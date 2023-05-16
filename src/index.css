@@ -1,0 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .menu-link {
+    @apply text-primaryGray text-sm14 font-semibold leading-5 inline-block mr-4 cursor-pointer;
+  }
+
+  .blackBtn {
+    @apply bg-primaryBlack px-5 py-2.5 rounded-3xl text-sm14 text-[#FFFFFF];
+  }
+
+  .outlineBtn {
+    @apply border-2 border-primaryBlack py-2.5 rounded-3xl text-sm14 px-5 font-semibold;
+  }
+
+  .regCard {
+    @apply bg-[#ffffff] mt-8 w-regCards h-regCard shadow-regCardShadow rounded-[30px] relative; 
+  }
+
+  .loginCard {
+    @apply bg-[#ffffff] mt-8 w-loginCard h-loginCard shadow-regCardShadow rounded-[30px] text-center;
+  }
+
+  .regHeading {
+    @apply text-primaryBlack text-sm18;
+  }
+
+  .regInput {
+    @apply border-solid border-[#D6D6D6] border rounded-3xl px-[0.938rem] py-[0.438rem] outline-none mt-2.5 w-[100%];
+  }
+
+  .bullet {
+    @apply text-sm12 text-primaryGray text-center;
+  }
+
+  .hrLine {
+    @apply w-[80%] bg-[#D9D9D9] h-[1px] mx-auto my-[50px];
+  }
+
+  .linkSearch {
+    @apply text-[13px] font-normal leading-[21px] text-primaryGray;
+  }
+
+  .footerHeadings {
+    @apply font-medium text-[13px] leading-4 text-[#333333] mb-[10px];
+  }
+
+  .footerLinks {
+    @apply font-normal text-[12px] text-[#333333];
+  }
+
+  .greenBlueButton {
+    @apply bg-[#00f9c6] px-5 py-1 border rounded-[15px] border-[#00f9c6] text-primaryBlack text-[12px];
+  }
+
+  .uploadPageData {
+    @apply text-[11px] text-primaryGray;
+  }
+}
