@@ -33,6 +33,7 @@ const Login = () => {
             dispatch(
               authSliceAction.setUserRole(res.data.userRole[0])
             );
+            dispatch(authSliceAction.setUserId(res.data.userId));
             navigate('/');
           } else {
             toast.error(res.data.message);

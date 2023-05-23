@@ -38,12 +38,15 @@ const ArtList = () => {
   function apps1(e) {
     setShow(false);
   }
+
   function apps2(e) {
     setShowStyles(false);
   }
+
   function apps3(e) {
     setShowSub(false);
   }
+
   function apps4(e) {
     setShowMedium(false);
   }
@@ -65,6 +68,7 @@ const ArtList = () => {
     setShowSub(false);
     setSelectSubValue(e);
   }
+
   function changeValue4(e) {
     // console.log(e);
     setShowMedium(false);

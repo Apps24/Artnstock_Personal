@@ -43,6 +43,12 @@ const AddDetails = () => {
 
   const dispatch = useDispatch();
 
+  const userId = useSelector((state) => state.auth.userId);
+
+  useEffect(() => {
+    console.log(userId);
+  }, []);
+
   useEffect(() => {
     dispatch(setpath2('/ Add Details'));
   }, []);
@@ -54,6 +60,7 @@ const AddDetails = () => {
       setSubjectMenuList(response.data);
       // console.log(response.data);
     };
+
     const getStyleList = async () => {
       const response = await httpClient.get('/style_master');
       setStyleMenuList(response.data);
@@ -121,7 +128,6 @@ const AddDetails = () => {
   const toggleMenuStyle = () => {
     setIsOpenStyle(!isOpenStyle);
   };
-
   const toggleMenuMedium = () => {
     setIsOpenMedium(!isOpenMedium);
   };
@@ -241,6 +247,10 @@ const AddDetails = () => {
 
   useEffect(() => {
     setImages(selectedImages);
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      userId: userId,
+    }));
   }, []);
 
   // useEffect(() => {
@@ -586,10 +596,10 @@ const AddDetails = () => {
                   }}
                 >
                   <button className='w-[220px] h-[40px] rounded-[20px] border-[1px] border-[#d6d6d6] pl-[15px] text-[14px] text-primaryGray text-start'>
-                    {styleMenu ? (
-                      <span>{styleMenu.name}</span>
-                    ) : (
+                    {mediumMenu ? (
                       <span>{mediumMenu}</span>
+                    ) : (
+                      <span>Select Medium</span>
                     )}
                     {/* {mediumMenu} */}
                   </button>

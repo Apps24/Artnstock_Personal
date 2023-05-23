@@ -17,6 +17,19 @@ import smallRightArrow from '../../assets/images/Icons/smallRightArrow.svg';
 import smallLeftArrow from '../../assets/images/Icons/smallLeftArrow.svg';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import Facebook from '../../assets/images/products/Facebook.png';
+import Twitter from '../../assets/images/products/Twitter.png';
+import Linkedin from '../../assets/images/products/Linkedin.png';
+import Instagram from '../../assets/images/products/Instagram.png';
+import Email from '../../assets/images/products/Email.png';
+import Link from '../../assets/images/products/Link.png';
+import ProfileEmail from '../../assets/images/products/ProfileEmail.png';
+import Save from '../../assets/images/products/Save.png';
+import Similar from '../../assets/images/products/Similar.png';
+import Artist from '../../assets/images/products/Artist.png';
+import ShoppingCart from '../../assets/images/products/ShoppingCart.png';
+import Share from '../../assets/images/products/Share.png';
+import Enlarge from '../../assets/images/products/Enlarge.png';
 
 const ProductList = () => {
   const navigate = useNavigate();
@@ -72,6 +85,7 @@ const ProductList = () => {
   const [sizeBtn, setSizeBtn] = useState();
   const [orientationBtn, setOrientationBtn] = useState();
   const [title, setTitle] = useState('');
+  const [popup, setPopup] = useState(false);
 
   useEffect(() => {
     getAllProductList();
@@ -97,11 +111,11 @@ const ProductList = () => {
 
   useEffect(() => {
     console.log(artsList);
-  }, []);
+  }, [artsList]);
 
-  useEffect(() => {
-    console.log(subjectId);
-  }, [subjectId]);
+  // useEffect(() => {
+  //   console.log(subjectId);
+  // }, [subjectId]);
 
   const changeSizeFilter = (text) => {
     setSizeBtn(text);
@@ -116,6 +130,12 @@ const ProductList = () => {
   const goToArtDetailsPage = (id) => {
     navigate(`/art/art-details`, { state: { id } });
   };
+
+  const [id, setId] = useState('');
+
+  useEffect(() => {
+    console.log(id);
+  }, [id]);
 
   return (
     <>
@@ -616,7 +636,7 @@ const ProductList = () => {
               {artsList.map((data) => {
                 return (
                   <div
-                    key={data?.artId}
+                    key={data?.productId}
                     className={` ${
                       showSidebar ? 'w-[24.3125rem]' : 'w-[22.625rem]'
                     }`}
@@ -624,7 +644,9 @@ const ProductList = () => {
                     <div
                       className={` w-full group overflow-hidden rounded-2xl relative`}
                       style={{ height: `${data?.height}px` }}
-                      onClick={() => goToArtDetailsPage(data?.artId)}
+                      onClick={() =>
+                        goToArtDetailsPage(data?.productId)
+                      }
                     >
                       <img
                         style={{ height: '100%', width: '100%' }}
@@ -636,18 +658,37 @@ const ProductList = () => {
                         style={{ height: '100%', width: '100%' }}
                       >
                         <div>
-                          <p className='text-heading text-[#ffffff] font-semibold'>
-                            {data?.productName}
-                          </p>
-                          <p className='text-sm12 text-[#ffffff] font-medium'>
-                            An Affair with array of Artistically{' '}
-                            <br />
-                            Printed Products
-                          </p>
-                          <span className='text-[#FFFFFF] text-heading font-thin'>
-                            745+
-                          </span>
+                          <div>
+                            <p className='text-heading text-[#ffffff] font-semibold'>
+                              {data?.productName}
+                            </p>
+                            <p className='text-sm12 text-[#ffffff] font-medium'>
+                              An Affair with array of Artistically{' '}
+                              <br />
+                              Printed Products
+                            </p>
+                            <span className='text-[#FFFFFF] text-heading font-thin'>
+                              745+
+                            </span>
+                          </div>
+                          <div className='absolute bottom-2 left-3 flex gap-2'>
+                            <img src={Save} alt='' />
+                            <img src={Similar} alt='' />
+                            <img src={Artist} alt='' />
+                            <img src={ShoppingCart} alt='' />
+                            <img
+                              src={Share}
+                              onClick={(e) => {
+                                setId(data?.productId);
+                                setPopup(!popup);
+                                e.stopPropagation();
+                              }}
+                              alt=''
+                            />
+                            <img src={Enlarge} alt='' />
+                          </div>
                         </div>
+
                         {/* <img
                       className="absolute bottom-2.5 left-2.5"
                       src={prodWhiteIcon}
@@ -656,7 +697,7 @@ const ProductList = () => {
                       </div>
                     </div>
                     <p className='text-primaryBlack text-[15px] leading-[18px] font-semibold mt-1.5'>
-                      {data?.artName}
+                      {data?.productName}
                     </p>
                     <p className='text-primaryGray text-sm12 leading-[15px]'>
                       Artnstock <br />
@@ -665,6 +706,86 @@ const ProductList = () => {
                     <p className='text-primaryBlack text-[15px] leading-[18px] font-semibold mt-1.5'>
                       ${data?.price}
                     </p>
+                    {/* Rollover */}
+                    {popup === true && data.productId === id ? (
+                      <div className='absolute top-[72%] z-[999]'>
+                        <div className='w-[305px] shadow-dropShadow bg-[#ffffff] p-5 rounded-2xl'>
+                          <p className='text-[13px] text-[#333333] leading-[1.2]'>
+                            Share and get paid with our{' '}
+                            <span className='text-[#f88331]'>
+                              Reseller Program
+                            </span>
+                          </p>
+                          <div className='flex gap-3 py-4'>
+                            <img src={Facebook} alt='' />
+                            <img src={Twitter} alt='' />
+                            <img src={Linkedin} alt='' />
+                            <img src={Instagram} alt='' />
+                            <img src={Email} alt='' />
+                            <img src={Link} alt='' />
+                          </div>
+                          <p className='text-[13px] text-[#333333] leading-[1.2]'>
+                            Send to
+                          </p>
+                          <div className='border border-[#d6d6d6] rounded-2xl px-3 py-2 my-2 '>
+                            <div className=''>
+                              <input
+                                type='text'
+                                name=''
+                                className='regInput border-b-2 w-[80%] border-x-0 border-t-0 rounded-none mx-5 my-5 '
+                                id=''
+                              />
+                              <div className='flex gap-2 my-2'>
+                                <div>
+                                  <img src={ProfileEmail} alt='' />
+                                </div>
+                                <div className='leading-[1.3]'>
+                                  <p className='text-[13px] text-[#757575]'>
+                                    ksgrafiks2012@gmail.com
+                                  </p>
+                                  <p className='text-[11px] text-[#757557]'>
+                                    Lorem ipsum dolor
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div className='px-5 py-2 hidden'>
+                            <input
+                              type='text'
+                              name=''
+                              placeholder='Enter Email'
+                              className='regInput '
+                              id=''
+                            />
+
+                            <div className='flex gap-2 my-2'>
+                              <div>
+                                <img src={ProfileEmail} alt='' />
+                              </div>
+                              <div className='leading-[1.3]'>
+                                <p className='text-[13px] text-[#757575]'>
+                                  ksgrafiks2012@gmail.com
+                                </p>
+                                <p className='text-[11px] text-[#757557]'>
+                                  Lorem ipsum dolor
+                                </p>
+                              </div>
+                            </div>
+                            <div className='w-[100%] h-[120px] border border-[#d6d6d6] rounded-2xl mb-2'>
+                              Abstract de
+                            </div>
+                            <div className='mb-2'>
+                              <button className='blackBtn'>
+                                Send
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div></div>
+                    )}
                   </div>
                 );
               })}

@@ -11,8 +11,11 @@ import usflag from '../../assets/images/socials/usflag.jpg';
 import dropdown from '../../assets/images/socials/dropdown.png';
 import signuptext from '../../assets/images/Icons/signup.svg';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
 
 const Footer = () => {
+  const [isOpenLang, setIsOpenLang] = useState(false);
+  const [isOpenCurr, setIsOpenCurr] = useState(false);
   return (
     <div className='footer'>
       <div className='footer-top text-center text-14px bg-[#F5F5F5] h-[38px] flex justify-center items-center'>
@@ -203,66 +206,44 @@ const Footer = () => {
           <div className='flex gap-[10px] flex-wrap'>
             {/* Column 6 */}
             <div className='flex-column'>
-              <div className='group relative dropdown cursor-pointer  pt-[0.45rem] bg-[#E6E6E6] w-[220px] h-[40px] bg-[#FFFFFF] rounded-[20px] mb-[15px]'>
-                <a className=' px-4 text-primaryGray text-sm14 font-medium text-[#BBBBBB]'>
-                  <img
-                    className='inline-block mr-[10px]'
-                    src={globe}
-                    alt=''
-                  />
-                  English
-                  <img
-                    className='inline-block ml-[100px]'
-                    src={dropdown}
-                    alt=''
-                  />
-                </a>
-                <div className='group-hover:block dropdown-menu absolute top-[2.55rem] hidden h-auto w-[8.813rem]'>
-                  <ul className='top-0  bg-white shadow-dropShadow rounded-2xl bg-[#ffffff] hover:overflow-hidden'>
-                    <li className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'>
-                      <a className='block cursor-pointer text-[0.813rem] text-primaryGray font-normal hover:text-primaryBlack leading-[2.438rem]'>
-                        <img
-                          src=''
-                          className='inline-block mr-3'
-                          alt=''
-                        />
-                        Hindi
-                      </a>
+              <div>
+                <button
+                  onClick={() => {
+                    setIsOpenLang(!isOpenLang);
+                  }}
+                  className={`${
+                    isOpenLang === true
+                      ? 'rounded-t-[20px] shadow-dropShadowButton border-b'
+                      : 'rounded-[20px]'
+                  } w-[220px] border-[#EFEFEF] px-[15px] text-sm14 font-medium text-[#BBBBBB] h-[40px] bg-[#fff] flex items-center justify-between z-50`}
+                >
+                  <div className='flex gap-[10px]'>
+                    <img src={globe} alt='' />
+                    <span>English</span>
+                  </div>
+                  <div>
+                    <img
+                      className='inline-block'
+                      src={dropdown}
+                      alt=''
+                    />
+                  </div>
+                </button>
+                {isOpenLang && (
+                  <ul className='shadow-dropShadow rounded-b-[20px] hover:overflow-hidden absolute bg-[#ffffff] text-center text-[13px] text-primaryGray w-[220px]'>
+                    <li className='cursor-pointer h-[40px] flex items-center pl-[46px] hover:bg-[#f0f0f0] border-b border-[#EFEFEF]'>
+                      English
                     </li>
-                    <li className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'>
-                      <a className='block cursor-pointer text-[0.813rem] text-primaryGray font-normal hover:text-primaryBlack leading-[2.438rem]'>
-                        <img
-                          src=''
-                          className='inline-block mr-3'
-                          alt=''
-                        />
-                        French
-                      </a>
+                    <li className='cursor-pointer h-[40px] flex items-center pl-[46px] hover:bg-[#f0f0f0] border-b border-[#EFEFEF]'>
+                      German
                     </li>
-                    <li className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'>
-                      <a className='block cursor-pointer text-[0.813rem] text-primaryGray font-normal hover:text-primaryBlack leading-[2.438rem]'>
-                        <img
-                          src=''
-                          className='inline-block mr-3'
-                          alt=''
-                        />
-                        German
-                      </a>
-                    </li>
-                    <li className='py-1 px-3.5 hover:bg-[#F0F0F0] '>
-                      <a className='block cursor-pointer text-[0.813rem] text-primaryGray font-normal hover:text-primaryBlack leading-[2.438rem]'>
-                        <img
-                          src=''
-                          className='inline-block mr-3'
-                          alt=''
-                        />
-                        English
-                      </a>
+                    <li className='cursor-pointer h-[40px] flex items-center pl-[46px] hover:bg-[#f0f0f0]'>
+                      French
                     </li>
                   </ul>
-                </div>
+                )}
               </div>
-              <div className='flex mb-[16px]'>
+              <div className='flex mb-[6px] mt-[15px]'>
                 <img className='h-[16px] w-[8px]' src={fb} alt='' />
                 <img
                   className='h-[13px] w-[16px] ml-[15px] mt-[3px]'
@@ -294,67 +275,45 @@ const Footer = () => {
             </div>
 
             {/* Column 7 */}
-            <div className='flex-column gap-[60px] flex-wrap'>
-              <div className='group relative dropdown cursor-pointer  pt-[0.45rem] bg-[#E6E6E6] w-[220px] h-[40px] bg-[#FFFFFF] rounded-[20px] mb-[15px]'>
-                <a className=' px-4 text-primaryGray text-sm14 font-medium text-[#BBBBBB]'>
+            {/* Column 7 */}
+            <div>
+              <button
+                onClick={() => {
+                  setIsOpenCurr(!isOpenCurr);
+                }}
+                className={`${
+                  isOpenCurr === true
+                    ? 'rounded-t-[20px] shadow-dropShadowButton border-b'
+                    : 'rounded-[20px]'
+                } w-[220px] border-[#EFEFEF] px-[15px] text-sm14 font-medium text-[#BBBBBB] h-[40px] bg-[#fff] flex items-center justify-between z-50`}
+              >
+                <div className='flex gap-[10px]'>
+                  <img src={usflag} alt='' />
+                  <span>USD</span>
+                </div>
+                <div>
                   <img
-                    className='inline-block mr-[10px]'
-                    src={usflag}
-                    alt=''
-                  />
-                  USD
-                  <img
-                    className='inline-block ml-[105px]'
+                    className='inline-block'
                     src={dropdown}
                     alt=''
                   />
-                </a>
-                <div className='group-hover:block dropdown-menu absolute top-[2.55rem] hidden h-auto w-[8.813rem]'>
-                  <ul className='top-0  bg-white shadow-dropShadow rounded-2xl bg-[#ffffff] hover:overflow-hidden'>
-                    <li className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'>
-                      <a className='block cursor-pointer text-[0.813rem] text-primaryGray font-normal hover:text-primaryBlack leading-[2.438rem]'>
-                        <img
-                          src=''
-                          className='inline-block mr-3'
-                          alt=''
-                        />
-                        INR
-                      </a>
-                    </li>
-                    <li className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'>
-                      <a className='block cursor-pointer text-[0.813rem] text-primaryGray font-normal hover:text-primaryBlack leading-[2.438rem]'>
-                        <img
-                          src=''
-                          className='inline-block mr-3'
-                          alt=''
-                        />
-                        JPY
-                      </a>
-                    </li>
-                    <li className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'>
-                      <a className='block cursor-pointer text-[0.813rem] text-primaryGray font-normal hover:text-primaryBlack leading-[2.438rem]'>
-                        <img
-                          src=''
-                          className='inline-block mr-3'
-                          alt=''
-                        />
-                        GBP
-                      </a>
-                    </li>
-                    <li className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'>
-                      <a className='block cursor-pointer text-[0.813rem] text-primaryGray font-normal hover:text-primaryBlack leading-[2.438rem]'>
-                        <img
-                          src=''
-                          className='inline-block mr-3'
-                          alt=''
-                        />
-                        USD
-                      </a>
-                    </li>
-                  </ul>
                 </div>
-              </div>
+              </button>
+              {isOpenCurr && (
+                <ul className='shadow-dropShadow rounded-b-[20px] hover:overflow-hidden absolute bg-[#ffffff] text-center text-[13px] text-primaryGray w-[220px]'>
+                  <li className='cursor-pointer h-[40px] flex items-center pl-[46px] hover:bg-[#f0f0f0] border-b border-[#EFEFEF]'>
+                    USD
+                  </li>
+                  <li className='cursor-pointer h-[40px] flex items-center pl-[46px] hover:bg-[#f0f0f0] border-b border-[#EFEFEF]'>
+                    INR
+                  </li>
+                  <li className='cursor-pointer h-[40px] flex items-center pl-[46px] hover:bg-[#f0f0f0]'>
+                    EUR
+                  </li>
+                </ul>
+              )}
             </div>
+            {/* end col7 */}
           </div>
         </div>
         <hr className='border-[#BCBCBC] mt-[20px] mb-[20px] h-[1px]' />

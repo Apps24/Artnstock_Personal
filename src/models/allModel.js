@@ -86,6 +86,7 @@ export const artMasterModel = {
   subjectId: '',
   styleId: '',
   image: '',
+  userId: '',
 };
 
 export const filteredMasterModel = {
