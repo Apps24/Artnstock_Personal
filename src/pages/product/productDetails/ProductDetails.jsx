@@ -343,6 +343,11 @@ const ProductDetails = () => {
     `${azra4}`,
     `${azra1}`,
   ];
+
+  const location = useLocation();
+
+  const data = location.state.data;
+
   return (
     <>
       <div className='w-[100%] flex justify-center'></div>
@@ -356,9 +361,13 @@ const ProductDetails = () => {
           <div className='w-[50%]'>
             <div
               style={{
-                backgroundImage: `url(${tshirtphoto})`,
+                backgroundImage: `url(${data?.image})`,
               }}
-              className='relative w-[540px] h-[540px] rounded-[16.01px] bg-[#f5f5f7] flex flex-col justify-center  items-center'
+              //earlier
+              // style={{
+              //   backgroundImage: `url(${tshirtphoto})`,
+              // }}
+              className='relative w-[540px] h-[540px] rounded-[16.01px] bg-[#f5f5f7] flex flex-col justify-center bg-cover bg-no-repeat items-center'
             >
               <img
                 src={viewIcon}
@@ -458,13 +467,15 @@ const ProductDetails = () => {
           </div>
           <div className='w-[50%]'>
             <p className='text-[25px] text-primaryBlack font-medium leading-[1]'>
-              Printed Artnstock Limited Edition <br /> on the Cotton
-              T-Shirt
+              {/* Printed Artnstock Limited Edition <br /> on the Cotton
+              T-Shirt */}
+              {data?.productName}
             </p>
 
             <div className='flex border-b border-t border-t-[2px] border-[#efefef] text-primaryGray text-[12px] mt-[10px]'>
               <p className='w-[100px] font-medium'>Product ID:</p>
-              <p>ANSHVB4R44</p>
+              <p>{data?.productId}</p>
+              {/* <p>ANSHVB4R44</p> */}
             </div>
 
             <div className='flex border-b border-b-[2px] border-[#efefef] text-primaryGray text-[12px]'>
@@ -615,9 +626,10 @@ const ProductDetails = () => {
                 <p className='text-[15px] font-medium'>Description</p>
               </div>
               <p className='text-[13px] text-primaryGray leading-[1.3]'>
-                180 GSM, 100% Pre-Combed cotton (Bio-Washed and
+                {/* 180 GSM, 100% Pre-Combed cotton (Bio-Washed and
                 Pre-Shrunk) <br /> Round Neck, Half Sleeved <br />{' '}
-                Machine wash, Wash in cold water
+                Machine wash, Wash in cold water */}
+                {data?.description}
               </p>
               <img
                 src={DescriptionPic}
@@ -653,7 +665,7 @@ const ProductDetails = () => {
                     $
                   </p>
                   <p className='text-orangeColor text-[38px] font-normal leading-[55px]'>
-                    189
+                    {data?.price}
                   </p>
                 </div>
                 <p className='text-sm12 font-normal text-primaryGray'>

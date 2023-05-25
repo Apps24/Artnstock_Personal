@@ -74,6 +74,7 @@ import TrackMyOrder3 from './components/customer/cust-components/PurchaseHistory
 import BuyersPlan from './components/customer/cust-components/BuyersPlan';
 import ProductDetails from './pages/product/productDetails/ProductDetails';
 import { Navigate } from 'react-router-dom';
+import Wishlist from './components/Wishlist/Wishlist2';
 
 function App() {
   const userAuth = useSelector((state) => state.auth);
@@ -229,6 +230,9 @@ function App() {
 
         {/* Product Details */}
         <Route path='product-details' element={<ProductDetails />} />
+
+        {/* Wishlist */}
+        <Route path='/wishlist' element={<Wishlist />} />
 
         {/* Register */}
         <Route element={<PrivateRoutes />}>

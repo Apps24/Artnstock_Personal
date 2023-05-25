@@ -6,8 +6,9 @@ import searchIcon from '../../../assets/images/Icons/searchDarkIcon.svg';
 import backArrow from '../../../assets/images/contributor/backArrow.png';
 import nextArrow from '../../../assets/images/contributor/nextArrow.png';
 import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setpath2 } from '../../../store/contriPathSlice';
+import { httpClient } from '../../../axios';
 
 const images = [
   {
@@ -190,6 +191,9 @@ const images = [
 
 const AllRelease = () => {
   const [isOpenSortBy, setIsOpenSortBy] = useState(false);
+
+  const userId = useSelector((state) => state.auth.userId);
+
   //   paginationn **dont change the sequence of the code below** else will give undefined error
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
@@ -216,9 +220,23 @@ const AllRelease = () => {
     }
   };
 
+  // api calls
+  const getAllActiveReleases = async () => {
+    try {
+      const res = await httpClient.get(
+        `/release_master/getUserIdWiseReleaseMaster/${userId}`
+      );
+      console.log(res.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(setpath2('/ All Releases'));
+    getAllActiveReleases();
   }, []);
 
   return (

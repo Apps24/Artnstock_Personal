@@ -327,6 +327,10 @@ const ArtDetails = () => {
     navigate('/checkout');
   };
 
+  useEffect(() => {
+    console.log(artDetails);
+  }, [artDetails]);
+
   return (
     <>
       <div className='w-w1168 mx-auto mt-10'>
@@ -1225,7 +1229,7 @@ const ArtDetails = () => {
                 $
               </p>
               <p className='text-orangeColor text-[38px] font-normal leading-[55px]'>
-                189
+                {artDetails?.price}
               </p>
             </div>
             <p className='text-sm12 font-normal text-primaryGray'>

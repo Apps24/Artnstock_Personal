@@ -631,7 +631,7 @@ const ProductList = () => {
             <div
               className={`mainImagesCon mt-[15px] grid gap-4 ${
                 showSidebar ? 'grid-cols-4' : 'grid-cols-5'
-              }`}
+              } `}
             >
               {artsList.map((data) => {
                 return (
@@ -639,7 +639,7 @@ const ProductList = () => {
                     key={data?.productId}
                     className={` ${
                       showSidebar ? 'w-[24.3125rem]' : 'w-[22.625rem]'
-                    }`}
+                    } relative`}
                   >
                     <div
                       className={` w-full group overflow-hidden rounded-2xl relative`}
@@ -708,7 +708,7 @@ const ProductList = () => {
                     </p>
                     {/* Rollover */}
                     {popup === true && data.productId === id ? (
-                      <div className='absolute top-[72%] z-[999]'>
+                      <div className='absolute z-[999] top-[360px] left-[110px]'>
                         <div className='w-[305px] shadow-dropShadow bg-[#ffffff] p-5 rounded-2xl'>
                           <p className='text-[13px] text-[#333333] leading-[1.2]'>
                             Share and get paid with our{' '}
