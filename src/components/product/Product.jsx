@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { httpClient } from '../../axios';
 import prodWhiteIcon from '../../assets/images/Icons/productsIconWhite.svg';
 import { useNavigate } from 'react-router-dom';
+import { setSubjectId } from '../../store/subjectidSlice';
+import { useDispatch } from 'react-redux';
 
 const Product = ({ heading }) => {
   const [prodList, setProdList] = useState([]);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     getProductList();
@@ -29,7 +32,14 @@ const Product = ({ heading }) => {
             if (i <= 4) {
               return (
                 <div key={data?.productId} className='w-[16.813rem]'>
-                  <div className='h-[16.813rem] w-full group overflow-hidden rounded-2xl relative'>
+                  <div
+                    onClick={() => {
+                      navigate('/product-details', {
+                        state: { data },
+                      });
+                    }}
+                    className='h-[16.813rem] w-full group overflow-hidden rounded-2xl relative'
+                  >
                     <img src={data?.image} alt='' />
                     <div
                       className='group-hover:flex hidden bg-blackRgba items-center justify-center absolute top-0 left-0 text-center'
@@ -71,6 +81,7 @@ const Product = ({ heading }) => {
         <button
           onClick={() => {
             navigate('/product-list');
+            dispatch(setSubjectId(null));
           }}
           className='blackBtn mx-auto block mt-7 mb-[50px]'
         >

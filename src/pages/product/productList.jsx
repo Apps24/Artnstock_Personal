@@ -203,7 +203,13 @@ const ProductList = () => {
                     <p className='text-[#BBBBBB] text-[13px] leading-[13px] font-medium'>
                       {selectValue ? selectValue : 'Most Popular'}
                     </p>
-                    <img src={dropArrow} alt='' />
+                    <img
+                      className={`${
+                        show === true ? 'transform rotate-180' : ''
+                      }`}
+                      src={dropArrow}
+                      alt=''
+                    />
                   </div>
                   {show && (
                     <div className='relative'>
@@ -244,7 +250,15 @@ const ProductList = () => {
                         ? selectStylesValue
                         : 'All Styles'}
                     </p>
-                    <img src={dropArrow} alt='' />
+                    <img
+                      className={`${
+                        showStyles === true
+                          ? 'transform rotate-180'
+                          : ''
+                      }`}
+                      src={dropArrow}
+                      alt=''
+                    />
                   </div>
                   {showStyles && (
                     <div className='relative'>
@@ -286,7 +300,13 @@ const ProductList = () => {
                         ? selectSubValue
                         : 'All Subjects'}
                     </p>
-                    <img src={dropArrow} alt='' />
+                    <img
+                      className={`${
+                        showSub === true ? 'transform rotate-180' : ''
+                      }`}
+                      src={dropArrow}
+                      alt=''
+                    />
                   </div>
                   {showSub && (
                     <div className='relative'>
@@ -327,7 +347,15 @@ const ProductList = () => {
                         ? selectMediumValue
                         : 'All Mediums'}
                     </p>
-                    <img src={dropArrow} alt='' />
+                    <img
+                      className={`${
+                        showMedium === true
+                          ? 'transform rotate-180'
+                          : ''
+                      }`}
+                      src={dropArrow}
+                      alt=''
+                    />
                   </div>
                   {showMedium && (
                     <div className='relative'>
