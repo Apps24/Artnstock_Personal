@@ -34,6 +34,7 @@ import { setpath } from '../../../store/contriPathSlice';
 import { setpath2 } from '../../../store/contriPathSlice';
 import Footer from '../../footer/Footer';
 import { useLocation } from 'react-router-dom';
+import Certificate from '../contri-components/Certificate';
 
 const theme = createTheme({
   typography: {
@@ -808,6 +809,7 @@ const Tabs = () => {
             <TabPanel value='6'>Item Six</TabPanel>
           </TabContext>
         </Box>
+        <Certificate />
         <Footer />
       </ThemeProvider>
     </>

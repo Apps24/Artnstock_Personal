@@ -17,7 +17,8 @@ import blackCircleImg from '../../../assets/images/Icons/W Art Print.svg';
 import roomViewImg from '../../../assets/images/Icons/Icon - View in a room.svg';
 import threeDImg from '../../../assets/images/Icons/Icon - 3D View.svg';
 import addIcon from '../../../assets/images/Icons/addIcon.svg';
-import wishlistIcon from '../../../assets/images/Icons/wishlistIcon.svg';
+// import wishlistIcon from '../../../assets/images/Icons/wishlistIcon.svg';
+import { ReactComponent as WishlistIcon } from '../../../assets/images/Icons/wishlistIcon.svg';
 import shareIcon from '../../../assets/images/Icons/shareIcon.svg';
 import productHeead from '../../../assets/images/static/Header - Products (1).svg';
 import productImg from '../../../assets/images/static/products.svg';
@@ -322,6 +323,58 @@ const ArtDetails = () => {
     navigate('/shopping-cart');
   };
 
+  // this code is for valdating if artId already exists in wishlist
+  const [wishlist, setwishlist] = useState();
+
+  useEffect(() => {
+    getAllWishlistByUserId();
+  }, []);
+
+  const getAllWishlistByUserId = async () => {
+    try {
+      const res = await httpClient.get(
+        `/wishlist_master/getByUserIdList/${userId}`
+      );
+      setwishlist(res.data);
+      // console.log(res.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  // above code is for valdating if artId already exists in wishlist
+
+  const addToWishlist = (artId) => {
+    const findId = wishlist.find(
+      (obj) => obj.artMaster.artId === artId
+    );
+
+    if (!findId) {
+      const object = {
+        artId: artId,
+        id: userId,
+      };
+      httpClient.post(`/wishlist_master/save`, object).then((res) => {
+        // console.log(res);
+        getAllWishlistByUserId();
+      });
+    }
+  };
+
+  const wishlistDelete = async (id) => {
+    wishlist?.forEach(async (obj) => {
+      if (obj.artMaster.artId === id) {
+        try {
+          const res = await httpClient.delete(
+            `/wishlist_master/delete/${obj.wishListId}`
+          );
+          getAllWishlistByUserId();
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    });
+  };
+
   const checkoutPage = () => {
     // navigate to checkout page
     navigate('/checkout');
@@ -374,9 +427,47 @@ const ArtDetails = () => {
                 <img src={roomViewImg} alt='' />
                 <img src={threeDImg} alt='' />
               </div>
-              <div className='flex gap-x-2.5'>
+              <div className='flex gap-x-2.5 items-center'>
                 <img src={addIcon} alt='' />
-                <img src={wishlistIcon} alt='' />
+
+                {wishlist?.find(
+                  (obj) => obj.artMaster.artId === artDetails.artId
+                ) === undefined ? (
+                  <WishlistIcon
+                    onClick={() => {
+                      addToWishlist(artDetails?.artId);
+                    }}
+                    style={{ fill: '#888888', width: '100%' }}
+                  />
+                ) : (
+                  <WishlistIcon
+                    onClick={() => {
+                      wishlistDelete(artDetails?.artId);
+                    }}
+                    style={{
+                      fill: 'red',
+                      width: '100%',
+                    }}
+                  />
+                )}
+
+                {/* <WishlistIcon
+                  style={{
+                    width: '100%',
+                    fill: `${
+                      wishlist?.find(
+                        (obj) =>
+                          obj.artMaster.artId === artDetails.artId
+                      ) === undefined
+                        ? '#888888'
+                        : 'red'
+                    }`,
+                  }}
+                  onClick={() => {
+                    addToWishlist(artDetails?.artId);
+                  }}
+                /> */}
+
                 <img src={shareIcon} alt='' />
               </div>
             </div>
@@ -1470,9 +1561,16 @@ const ArtDetails = () => {
                             {/* <img src={roomViewImg} alt='' /> */}
                             <img src={threeDImg} alt='' />
                           </div>
-                          <div className='flex gap-x-2.5'>
+                          <div className='flex gap-x-2.5 items-center'>
                             <img src={addIcon} alt='' />
-                            <img src={wishlistIcon} alt='' />
+                            <div>
+                              <WishlistIcon />
+                            </div>
+                            {/* <img
+                              style={{ fill: 'red' }}
+                              src={wishlistIcon}
+                              alt=''
+                            /> */}
                             <img src={shareIcon} alt='' />
                           </div>
                         </div>

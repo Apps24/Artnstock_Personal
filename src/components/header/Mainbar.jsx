@@ -2,7 +2,8 @@ import React, { useRef, useState, useEffect } from 'react';
 import Topbar from './Topbar';
 import mainLogo from '../../assets/images/header/mainLogo.svg';
 import notficationIcon from '../../assets/images/Icons/notificationIcon.svg';
-import wishlistIcon from '../../assets/images/Icons/wishlistIcon.svg';
+// import wishlistIcon from '../../assets/images/Icons/wishlistIcon.svg';
+import { ReactComponent as WishlistIcon } from '../../assets/images/Icons/wishlistIcon.svg';
 import cartIcon from '../../assets/images/Icons/cartIcon.svg';
 import dropArrow from '../../assets/images/Icons/Down arrow.svg';
 import searchIcon from '../../assets/images/Icons/searchDarkIcon.svg';
@@ -841,16 +842,30 @@ const Mainbar = () => {
                 </div>
               </li>
               <li className='menu-link'>
-                <img
+                {/* <img
                   onClick={() => {
                     navigate('/wishlist');
                   }}
                   src={wishlistIcon}
                   alt=''
+                /> */}
+                <WishlistIcon
+                  onClick={() => {
+                    navigate('/wishlist');
+                  }}
+                  style={{
+                    fill: '#888888',
+                  }}
                 />
               </li>
               <li className='menu-link m-0'>
-                <img src={cartIcon} alt='' />
+                <img
+                  onClick={() => {
+                    navigate('/shopping-cart');
+                  }}
+                  src={cartIcon}
+                  alt=''
+                />
               </li>
             </ul>
           </div>

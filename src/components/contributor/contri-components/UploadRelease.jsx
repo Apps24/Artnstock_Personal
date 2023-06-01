@@ -160,6 +160,10 @@ const UploadRelease = () => {
     dispatch(setpath2('/ Upload Release'));
   }, []);
 
+  // useEffect(() => {
+  //   console.log(cards);
+  // }, [cards]);
+
   return (
     <div>
       <div className='flex justify-center'>

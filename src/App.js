@@ -77,6 +77,7 @@ import { Navigate } from 'react-router-dom';
 import Wishlist from './components/Wishlist/Wishlist2';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import ContributorViewMyStore from './components/ContributorViewMyStore/ContributorViewMyStore';
 
 function App() {
   const userAuth = useSelector((state) => state.auth);
@@ -247,6 +248,13 @@ function App() {
 
         {/* Wishlist */}
         <Route path='/wishlist' element={<Wishlist />} />
+
+        {/* View My Store */}
+        <Route
+          path='/view-my-store'
+          element={<ContributorViewMyStore />}
+          exact
+        />
 
         {/* Register */}
         <Route element={<PrivateRoutes />}>
