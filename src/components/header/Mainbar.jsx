@@ -55,7 +55,6 @@ import mug from '../../assets/images/Menubar/mug.png';
 
 import LoadingBar from 'react-top-loading-bar';
 
-import { setUserRole } from '../../store/authSlice';
 
 const StyledPopup = styled(Popup)`
   // use your custom style for ".popup-overlay"
@@ -86,6 +85,7 @@ const Mainbar = () => {
   const navigate = useNavigate();
   const [showDrop, setShowDrop] = useState(false);
   const ref = useRef(null);
+  const [selectItems, setSelectItems] = useState(null);
 
   //loading bar
   const [progress, setProgress] = useState(0);
@@ -131,13 +131,23 @@ const Mainbar = () => {
 
   const userRole = useSelector((state) => state.auth.userRole);
 
-  useEffect(() => {
-    console.log(userRole);
-  }, []);
+  // useEffect(() => {
+  //   console.log(userRole);
+  // }, []);
 
   useEffect(() => {
     setProgress(100);
   }, []);
+
+  useEffect(() => {
+    location.pathname === '/' && setSelectItems(null);
+    location.pathname === '/art-home' && setSelectItems('Art');
+    location.pathname === '/photo-home' && setSelectItems('Photos');
+    location.pathname === '/footage-home' && setSelectItems('Footage');
+    location.pathname === '/music-home' && setSelectItems('Music');
+    location.pathname === '/templates-home' && setSelectItems('Templates');
+    location.pathname === '/product-home' && setSelectItems('Products');
+  }, [location]);
 
   return (
     <>
@@ -865,7 +875,7 @@ const Mainbar = () => {
           {/* <div className="rightdiv py-3 bg-[#E6E6E6] flex"> */}
           <div className='group relative dropdown cursor-pointer  py-3 bg-[#E6E6E6]'>
             <a className=' px-4 text-primaryGray text-sm14 font-medium'>
-              All Items{' '}
+             {selectItems !== null ? selectItems : "All Items"}
               <img
                 className='inline-block ml-2'
                 src={dropArrow}
@@ -874,7 +884,7 @@ const Mainbar = () => {
             </a>
             <div className='group-hover:block  z-10 dropdown-menu absolute top-12 hidden h-auto w-[8.813rem]'>
               <ul className='top-0 bg-white shadow-dropShadow rounded-2xl bg-[#ffffff] hover:overflow-hidden'>
-                <li className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'>
+                <li className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]' onClick={() => setSelectItems('Art')}>
                   <a className='block cursor-pointer text-[0.813rem] text-primaryGray font-normal hover:text-primaryBlack leading-[2.438rem]'>
                     <img
                       src={artIcon}
@@ -884,7 +894,7 @@ const Mainbar = () => {
                     Art
                   </a>
                 </li>
-                <li className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'>
+                <li className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]' onClick={() => setSelectItems('Photos')}>
                   <a className='block cursor-pointer text-[0.813rem] text-primaryGray font-normal hover:text-primaryBlack leading-[2.438rem]'>
                     <img
                       src={photoIcon}
@@ -894,7 +904,7 @@ const Mainbar = () => {
                     Photos
                   </a>
                 </li>
-                <li className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'>
+                <li className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]' onClick={() => setSelectItems('Footage')}>
                   <a className='block cursor-pointer text-[0.813rem] text-primaryGray font-normal hover:text-primaryBlack leading-[2.438rem]'>
                     <img
                       src={footageIcon}
@@ -904,7 +914,7 @@ const Mainbar = () => {
                     Footage
                   </a>
                 </li>
-                <li className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'>
+                <li className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]' onClick={() => setSelectItems('Music')}>
                   <a className='block cursor-pointer text-[0.813rem] text-primaryGray font-normal hover:text-primaryBlack leading-[2.438rem]'>
                     <img
                       src={musicIcon}
@@ -914,7 +924,7 @@ const Mainbar = () => {
                     Music
                   </a>
                 </li>
-                <li className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'>
+                <li className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]' onClick={() => setSelectItems('Templates')}>
                   <a className='block cursor-pointer text-[0.813rem] text-primaryGray font-normal hover:text-primaryBlack leading-[2.438rem]'>
                     <img
                       src={templatesIcon}
@@ -924,7 +934,7 @@ const Mainbar = () => {
                     Templates
                   </a>
                 </li>
-                <li className='py-1 px-3.5 hover:bg-[#F0F0F0] '>
+                <li className='py-1 px-3.5 hover:bg-[#F0F0F0] ' onClick={() => setSelectItems('Products')}>
                   <a className='block cursor-pointer text-[0.813rem] text-primaryGray font-normal hover:text-primaryBlack leading-[2.438rem]'>
                     <img
                       src={productsIcon}

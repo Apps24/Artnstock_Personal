@@ -74,6 +74,7 @@ module.exports = {
       w245: '15.313rem',
       w350: '21.875rem',
       w1170: '73.125rem',
+      w450: '28.125rem',
     },
     height: {
       regCard: '29.375rem',

@@ -67,6 +67,8 @@ import grp from "../../../assets/images/art-details/grp.png";
 import grp144 from "../../../assets/images/art-details/grp144.png";
 import stars from "../../../assets/images/art-details/stars.png"
 import Footer from "../../../components/footer/Footer";
+import styled from "styled-components";
+import Popup from "reactjs-popup"
 
 const styleDrop = [
   { a: 'ddsdd' },
@@ -212,6 +214,41 @@ const CustomerImg = [
   `${azra4}`,
   `${azra1}`,
 ];
+
+const StyledPopup = styled(Popup)`
+  // use your custom style for ".popup-overlay"
+  /* &-overlay {
+    ...;
+  } */
+  // use your custom style for ".popup-content"
+  &-content {
+    background-color: #ffffff;
+    color: #333333;
+    border-radius: 30px;
+    padding: 0;
+    width: 88.063rem;
+    height: 56.188rem;
+    overflow: hidden;
+    border: none;
+  }
+`;
+const SeeAllFramesPopup = styled(Popup)`
+  // use your custom style for ".popup-overlay"
+  /* &-overlay {
+    ...;
+  } */
+  // use your custom style for ".popup-content"
+  &-content {
+    background-color: #ffffff;
+    color: #333333;
+    border-radius: 30px;
+    padding: 30px;
+    width: 45.313rem;
+    height: 45.313rem;
+    overflow: hidden;
+    border: none;
+  }
+`;
 
 const ArtDetails = () => {
   const location = useLocation();
