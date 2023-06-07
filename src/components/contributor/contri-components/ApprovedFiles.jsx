@@ -247,7 +247,8 @@ const ApprovedFiles = () => {
                       }}
                     ></div>
 
-                    {hoveredId === card.id && (
+                    {hoveredId === card.id ||
+                    checkedId === card.id ? (
                       <>
                         <div className='absolute inset-0 flex items-center justify-center'>
                           <button
@@ -267,6 +268,8 @@ const ApprovedFiles = () => {
                           />
                         </div>
                       </>
+                    ) : (
+                      <div></div>
                     )}
                   </div>
                 ))}

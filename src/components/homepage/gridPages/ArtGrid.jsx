@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setSubjectId } from '../../../store/subjectidSlice';
 
-const ArtGrid = ({ gridList }) => {
+const ArtGrid = ({ gridList, type }) => {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -45,7 +45,11 @@ const ArtGrid = ({ gridList }) => {
           onClick={() => {
             console.log(gridList[0]);
             dispatch(setSubjectId(gridList[0]));
-            navigate('/art-list');
+            if (type === 'product') {
+              navigate('/product-list');
+            } else {
+              navigate('/art-list');
+            }
           }}
           className='row-span-4 rounded-2xl group overflow-hidden'
           style={{
@@ -81,7 +85,11 @@ const ArtGrid = ({ gridList }) => {
         <div
           onClick={() => {
             dispatch(setSubjectId(gridList[1]));
-            navigate('/art-list');
+            if (type === 'product') {
+              navigate('/product-list');
+            } else {
+              navigate('/art-list');
+            }
           }}
           className='row-span-2 rounded-2xl group overflow-hidden'
           style={{
@@ -117,7 +125,11 @@ const ArtGrid = ({ gridList }) => {
         <div
           onClick={() => {
             dispatch(setSubjectId(gridList[2]));
-            navigate('/art-list');
+            if (type === 'product') {
+              navigate('/product-list');
+            } else {
+              navigate('/art-list');
+            }
           }}
           className='row-span-2 col-span-2 rounded-2xl group overflow-hidden'
           style={{
@@ -153,7 +165,11 @@ const ArtGrid = ({ gridList }) => {
         <div
           onClick={() => {
             dispatch(setSubjectId(gridList[3]));
-            navigate('/art-list');
+            if (type === 'product') {
+              navigate('/product-list');
+            } else {
+              navigate('/art-list');
+            }
           }}
           className='row-span-2 col-span-2 rounded-2xl group overflow-hidden'
           style={{
@@ -189,7 +205,11 @@ const ArtGrid = ({ gridList }) => {
         <div
           onClick={() => {
             dispatch(setSubjectId(gridList[4]));
-            navigate('/art-list');
+            if (type === 'product') {
+              navigate('/product-list');
+            } else {
+              navigate('/art-list');
+            }
           }}
           className='row-span-2 rounded-2xl group overflow-hidden'
           style={{
@@ -225,7 +245,11 @@ const ArtGrid = ({ gridList }) => {
         <div
           onClick={() => {
             dispatch(setSubjectId(gridList[5]));
-            navigate('/art-list');
+            if (type === 'product') {
+              navigate('/product-list');
+            } else {
+              navigate('/art-list');
+            }
           }}
           className='row-span-2 rounded-2xl group overflow-hidden'
           style={{
@@ -261,7 +285,11 @@ const ArtGrid = ({ gridList }) => {
         <div
           onClick={() => {
             dispatch(setSubjectId(gridList[6]));
-            navigate('/art-list');
+            if (type === 'product') {
+              navigate('/product-list');
+            } else {
+              navigate('/art-list');
+            }
           }}
           className='row-span-2 col-span-2 rounded-2xl group overflow-hidden'
           style={{
@@ -297,7 +325,11 @@ const ArtGrid = ({ gridList }) => {
         <div
           onClick={() => {
             dispatch(setSubjectId(gridList[7]));
-            navigate('/art-list');
+            if (type === 'product') {
+              navigate('/product-list');
+            } else {
+              navigate('/art-list');
+            }
           }}
           className='row-span-4 rounded-2xl group overflow-hidden'
           style={{
@@ -333,7 +365,11 @@ const ArtGrid = ({ gridList }) => {
         <div
           onClick={() => {
             dispatch(setSubjectId(gridList[8]));
-            navigate('/art-list');
+            if (type === 'product') {
+              navigate('/product-list');
+            } else {
+              navigate('/art-list');
+            }
           }}
           className='row-span-2 col-span-2 rounded-2xl group overflow-hidden'
           style={{
@@ -369,7 +405,11 @@ const ArtGrid = ({ gridList }) => {
         <div
           onClick={() => {
             dispatch(setSubjectId(gridList[9]));
-            navigate('/art-list');
+            if (type === 'product') {
+              navigate('/product-list');
+            } else {
+              navigate('/art-list');
+            }
           }}
           className='row-span-2 rounded-2xl group overflow-hidden'
           style={{
@@ -402,15 +442,29 @@ const ArtGrid = ({ gridList }) => {
           </div>
         </div>
       </div>
-      <button
-        onClick={() => {
-          artNextPage('all');
-          dispatch(setSubjectId(null));
-        }}
-        className='blackBtn mx-auto block'
-      >
-        Discover More
-      </button>
+
+      {type === 'product' ? (
+        <button
+          onClick={() => {
+            navigate('/product-list');
+            dispatch(setSubjectId(null));
+          }}
+          className='blackBtn mx-auto block'
+        >
+          Discover More
+        </button>
+      ) : (
+        <button
+          onClick={() => {
+            artNextPage('all');
+
+            dispatch(setSubjectId(null));
+          }}
+          className='blackBtn mx-auto block'
+        >
+          Discover More
+        </button>
+      )}
     </div>
   );
 };

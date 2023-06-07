@@ -96,22 +96,27 @@ const ProductList = () => {
   const getAllProductList = async () => {
     if (subjectId === null) {
       const res = await httpClient.get(
-        '/product_master/getActiveProductMaster'
+        '/art_product_master/getActiveArtProductMaster'
       );
       setTitle('All Products');
+      console.log(res.data);
       setArtsList(res.data);
     } else {
       const res = await httpClient.get(
-        `/product_master/getProductTypeIdWiseProductMaster/${subjectId.productTypeMaster.productTypeId}`
+        `/art_product_master/getProductSubCategoryIdWiseArtProductMaster/${subjectId.productSubCategoryId}`
       );
-      setTitle(subjectId.productName);
+      setTitle(subjectId.productSubCategoryName);
       setArtsList(res.data);
     }
   };
 
   useEffect(() => {
-    console.log(artsList);
-  }, [artsList]);
+    console.log(subjectId);
+  }, []);
+
+  // useEffect(() => {
+  //   console.log(artsList);
+  // }, [artsList]);
 
   // useEffect(() => {
   //   console.log(subjectId);
@@ -127,15 +132,26 @@ const ProductList = () => {
     // console.log(text);
   };
 
-  const goToArtDetailsPage = (id) => {
-    navigate(`/art/art-details`, { state: { id } });
+  const goToProductDetailsPage = (data) => {
+    navigate('/product-details', { state: { data } });
   };
 
   const [id, setId] = useState('');
 
-  useEffect(() => {
-    console.log(id);
-  }, [id]);
+  // useEffect(() => {
+  //   console.log(id);
+  // }, [id]);
+
+  const imageLinkChange = (url) => {
+    const str = url;
+
+    const updatedStr = str.replace(
+      'upload/',
+      'upload/c_scale,h_362,w_362/'
+    );
+
+    return updatedStr;
+  };
 
   return (
     <>
@@ -664,7 +680,7 @@ const ProductList = () => {
               {artsList.map((data) => {
                 return (
                   <div
-                    key={data?.productId}
+                    key={data?.artProductId}
                     className={` ${
                       showSidebar ? 'w-[24.3125rem]' : 'w-[22.625rem]'
                     } relative`}
@@ -672,13 +688,11 @@ const ProductList = () => {
                     <div
                       className={` w-full group overflow-hidden rounded-2xl relative`}
                       style={{ height: `${data?.height}px` }}
-                      onClick={() =>
-                        goToArtDetailsPage(data?.productId)
-                      }
+                      onClick={() => goToProductDetailsPage(data)}
                     >
                       <img
                         style={{ height: '100%', width: '100%' }}
-                        src={data?.image}
+                        src={imageLinkChange(data?.image)}
                         alt=''
                       />
                       <div
@@ -688,7 +702,7 @@ const ProductList = () => {
                         <div>
                           <div>
                             <p className='text-heading text-[#ffffff] font-semibold'>
-                              {data?.productName}
+                              {data?.productMaster.productName}
                             </p>
                             <p className='text-sm12 text-[#ffffff] font-medium'>
                               An Affair with array of Artistically{' '}
@@ -725,14 +739,14 @@ const ProductList = () => {
                       </div>
                     </div>
                     <p className='text-primaryBlack text-[15px] leading-[18px] font-semibold mt-1.5'>
-                      {data?.productName}
+                      {data?.productMaster.productName}
                     </p>
                     <p className='text-primaryGray text-sm12 leading-[15px]'>
                       Artnstock <br />
                       35.4” x 31.5” Multiple Sizes
                     </p>
                     <p className='text-primaryBlack text-[15px] leading-[18px] font-semibold mt-1.5'>
-                      ${data?.price}
+                      ${data?.sizeAndPrices[0].sellPrice}
                     </p>
                     {/* Rollover */}
                     {popup === true && data.productId === id ? (

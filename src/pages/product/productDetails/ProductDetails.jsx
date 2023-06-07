@@ -17,7 +17,10 @@ import blackCircleImg from '../../../assets/images/Icons/W Art Print.svg';
 import roomViewImg from '../../../assets/images/Icons/Icon - View in a room.svg';
 import threeDImg from '../../../assets/images/Icons/Icon - 3D View.svg';
 import addIcon from '../../../assets/images/Icons/addIcon.svg';
+
 import wishlistIcon from '../../../assets/images/Icons/wishlistIcon.svg';
+import { ReactComponent as WishlistIcon } from '../../../assets/images/Icons/wishlistIcon.svg';
+
 import shareIcon from '../../../assets/images/Icons/shareIcon.svg';
 import productHeead from '../../../assets/images/static/Header - Products (1).svg';
 import productImg from '../../../assets/images/static/products.svg';
@@ -48,6 +51,7 @@ import MensShirt from '../../../assets/images/lifestyle/2MensShirt.png';
 import cards from '../../../assets/images/lifestyle/cards.png';
 import certificate from '../../../assets/images/lifestyle/Certificate.png';
 import artwithframe from '../../../assets/images/products/artwithframe.png';
+import { useSelector } from 'react-redux';
 
 // pratiksha
 import profile from '../../../assets/images/Menubar/Profile.png';
@@ -348,6 +352,74 @@ const ProductDetails = () => {
 
   const data = location.state.data;
 
+  const userId = useSelector((state) => state.auth.userId);
+
+  // this code is for valdating if artProductId already exists in wishlist
+  const [wishlist, setwishlist] = useState();
+
+  useEffect(() => {
+    getAllWishlistByUserId();
+  }, []);
+  useEffect(() => {
+    console.log(data);
+  }, []);
+
+  const getAllWishlistByUserId = async () => {
+    try {
+      const res = await httpClient.get(
+        `/wishlist_master/getByUserIdList/${userId}`
+      );
+      setwishlist(res.data);
+      // console.log(res.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  // above code is for valdating if artProductId already exists in wishlist
+
+  const addToWishlist = (artProductId) => {
+    // console.log('here', artProductId);
+    // const findId = wishlist.find(
+    //   (obj) => obj.artProductMaster.artProductId === artProductId
+
+    // );
+
+    let findId;
+    wishlist.forEach((wishlist) => {
+      if (wishlist.artMaster === null) {
+        if (wishlist.artProductMaster.artProductId === artProductId) {
+          findId = undefined;
+        }
+      }
+    });
+
+    if (!findId) {
+      const object = {
+        artProductId: artProductId,
+        id: userId,
+      };
+      httpClient.post(`/wishlist_master/save`, object).then((res) => {
+        // console.log(res);
+        getAllWishlistByUserId();
+      });
+    }
+  };
+
+  const wishlistDelete = async (id) => {
+    wishlist?.forEach(async (obj) => {
+      if (obj.artProductMaster.artProductId === id) {
+        try {
+          const res = await httpClient.delete(
+            `/wishlist_master/delete/${obj.wishListId}`
+          );
+          getAllWishlistByUserId();
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    });
+  };
+
   return (
     <>
       <div className='w-[100%] flex justify-center'></div>
@@ -367,7 +439,7 @@ const ProductDetails = () => {
               // style={{
               //   backgroundImage: `url(${tshirtphoto})`,
               // }}
-              className='relative w-[540px] h-[540px] rounded-[16.01px] bg-[#f5f5f7] flex flex-col justify-center bg-cover bg-no-repeat items-center'
+              className='relative w-[540px] h-[540px] rounded-[16.01px] bg-[#f5f5f7] flex flex-col justify-center bg-contain bg-no-repeat items-center'
             >
               <img
                 src={viewIcon}
@@ -384,7 +456,30 @@ const ProductDetails = () => {
               </div>
               <div className='flex gap-x-2.5'>
                 <img src={addIcon} alt='' />
-                <img src={wishlistIcon} alt='' />
+                {/* <img src={wishlistIcon} alt='' /> */}
+
+                {wishlist?.find(
+                  (obj) =>
+                    obj.artProductMaster?.artProductId ===
+                    data?.artProductId
+                ) === undefined ? (
+                  <WishlistIcon
+                    onClick={() => {
+                      addToWishlist(data?.artProductId);
+                    }}
+                    style={{ fill: '#888888', width: '100%' }}
+                  />
+                ) : (
+                  <WishlistIcon
+                    onClick={() => {
+                      wishlistDelete(data?.artProductId);
+                    }}
+                    style={{
+                      fill: 'red',
+                      width: '100%',
+                    }}
+                  />
+                )}
                 <img src={shareIcon} alt='' />
               </div>
             </div>
@@ -469,12 +564,12 @@ const ProductDetails = () => {
             <p className='text-[25px] text-primaryBlack font-medium leading-[1]'>
               {/* Printed Artnstock Limited Edition <br /> on the Cotton
               T-Shirt */}
-              {data?.productName}
+              {data?.productMaster.productName}
             </p>
 
             <div className='flex border-b border-t border-t-[2px] border-[#efefef] text-primaryGray text-[12px] mt-[10px]'>
               <p className='w-[100px] font-medium'>Product ID:</p>
-              <p>{data?.productId}</p>
+              <p>{data?.productMaster.productId}</p>
               {/* <p>ANSHVB4R44</p> */}
             </div>
 
@@ -629,7 +724,7 @@ const ProductDetails = () => {
                 {/* 180 GSM, 100% Pre-Combed cotton (Bio-Washed and
                 Pre-Shrunk) <br /> Round Neck, Half Sleeved <br />{' '}
                 Machine wash, Wash in cold water */}
-                {data?.description}
+                {data?.productMaster.description}
               </p>
               <img
                 src={DescriptionPic}
@@ -665,7 +760,7 @@ const ProductDetails = () => {
                     $
                   </p>
                   <p className='text-orangeColor text-[38px] font-normal leading-[55px]'>
-                    {data?.price}
+                    {data?.sizeAndPrices[0].sellPrice}
                   </p>
                 </div>
                 <p className='text-sm12 font-normal text-primaryGray'>
