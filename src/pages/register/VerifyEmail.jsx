@@ -75,12 +75,13 @@ const VerifyEmail = () => {
       .then((res) => {
         console.log(res);
         dispatch(userRegSliceAction.setUserStatus(res.data));
-        if (res.data === 'Active') {
+        if (res.data.status === 'Active') {
           dispatch(authSliceAction.loginUser(true));
           dispatch(authSliceAction.setUserRole(res.data.userRole[0]));
           dispatch(authSliceAction.setUserId(res.data.userId));
+          dispatch(authSliceAction.setUserDetails(res.data));
         }
-        if (res.data === 'InProcess') {
+        if (res.data.status === 'InProcess') {
           sendMail();
           setTimeout(() => {
             setOpen(false);

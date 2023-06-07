@@ -37,6 +37,7 @@ import Architecture from '../../assets/images/static/Architecture.png';
 import Botanical from '../../assets/images/static/Botanical.png';
 import People from '../../assets/images/static/People.png';
 import Scenic from '../../assets/images/static/Scenic.png';
+import { httpClient } from '../../axios';
 
 // Product
 import comboPack from '../../assets/images/static/Icon - Combo Pack.png';
@@ -93,6 +94,8 @@ const Mainbar = () => {
 
   const location = useLocation();
 
+  const userDetails = useSelector((state) => state.auth.userDetails);
+
   const [activeLink, setActiveLink] = useState(
     location.pathname === '/'
       ? 'home'
@@ -137,8 +140,16 @@ const Mainbar = () => {
     }
   };
 
+  const [searchedArtList, setsearchedArtList] = useState([]);
   const changeinput = (e) => {
-    console.log(e.target.value);
+    // console.log(e.target.value);
+    let value = e.target.value;
+    httpClient
+      .get(`/art_master/searchTextByArtName/${value}`)
+      .then((res) => {
+        setsearchedArtList(res.data);
+        console.log(res.data);
+      });
   };
 
   // redux useSelector of userRole
@@ -587,10 +598,14 @@ const Mainbar = () => {
 
                                   <p className='leading-[1.3]'>
                                     <p className='text-[18px] text-[#333333]'>
-                                      Azra Creations
+                                      {userDetails.displayName}
                                     </p>
                                     <p className='text-[11px] text-[#757575]'>
-                                      User ID: ANS98765432
+                                      User ID:{' '}
+                                      {userDetails.userId?.slice(
+                                        0,
+                                        10
+                                      )}
                                     </p>
                                     <p className='text-[11px] text-[#757575]'>
                                       Illustrator/Photographer
@@ -605,7 +620,18 @@ const Mainbar = () => {
                                     </p>
                                   </p>
                                 </div>
-                                <button className='text-[#333333] border w-[111px] h-[22px] rounded-[11px] flex justify-center items-center p-0 mb-[10px]'>
+                                <button
+                                  onClick={() => {
+                                    navigate(
+                                      `${
+                                        userRole === 'contributor'
+                                          ? '/contributor'
+                                          : 'customer'
+                                      }`
+                                    );
+                                  }}
+                                  className='text-[#333333] border w-[111px] h-[22px] rounded-[11px] flex justify-center items-center p-0 mb-[10px]'
+                                >
                                   <span>Account Settings</span>
                                 </button>
                               </div>
@@ -899,7 +925,10 @@ const Mainbar = () => {
               <div className=' border-t border-[#EFEFEF] pt-5 pb-7 flex'>
                 <div className='flex-1 border-r border-[#EFEFEF]'>
                   <ul>
-                    <li className='linkSearch'>Arts for Kids</li>
+                    {searchedArtList.map((art) => (
+                      <li className='linkSearch'>{art.artName}</li>
+                    ))}
+                    {/* <li className='linkSearch'>Arts for Kids</li>
                     <li className='linkSearch'>Astronomy & Space</li>
                     <li className='linkSearch'>Beverages</li>
                     <li className='linkSearch'>Book Illustration</li>
@@ -908,7 +937,7 @@ const Mainbar = () => {
                     <li className='linkSearch'>Education</li>
                     <li className='linkSearch'>Fantasy</li>
                     <li className='linkSearch'>Fashion</li>
-                    <li className='linkSearch'>Figurative</li>
+                    <li className='linkSearch'>Figurative</li> */}
                   </ul>
                 </div>
                 <div className='flex-1 flex flex-col justify-between border-r  border-[#EFEFEF] pl-5'>

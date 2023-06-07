@@ -34,6 +34,7 @@ const Login = () => {
               authSliceAction.setUserRole(res.data.userRole[0])
             );
             dispatch(authSliceAction.setUserId(res.data.userId));
+            dispatch(authSliceAction.setUserDetails(res.data));
             navigate('/');
           } else {
             toast.error(res.data.message);
@@ -43,6 +44,7 @@ const Login = () => {
       toast.error('Please enter email and password');
     }
   };
+
   return (
     <div className='w-full h-[100vh] bg-[#FF369F] flex justify-center'>
       <div className='loginCard py-7 px-[67px]'>
