@@ -17,7 +17,7 @@ const ProdList = ({ heading }) => {
 
   const getProductList = () => {
     httpClient.get('/product_master').then((res) => {
-      //   console.log(res);
+      console.log(res);
       setProdList(res.data);
     });
   };
@@ -32,9 +32,13 @@ const ProdList = ({ heading }) => {
               <div key={data?.productId} className='w-[16.813rem]'>
                 <div
                   onClick={() => {
-                    dispatch(setSubjectId(data));
-                    navigate('/product-list');
+                    // dispatch(setSubjectId(data));
+                    navigate('/product-details', { state: { data } });
                   }}
+                  // onClick={() => {
+                  //   dispatch(setSubjectId(data));
+                  //   navigate('/product-list');
+                  // }}
                   className='h-[16.813rem] w-full group overflow-hidden rounded-2xl relative'
                 >
                   <img src={data?.image} alt='' />

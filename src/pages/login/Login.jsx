@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { authSliceAction } from '../../store/authSlice';
 import { useNavigate } from 'react-router-dom';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -33,6 +34,7 @@ const Login = () => {
             dispatch(
               authSliceAction.setUserRole(res.data.userRole[0])
             );
+            dispatch(authSliceAction.setUserId(res.data.userId));
             navigate('/');
           } else {
             toast.error(res.data.message);
@@ -42,6 +44,11 @@ const Login = () => {
       toast.error('Please enter email and password');
     }
   };
+
+  const onChangeCaptcha = (value) => {
+    console.log('Captcha value:', value);
+  };
+
   return (
     <div className='w-full h-[100vh] bg-[#FF369F] flex justify-center'>
       <div className='loginCard py-7 px-[67px]'>
@@ -64,7 +71,13 @@ const Login = () => {
           autoComplete='off'
           onChange={(e) => setPassword(e.target.value)}
         />
-        <img className='mx-auto my-5' src={captcha} alt='' />
+        {/* <img className='mx-auto my-5' src={captcha} alt='' /> */}
+        <div className='mx-auto my-5 ' style={{width: "fit-content"}}>
+        <ReCAPTCHA
+    sitekey="6LenqnImAAAAAFpIjwhtNCTk1ElnUEot9oJ5J7iT"
+    onChange={onChangeCaptcha}
+  />
+  </div>
         <button onClick={login} className='blackBtn'>
           Sign In
         </button>

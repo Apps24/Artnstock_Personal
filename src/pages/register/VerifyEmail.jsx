@@ -78,6 +78,7 @@ const VerifyEmail = () => {
         if (res.data === 'Active') {
           dispatch(authSliceAction.loginUser(true));
           dispatch(authSliceAction.setUserRole(res.data.userRole[0]));
+          dispatch(authSliceAction.setUserId(res.data.userId));
         }
         if (res.data === 'InProcess') {
           sendMail();

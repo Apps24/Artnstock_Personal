@@ -18,6 +18,15 @@ import { artMasterModel } from '../../../models/allModel';
 import AttachFileCards from './AttachFileCards';
 import { setpath2 } from '../../../store/contriPathSlice';
 import { useDispatch } from 'react-redux';
+import view from '../../../assets/images/contributor/view.png';
+import edit from '../../../assets/images/contributor/edit.png';
+import deletee from '../../../assets/images/contributor/delete.png';
+
+const releaseCards = [
+  { id: '1', name: 'jn jencj jbnejne eudnedn' },
+  { id: '1', name: 'jn jencj jbnejne eudnedn' },
+  { id: '1', name: 'jn jencj jbnejne eudnedn' },
+];
 
 const AddDetails = () => {
   const [images, setImages] = useState([]);
@@ -43,6 +52,12 @@ const AddDetails = () => {
 
   const dispatch = useDispatch();
 
+  const userId = useSelector((state) => state.auth.userId);
+
+  useEffect(() => {
+    console.log(userId);
+  }, []);
+
   useEffect(() => {
     dispatch(setpath2('/ Add Details'));
   }, []);
@@ -54,6 +69,7 @@ const AddDetails = () => {
       setSubjectMenuList(response.data);
       // console.log(response.data);
     };
+
     const getStyleList = async () => {
       const response = await httpClient.get('/style_master');
       setStyleMenuList(response.data);
@@ -121,7 +137,6 @@ const AddDetails = () => {
   const toggleMenuStyle = () => {
     setIsOpenStyle(!isOpenStyle);
   };
-
   const toggleMenuMedium = () => {
     setIsOpenMedium(!isOpenMedium);
   };
@@ -241,6 +256,10 @@ const AddDetails = () => {
 
   useEffect(() => {
     setImages(selectedImages);
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      userId: userId,
+    }));
   }, []);
 
   // useEffect(() => {
@@ -586,10 +605,10 @@ const AddDetails = () => {
                   }}
                 >
                   <button className='w-[220px] h-[40px] rounded-[20px] border-[1px] border-[#d6d6d6] pl-[15px] text-[14px] text-primaryGray text-start'>
-                    {styleMenu ? (
-                      <span>{styleMenu.name}</span>
-                    ) : (
+                    {mediumMenu ? (
                       <span>{mediumMenu}</span>
+                    ) : (
+                      <span>Select Medium</span>
                     )}
                     {/* {mediumMenu} */}
                   </button>
@@ -789,6 +808,52 @@ const AddDetails = () => {
               </p>
             </div>
           </div>
+
+          {/* release test */}
+          <div className='pt-[25px]'>
+            <p className='text-[15px] text-primaryBlack font-medium'>
+              Attach Releases
+            </p>
+            <p className='text-[11px] primary-Gray'>
+              Lorem Ipsum dolor sit amet consectetur adipiscing elit
+              sed do.
+            </p>
+            {releaseCards.length > 0 && (
+              <div className='text-[0.750rem] border border-[#d6d6d6] rounded-[0.625rem]'>
+                {releaseCards.map((obj, index) => (
+                  <p
+                    key={index}
+                    className={`${
+                      index !== releaseCards.length - 1
+                        ? 'border-b border-[#d6d6d6]'
+                        : ''
+                    } flex justify-between p-[0.250rem] px-[0.500rem]`}
+                  >
+                    <div className='flex gap-[0.500rem]'>
+                      <input
+                        type='checkbox'
+                        // onChange={() => handleCheckboxChange(obj)}
+                      />
+                      {/* <span>{obj.cards.name}</span> */}
+                    </div>
+                    <div className='flex gap-[1.188rem]'>
+                      <div className='pt-[0.188rem]'>
+                        <img src={view} alt='' />
+                      </div>
+                      <div>
+                        <img src={edit} alt='' />
+                      </div>
+                      <div>
+                        <img src={deletee} alt='' />
+                      </div>
+                    </div>
+                  </p>
+                ))}
+              </div>
+            )}
+          </div>
+          {/* release test */}
+
           <div className='pt-[25px]'>
             <p className='text-[15px] text-primaryBlack font-medium'>
               Add Keywords

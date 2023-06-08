@@ -74,6 +74,10 @@ import TrackMyOrder3 from './components/customer/cust-components/PurchaseHistory
 import BuyersPlan from './components/customer/cust-components/BuyersPlan';
 import ProductDetails from './pages/product/productDetails/ProductDetails';
 import { Navigate } from 'react-router-dom';
+import Wishlist from './components/Wishlist/Wishlist2';
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import ContributorViewMyStore from './components/ContributorViewMyStore/ContributorViewMyStore';
 
 function App() {
   const userAuth = useSelector((state) => state.auth);
@@ -102,8 +106,20 @@ function App() {
     return children;
   };
 
+  // scroll to top function
+  const ScrollToTop = () => {
+    const { pathname } = useLocation();
+
+    useEffect(() => {
+      window.scrollTo(0, 0);
+    }, [pathname]);
+
+    return null;
+  };
+
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Mainbar />
       <Routes>
         {/* Account Settings */}
@@ -229,6 +245,16 @@ function App() {
 
         {/* Product Details */}
         <Route path='product-details' element={<ProductDetails />} />
+
+        {/* Wishlist */}
+        <Route path='/wishlist' element={<Wishlist />} />
+
+        {/* View My Store */}
+        <Route
+          path='/view-my-store'
+          element={<ContributorViewMyStore />}
+          exact
+        />
 
         {/* Register */}
         <Route element={<PrivateRoutes />}>

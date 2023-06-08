@@ -6,7 +6,7 @@ import TabPanel from '@mui/lab/TabPanel';
 import ContriBanner from '../contri-banner/Contri-Banner';
 import UploadContent from '../contri-components/UploadContent';
 import Submit from '../contri-components/Submit';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import AddDetails from '../contri-components/AddDetails';
 import { useDispatch, useSelector } from 'react-redux';
 import { setNestedTabValueUpload } from '../../../store/nestedTabSlice';
@@ -33,6 +33,8 @@ import TaxMain from '../contri-components/tax/TaxMain';
 import { setpath } from '../../../store/contriPathSlice';
 import { setpath2 } from '../../../store/contriPathSlice';
 import Footer from '../../footer/Footer';
+import { useLocation } from 'react-router-dom';
+import Certificate from '../contri-components/Certificate';
 
 const theme = createTheme({
   typography: {
@@ -45,6 +47,20 @@ const Tabs = () => {
   const [nestedEarnings, setNestedEarnings] = useState('5.1');
   // const [path, setpath] = useState('/ Dashboard');
   // const [path2, setpath2] = useState('');
+
+  const location = useLocation();
+
+  const sta = location.state;
+
+  useEffect(() => {
+    if (sta !== '' && sta !== null) {
+      setValue(sta);
+    }
+  }, [sta]);
+
+  useEffect(() => {
+    console.log(sta);
+  }, []);
 
   const dispatch = useDispatch();
 
@@ -793,6 +809,7 @@ const Tabs = () => {
             <TabPanel value='6'>Item Six</TabPanel>
           </TabContext>
         </Box>
+        <Certificate />
         <Footer />
       </ThemeProvider>
     </>

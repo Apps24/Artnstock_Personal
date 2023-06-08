@@ -17,6 +17,8 @@ import PurchaseHistory from '../cust-components/PurchaseHistory';
 import BuyersPlan from '../cust-components/BuyersPlan';
 // importing components/
 import MyCollections from '../cust-components/MyCollections';
+import { useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const theme = createTheme({
   typography: {
@@ -31,6 +33,20 @@ const TabsCustomer = () => {
   const [path, setpath] = useState('/ My Collections');
 
   const dispatch = useDispatch();
+
+  const location = useLocation();
+
+  const sta = location.state;
+
+  useEffect(() => {
+    if (sta !== '' && sta !== null) {
+      setValue(sta);
+    }
+  }, [sta]);
+
+  useEffect(() => {
+    console.log(value, 'val');
+  }, []);
 
   const path2 = useSelector((state) => state.contriPath.path2cust);
 
@@ -156,7 +172,7 @@ const TabsCustomer = () => {
                     setpath('/ Contributors Support');
                     dispatch(setpath2cust(''));
                   }}
-                  label='Contributors Support'
+                  label='Customer Support'
                   value='5'
                   sx={{
                     textTransform: 'none!important',

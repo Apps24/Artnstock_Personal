@@ -38,12 +38,15 @@ const ArtList = () => {
   function apps1(e) {
     setShow(false);
   }
+
   function apps2(e) {
     setShowStyles(false);
   }
+
   function apps3(e) {
     setShowSub(false);
   }
+
   function apps4(e) {
     setShowMedium(false);
   }
@@ -65,6 +68,7 @@ const ArtList = () => {
     setShowSub(false);
     setSelectSubValue(e);
   }
+
   function changeValue4(e) {
     // console.log(e);
     setShowMedium(false);
@@ -260,7 +264,13 @@ const ArtList = () => {
                     <p className='text-[#BBBBBB] text-[13px] leading-[13px] font-medium'>
                       {selectValue ? selectValue : 'Most Popular'}
                     </p>
-                    <img src={dropArrow} alt='' />
+                    <img
+                      className={`${
+                        show === true ? 'transform rotate-180' : ''
+                      }`}
+                      src={dropArrow}
+                      alt=''
+                    />
                   </div>
                   {show && (
                     <div className='relative'>
@@ -301,7 +311,15 @@ const ArtList = () => {
                         ? selectStylesValue
                         : 'All Styles'}
                     </p>
-                    <img src={dropArrow} alt='' />
+                    <img
+                      className={`${
+                        showStyles === true
+                          ? 'transform rotate-180'
+                          : ''
+                      }`}
+                      src={dropArrow}
+                      alt=''
+                    />
                   </div>
                   {showStyles && (
                     <div className='relative'>
@@ -352,7 +370,13 @@ const ArtList = () => {
                         ? selectSubValue
                         : 'All Subjects'}
                     </p>
-                    <img src={dropArrow} alt='' />
+                    <img
+                      className={`${
+                        showSub === true ? 'transform rotate-180' : ''
+                      }`}
+                      src={dropArrow}
+                      alt=''
+                    />
                   </div>
                   {showSub && (
                     <div className='relative'>
@@ -401,7 +425,15 @@ const ArtList = () => {
                         ? selectMediumValue
                         : 'All Mediums'}
                     </p>
-                    <img src={dropArrow} alt='' />
+                    <img
+                      className={`${
+                        showMedium === true
+                          ? 'transform rotate-180'
+                          : ''
+                      }`}
+                      src={dropArrow}
+                      alt=''
+                    />
                   </div>
                   {showMedium && (
                     <div className='relative'>

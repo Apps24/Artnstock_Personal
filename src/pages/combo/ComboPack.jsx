@@ -13,9 +13,13 @@ import save from '../../assets/images/combo/save.png';
 import { httpClient } from '../../axios';
 import mainlogo from '../../assets/images/header/mainLogo.svg';
 import Footer from '../../components/footer/Footer';
+import { useSelector } from 'react-redux';
 
 const ComboPack = () => {
   const [data, setData] = useState();
+
+  const userId = useSelector((state) => state.auth.userId);
+
   // grid api call
 
   useEffect(() => {
@@ -24,6 +28,23 @@ const ComboPack = () => {
       console.log(res);
     });
   }, []);
+
+  // const addToWishlist = (comboId) => {
+  //   const findId = wishlist.find(
+  //     (obj) => obj.artMaster.artId === artId
+  //   );
+
+  //   if (!findId) {
+  //     const object = {
+  //       artId: comboId,
+  //       id: userId,
+  //     };
+  //     httpClient.post(`/wishlist_master/save`, object).then((res) => {
+  //       console.log(res);
+  //     });
+  //   }
+  // };
+
   return (
     <>
       <Banner type='product' />

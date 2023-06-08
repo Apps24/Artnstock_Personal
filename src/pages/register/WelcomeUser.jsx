@@ -60,7 +60,7 @@ const WelcomeUser = () => {
           </p>
 
           <button className="bg-gradient-to-r from-[#E23C9C] via-[#F2D058] to-[#6EDDED] px-5 py-2.5 rounded-3xl text-sm14 text-primaryBlack font-medium my-[15px]">
-            <Link to="/">Go To Artnstock</Link>
+            <Link to={userDetails.userType === "customer" ? "/" : "/upload-file"} >Go To Artnstock</Link>
           </button>
           <p className="text-orangeColor text-sm12 font-medium leading-[14px]">
             {" "}

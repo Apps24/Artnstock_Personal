@@ -6,30 +6,163 @@ import addsmall from '../../../assets/images/contributor/addsmall.png';
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { setpath2 } from '../../../store/contriPathSlice';
+import { useSelector } from 'react-redux';
+import { httpClient } from '../../../axios';
 
 const UploadRelease = () => {
   const [cards, setCards] = useState([]);
+  const [images, setImages] = useState([]);
+
+  const userId = useSelector((state) => state.auth.userId);
+
+  // release form
+  const [data, setData] = useState({
+    release: [],
+    attachContent: [],
+    description: '',
+    nameOfPerson: '',
+    type: '',
+    userId: userId,
+  });
 
   // dropdown
   const [isPleaseSelectOpen, setIsPleaseSelectOpen] = useState();
 
   const dispatch = useDispatch();
 
-  const handleFileChange = (event) => {
-    const newCards = Array.from(files);
-    const files = event.target.files;
-
-    setCards((prevCards) => [...prevCards, ...newCards]);
-  };
   const fileInputRef = useRef(null);
+  const fileInputRefAttach = useRef(null);
+
+  const handleFileChange = (event) => {
+    const files = event.target.files;
+    const newImages = Array.from(files);
+    // setCards((prevCards) => [...prevCards, ...newImages]);
+
+    // upload images
+    newImages.forEach((cards) => {
+      let formData = new FormData();
+      formData.append('file', cards);
+      httpClient
+        .post('/bucket/push', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+        .then((res) => {
+          console.log('file uploaded successfully');
+          // console.log(res);
+          const dataa = res.data;
+          setCards((prevCards) => [...prevCards, { dataa, cards }]);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    });
+    // upload images
+  };
+
+  const handleFileChangeAttach = (event) => {
+    const files = event.target.files;
+    const newImages = Array.from(files);
+    setImages((prevImages) => [...prevImages, ...newImages]);
+
+    // upload images
+    newImages.forEach((cards) => {
+      let formData = new FormData();
+      formData.append('file', cards);
+      httpClient
+        .post('/bucket/push', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+        .then((res) => {
+          console.log('file uploaded successfully');
+          // console.log(res);
+          const dataa = res.data;
+          setData((prevImages) => ({
+            ...prevImages,
+            attachContent: [...prevImages.attachContent, dataa],
+          }));
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    });
+    // upload images
+  };
+
+  const handleCheckboxChange = (obj) => {
+    const array = data.release.find((item) => item === obj.dataa);
+    if (!array) {
+      setData((prevImages) => ({
+        ...prevImages,
+        release: [...prevImages.release, obj.dataa],
+      }));
+    } else {
+      setData((prevImages) => ({
+        ...prevImages,
+        release: prevImages.release.filter(
+          (item) => item !== obj.dataa
+        ),
+      }));
+    }
+  };
+
+  // POST API OF RELEASE
+
+  const postRelease = async () => {
+    try {
+      const res = await httpClient.post(
+        '/release_master/createReleaseMaster',
+        data
+      );
+      console.log(res);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const handleButtonClick = () => {
     fileInputRef.current.click();
   };
 
+  const handleButtonClickAttach = () => {
+    fileInputRefAttach.current.click();
+  };
+
+  const type = (str) => {
+    setData((prevImages) => ({
+      ...prevImages,
+      type: str,
+    }));
+  };
+
+  const name = (str) => {
+    setData((prevImages) => ({
+      ...prevImages,
+      nameOfPerson: str,
+    }));
+  };
+
+  const description = (str) => {
+    setData((prevImages) => ({
+      ...prevImages,
+      description: str,
+    }));
+  };
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
+
   useEffect(() => {
     dispatch(setpath2('/ Upload Release'));
   }, []);
+
+  // useEffect(() => {
+  //   console.log(cards);
+  // }, [cards]);
 
   return (
     <div>
@@ -104,7 +237,7 @@ const UploadRelease = () => {
       </div>
 
       <div className='w-full pt-[1.375rem]'>
-        <div className='flex flex-col gap-[1.875rem] w-[43.125rem] mx-[auto] text-primaryGray'>
+        <div className='flex flex-col gap-[1.875rem] w-[100%] max-w-[43.125rem] mx-[auto] text-primaryGray'>
           <div className='flex flex-col gap-[0.438rem]'>
             <p className='text-primaryBlack text-[0.938rem] font-medium'>
               Select File From Computer
@@ -115,66 +248,57 @@ const UploadRelease = () => {
               both Model Release and Property Release to be attached.
             </p>
             <div>
-              <button className='w-[6.625rem] h-[1.750rem] bg-[#8e8e8e] text-[#ffffff] rounded-[0.875rem] text-[0.750rem] font-medium'>
+              <input
+                type='file'
+                multiple
+                onChange={handleFileChange}
+                accept='image/*'
+                style={{ display: 'none' }}
+                ref={fileInputRef}
+              />
+              <button
+                onClick={handleButtonClick}
+                className='w-[6.625rem] h-[1.750rem] bg-[#8e8e8e] text-[#ffffff] rounded-[0.875rem] text-[0.750rem] font-medium'
+              >
                 Attach Release
               </button>
               <p className='text-[0.688rem] mt-[0.188rem]'>
                 JPEG or PDF file only. Max 4MB.
               </p>
             </div>
-            <div className='text-[0.750rem] border border-[#d6d6d6] rounded-[0.625rem]'>
-              <p className='flex justify-between border-b border-[#d6d6d6] p-[0.250rem] px-[0.500rem]'>
-                <div className='flex gap-[0.500rem]'>
-                  <input type='checkbox' />
-                  <span>Blue sky and nature by Khalid Shaikh</span>
-                </div>
-                <div className='flex gap-[1.188rem]'>
-                  <div className='pt-[0.188rem]'>
-                    <img src={view} alt='' />
-                  </div>
-                  <div>
-                    <img src={edit} alt='' />
-                  </div>
-                  <div>
-                    <img src={deletee} alt='' />
-                  </div>
-                </div>
-              </p>
-              <p className='flex justify-between border-b border-[#d6d6d6] p-[0.250rem] px-[0.500rem]'>
-                <div className='flex gap-[0.500rem]'>
-                  <input type='checkbox' />
-                  <span>Landscape by Lorem Ipsum</span>
-                </div>
-                <div className='flex gap-[1.188rem]'>
-                  <div className='pt-[0.188rem]'>
-                    <img src={view} alt='' />
-                  </div>
-                  <div>
-                    <img src={edit} alt='' />
-                  </div>
-                  <div>
-                    <img src={deletee} alt='' />
-                  </div>
-                </div>
-              </p>
-              <p className='flex justify-between p-[0.250rem] px-[0.500rem]'>
-                <div className='flex gap-[0.500rem]'>
-                  <input type='checkbox' />
-                  <span>Abstract painting by Lorem Ipsum</span>
-                </div>
-                <div className='flex gap-[1.188rem]'>
-                  <div className='pt-[0.188rem]'>
-                    <img src={view} alt='' />
-                  </div>
-                  <div>
-                    <img src={edit} alt='' />
-                  </div>
-                  <div>
-                    <img src={deletee} alt='' />
-                  </div>
-                </div>
-              </p>
-            </div>
+            {cards.length > 0 && (
+              <div className='text-[0.750rem] border border-[#d6d6d6] rounded-[0.625rem]'>
+                {cards.map((obj, index) => (
+                  <p
+                    key={index}
+                    className={`${
+                      index !== cards.length - 1
+                        ? 'border-b border-[#d6d6d6]'
+                        : ''
+                    } flex justify-between p-[0.250rem] px-[0.500rem]`}
+                  >
+                    <div className='flex gap-[0.500rem]'>
+                      <input
+                        type='checkbox'
+                        onChange={() => handleCheckboxChange(obj)}
+                      />
+                      <span>{obj.cards.name}</span>
+                    </div>
+                    <div className='flex gap-[1.188rem]'>
+                      <div className='pt-[0.188rem]'>
+                        <img src={view} alt='' />
+                      </div>
+                      <div>
+                        <img src={edit} alt='' />
+                      </div>
+                      <div>
+                        <img src={deletee} alt='' />
+                      </div>
+                    </div>
+                  </p>
+                ))}
+              </div>
+            )}
           </div>
           <div className='flex flex-col gap-[0.438rem]'>
             <p className='text-primaryBlack text-[0.938rem] font-medium'>
@@ -191,11 +315,18 @@ const UploadRelease = () => {
                   onClick={() => {
                     setIsPleaseSelectOpen(!isPleaseSelectOpen);
                   }}
-                  className='px-4 cursor-pointer bg-[#E6E6E6] w-[20.625rem] h-[2.500rem] bg-[#FFFFFF] rounded-[1.250rem] border border-[#d6d6d6] flex items-center justify-between'
+                  className='px-4 cursor-pointer bg-[#E6E6E6] w-[100%] max-w-[20.625rem] h-[2.500rem] bg-[#FFFFFF] rounded-[1.250rem] border border-[#d6d6d6] flex items-center justify-between'
                 >
-                  <span className='text-[#bbbbbb]'>
-                    Please Select
-                  </span>
+                  {data.type === '' ? (
+                    <span className='text-[#bbbbbb]'>
+                      Please Select
+                    </span>
+                  ) : (
+                    <span className='text-primaryGray'>
+                      {data.type}
+                    </span>
+                  )}
+
                   <img
                     className='inline-block'
                     src={dropdown}
@@ -204,11 +335,29 @@ const UploadRelease = () => {
                 </button>
                 {isPleaseSelectOpen && (
                   <ul className='shadow-dropShadow rounded-2xl hover:overflow-hidden dropdown__menu absolute z-50 bg-[#ffffff] w-[20.625rem] text-center text-[14px] text-primaryGray'>
-                    <li className='cursor-pointer hover:bg-[#F0F0F0] border-b border-[#EFEFEF] py-[5px]'>
-                      hgdvgdvcgv
+                    <li
+                      onClick={() => {
+                        type('property');
+                      }}
+                      className='cursor-pointer hover:bg-[#F0F0F0] border-b border-[#EFEFEF] py-[5px]'
+                    >
+                      property
                     </li>
-                    <li className='cursor-pointer hover:bg-[#F0F0F0] border-b border-[#EFEFEF] py-[5px]'>
-                      hgdvgdvcgv
+                    <li
+                      onClick={() => {
+                        type('model');
+                      }}
+                      className='cursor-pointer hover:bg-[#F0F0F0] border-b border-[#EFEFEF] py-[5px]'
+                    >
+                      model
+                    </li>
+                    <li
+                      onClick={() => {
+                        type('minor');
+                      }}
+                      className='cursor-pointer hover:bg-[#F0F0F0] border-b border-[#EFEFEF] py-[5px]'
+                    >
+                      minor
                     </li>
                   </ul>
                 )}
@@ -225,15 +374,21 @@ const UploadRelease = () => {
               <p className='text-[0.750rem]'>Name of the Person</p>
               <input
                 type='text'
-                className='w-[20.625rem] h-[2.500rem] border border-[#d6d6d6] rounded-[1.250rem] px-[0.438rem]'
+                className='w-[100%] max-w-[20.625rem] h-[2.500rem] border border-[#d6d6d6] rounded-[1.250rem] px-[0.438rem]'
+                onChange={(e) => {
+                  name(e.target.value);
+                }}
               />
             </div>
             <div>
               <p className='text-[0.750rem]'>Description</p>
               <textarea
+                onChange={(e) => {
+                  description(e.target.value);
+                }}
                 name='description'
                 type='text'
-                className='border border-[#d6d6d6] h-[6.625rem] w-[43.125rem] rounded-[1.000rem] pb-[4.375rem] pl-[0.625rem]'
+                className='border border-[#d6d6d6] h-[6.625rem] w-[100%] max-w-[43.125rem] rounded-[1.000rem] pb-[4.375rem] pl-[0.625rem]'
                 // value={description}
                 // onChange={handleDescriptionChange}
               />
@@ -252,23 +407,23 @@ const UploadRelease = () => {
               <input
                 type='file'
                 multiple
-                onChange={handleFileChange}
+                onChange={handleFileChangeAttach}
                 accept='image/*'
                 style={{ display: 'none' }}
-                ref={fileInputRef}
+                ref={fileInputRefAttach}
               />
-              {cards.map((card) => (
+              {images.map((card) => (
                 <div
                   style={{
                     backgroundImage: `url(${URL.createObjectURL(
                       card
                     )})`,
                   }}
-                  className='w-[4.063rem] h-[4.063rem] rounded-[0.625rem] flex justify-center items-center'
+                  className='w-[4.063rem] h-[4.063rem] rounded-[0.625rem] flex justify-center items-center bg-cover bg-no-repeat'
                 ></div>
               ))}
               <div
-                onClick={handleButtonClick}
+                onClick={handleButtonClickAttach}
                 className='w-[4.063rem] h-[4.063rem] bg-[#f7f7f7] rounded-[0.625rem] flex justify-center items-center'
               >
                 <img
@@ -297,7 +452,10 @@ const UploadRelease = () => {
               </span>
             </div>
             <div className='flex gap-[0.938rem] justify-center pb-[12.875rem]'>
-              <button className='blackBtn h-[2.500rem]'>
+              <button
+                onClick={postRelease}
+                className='blackBtn h-[2.500rem]'
+              >
                 Upload Release
               </button>
               <button className='h-[2.500rem] px-6 py-2 rounded-3xl text-sm14 text-primaryBlack border-[0.125rem]'>

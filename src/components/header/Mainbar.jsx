@@ -2,7 +2,8 @@ import React, { useRef, useState, useEffect } from 'react';
 import Topbar from './Topbar';
 import mainLogo from '../../assets/images/header/mainLogo.svg';
 import notficationIcon from '../../assets/images/Icons/notificationIcon.svg';
-import wishlistIcon from '../../assets/images/Icons/wishlistIcon.svg';
+// import wishlistIcon from '../../assets/images/Icons/wishlistIcon.svg';
+import { ReactComponent as WishlistIcon } from '../../assets/images/Icons/wishlistIcon.svg';
 import cartIcon from '../../assets/images/Icons/cartIcon.svg';
 import dropArrow from '../../assets/images/Icons/Down arrow.svg';
 import searchIcon from '../../assets/images/Icons/searchDarkIcon.svg';
@@ -91,6 +92,7 @@ const Mainbar = () => {
   const [progress, setProgress] = useState(0);
 
   const location = useLocation();
+
   const [activeLink, setActiveLink] = useState(
     location.pathname === '/'
       ? 'home'
@@ -108,7 +110,24 @@ const Mainbar = () => {
       ? 'Products'
       : 'home'
   );
+
   // console.log(activeLink);
+  const pathh = (val) => {
+    navigate('/tabs', {
+      state: val,
+    });
+  };
+
+  const pathhcust = (val) => {
+    navigate('/customer-tabs', {
+      state: val,
+    });
+
+  };
+
+  const customerSetting = () => {
+    navigate('/customer');
+  };
 
   const logout = () => {
     // dispatch(setUserRole(''));
@@ -601,7 +620,7 @@ const Mainbar = () => {
                                     </p>
                                   </p>
                                 </div>
-                                <button className='text-[#333333] border w-[111px] h-[22px] rounded-[11px] flex justify-center items-center p-0 mb-[10px]'>
+                                <button onClick={customerSetting} className='text-[#333333] border w-[111px] h-[22px] rounded-[11px] flex justify-center items-center p-0 mb-[10px]'>
                                   <span>Account Settings</span>
                                 </button>
                               </div>
@@ -609,27 +628,57 @@ const Mainbar = () => {
                           </div>
                           <div>
                             <Menu.Item className='px-[14px] text-[12px] text-[#757575] '>
-                              <button>My Collections</button>
+                              <button
+                                onClick={() => {
+                                  pathhcust('1');
+                                }}
+                              >
+                                My Collections
+                              </button>
                             </Menu.Item>
                           </div>
                           <div className='px-[14px] text-[12px] text-[#757575]'>
                             <Menu.Item>
-                              <button>Plan</button>
+                              <button
+                                onClick={() => {
+                                  pathhcust('2');
+                                }}
+                              >
+                                Plan
+                              </button>
                             </Menu.Item>
                           </div>
                           <div className='px-[14px] text-[12px] text-[#757575]'>
                             <Menu.Item>
-                              <button>Purchase History</button>
+                              <button
+                                onClick={() => {
+                                  pathhcust('3');
+                                }}
+                              >
+                                Purchase History
+                              </button>
                             </Menu.Item>
                           </div>
                           <div className='px-[14px] text-[12px] text-[#757575]'>
                             <Menu.Item>
-                              <button>Referral Earnings</button>
+                              <button
+                                onClick={() => {
+                                  pathhcust('4');
+                                }}
+                              >
+                                Referral Earnings
+                              </button>
                             </Menu.Item>
                           </div>
                           <div className='px-[14px] text-[12px] text-[#757575]'>
                             <Menu.Item>
-                              <button>Customer Support</button>
+                              <button
+                                onClick={() => {
+                                  pathhcust('5');
+                                }}
+                              >
+                                Customer Support
+                              </button>
                             </Menu.Item>
                           </div>
 
@@ -645,32 +694,68 @@ const Mainbar = () => {
                               </div>
                               <div className='px-[14px] text-[12px] text-[#757575]'>
                                 <Menu.Item>
-                                  <button>Dashboard </button>
+                                  <button
+                                    onClick={() => {
+                                      pathh('1');
+                                    }}
+                                  >
+                                    Dashboard{' '}
+                                  </button>
                                 </Menu.Item>
                               </div>
                               <div className='px-[14px] text-[12px] text-[#757575]'>
                                 <Menu.Item>
-                                  <button>Upload</button>
+                                  <button
+                                    onClick={() => {
+                                      pathh('2');
+                                    }}
+                                  >
+                                    Upload
+                                  </button>
                                 </Menu.Item>
                               </div>
                               <div className='px-[14px] text-[12px] text-[#757575]'>
                                 <Menu.Item>
-                                  <button>File Manager</button>
+                                  <button
+                                    onClick={() => {
+                                      pathh('3');
+                                    }}
+                                  >
+                                    File Manager
+                                  </button>
                                 </Menu.Item>
                               </div>
                               <div className='px-[14px] text-[12px] text-[#757575]'>
                                 <Menu.Item>
-                                  <button>Releases</button>
+                                  <button
+                                    onClick={() => {
+                                      pathh('4');
+                                    }}
+                                  >
+                                    Releases
+                                  </button>
                                 </Menu.Item>
                               </div>
                               <div className='px-[14px] text-[12px] text-[#757575]'>
                                 <Menu.Item>
-                                  <button>Earnings</button>
+                                  <button
+                                    onClick={() => {
+                                      pathh('5');
+                                    }}
+                                  >
+                                    Earnings
+                                  </button>
                                 </Menu.Item>
                               </div>
                               <div className='px-[14px] text-[12px] text-[#757575]'>
                                 <Menu.Item>
-                                  <button>Contributor Support</button>
+                                  <button
+                                    onClick={() => {
+                                      pathh('6');
+                                    }}
+                                  >
+                                    Contributor Support
+                                  </button>
                                 </Menu.Item>
                               </div>
                               <div className='px-[14px] text-[12px] text-[#757575]'>
@@ -772,10 +857,30 @@ const Mainbar = () => {
                 </div>
               </li>
               <li className='menu-link'>
-                <img src={wishlistIcon} alt='' />
+                {/* <img
+                  onClick={() => {
+                    navigate('/wishlist');
+                  }}
+                  src={wishlistIcon}
+                  alt=''
+                /> */}
+                <WishlistIcon
+                  onClick={() => {
+                    navigate('/wishlist');
+                  }}
+                  style={{
+                    fill: '#888888',
+                  }}
+                />
               </li>
               <li className='menu-link m-0'>
-                <img src={cartIcon} alt='' />
+                <img
+                  onClick={() => {
+                    navigate('/shopping-cart');
+                  }}
+                  src={cartIcon}
+                  alt=''
+                />
               </li>
             </ul>
           </div>

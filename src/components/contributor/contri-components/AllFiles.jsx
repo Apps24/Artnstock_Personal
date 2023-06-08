@@ -31,7 +31,9 @@ const AllFiles = ({ image }) => {
     } else {
       dispatch(
         setSelectedAllFilesImages(
-          selectedAllFilesImages.filter((img) => img.id !== image.id)
+          selectedAllFilesImages.filter(
+            (img) => img.artId !== image.artId
+          )
         )
       );
     }
@@ -45,13 +47,13 @@ const AllFiles = ({ image }) => {
     <>
       <div className='flex flex-col text-center'>
         <div
-          onMouseEnter={() => setHovered(image.id)}
+          onMouseEnter={() => setHovered(image.artId)}
           onMouseLeave={() => setHovered(null)}
           className='w-[181px] h-[181px] rounded-[16px] inset-0 relative'
         >
           <div
             className={`h-[100%] w-[100%] bg-no-repeat bg-center bg-cover filter brightness-100 absolute rounded-[16px] overflow-hidden ${
-              hovered === image.id ? 'brightness-[70%]' : ''
+              hovered === image.artId ? 'brightness-[70%]' : ''
             }`}
             style={{
               backgroundImage: `url("${image.image}")`,
@@ -71,7 +73,7 @@ const AllFiles = ({ image }) => {
                 className='w-6 h-6 opacity-[100%]'
                 checked={
                   selectedAllFilesImages.length &&
-                  selectedAllFilesImages[0].id == image.id
+                  selectedAllFilesImages[0].artId == image.artId
                 }
                 // checked={isChecked}
                 onChange={handleCheckboxChange}
@@ -94,10 +96,11 @@ const AllFiles = ({ image }) => {
           {image.name}
         </p>
         <p className='text-[11px] text-primaryGray'>
-          Image ID:{image.id}
+          Image ID: {image.artId.substring(0, 10)}
         </p>
         <p className='text-[11px] text-primaryGray'>
-          Uploaded {image.uploaded}
+          {/* Uploaded: {image.submittedDate} */}
+          Uploaded: {image.submittedDate?.substring(0, 10)}
         </p>
       </div>
     </>

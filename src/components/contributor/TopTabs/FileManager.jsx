@@ -29,6 +29,7 @@ import productFiles from '../../../assets/images/contributor/productFiles.png';
 import folder from '../../../assets/images/contributor/folder.png';
 import backArrow from '../../../assets/images/contributor/backArrow.png';
 import nextArrow from '../../../assets/images/contributor/nextArrow.png';
+import folderOfImage from '../../../assets/images/contributor/folderOfImage.png';
 
 // hooks
 
@@ -37,165 +38,168 @@ import { useSelector } from 'react-redux';
 import Popup from 'reactjs-popup';
 import styled from 'styled-components';
 import AllFiles from '../contri-components/AllFiles';
+import { httpClient } from '../../../axios';
+import { authSliceAction } from '../../../store/authSlice';
 
-const images = [
-  {
-    id: '1',
-    image:
-      'https://images.pexels.com/photos/2245436/pexels-photo-2245436.png?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    uploaded: '26 Jan,2022',
-    name: 'Spanish',
-  },
-  {
-    id: '2',
-    image:
-      'https://images.pexels.com/photos/6791741/pexels-photo-6791741.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    uploaded: '26 Jan,2022',
-    name: 'Italian',
-  },
-  {
-    id: '3',
-    image:
-      'https://images.pexels.com/photos/2132126/pexels-photo-2132126.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    uploaded: '26 Jan,2022',
-    name: 'Italian',
-  },
-  {
-    id: '4',
-    image:
-      'https://images.pexels.com/photos/2827374/pexels-photo-2827374.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    uploaded: '26 Jan,2022',
-    name: 'Italian',
-  },
-  {
-    id: '5',
-    image:
-      'https://images.pexels.com/photos/2622179/pexels-photo-2622179.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    uploaded: '26 Jan,2022',
-    name: 'Italian',
-  },
-  {
-    id: '6',
-    image:
-      'https://images.pexels.com/photos/2245436/pexels-photo-2245436.png?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    uploaded: '26 Jan,2022',
-    name: 'Italian',
-  },
-  {
-    id: '7',
-    image:
-      'https://images.pexels.com/photos/6791741/pexels-photo-6791741.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    uploaded: '26 Jan,2022',
-    name: 'Spanish',
-  },
-  {
-    id: '8',
-    image:
-      'https://images.pexels.com/photos/2132126/pexels-photo-2132126.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    uploaded: '26 Jan,2022',
-    name: 'Spanish',
-  },
-  {
-    id: '9',
-    image:
-      'https://images.pexels.com/photos/2827374/pexels-photo-2827374.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    uploaded: '26 Jan,2022',
-    name: 'Spanish',
-  },
-  {
-    id: '10',
-    image:
-      'https://images.pexels.com/photos/2622179/pexels-photo-2622179.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    uploaded: '26 Jan,2022',
-    name: 'Spanish',
-  },
-  {
-    id: '11',
-    image:
-      'https://images.pexels.com/photos/2245436/pexels-photo-2245436.png?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    uploaded: '26 Jan,2022',
-    name: 'Spanish',
-  },
-  {
-    id: '12',
-    image:
-      'https://images.pexels.com/photos/6791741/pexels-photo-6791741.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    uploaded: '26 Jan,2022',
-    name: 'Spanish',
-  },
-  {
-    id: '13',
-    image:
-      'https://images.pexels.com/photos/2132126/pexels-photo-2132126.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    uploaded: '26 Jan,2022',
-    name: 'Spanish',
-  },
-  {
-    id: '14',
-    image:
-      'https://images.pexels.com/photos/2827374/pexels-photo-2827374.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    uploaded: '26 Jan,2022',
-    name: 'Spanish',
-  },
-  {
-    id: '15',
-    image:
-      'https://images.pexels.com/photos/2622179/pexels-photo-2622179.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    uploaded: '26 Jan,2022',
-    name: 'Spanish',
-  },
-  {
-    id: '16',
-    image:
-      'https://images.pexels.com/photos/2622179/pexels-photo-2622179.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    uploaded: '26 Jan,2022',
-    name: 'Spanish',
-  },
-  {
-    id: '17',
-    image:
-      'https://images.pexels.com/photos/2245436/pexels-photo-2245436.png?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    uploaded: '26 Jan,2022',
-    name: 'Spanish',
-  },
-  {
-    id: '18',
-    image:
-      'https://images.pexels.com/photos/6791741/pexels-photo-6791741.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    uploaded: '26 Jan,2022',
-    name: 'Spanish',
-  },
-  {
-    id: '19',
-    image:
-      'https://images.pexels.com/photos/2132126/pexels-photo-2132126.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    uploaded: '26 Jan,2022',
-    name: 'Spanish',
-  },
-  {
-    id: '20',
-    image:
-      'https://images.pexels.com/photos/2827374/pexels-photo-2827374.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    uploaded: '26 Jan,2022',
-    name: 'Spanish',
-  },
-  {
-    id: '21',
-    image:
-      'https://images.pexels.com/photos/2622179/pexels-photo-2622179.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    uploaded: '26 Jan,2022',
-    name: 'Spanish',
-  },
-  {
-    id: '22',
-    image:
-      'https://images.pexels.com/photos/2622179/pexels-photo-2622179.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    uploaded: '26 Jan,2022',
-    name: 'Spanish',
-  },
-];
+// const images = [
+//   {
+//     id: '1',
+//     image:
+//       'https://images.pexels.com/photos/2245436/pexels-photo-2245436.png?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+//     uploaded: '26 Jan,2022',
+//     name: 'Spanish',
+//   },
+//   {
+//     id: '2',
+//     image:
+//       'https://images.pexels.com/photos/6791741/pexels-photo-6791741.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+//     uploaded: '26 Jan,2022',
+//     name: 'Italian',
+//   },
+//   {
+//     id: '3',
+//     image:
+//       'https://images.pexels.com/photos/2132126/pexels-photo-2132126.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+//     uploaded: '26 Jan,2022',
+//     name: 'Italian',
+//   },
+//   {
+//     id: '4',
+//     image:
+//       'https://images.pexels.com/photos/2827374/pexels-photo-2827374.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+//     uploaded: '26 Jan,2022',
+//     name: 'Italian',
+//   },
+//   {
+//     id: '5',
+//     image:
+//       'https://images.pexels.com/photos/2622179/pexels-photo-2622179.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+//     uploaded: '26 Jan,2022',
+//     name: 'Italian',
+//   },
+//   {
+//     id: '6',
+//     image:
+//       'https://images.pexels.com/photos/2245436/pexels-photo-2245436.png?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+//     uploaded: '26 Jan,2022',
+//     name: 'Italian',
+//   },
+//   {
+//     id: '7',
+//     image:
+//       'https://images.pexels.com/photos/6791741/pexels-photo-6791741.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+//     uploaded: '26 Jan,2022',
+//     name: 'Spanish',
+//   },
+//   {
+//     id: '8',
+//     image:
+//       'https://images.pexels.com/photos/2132126/pexels-photo-2132126.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+//     uploaded: '26 Jan,2022',
+//     name: 'Spanish',
+//   },
+//   {
+//     id: '9',
+//     image:
+//       'https://images.pexels.com/photos/2827374/pexels-photo-2827374.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+//     uploaded: '26 Jan,2022',
+//     name: 'Spanish',
+//   },
+//   {
+//     id: '10',
+//     image:
+//       'https://images.pexels.com/photos/2622179/pexels-photo-2622179.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+//     uploaded: '26 Jan,2022',
+//     name: 'Spanish',
+//   },
+//   {
+//     id: '11',
+//     image:
+//       'https://images.pexels.com/photos/2245436/pexels-photo-2245436.png?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+//     uploaded: '26 Jan,2022',
+//     name: 'Spanish',
+//   },
+//   {
+//     id: '12',
+//     image:
+//       'https://images.pexels.com/photos/6791741/pexels-photo-6791741.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+//     uploaded: '26 Jan,2022',
+//     name: 'Spanish',
+//   },
+//   {
+//     id: '13',
+//     image:
+//       'https://images.pexels.com/photos/2132126/pexels-photo-2132126.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+//     uploaded: '26 Jan,2022',
+//     name: 'Spanish',
+//   },
+//   {
+//     id: '14',
+//     image:
+//       'https://images.pexels.com/photos/2827374/pexels-photo-2827374.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+//     uploaded: '26 Jan,2022',
+//     name: 'Spanish',
+//   },
+//   {
+//     id: '15',
+//     image:
+//       'https://images.pexels.com/photos/2622179/pexels-photo-2622179.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+//     uploaded: '26 Jan,2022',
+//     name: 'Spanish',
+//   },
+//   {
+//     id: '16',
+//     image:
+//       'https://images.pexels.com/photos/2622179/pexels-photo-2622179.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+//     uploaded: '26 Jan,2022',
+//     name: 'Spanish',
+//   },
+//   {
+//     id: '17',
+//     image:
+//       'https://images.pexels.com/photos/2245436/pexels-photo-2245436.png?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+//     uploaded: '26 Jan,2022',
+//     name: 'Spanish',
+//   },
+//   {
+//     id: '18',
+//     image:
+//       'https://images.pexels.com/photos/6791741/pexels-photo-6791741.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+//     uploaded: '26 Jan,2022',
+//     name: 'Spanish',
+//   },
+//   {
+//     id: '19',
+//     image:
+//       'https://images.pexels.com/photos/2132126/pexels-photo-2132126.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+//     uploaded: '26 Jan,2022',
+//     name: 'Spanish',
+//   },
+//   {
+//     id: '20',
+//     image:
+//       'https://images.pexels.com/photos/2827374/pexels-photo-2827374.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+//     uploaded: '26 Jan,2022',
+//     name: 'Spanish',
+//   },
+//   {
+//     id: '21',
+//     image:
+//       'https://images.pexels.com/photos/2622179/pexels-photo-2622179.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+//     uploaded: '26 Jan,2022',
+//     name: 'Spanish',
+//   },
+//   {
+//     id: '22',
+//     image:
+//       'https://images.pexels.com/photos/2622179/pexels-photo-2622179.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+//     uploaded: '26 Jan,2022',
+//     name: 'Spanish',
+//   },
+// ];
 
 // popuop
+
 const StyledPopup = styled(Popup)`
   // use your custom style for ".popup-overlay"
   /* &-overlay {
@@ -219,10 +223,10 @@ const FileManager = () => {
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [isNameOpen, setIsNameOpen] = useState(false);
   const [category, setCategory] = useState('');
-  const [folderName, setFolderName] = useState('');
+  const [folderName, setFolderName] = useState(null);
 
   const [categories, setCategories] = useState({
-    all: images,
+    all: [],
     art: [],
     photo: [],
     footage: [],
@@ -237,27 +241,87 @@ const FileManager = () => {
   const [name, setname] = useState('');
   const [isOpenSortBy, setIsOpenSortBy] = useState(false);
 
-  const createFolder = (name) => {
+  const userId = useSelector((state) => state.auth.userId);
+
+  // api calls
+
+  const getUserIdWiseArts = async () => {
+    try {
+      const response = await httpClient.get(
+        `/art_master/getUserIdWiseUserMaster/${userId}`
+      );
+      setCategories((prevCategories) => ({
+        ...prevCategories,
+        all: response.data,
+      }));
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getFolders = async () => {
+    try {
+      const response = await httpClient.get('/file_manager_master');
+      const data = response.data;
+
+      setCategories((prevCategories) => ({
+        ...prevCategories,
+        art: [],
+        photo: [],
+        footage: [],
+        music: [],
+        templates: [],
+        product: [],
+      }));
+
+      data.forEach((obj) => {
+        if (obj.category === 'art') {
+          setCategories((prevCategories) => ({
+            ...prevCategories,
+            art: [...prevCategories.art, obj],
+          }));
+        } else if (obj.category === 'photos') {
+          setCategories((prevCategories) => ({
+            ...prevCategories,
+            photo: [...prevCategories.photo, obj],
+          }));
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const createFolder = async (name) => {
     const newFolder = {
-      name: name,
-      image: '',
-      files: [],
+      artId: [],
+      category: categoriesFocus,
+      title: name,
+      userId: userId,
     };
 
-    if (categoriesFocus === 'art') {
-      setCategories((prevData) => ({
-        ...prevData,
-        art: [...prevData.art, newFolder],
-      }));
-    } else if (categoriesFocus === 'photos') {
-      setCategories((prevData) => ({
-        ...prevData,
-        photo: [...prevData.photo, newFolder],
-      }));
+    try {
+      const response = await httpClient.post(
+        '/file_manager_master/create',
+        newFolder
+      );
+    } catch (error) {
+      console.error(error);
     }
-
     setCreate(false);
+    await getUserIdWiseArts();
+    await getFolders();
   };
+
+  useEffect(() => {
+    getUserIdWiseArts();
+    getFolders();
+  }, []);
+
+  useEffect(() => {
+    console.log(categories);
+  }, [categories]);
 
   const namee = (event) => {
     const n = event.target.value;
@@ -279,11 +343,12 @@ const FileManager = () => {
     (state) => state.fileimages.selectedAllFilesImages
   );
 
-  //   paginationn **dont change the sequence of the code below** else will give undefined error
+  // pagination **dont change the sequence of the code below** else will give undefined error
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 18;
 
-  let abc;
+  let abc = [];
+
   if (categoriesFocus === 'all') {
     abc = categories.all || [];
   } else if (categoriesFocus === 'art') {
@@ -298,15 +363,12 @@ const FileManager = () => {
   const totalPages = Math.ceil(dataToRender.length / itemsPerPage);
 
   const handlePrevPage = () => {
-    console.log(currentPage);
     if (currentPage > 1 && currentPage <= totalPages) {
-      console.log('i am running');
       setCurrentPage((prevPage) => prevPage - 1);
     }
   };
 
   const handleNextPage = () => {
-    console.log(currentPage);
     if (currentPage >= 1 && currentPage < totalPages) {
       setCurrentPage((prevPage) => prevPage + 1);
     }
@@ -315,41 +377,18 @@ const FileManager = () => {
   //pagination ends
 
   const addToFolder = () => {
-    if (category === 'Art') {
-      setCategories((prevFormData) => {
-        const updatedArt = prevFormData.art.map((folder) => {
-          if (folder.name === folderName) {
-            return {
-              ...folder,
-              files: [...folder.files, selectedAllFilesImages[0]],
-            };
-          }
-          return folder;
-        });
+    const object = {
+      artId: selectedAllFilesImages[0].artId,
+      fileManagerId: folderName.fileManagerId,
+    };
+    httpClient
+      .post('/file_manager_master/fileManagerIdWiseAddArt', object)
+      .then((res) => {
+        console.log(res.data);
 
-        return {
-          ...prevFormData,
-          art: updatedArt,
-        };
+        getUserIdWiseArts();
+        getFolders();
       });
-    } else if (category === 'Photos') {
-      setCategories((prevFormData) => {
-        const updatedArt = prevFormData.photo.map((folder) => {
-          if (folder.name === folderName) {
-            return {
-              ...folder,
-              files: [...folder.files, selectedAllFilesImages[0]],
-            };
-          }
-          return folder;
-        });
-
-        return {
-          ...prevFormData,
-          photo: updatedArt,
-        };
-      });
-    }
   };
 
   const [imagesFolderArray, setImagesFolderArray] = useState(null);
@@ -537,6 +576,8 @@ const FileManager = () => {
                               <li
                                 onClick={() => {
                                   setCategory('Art');
+                                  setIsCategoryOpen(!isCategoryOpen);
+                                  setFolderName(null);
                                 }}
                                 className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
                               >
@@ -545,6 +586,8 @@ const FileManager = () => {
                               <li
                                 onClick={() => {
                                   setCategory('Photos');
+                                  setIsCategoryOpen(!isCategoryOpen);
+                                  setFolderName(null);
                                 }}
                                 className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
                               >
@@ -553,6 +596,8 @@ const FileManager = () => {
                               <li
                                 onClick={() => {
                                   setCategory('Footage');
+                                  setIsCategoryOpen(!isCategoryOpen);
+                                  setFolderName(null);
                                 }}
                                 className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
                               >
@@ -561,6 +606,8 @@ const FileManager = () => {
                               <li
                                 onClick={() => {
                                   setCategory('Music');
+                                  setIsCategoryOpen(!isCategoryOpen);
+                                  setFolderName(null);
                                 }}
                                 className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
                               >
@@ -569,6 +616,8 @@ const FileManager = () => {
                               <li
                                 onClick={() => {
                                   setCategory('Templates');
+                                  setIsCategoryOpen(!isCategoryOpen);
+                                  setFolderName(null);
                                 }}
                                 className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
                               >
@@ -577,6 +626,8 @@ const FileManager = () => {
                               <li
                                 onClick={() => {
                                   setCategory('Product');
+                                  setIsCategoryOpen(!isCategoryOpen);
+                                  setFolderName(null);
                                 }}
                                 className='py-1 px-3.5 hover:bg-[#F0F0F0]'
                               >
@@ -604,10 +655,10 @@ const FileManager = () => {
                                 : 'rounded-[20px] border  border-[#d6d6d6]'
                             } cursor-pointer w-[390px] h-[40px] bg-[#FFFFFF] text-primaryGray text-sm14 font-medium flex items-center justify-between px-[15px]`}
                           >
-                            {folderName === '' ? (
+                            {folderName === null ? (
                               <span>Enter Set Name</span>
                             ) : (
-                              <span>{folderName}</span>
+                              <span>{folderName.title}</span>
                             )}
                             {}
 
@@ -626,11 +677,12 @@ const FileManager = () => {
                                     (items, index) => (
                                       <li
                                         onClick={() => {
-                                          setFolderName(items.name);
+                                          setFolderName(items);
+                                          setIsNameOpen(!isNameOpen);
                                         }}
                                         className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
                                       >
-                                        {items.name}
+                                        {items.title}
                                       </li>
                                     )
                                   )}
@@ -645,11 +697,12 @@ const FileManager = () => {
                                     (items, index) => (
                                       <li
                                         onClick={() => {
-                                          setFolderName(items.name);
+                                          setFolderName(items);
+                                          setIsNameOpen(!isNameOpen);
                                         }}
                                         className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
                                       >
-                                        {items.name}
+                                        {items.title}
                                       </li>
                                     )
                                   )}
@@ -669,7 +722,10 @@ const FileManager = () => {
                       >
                         Save
                       </button>
-                      <button className='h-[40px] px-6 py-2 rounded-3xl text-sm14 text-primaryBlack border-[2px] w-[88px]'>
+                      <button
+                        onClick={close}
+                        className='h-[40px] px-6 py-2 rounded-3xl text-sm14 text-primaryBlack border-[2px] w-[88px]'
+                      >
                         Cancel
                       </button>
                     </div>
@@ -828,7 +884,9 @@ const FileManager = () => {
               onClick={() => {
                 setCategoriesFocus('all');
               }}
-              className='flex h-[40px] gap-[8px] bg-[#f0f0f0] py-[5px] cursor-pointer'
+              className={`flex h-[40px] gap-[8px] bg-[${
+                categoriesFocus === 'all' ? '#f0f0f0' : '#ffffff'
+              }] py-[5px] cursor-pointer border-b border-[#efefef]`}
             >
               <div>
                 <img src={allfiles} alt='' />
@@ -845,7 +903,7 @@ const FileManager = () => {
                 </div>
                 <div>
                   <p className='text-[15px] font-medium'>
-                    {images.length}
+                    {categories.all.length}
                   </p>
                 </div>
               </div>
@@ -857,7 +915,9 @@ const FileManager = () => {
                 setCategoriesFocus('art');
                 setArtTabFocus(!artTabFocus);
               }}
-              className='flex h-[38px] gap-[8px] bg-[#ffffff] py-[5px] border-b border-[#efefef] cursor-pointer'
+              className={`flex h-[38px] gap-[8px] bg-[${
+                categoriesFocus === 'art' ? '#f0f0f0' : '#ffffff'
+              }] py-[5px] border-b border-[#efefef] cursor-pointer`}
             >
               <div className='my-[auto]'>
                 <img src={artFiles} alt='' />
@@ -868,7 +928,7 @@ const FileManager = () => {
                   <p className='text-[15px] text-primaryBlack font-medium leading-[1]'>
                     Art{' '}
                     <span className='text-primaryGray text-[11px] leading-[1]'>
-                      (0 Sets)
+                      ({categories.art.length} Sets)
                     </span>
                   </p>
                 </div>
@@ -883,13 +943,20 @@ const FileManager = () => {
             </div>
 
             {/* test */}
+
             {artTabFocus === true &&
               categories.art.map((obj) => (
                 <div
                   onClick={() => {
                     folderImages(obj);
                   }}
-                  className='flex h-[27px] gap-[8px] bg-[#ffffff] py-[5px] border-b border-[#efefef] cursor-pointer'
+                  className={`flex h-[27px] gap-[8px] bg-[${
+                    categoriesFocus === 'folderImages' &&
+                    imagesFolderArray.fileManagerId ===
+                      obj.fileManagerId
+                      ? '#f0f0f0'
+                      : '#ffffff'
+                  }] py-[5px] border-b border-[#efefef] cursor-pointer`}
                 >
                   <div className='my-[auto]'>
                     <img src={folder} alt='' />
@@ -897,11 +964,13 @@ const FileManager = () => {
                   <div className='flex w-[184px] justify-between'>
                     <div className='flex flex-col justify-center'>
                       <p className='text-[12px] text-primaryGray font-medium leading-[1]'>
-                        {obj.name}
+                        {obj.title}
                       </p>
                     </div>
                     <div>
-                      <p className='text-[12px]'>10</p>
+                      <p className='text-[12px]'>
+                        {obj.artMaster.length}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -939,7 +1008,9 @@ const FileManager = () => {
                 setCategoriesFocus('photos');
                 setPhotosTabFocus(!photosTabFocus);
               }}
-              className='flex h-[38px] gap-[8px] bg-[#ffffff] py-[5px] border-b border-[#efefef] cursor-pointer'
+              className={`flex h-[38px] gap-[8px] bg-[${
+                categoriesFocus === 'photos' ? '#f0f0f0' : '#ffffff'
+              }] py-[5px] border-b border-[#efefef] cursor-pointer`}
             >
               <div className='my-[auto]'>
                 <img src={photosFiles} alt='' />
@@ -950,7 +1021,7 @@ const FileManager = () => {
                   <p className='text-[15px] text-primaryBlack font-medium leading-[1]'>
                     Photos{' '}
                     <span className='text-primaryGray text-[11px] leading-[1]'>
-                      (0 Sets)
+                      ({categories.photo.length} Sets)
                     </span>
                   </p>
                 </div>
@@ -972,7 +1043,13 @@ const FileManager = () => {
                   onClick={() => {
                     folderImages(obj);
                   }}
-                  className='flex h-[27px] gap-[8px] bg-[#ffffff] py-[5px] border-b border-[#efefef] cursor-pointer'
+                  className={`flex h-[27px] gap-[8px] bg-[${
+                    categoriesFocus === 'folderImages' &&
+                    imagesFolderArray.fileManagerId ===
+                      obj.fileManagerId
+                      ? '#f0f0f0'
+                      : '#ffffff'
+                  }] py-[5px] border-b border-[#efefef] cursor-pointer`}
                 >
                   <div className='my-[auto]'>
                     <img src={folder} alt='' />
@@ -980,11 +1057,13 @@ const FileManager = () => {
                   <div className='flex w-[184px] justify-between'>
                     <div className='flex flex-col justify-center'>
                       <p className='text-[12px] text-primaryGray font-medium leading-[1]'>
-                        {obj.name}
+                        {obj.title}
                       </p>
                     </div>
                     <div>
-                      <p className='text-[12px]'>10</p>
+                      <p className='text-[12px]'>
+                        {obj.artMaster.length}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -1028,7 +1107,7 @@ const FileManager = () => {
                   <p className='text-[15px] text-primaryBlack font-medium leading-[1]'>
                     Footage{' '}
                     <span className='text-primaryGray text-[11px] leading-[1]'>
-                      (0 Sets)
+                      ({categories.footage.length} Sets)
                     </span>
                   </p>
                 </div>
@@ -1049,7 +1128,7 @@ const FileManager = () => {
                   <p className='text-[15px] text-primaryBlack font-medium leading-[1]'>
                     Music{' '}
                     <span className='text-primaryGray text-[11px] leading-[1]'>
-                      (0 Sets)
+                      ({categories.music.length} Sets)
                     </span>
                   </p>
                 </div>
@@ -1070,7 +1149,7 @@ const FileManager = () => {
                   <p className='text-[15px] text-primaryBlack font-medium leading-[1]'>
                     Templates{' '}
                     <span className='text-primaryGray text-[11px] leading-[1]'>
-                      (0 Sets)
+                      ({categories.templates.length} Sets)
                     </span>
                   </p>
                 </div>
@@ -1091,7 +1170,7 @@ const FileManager = () => {
                   <p className='text-[15px] text-primaryBlack font-medium leading-[1]'>
                     Product{' '}
                     <span className='text-primaryGray text-[11px] leading-[1]'>
-                      (0 Sets)
+                      ({categories.product.length} Sets)
                     </span>
                   </p>
                 </div>
@@ -1157,32 +1236,49 @@ const FileManager = () => {
                 <div className='flex flex-wrap gap-[16px]'>
                   {categoriesFocus === 'art' &&
                     categories.art.map((image) => (
-                      <div className='flex flex-col w-[181px] text-center'>
+                      <div
+                        onClick={() => {
+                          folderImages(image);
+                        }}
+                        className='flex flex-col w-[181px] text-center'
+                      >
                         <div
                           style={{
-                            backgroundImage:
-                              image.files != ''
-                                ? `url(${image.files[0].image})`
-                                : 'none',
+                            backgroundImage: `url(${image.artMaster[0]?.image})`,
                             backgroundColor:
-                              image.image != ''
+                              image.artMaster === []
                                 ? 'transparent'
                                 : '#bbbaba',
                           }}
-                          className='w-[181px] h-[181px] rounded-[16px] flex justify-center items-center bg-no-repeat bg-center bg-coverF'
+                          className='w-[181px] h-[181px] rounded-[16px] flex justify-center items-center bg-no-repeat bg-center bg-cover'
                         >
-                          <img src={imagesfolder} alt='' />
+                          <div
+                            className='bg-no-repeat bg-center bg-cover w-[49px] h-[43px] flex justify-center items-center'
+                            style={{
+                              backgroundImage: `url(${folderOfImage})`,
+                            }}
+                          >
+                            <div className='flex flex-col pt-[6px] text-[#fff]'>
+                              <p className='text-[18px] font-medium leading-[0.8]'>
+                                {image.artMaster.length}
+                              </p>
+                              <p className='text-[11px] leading-[0.8]'>
+                                images
+                              </p>
+                            </div>
+                          </div>
+                          {/* <img src={folderOfImage} alt='' /> */}
                         </div>
 
                         <img src={image.image} alt='' />
                         <p className='text-[11px] text-primaryBlack font-medium pt-[3px]'>
-                          {image.name}
+                          {image.title}
                         </p>
                         <p className='text-[11px] text-primaryGray'>
-                          Image ID:{image.id}
+                          Image ID:{image.fileManagerId}
                         </p>
                         <p className='text-[11px] text-primaryGray'>
-                          Uploaded {image.uploaded}
+                          Uploaded: {image.submitted}
                         </p>
                       </div>
                     ))}
@@ -1241,36 +1337,53 @@ const FileManager = () => {
             <div className='flex flex-wrap gap-[16px]'>
               {categoriesFocus === 'photos' &&
                 categories.photo.map((image) => (
-                  <div className='flex flex-col w-[181px] text-center'>
+                  <div
+                    onClick={() => {
+                      folderImages(image);
+                    }}
+                    className='flex flex-col w-[181px] text-center'
+                  >
                     <div
                       style={{
-                        backgroundImage:
-                          image.files != ''
-                            ? `url(${image.files[0].image})`
-                            : 'none',
+                        backgroundImage: `url(${image.artMaster[0]?.image})`,
                         backgroundColor:
-                          image.image != ''
+                          image.artMaster === []
                             ? 'transparent'
                             : '#bbbaba',
                       }}
                       className='w-[181px] h-[181px] rounded-[16px] flex justify-center items-center bg-no-repeat bg-center bg-coverF'
                     >
-                      <img src={imagesfolder} alt='' />
+                      <div
+                        className='bg-no-repeat bg-center bg-cover w-[49px] h-[43px] flex justify-center items-center'
+                        style={{
+                          backgroundImage: `url(${folderOfImage})`,
+                        }}
+                      >
+                        <div className='flex flex-col pt-[6px] text-[#fff]'>
+                          <p className='text-[18px] font-medium leading-[0.8]'>
+                            {image.artMaster.length}
+                          </p>
+                          <p className='text-[11px] leading-[0.8]'>
+                            images
+                          </p>
+                        </div>
+                      </div>
                     </div>
 
                     <img src={image.image} alt='' />
                     <p className='text-[11px] text-primaryBlack font-medium pt-[3px]'>
-                      {image.name}
+                      {image.title}
                     </p>
                     <p className='text-[11px] text-primaryGray'>
-                      Image ID:{image.id}
+                      Image ID:{image.fileManagerId}
                     </p>
                     <p className='text-[11px] text-primaryGray'>
-                      Uploaded {image.uploaded}
+                      Uploaded: {image.uploaded}
                     </p>
                   </div>
                 ))}
             </div>
+
             {categoriesFocus === 'photos' &&
             categories.photo.length > 0 ? (
               <div className='w-full flex justify-center pt-[10px]'>
@@ -1284,7 +1397,8 @@ const FileManager = () => {
 
             <div className='flex flex-wrap gap-[16px]'>
               {categoriesFocus === 'folderImages' &&
-                imagesFolderArray.files.map((image) => (
+              imagesFolderArray.artMaster.length > 0 ? (
+                imagesFolderArray.artMaster.map((image) => (
                   <div className='flex flex-col text-center'>
                     <div
                       // onMouseEnter={() => setHovered(image.id)}
@@ -1310,7 +1424,20 @@ const FileManager = () => {
                       Uploaded {image.uploaded}
                     </p>
                   </div>
-                ))}
+                ))
+              ) : categoriesFocus === 'folderImages' &&
+                imagesFolderArray.artMaster.length === 0 ? (
+                <div className='text-center pt-[8px] pb-[1000px] mx-[auto]'>
+                  <p className='text-pinkColor text-[18px]'>
+                    Looks like you havn’t added any items yet
+                  </p>
+                  <p className='text-primaryGray text-[12px]'>
+                    start by adding items you have recently viewed
+                  </p>
+                </div>
+              ) : (
+                <div></div>
+              )}
             </div>
           </div>
         </div>

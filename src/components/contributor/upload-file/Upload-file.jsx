@@ -3,8 +3,24 @@ import iconart from '../../../../src/assets/images/contributor/icon-art.png';
 import iconphotos from '../../../../src/assets/images/contributor/icon-photos.png';
 import iconfootage from '../../../../src/assets/images/contributor/icon-footage.png';
 import icontemplates from '../../../../src/assets/images/contributor/icon-templates.png';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 const UploadFile = () => {
+
+  const navigate = useNavigate();
+
+  const [check, setCheck] = useState(true);
+
+  const changeCheck = () => { 
+    setCheck((prev) => !prev);
+  }
+
+  const gotoTabs = () => {
+    // console.log(check);
+   check && navigate("/tabs")
+  }
+
   return (
     <>
       {/*Section 1 banner */}
@@ -907,13 +923,13 @@ const UploadFile = () => {
             <br />
             <div className='text-center mt-[25px]'>
               <label className='text-[12px] primaryGray w-[100%]'>
-                <input className='mr-[17px]' type='checkbox' />I
+                <input className='mr-[17px]' type='checkbox' checked={check} onChange={changeCheck}  />I
                 acknowledge and warrant that I have read and agree
                 with Artnstock’s uploading Terms and Conditions.
               </label>{' '}
               <br />
               <div className='flex gap-[15px] justify-center mt-[25px] pb-[70px]'>
-                <button className='blackBtn'>Continue</button>
+                <button className='blackBtn' onClick={gotoTabs} >Continue</button>
                 <button className='px-6 py-2.5 rounded-3xl text-sm14 text-primaryBlack border-[2px]'>
                   Cancel
                 </button>
