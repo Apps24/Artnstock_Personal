@@ -15,6 +15,8 @@ const authSlice = createSlice({
     logoutUser(state, action) {
       state.login = false;
       state.userRole = '';
+      state.userId = '';
+      state.userDetails = {};
     },
     setUserRole(state, action) {
       state.userRole = action.payload;

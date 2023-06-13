@@ -9,6 +9,7 @@ import wishlist3 from '../../assets/images/wishlist/wishlist3.png';
 import { httpClient } from '../../axios';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 // const wishlist = [
 //   {
@@ -46,6 +47,8 @@ const Wishlist2 = () => {
   const [wishlist, setwishlist] = useState();
 
   const userId = useSelector((state) => state.auth.userId);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     getAllWishlistByUserId();
@@ -306,7 +309,12 @@ const Wishlist2 = () => {
                 To add items to your wishlist, simply click the 'Add
                 to wishlist' link from any product page.
               </p>
-              <button className='blackBtn text-[14px]'>
+              <button
+                onClick={() => {
+                  navigate('/art-list');
+                }}
+                className='blackBtn text-[14px]'
+              >
                 Start Here
               </button>
             </div>

@@ -35,11 +35,25 @@ const ProductHomepage = () => {
   // }, []);
   useEffect(() => {
     httpClient
-      .get(`/product_sub_category_master/getActiveProductSubCategory`)
+      .get(`/product_sub_category_master/getTypeWiseList/homeGrid`)
       .then((res) => {
         setGridList(res.data);
         console.log(res.data);
       });
+  }, []);
+
+  const [faq, setfaq] = useState([]);
+  const getArtWiseFaqList = () => {
+    httpClient
+      .get(`/frequently_asked_master/getTypeWiseFaq/product`)
+      .then((res) => {
+        setfaq(res.data);
+        console.log(res);
+      });
+  };
+
+  useEffect(() => {
+    getArtWiseFaqList();
   }, []);
 
   return (
@@ -65,7 +79,7 @@ const ProductHomepage = () => {
         />
       </div>
       <Magzine type='product' />
-      <ArtHomeFaq type='product' />
+      <ArtHomeFaq type={faq} />
       <Footer />
     </>
   );

@@ -35,6 +35,7 @@ const Login = () => {
             );
             dispatch(authSliceAction.setUserId(res.data.userId));
             dispatch(authSliceAction.setUserDetails(res.data));
+            // console.log(res.data);
             navigate('/');
           } else {
             toast.error(res.data.message);

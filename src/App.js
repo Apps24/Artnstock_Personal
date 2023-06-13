@@ -206,9 +206,9 @@ function App() {
           path='/customer-tabs'
           element={
             <ProtectedRouteForNull>
-              <ProtectedRouteForContributor>
-                <TabsCustomer />
-              </ProtectedRouteForContributor>
+              {/* <ProtectedRouteForContributor> */}
+              <TabsCustomer />
+              {/* </ProtectedRouteForContributor> */}
             </ProtectedRouteForNull>
           }
         />

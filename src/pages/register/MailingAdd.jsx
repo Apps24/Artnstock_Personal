@@ -10,6 +10,8 @@ import { mailingAddressModel } from '../../models/allModel';
 import { addressSchema } from '../../schemas';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import errorIcon from '../../assets/join/Icon_Error.svg';
+import successIcon from '../../assets/join/Icon_true.svg';
 
 const initialValues = {
   addressOne: '',
@@ -65,6 +67,34 @@ const MailingAdd = () => {
           toast('Something went wrong');
         }
       });
+  };
+
+  const handlePhoneNumberKeyDown = (event) => {
+    const keyCode = event.keyCode || event.which;
+    const isCharacterKey =
+      (keyCode >= 65 && keyCode <= 90) || // A-Z
+      (keyCode >= 97 && keyCode <= 122); // a-z
+
+    const inputValue = event.target.value;
+    const numberOfDigits = inputValue.replace(/[^0-9]/g, '').length;
+
+    if (isCharacterKey || (numberOfDigits >= 10 && keyCode !== 8)) {
+      event.preventDefault();
+    }
+  };
+
+  const handleZipCodeKeyDown = (event) => {
+    const keyCode = event.keyCode || event.which;
+    const isCharacterKey =
+      (keyCode >= 65 && keyCode <= 90) || // A-Z
+      (keyCode >= 97 && keyCode <= 122); // a-z
+
+    const inputValue = event.target.value;
+    const numberOfDigits = inputValue.replace(/[^0-9]/g, '').length;
+
+    if (isCharacterKey || (numberOfDigits >= 6 && keyCode !== 8)) {
+      event.preventDefault();
+    }
   };
 
   return (
@@ -196,16 +226,34 @@ const MailingAdd = () => {
               />
             </div>
             <div className='flex gap-[10px]'>
-              <input
-                className='regInput placeholder:text-[0.875rem] placeholder:leading-[0.875rem] placeholder:font-medium placeholder:text-[#BBBBBB]'
-                placeholder='Zip/Postal Code'
-                type='text'
-                name='zipCode'
-                autoComplete='off'
-                value={values.zipCode}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
+              <div className='relative'>
+                <input
+                  className='regInput placeholder:text-[0.875rem] placeholder:leading-[0.875rem] placeholder:font-medium placeholder:text-[#BBBBBB]'
+                  placeholder='Zip/Postal Code'
+                  type='text'
+                  name='zipCode'
+                  autoComplete='off'
+                  value={values.zipCode}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  onKeyDown={handleZipCodeKeyDown}
+                />
+                {touched.zipCode ? (
+                  errors.zipCode ? (
+                    <img
+                      className='absolute right-2.5 top-6'
+                      src={errorIcon}
+                      alt='Error'
+                    />
+                  ) : (
+                    <img
+                      className='absolute right-2.5 top-6'
+                      src={successIcon}
+                      alt='Success'
+                    />
+                  )
+                ) : null}
+              </div>
               <input
                 className='regInput placeholder:text-[0.875rem] placeholder:leading-[0.875rem] placeholder:font-medium placeholder:text-[#BBBBBB]'
                 placeholder='State/Province'
@@ -217,16 +265,35 @@ const MailingAdd = () => {
                 onBlur={handleBlur}
               />
             </div>
-            <input
-              className='regInput placeholder:text-[0.875rem] placeholder:leading-[0.875rem] placeholder:font-medium placeholder:text-[#BBBBBB]'
-              placeholder='Phone Number'
-              type='text'
-              name='phNumber'
-              autoComplete='off'
-              value={values.phNumber}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
+
+            <div className='relative'>
+              <input
+                className='appearance-none regInput placeholder:text-[0.875rem] placeholder:leading-[0.875rem] placeholder:font-medium placeholder:text-[#BBBBBB]'
+                placeholder='Phone Number'
+                type='text'
+                name='phNumber'
+                autoComplete='off'
+                value={values.phNumber}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                onKeyDown={handlePhoneNumberKeyDown}
+              />
+              {touched.phNumber ? (
+                errors.phNumber ? (
+                  <img
+                    className='absolute right-2.5 top-6'
+                    src={errorIcon}
+                    alt='Error'
+                  />
+                ) : (
+                  <img
+                    className='absolute right-2.5 top-6'
+                    src={successIcon}
+                    alt='Success'
+                  />
+                )
+              ) : null}
+            </div>
 
             <button type='submit' className='blackBtn mt-[0.938rem]'>
               Next

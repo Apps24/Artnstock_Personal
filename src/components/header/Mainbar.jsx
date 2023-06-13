@@ -58,6 +58,7 @@ import mug from '../../assets/images/Menubar/mug.png';
 import LoadingBar from 'react-top-loading-bar';
 
 import { setUserRole } from '../../store/authSlice';
+import { logDOM } from '@testing-library/react';
 
 const StyledPopup = styled(Popup)`
   // use your custom style for ".popup-overlay"
@@ -140,28 +141,46 @@ const Mainbar = () => {
     }
   };
 
-  const [searchedArtList, setsearchedArtList] = useState([]);
-  const changeinput = (e) => {
-    // console.log(e.target.value);
-    let value = e.target.value;
-    httpClient
-      .get(`/art_master/searchTextByArtName/${value}`)
-      .then((res) => {
-        setsearchedArtList(res.data);
-        console.log(res.data);
-      });
+  // const [searchedArtList, setsearchedArtList] = useState([]);
+
+  // const changeinput = (e) => {
+  //   let value = e.target.value;
+  //   httpClient
+  //     .get(`/art_master/searchTextByArtName/${value}`)
+  //     .then((res) => {
+  //       setsearchedArtList(res.data);
+
+  //       // console.log(res.data);
+  //     });
+  // };
+
+  // const searchOnClick = () => {
+  //   if (searchedArtList.length > 0) {
+  //     navigate('/art-list', {
+  //       state: searchedArtList,
+  //     });
+  //   }
+  // };
+
+  const [artDropdownList, setartDropdownList] = useState([]);
+  const getArtDropdownTrue = () => {
+    httpClient.get(`/style_master/getArtDropdownTrue`).then((res) => {
+      setartDropdownList(res.data);
+      console.log(res.data);
+    });
   };
 
   // redux useSelector of userRole
 
   const userRole = useSelector((state) => state.auth.userRole);
 
-  useEffect(() => {
-    console.log(userRole);
-  }, []);
+  // useEffect(() => {
+  //   console.log(searchedArtList);
+  // }, [searchedArtList]);
 
   useEffect(() => {
     setProgress(100);
+    getArtDropdownTrue();
   }, []);
 
   return (
@@ -195,16 +214,16 @@ const Mainbar = () => {
                 >
                   ART
                 </NavLink>
-                <div className='bg-[#ffffff] pt-5 px-5 pb-7 absolute rounded-3xl z-50 shadow-regCardShadow top-8 left-0 hidden group-hover:block'>
+                <div className='bg-[#ffffff] pt-5 px-5 pb-7 absolute rounded-3xl z-50 shadow-regCardShadow top-4.5 left-0 hidden group-hover:block'>
                   <div className='flex gap-4 mb-7'>
                     <div>
                       <img
-                        className='h-[150px] w-[150px] max-w-none'
-                        src={artDropImg}
+                        className='h-[150px] w-[150px] max-w-none rounded-[16px]'
+                        src={artDropdownList[0]?.image}
                         alt=''
                       />
                       <p className='my-2.5 font-medium text-[15px] text-primaryBlack'>
-                        Abstract
+                        {artDropdownList[0]?.name}
                       </p>
                       <ul>
                         <li className='text-[13px] text-primaryGray font-normal leading-[19px]'>
@@ -226,12 +245,12 @@ const Mainbar = () => {
                     </div>
                     <div>
                       <img
-                        className='h-[150px] w-[150px] max-w-none'
-                        src={Animals}
+                        className='h-[150px] w-[150px] max-w-none rounded-[16px]'
+                        src={artDropdownList[1]?.image}
                         alt=''
                       />
                       <p className='my-2.5 font-medium text-[15px] text-primaryBlack'>
-                        Animals
+                        {artDropdownList[1]?.name}
                       </p>
                       <ul>
                         <li className='text-[13px] text-primaryGray font-normal leading-[19px]'>
@@ -253,12 +272,12 @@ const Mainbar = () => {
                     </div>
                     <div>
                       <img
-                        className='h-[150px] w-[150px] max-w-none'
-                        src={Architecture}
+                        className='h-[150px] w-[150px] max-w-none rounded-[16px]'
+                        src={artDropdownList[2]?.image}
                         alt=''
                       />
                       <p className='my-2.5 font-medium text-[15px] text-primaryBlack'>
-                        Architecture
+                        {artDropdownList[2]?.name}
                       </p>
                       <ul>
                         <li className='text-[13px] text-primaryGray font-normal leading-[19px]'>
@@ -280,12 +299,12 @@ const Mainbar = () => {
                     </div>
                     <div>
                       <img
-                        className='h-[150px] w-[150px] max-w-none'
-                        src={Botanical}
+                        className='h-[150px] w-[150px] max-w-none rounded-[16px]'
+                        src={artDropdownList[3]?.image}
                         alt=''
                       />
                       <p className='my-2.5 font-medium text-[15px] text-primaryBlack'>
-                        Botanical
+                        {artDropdownList[3]?.name}
                       </p>
                       <ul>
                         <li className='text-[13px] text-primaryGray font-normal leading-[19px]'>
@@ -307,12 +326,12 @@ const Mainbar = () => {
                     </div>
                     <div>
                       <img
-                        className='h-[150px] w-[150px] max-w-none'
-                        src={People}
+                        className='h-[150px] w-[150px] max-w-none rounded-[16px]'
+                        src={artDropdownList[4]?.image}
                         alt=''
                       />
                       <p className='my-2.5 font-medium text-[15px] text-primaryBlack'>
-                        People
+                        {artDropdownList[4]?.name}
                       </p>
                       <ul>
                         <li className='text-[13px] text-primaryGray font-normal leading-[19px]'>
@@ -334,12 +353,12 @@ const Mainbar = () => {
                     </div>
                     <div>
                       <img
-                        className='h-[150px] w-[150px] max-w-none'
-                        src={Scenic}
+                        className='h-[150px] w-[150px] max-w-none rounded-[16px]'
+                        src={artDropdownList[5]?.image}
                         alt=''
                       />
                       <p className='my-2.5 font-medium text-[15px] text-primaryBlack'>
-                        Scenic
+                        {artDropdownList[5]?.name}
                       </p>
                       <ul>
                         <li className='text-[13px] text-primaryGray font-normal leading-[19px]'>
@@ -616,7 +635,15 @@ const Mainbar = () => {
                                         className='inline'
                                         alt=''
                                       />{' '}
-                                      Pune, India
+                                      {
+                                        userDetails.shippingAddress
+                                          .cityName
+                                      }
+                                      ,{' '}
+                                      {
+                                        userDetails.shippingAddress
+                                          .countryName
+                                      }
                                     </p>
                                   </p>
                                 </div>
@@ -905,7 +932,7 @@ const Mainbar = () => {
               }`}
               type='text'
               placeholder='Find something great'
-              onChange={changeinput}
+              // onChange={changeinput}
               ref={ref}
               onFocus={() => setShowDrop(true)}
               onBlur={() => setShowDrop(false)}
@@ -925,10 +952,11 @@ const Mainbar = () => {
               <div className=' border-t border-[#EFEFEF] pt-5 pb-7 flex'>
                 <div className='flex-1 border-r border-[#EFEFEF]'>
                   <ul>
-                    {searchedArtList.map((art) => (
-                      <li className='linkSearch'>{art.artName}</li>
-                    ))}
-                    {/* <li className='linkSearch'>Arts for Kids</li>
+                    {/* {searchedArtList.length > 0 &&
+                      searchedArtList.map((art) => (
+                        <li className='linkSearch'>{art.artName}</li>
+                      ))} */}
+                    <li className='linkSearch'>Arts for Kids</li>
                     <li className='linkSearch'>Astronomy & Space</li>
                     <li className='linkSearch'>Beverages</li>
                     <li className='linkSearch'>Book Illustration</li>
@@ -937,7 +965,7 @@ const Mainbar = () => {
                     <li className='linkSearch'>Education</li>
                     <li className='linkSearch'>Fantasy</li>
                     <li className='linkSearch'>Fashion</li>
-                    <li className='linkSearch'>Figurative</li> */}
+                    <li className='linkSearch'>Figurative</li>
                   </ul>
                 </div>
                 <div className='flex-1 flex flex-col justify-between border-r  border-[#EFEFEF] pl-5'>
@@ -1110,7 +1138,10 @@ const Mainbar = () => {
             )}
           </StyledPopup>
 
-          <button className=' py-3.5 rounded-tr-3xl rounded-br-3xl bg-placeholderColor px-4 text-primaryBlack text-sm14 font-medium'>
+          <button
+            // onClick={searchOnClick}
+            className=' py-3.5 rounded-tr-3xl rounded-br-3xl bg-placeholderColor px-4 text-primaryBlack text-sm14 font-medium'
+          >
             <img
               className='inline-block mr-2'
               src={searchIcon}

@@ -581,9 +581,9 @@ const EarningSummary = () => {
             </button>
             <div className='flex flex-col justify-center'>
               <img
-                className='cursor-pointer pl-[14px]'
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
+                className='cursor-pointer pl-[14px]'
                 src={download}
                 alt=''
               />

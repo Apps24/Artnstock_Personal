@@ -18,6 +18,16 @@ import smallLeftArrow from '../../assets/images/Icons/smallLeftArrow.svg';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { filteredMasterModel } from '../../models/allModel';
+import { useLocation } from 'react-router-dom';
+
+// images for art Hover
+import save from '../../assets/images/artList/save.png';
+import similar from '../../assets/images/artList/similar.png';
+import profile from '../../assets/images/artList/profile.png';
+import shopCart from '../../assets/images/artList/shopCart.png';
+import enlarge from '../../assets/images/artList/enlarge.png';
+import share from '../../assets/images/artList/Share.png';
+import { ReactComponent as Wishlist } from '../../assets/images/artList/wishlistsvg.svg';
 
 const ArtList = () => {
   const navigate = useNavigate();
@@ -32,8 +42,18 @@ const ArtList = () => {
   const [selectMediumValue, setSelectMediumValue] = useState();
   const ref1 = useDetectClickOutside({ onTriggered: apps1 });
   const ref2 = useDetectClickOutside({ onTriggered: apps2 });
-  const ref3 = useDetectClickOutside({ onTriggered: apps3 });
   const ref4 = useDetectClickOutside({ onTriggered: apps4 });
+  const ref3 = useDetectClickOutside({ onTriggered: apps3 });
+
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
 
   function apps1(e) {
     setShow(false);
@@ -81,13 +101,17 @@ const ArtList = () => {
   const [orientationBtn, setOrientationBtn] = useState();
   const [title, setTitle] = useState('');
 
-  useEffect(() => {
-    getAllArtList();
-    getActiveStyleList();
-    getActiveSubjectList();
-  }, []);
-
   const subjectId = useSelector((state) => state.subjectId.subjectId);
+
+  const userId = useSelector((state) => state.auth.userId);
+
+  // const location = useLocation();
+
+  // useEffect(() => {
+  //   if (location.state !== null) {
+  //     setArtsList(location.state);
+  //   }
+  // }, [location.state]);
 
   // api calls
   const getAllArtList = async () => {
@@ -98,12 +122,13 @@ const ArtList = () => {
         );
         setTitle('All Art');
         setArtsList(res.data);
+        console.log(res.data);
       } else {
         const res = await httpClient.get(
           `/art_master/getSubjectIdWiseSubjectMaster/${subjectId.subjectId}`
         );
         setTitle(subjectId.subjectName);
-        console.log(res);
+        console.log(res.data);
         setArtsList(res.data);
       }
     } catch (error) {
@@ -148,41 +173,49 @@ const ArtList = () => {
   //   userFirstName: 'string',
   // });
 
-  const [filteredList, setfilteredList] = useState(
-    filteredMasterModel
-  );
+  // const [filteredList, setfilteredList] = useState(
+  //   filteredMasterModel
+  // );
 
-  const setFilters = (value, type) => {
-    if (type === 'style') {
-      setfilteredList((prevFormData) => ({
-        ...prevFormData,
-        styleId: value,
-      }));
-    } else if (type === 'subject') {
-      setfilteredList((prevFormData) => ({
-        ...prevFormData,
-        subjectId: value,
-      }));
-    }
-  };
+  // const setFilters = (value, type) => {
+  //   if (type === 'style') {
+  //     setfilteredList((prevFormData) => ({
+  //       ...prevFormData,
+  //       styleId: value,
+  //     }));
+  //   } else if (type === 'subject') {
+  //     setfilteredList((prevFormData) => ({
+  //       ...prevFormData,
+  //       subjectId: value,
+  //     }));
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   if (subjectId === null) {
+  //     getFilteredList();
+  //     console.log(filteredList);
+  //   }
+  // }, [filteredList]);
+
+  // const getFilteredList = async () => {
+  //   try {
+  //     const res = await httpClient.post(
+  //       '/art_master/ArtMasterFilter',
+  //       filteredList
+  //     );
+  //     setArtsList(res.data);
+  //     console.log(res.data);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   useEffect(() => {
-    getFilteredList();
-    console.log(filteredList);
-  }, [filteredList]);
-
-  const getFilteredList = async () => {
-    try {
-      const res = await httpClient.post(
-        '/art_master/ArtMasterFilter',
-        filteredList
-      );
-      setArtsList(res.data);
-      console.log(res.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+    getAllArtList();
+    getActiveStyleList();
+    getActiveSubjectList();
+  }, []);
 
   const changeSizeFilter = (text) => {
     setSizeBtn(text);
@@ -196,11 +229,94 @@ const ArtList = () => {
     navigate(`/art/art-details`, { state: { id } });
   };
 
-  useEffect(() => {}, [selectStylesValue]);
+  const [popupArray, setPopupArray] = useState([]);
+
+  const popupOfHover = (id) => {
+    console.log(typeof popupArray);
+
+    const find = popupArray.find((obj) => obj.id === id.id);
+    if (find === undefined) {
+      setPopupArray((prev) => [...prev, id]);
+    } else if (find !== undefined) {
+      setPopupArray(popupArray.filter((obj) => obj.id !== id.id));
+    }
+  };
+
+  // useEffect(() => {
+  //   console.log(popupArray);
+  // }, [popupArray]);
+
+  // test wishlist
+
+  // this code is for valdating if artId already exists in wishlist
+  const [wishlist, setwishlist] = useState();
+
+  useEffect(() => {
+    getAllWishlistByUserId();
+  }, []);
+
+  const getAllWishlistByUserId = async () => {
+    try {
+      const res = await httpClient.get(
+        `/wishlist_master/getByUserIdList/${userId}`
+      );
+      setwishlist(res.data);
+      // console.log(res.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  // above code is for valdating if artId already exists in wishlist
+
+  const addToWishlist = (artId) => {
+    let findId;
+    wishlist.forEach((obj) => {
+      if (obj.artMaster !== null) {
+        if (obj.artMaster.artId === artId) {
+          findId = undefined;
+        }
+      }
+    });
+
+    if (!findId) {
+      const object = {
+        artId: artId,
+        id: userId,
+      };
+      httpClient.post(`/wishlist_master/save`, object).then((res) => {
+        console.log(res.data);
+        getAllWishlistByUserId();
+      });
+    }
+  };
+
+  const wishlistDelete = async (id) => {
+    wishlist?.forEach(async (obj) => {
+      if (obj.artMaster.artId === id) {
+        try {
+          const res = await httpClient.delete(
+            `/wishlist_master/delete/${obj.wishListId}`
+          );
+          getAllWishlistByUserId();
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    });
+  };
+
+  // test wishlist
+
+  useEffect(() => {
+    console.log(userId);
+  }, [userId]);
 
   return (
     <>
-      <div className='main py-7'>
+      <div
+        // onMouseEnter={() => setPopupOpen(false)}
+        className='main py-7'
+      >
         <div className='px-6'>
           <p className='mb-[2px] bullet text-left'>
             Artnstock / Art / {title}
@@ -327,7 +443,7 @@ const ArtList = () => {
                         <li
                           onClick={() => {
                             changeValue2('All Styles');
-                            setFilters('', 'style');
+                            // setFilters('', 'style');
                           }}
                           className='py-3 px-4 cursor-pointer text-[#BBBBBB] text-[13px] leading-[13px] font-medium border-b border-[#D6D6D6]'
                         >
@@ -338,7 +454,7 @@ const ArtList = () => {
                           <li
                             onClick={() => {
                               changeValue2(obj.name);
-                              setFilters(obj.styleId, 'style');
+                              // setFilters(obj.styleId, 'style');
                             }}
                             className='py-3 px-4 cursor-pointer text-[#BBBBBB] text-[13px] leading-[13px] font-medium border-b border-[#D6D6D6]'
                           >
@@ -384,7 +500,7 @@ const ArtList = () => {
                         <li
                           onClick={() => {
                             changeValue3('All Subjects');
-                            setFilters('', 'subject');
+                            // setFilters('', 'subject');
                           }}
                           className='py-3 px-4 cursor-pointer text-[#BBBBBB] text-[13px] leading-[13px] font-medium border-b border-[#D6D6D6]'
                         >
@@ -394,7 +510,7 @@ const ArtList = () => {
                           <li
                             onClick={() => {
                               changeValue3(obj.subjectName);
-                              setFilters(obj.subjectId, 'subject');
+                              // setFilters(obj.subjectId, 'subject');
                             }}
                             className='py-3 px-4 cursor-pointer text-[#BBBBBB] text-[13px] leading-[13px] font-medium border-b border-[#D6D6D6]'
                           >
@@ -715,7 +831,12 @@ const ArtList = () => {
               </form>
             </div>
           )}
-          <div className='content'>
+          <div
+            // onMouseEnter={() => {
+            //   setPopupArray(false);
+            // }}
+            className='content'
+          >
             <div className='flex'>
               {!showSidebar && (
                 <img
@@ -742,43 +863,153 @@ const ArtList = () => {
               {artsList.map((data) => {
                 return (
                   <div
+                    onMouseEnter={() => {
+                      setPopupArray([]);
+                    }}
                     key={data?.artId}
                     className={` ${
                       showSidebar ? 'w-[19.25rem]' : 'w-[18.688rem]'
-                    }`}
+                    } rounded-2xl`}
                   >
                     <div
-                      className={` w-full group overflow-hidden rounded-2xl relative`}
+                      className={` w-full group rounded-2xl relative`}
                       style={{ height: `${data?.height}px` }}
                       onClick={() => goToArtDetailsPage(data?.artId)}
                     >
                       <img
+                        className='rounded-2xl'
                         style={{ height: '100%' }}
                         src={data?.image}
                         alt=''
                       />
                       <div
-                        className='group-hover:flex hidden bg-blackRgba items-center justify-center absolute top-0 left-0 text-center'
+                        className='group-hover:flex hidden bg-blackRgba items-center justify-center absolute top-0 left-0 rounded-2xl'
                         style={{ height: '100%', width: '100%' }}
                       >
-                        <div>
-                          <p className='text-heading text-[#ffffff] font-semibold'>
-                            {data?.productName}
-                          </p>
-                          <p className='text-sm12 text-[#ffffff] font-medium'>
-                            An Affair with array of Artistically{' '}
-                            <br />
-                            Printed Products
-                          </p>
-                          <span className='text-[#FFFFFF] text-heading font-thin'>
-                            745+
-                          </span>
+                        <p className='text-[25px] text-[#fff]'>
+                          {data.subjectMaster.subjectName}
+                        </p>
+                        <div className='absolute bottom-[10px] left-[10px] flex gap-[10px]'>
+                          <div
+                            onClick={(e) => {
+                              popupOfHover({ id: data.artId });
+                              e.stopPropagation();
+                            }}
+                          >
+                            <img src={save} alt='' />
+                          </div>
+                          <div>
+                            <img src={similar} alt='' />
+                          </div>
+                          <div>
+                            <img src={profile} alt='' />
+                          </div>
+                          <div>
+                            <img src={shopCart} alt='' />
+                          </div>
+                          <div>
+                            <img
+                              onClick={(e) => {
+                                navigate('/BuyerReferralProgram');
+                                e.stopPropagation();
+                              }}
+                              src={share}
+                              alt=''
+                            />
+                          </div>
                         </div>
-                        {/* <img
-                      className="absolute bottom-2.5 left-2.5"
-                      src={prodWhiteIcon}
-                      alt=""
-                    /> */}
+                        <div className='absolute right-[10px] bottom-[10px]'>
+                          <img src={enlarge} alt='' />
+                        </div>
+                        <div className='absolute right-[3px] top-[3px]'>
+                          {/* <img
+                            className='cursor-pointer'
+                            onMouseEnter={handleMouseEnter}
+                            onMouseLeave={handleMouseLeave}
+                            src={wishlist}
+                            alt=''
+                          /> */}
+
+                          {/* test */}
+                          {wishlist?.find(
+                            (obj) =>
+                              obj.artMaster?.artId === data.artId
+                          ) === undefined ? (
+                            <Wishlist
+                              className='cursor-pointer'
+                              onMouseEnter={handleMouseEnter}
+                              onMouseLeave={handleMouseLeave}
+                              onClick={(e) => {
+                                addToWishlist(data?.artId);
+                                e.stopPropagation();
+                              }}
+                              style={{
+                                fill: '#fff',
+                                width: '100%',
+                              }}
+                            />
+                          ) : (
+                            <Wishlist
+                              className='cursor-pointer'
+                              onMouseEnter={handleMouseEnter}
+                              onMouseLeave={handleMouseLeave}
+                              onClick={(e) => {
+                                wishlistDelete(data?.artId);
+                                e.stopPropagation();
+                              }}
+                              style={{
+                                fill: 'red',
+                                width: '100%',
+                              }}
+                            />
+                          )}
+                          {/* test */}
+
+                          {/* <Wishlist
+                             className='cursor-pointer'
+                            onMouseEnter={handleMouseEnter}
+                            onMouseLeave={handleMouseLeave}
+                          /> */}
+                        </div>
+                        {isHovered && (
+                          <button className='w-[164px] z-[99] mt-[3px] h-[20px] flex justify-center items-center text-[11px] bg-[#f7f7f7] rounded-[10px] text-primaryGray absolute top-[33px] left-[203px] border border-[#e4e4e4]'>
+                            <span className='leading-[1]'>
+                              Save to Wishlist
+                            </span>
+                          </button>
+                        )}
+                        {popupArray.find(
+                          (obj) => obj.id === data.artId
+                        ) && (
+                          <div
+                            className={`z-999 right-[117px] bottom-[15px] bg-[#fff] rounded-[16px] w-[266px] absolute bottom-[44px] left-[-117px]`}
+                            style={{
+                              boxShadow:
+                                '0px 0px 18px rgba(0, 0, 0, 0.2)',
+                            }}
+                          >
+                            <div className='flex gap-[5px] flex-col p-[14px] leading-[1.3] text-center'>
+                              <p className='font-medium text-primaryBlack text-[15px]'>
+                                Create Account
+                              </p>
+                              <p className='text-primaryGray text-[11px]'>
+                                To create and add to a collection, you
+                                must be a logged-in member
+                              </p>
+                              <button className='bg-[#8e8e8e] rounded-[14px] h-[28px] w-[108px] text-[12px] font-medium text-[white] mx-[auto]'>
+                                Create Account
+                              </button>
+                              <p className='text-orangeColor text-[11px]'>
+                                Already a member? Sign in
+                              </p>
+                              <p className='text-pinkColor text-[11px]'>
+                                Note: Downloaded images will be saved
+                                in ‘Collections’ folder
+                              </p>
+                            </div>
+                            <div class='absolute left-[47%] bottom-[-10px] w-[20px] h-[20px] bg-[white] rounded-br-[5px] transform rotate-45 shadow-inner'></div>
+                          </div>
+                        )}
                       </div>
                     </div>
                     <p className='text-primaryBlack text-[15px] leading-[18px] font-semibold mt-1.5'>

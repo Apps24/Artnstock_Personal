@@ -1,0 +1,19 @@
+<svg id="Icon_-_Wish_List" data-name="Icon - Wish List" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="43" height="43" viewBox="0 0 43 43">
+  <defs>
+    <style>
+      .cls-1 {
+        <!-- fill: #e8e8e8; -->
+        fill-rule: evenodd;
+        filter: url(#filter);
+      }
+    </style>
+    <filter id="filter" x="1206" y="270" width="43" height="43" filterUnits="userSpaceOnUse">
+      <feOffset result="offset" in="SourceAlpha"/>
+      <feGaussianBlur result="blur" stdDeviation="3.162"/>
+      <feFlood result="flood" flood-color="#020000" flood-opacity="0.13"/>
+      <feComposite result="composite" operator="in" in2="blur"/>
+      <feBlend result="blend" in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <path id="Icon_-_Wish_List_copy" data-name="Icon - Wish List copy" class="cls-1" d="M1232.75,279c-2.66,0-4.86,2.7-5.75,3.971-0.89-1.274-3.09-3.971-5.75-3.971-3.45,0-6.25,3.458-6.25,7.708a8.4,8.4,0,0,0,2.32,5.955,0.473,0.473,0,0,0,.08.108l9.25,10.072a0.471,0.471,0,0,0,.7,0l9.56-10.423,0.1-.1c0.08-.082.15-0.164,0.24-0.265a0.4,0.4,0,0,0,.09-0.133,8.723,8.723,0,0,0,1.66-5.21C1239,282.458,1236.2,279,1232.75,279Z" transform="translate(-1206 -270)"/>
+</svg>

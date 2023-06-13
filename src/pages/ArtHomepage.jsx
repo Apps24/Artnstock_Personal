@@ -35,6 +35,20 @@ const ArtHomepage = () => {
       });
   }, []);
 
+  const [faq, setfaq] = useState([]);
+  const getArtWiseFaqList = () => {
+    httpClient
+      .get(`/frequently_asked_master/getTypeWiseFaq/art`)
+      .then((res) => {
+        setfaq(res.data);
+        console.log(res);
+      });
+  };
+
+  useEffect(() => {
+    getArtWiseFaqList();
+  }, []);
+
   return (
     <>
       <Banner type='art' />
@@ -51,7 +65,7 @@ const ArtHomepage = () => {
       />
       <Magzine type='art' />
 
-      <ArtHomeFaq />
+      <ArtHomeFaq type={faq} />
       <Footer />
     </>
   );
