@@ -190,7 +190,7 @@ const Mainbar = () => {
       state: searchedArtList,
     });
     dispatch(searchSliceAction.setSearchText(searchedArtList));
-
+  }
   const [artDropdownList, setartDropdownList] = useState([]);
   const getArtDropdownTrue = () => {
     httpClient.get(`/style_master/getArtDropdownTrue`).then((res) => {

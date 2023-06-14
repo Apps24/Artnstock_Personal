@@ -20,6 +20,15 @@ import { useSelector } from 'react-redux';
 import { filteredMasterModel } from '../../models/allModel';
 import { useLocation } from 'react-router-dom';
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
+// images for art Hover
+
+import save from '../../assets/images/artList/save.png';
+import similar from '../../assets/images/artList/similar.png';
+import profile from '../../assets/images/artList/profile.png';
+import shopCart from '../../assets/images/artList/shopCart.png';
+import enlarge from '../../assets/images/artList/enlarge.png';
+import share from '../../assets/images/artList/Share.png';
+import { ReactComponent as Wishlist } from '../../assets/images/artList/wishlistsvg.svg';
 
 const popularList = [
   {
@@ -39,14 +48,7 @@ const popularList = [
     name: "Price:High to Low",
   },
 ];
-// images for art Hover
-import save from '../../assets/images/artList/save.png';
-import similar from '../../assets/images/artList/similar.png';
-import profile from '../../assets/images/artList/profile.png';
-import shopCart from '../../assets/images/artList/shopCart.png';
-import enlarge from '../../assets/images/artList/enlarge.png';
-import share from '../../assets/images/artList/Share.png';
-import { ReactComponent as Wishlist } from '../../assets/images/artList/wishlistsvg.svg';
+
 
 const ArtList = () => {
   const navigate = useNavigate();
