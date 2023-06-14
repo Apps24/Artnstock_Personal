@@ -50,6 +50,20 @@ const ProductHomepage = () => {
       });
   }, []);
 
+  const [faq, setfaq] = useState([]);
+  const getArtWiseFaqList = () => {
+    httpClient
+      .get(`/frequently_asked_master/getTypeWiseFaq/product`)
+      .then((res) => {
+        setfaq(res.data);
+        console.log(res);
+      });
+  };
+
+  useEffect(() => {
+    getArtWiseFaqList();
+  }, []);
+
   return (
     <>
 
@@ -83,8 +97,10 @@ const ProductHomepage = () => {
           leftTextImg={homeObject?.signInLeftMain}
         />
       </div>
-      <Magzine type="product" />
-      <ArtHomeFaq type="product" />
+
+      <Magzine type='product' />
+      <ArtHomeFaq type={faq} />
+
       <Footer />
     </>
   );

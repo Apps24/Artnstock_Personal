@@ -52,6 +52,9 @@ import mug from "../../assets/images/Menubar/mug.png";
 
 import LoadingBar from "react-top-loading-bar";
 import { searchSliceAction } from "../../store/searchSlice";
+import { setUserRole } from '../../store/authSlice';
+import { logDOM } from '@testing-library/react';
+
 
 const StyledPopup = styled(Popup)`
   // use your custom style for ".popup-overlay"
@@ -187,19 +190,20 @@ const Mainbar = () => {
       state: searchedArtList,
     });
     dispatch(searchSliceAction.setSearchText(searchedArtList));
+
+  const [artDropdownList, setartDropdownList] = useState([]);
+  const getArtDropdownTrue = () => {
+    httpClient.get(`/style_master/getArtDropdownTrue`).then((res) => {
+      setartDropdownList(res.data);
+      console.log(res.data);
+    });
+
   };
-
-  // redux useSelector of userRole
-
-  // useEffect(() => {
-  //   console.log(userRole);
-  // }, []);
 
   useEffect(() => {
     setProgress(100);
+    getArtDropdownTrue();
   }, []);
-
- 
 
   useEffect(() => {
     location.pathname === "/" && setSelectItems(null);
@@ -211,8 +215,7 @@ const Mainbar = () => {
     location.pathname === "/product-home" && setSelectItems("Products");
   }, [location]);
 
-
-
+  
 
   return (
     <>
@@ -243,16 +246,16 @@ const Mainbar = () => {
                 <NavLink onClick={() => setActiveLink("Art")} to="/art-home">
                   ART
                 </NavLink>
-                <div className="bg-[#ffffff] pt-5 px-5 pb-7 absolute rounded-3xl z-50 shadow-regCardShadow top-8 left-0 hidden group-hover:block">
-                  <div className="flex gap-4 mb-7">
+                <div className='bg-[#ffffff] pt-5 px-5 pb-7 absolute rounded-3xl z-50 shadow-regCardShadow top-4.5 left-0 hidden group-hover:block'>
+                  <div className='flex gap-4 mb-7'>
                     <div>
                       <img
-                        className="h-[150px] w-[150px] max-w-none"
-                        src={artDropImg}
-                        alt=""
+                        className='h-[150px] w-[150px] max-w-none rounded-[16px]'
+                        src={artDropdownList[0]?.image}
+                        alt=''
                       />
-                      <p className="my-2.5 font-medium text-[15px] text-primaryBlack">
-                        Abstract
+                      <p className='my-2.5 font-medium text-[15px] text-primaryBlack'>
+                        {artDropdownList[0]?.name}
                       </p>
                       <ul>
                         <li className="text-[13px] text-primaryGray font-normal leading-[19px]">
@@ -274,12 +277,12 @@ const Mainbar = () => {
                     </div>
                     <div>
                       <img
-                        className="h-[150px] w-[150px] max-w-none"
-                        src={Animals}
-                        alt=""
+                        className='h-[150px] w-[150px] max-w-none rounded-[16px]'
+                        src={artDropdownList[1]?.image}
+                        alt=''
                       />
-                      <p className="my-2.5 font-medium text-[15px] text-primaryBlack">
-                        Animals
+                      <p className='my-2.5 font-medium text-[15px] text-primaryBlack'>
+                        {artDropdownList[1]?.name}
                       </p>
                       <ul>
                         <li className="text-[13px] text-primaryGray font-normal leading-[19px]">
@@ -301,12 +304,12 @@ const Mainbar = () => {
                     </div>
                     <div>
                       <img
-                        className="h-[150px] w-[150px] max-w-none"
-                        src={Architecture}
-                        alt=""
+                        className='h-[150px] w-[150px] max-w-none rounded-[16px]'
+                        src={artDropdownList[2]?.image}
+                        alt=''
                       />
-                      <p className="my-2.5 font-medium text-[15px] text-primaryBlack">
-                        Architecture
+                      <p className='my-2.5 font-medium text-[15px] text-primaryBlack'>
+                        {artDropdownList[2]?.name}
                       </p>
                       <ul>
                         <li className="text-[13px] text-primaryGray font-normal leading-[19px]">
@@ -328,12 +331,12 @@ const Mainbar = () => {
                     </div>
                     <div>
                       <img
-                        className="h-[150px] w-[150px] max-w-none"
-                        src={Botanical}
-                        alt=""
+                        className='h-[150px] w-[150px] max-w-none rounded-[16px]'
+                        src={artDropdownList[3]?.image}
+                        alt=''
                       />
-                      <p className="my-2.5 font-medium text-[15px] text-primaryBlack">
-                        Botanical
+                      <p className='my-2.5 font-medium text-[15px] text-primaryBlack'>
+                        {artDropdownList[3]?.name}
                       </p>
                       <ul>
                         <li className="text-[13px] text-primaryGray font-normal leading-[19px]">
@@ -355,12 +358,12 @@ const Mainbar = () => {
                     </div>
                     <div>
                       <img
-                        className="h-[150px] w-[150px] max-w-none"
-                        src={People}
-                        alt=""
+                        className='h-[150px] w-[150px] max-w-none rounded-[16px]'
+                        src={artDropdownList[4]?.image}
+                        alt=''
                       />
-                      <p className="my-2.5 font-medium text-[15px] text-primaryBlack">
-                        People
+                      <p className='my-2.5 font-medium text-[15px] text-primaryBlack'>
+                        {artDropdownList[4]?.name}
                       </p>
                       <ul>
                         <li className="text-[13px] text-primaryGray font-normal leading-[19px]">
@@ -382,12 +385,12 @@ const Mainbar = () => {
                     </div>
                     <div>
                       <img
-                        className="h-[150px] w-[150px] max-w-none"
-                        src={Scenic}
-                        alt=""
+                        className='h-[150px] w-[150px] max-w-none rounded-[16px]'
+                        src={artDropdownList[5]?.image}
+                        alt=''
                       />
-                      <p className="my-2.5 font-medium text-[15px] text-primaryBlack">
-                        Scenic
+                      <p className='my-2.5 font-medium text-[15px] text-primaryBlack'>
+                        {artDropdownList[5]?.name}
                       </p>
                       <ul>
                         <li className="text-[13px] text-primaryGray font-normal leading-[19px]">
@@ -658,10 +661,18 @@ const Mainbar = () => {
                                     <p className="text-[11px] text-[#757575]">
                                       <img
                                         src={locationIcon}
-                                        className="inline"
-                                        alt=""
-                                      />{" "}
-                                      Pune, India
+                                        className='inline'
+                                        alt=''
+                                      />
+                                      {
+                                        userDetails.shippingAddress
+                                          .cityName
+                                      }
+                                      ,
+                                      {
+                                        userDetails.shippingAddress
+                                          .countryName
+                                      }
                                     </p>
                                   </p>
                                 </div>
@@ -970,19 +981,16 @@ const Mainbar = () => {
               <div className=" border-t border-[#EFEFEF] pt-5 pb-7 flex">
                 <div className="flex-1 border-r border-[#EFEFEF]">
                   <ul>
-                    {/* {searchedArtList.map((art) => (
-                      <li className='linkSearch'>{art.artName}</li>
-                    ))} */}
-                    <li className="linkSearch">Arts for Kids</li>
-                    <li className="linkSearch">Astronomy & Space</li>
-                    <li className="linkSearch">Beverages</li>
-                    <li className="linkSearch">Book Illustration</li>
-                    <li className="linkSearch">Comics</li>
-                    <li className="linkSearch">Dance</li>
-                    <li className="linkSearch">Education</li>
-                    <li className="linkSearch">Fantasy</li>
-                    <li className="linkSearch">Fashion</li>
-                    <li className="linkSearch">Figurative</li>
+                    <li className='linkSearch'>Arts for Kids</li>
+                    <li className='linkSearch'>Astronomy & Space</li>
+                    <li className='linkSearch'>Beverages</li>
+                    <li className='linkSearch'>Book Illustration</li>
+                    <li className='linkSearch'>Comics</li>
+                    <li className='linkSearch'>Dance</li>
+                    <li className='linkSearch'>Education</li>
+                    <li className='linkSearch'>Fantasy</li>
+                    <li className='linkSearch'>Fashion</li>
+                    <li className='linkSearch'>Figurative</li>
                   </ul>
                 </div>
                 <div className="flex-1 flex flex-col justify-between border-r  border-[#EFEFEF] pl-5">

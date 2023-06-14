@@ -187,6 +187,8 @@ const SearchList = () => {
       return updatedStr;
     };
 
+    
+
     const [filtres, setFiltres] = useState({
         styleId: "",
         subjectId: "",
