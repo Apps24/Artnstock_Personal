@@ -8,10 +8,20 @@ import { useDispatch } from 'react-redux';
 import { setpath2 } from '../../../store/contriPathSlice';
 import { useSelector } from 'react-redux';
 import { httpClient } from '../../../axios';
+import { Cloudinary } from '@cloudinary/url-gen';
+// import cloudinary from 'cloudinary';
+
+// cloudinary.config({
+//   cloud_name: 'artnstockimg',
+//   api_key: '632591959119914',
+//   api_secret: 'jp4n7VfrNS_cBjwuV0AUiAFZdQ4',
+// });
 
 const UploadRelease = () => {
   const [cards, setCards] = useState([]);
   const [images, setImages] = useState([]);
+
+  // https://api.cloudinary.com/v1_1/demo/image/upload
 
   const userId = useSelector((state) => state.auth.userId);
 
@@ -42,21 +52,38 @@ const UploadRelease = () => {
     newImages.forEach((cards) => {
       let formData = new FormData();
       formData.append('file', cards);
+      formData.append('upload_preset', 'lf9qn8qc');
+      formData.append('cloud_name', 'artnstockimg');
+
       httpClient
-        .post('/bucket/push', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        })
+        .post(
+          'https://api.cloudinary.com/v1_1/artnstockimg/image/upload',
+          formData
+        )
         .then((res) => {
           console.log('file uploaded successfully');
-          // console.log(res);
+          console.log(res.data.url);
           const dataa = res.data;
           setCards((prevCards) => [...prevCards, { dataa, cards }]);
         })
         .catch((err) => {
           console.log(err);
         });
+      // httpClient
+      //   .post('/bucket/push', formData, {
+      //     headers: {
+      //       'Content-Type': 'multipart/form-data',
+      //     },
+      //   })
+      //   .then((res) => {
+      //     console.log('file uploaded successfully');
+      //     // console.log(res);
+      //     const dataa = res.data;
+      //     setCards((prevCards) => [...prevCards, { dataa, cards }]);
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //   });
     });
     // upload images
   };

@@ -44,7 +44,7 @@ const UserDetails = () => {
   // console.log(userType);
 
   const createUser = () => {
-    setAlertToggle(true);
+    // setAlertToggle(true);
     userModel.userFirstName = values.fName;
     userModel.userLastName = values.lName;
     userModel.displayName = values.dName;

@@ -78,6 +78,7 @@ import Wishlist from './components/Wishlist/Wishlist2';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import ContributorViewMyStore from './components/ContributorViewMyStore/ContributorViewMyStore';
+import SearchList from './pages/search/SearchList';
 
 function App() {
   const userAuth = useSelector((state) => state.auth);
@@ -212,6 +213,9 @@ function App() {
             </ProtectedRouteForNull>
           }
         />
+
+        {/* Search */}
+        <Route path='/search' element={<SearchList />} exact />
 
         {/* Art */}
         <Route path='/art-list' element={<ArtList />} exact />

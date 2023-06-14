@@ -35,6 +35,7 @@ const Login = () => {
               authSliceAction.setUserRole(res.data.userRole[0])
             );
             dispatch(authSliceAction.setUserId(res.data.userId));
+            dispatch(authSliceAction.setUserDetails(res.data));
             navigate('/');
           } else {
             toast.error(res.data.message);
@@ -45,9 +46,11 @@ const Login = () => {
     }
   };
 
+
   const onChangeCaptcha = (value) => {
     console.log('Captcha value:', value);
   };
+
 
   return (
     <div className='w-full h-[100vh] bg-[#FF369F] flex justify-center'>

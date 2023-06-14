@@ -8,6 +8,7 @@ import nestedTabSlice from './nestedTabSlice';
 import fileImageSlice from './fileImageSlice';
 import contriPathSlice from './contriPathSlice';
 import subjectidSlice from './subjectidSlice';
+import searchSlice from './searchSlice';
 
 const persistConfig = {
   key: 'root',
@@ -30,6 +31,7 @@ const reducer = combineReducers({
   nestedTab: nestedTabSlice.reducer,
   contriPath: contriPathSlice.reducer,
   subjectId: subjectidSlice.reducer,
+  searchText: searchSlice.reducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducer);

@@ -66,7 +66,7 @@ const GrayBoxForSubmit = ({ card, style }) => {
         }`}
         style={backgroundImageStyle}
       ></div>
-      {hovered && (
+      {selectedImages.find((item) => item === card) || hovered ? (
         <div className='absolute inset-0 flex items-center justify-center'>
           <button
             className='w-[52px] h-[20px] bg-[#e8e8e8] text-[11px] opacity-[100%] cursor-pointer rounded-[10px]'
@@ -75,8 +75,10 @@ const GrayBoxForSubmit = ({ card, style }) => {
             Select
           </button>
         </div>
+      ) : (
+        <div></div>
       )}
-      {hovered && (
+      {selectedImages.find((item) => item === card) || hovered ? (
         <div className='absolute top-0 right-0 p-2'>
           <input
             type='checkbox'
@@ -85,6 +87,8 @@ const GrayBoxForSubmit = ({ card, style }) => {
             onChange={handleCheckboxChange}
           />
         </div>
+      ) : (
+        <div></div>
       )}
     </div>
   );

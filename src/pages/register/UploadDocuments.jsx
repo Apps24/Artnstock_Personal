@@ -38,6 +38,12 @@ const UploadDocuments = () => {
     setSelectedVal(val);
   };
 
+  const deleteFileData = () => {
+    setFileData({});
+    setSelectedVal(false);
+    setUploadBtn(0);
+  }
+
   return (
     <div className="w-full h-[100vh] bg-[#36DEED] flex justify-center">
       <div className="regCard flex">
@@ -96,7 +102,7 @@ const UploadDocuments = () => {
                   {uploadBtn >= 100 && (
                     <div className="flex">
                       <img src={eyeIcon} className="mr-2" alt="" />
-                      <img src={deleteIcon} alt="" />
+                      <img onClick={deleteFileData} src={deleteIcon} alt="" />
                     </div>
                   )}
                 </div>

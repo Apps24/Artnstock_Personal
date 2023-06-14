@@ -26,6 +26,14 @@ const ProductHomepage = () => {
   }, []);
 
   // grid api call
+  // useEffect(() => {
+  //   httpClient
+  //     .get(`/art_product_master/getActiveArtProductMaster`)
+  //     .then((res) => {
+  //       setGridList(res.data);
+  //       console.log(res.data);
+  //     });
+  // }, []);
   useEffect(() => {
     httpClient
       .get(`/product_sub_category_master/getTypeWiseList/homeGrid`)
@@ -44,10 +52,13 @@ const ProductHomepage = () => {
 
   return (
     <>
+
       <Banner type="product" />
       <ArtGrid gridList={gridList} />
       <div className="hrLine"></div>
-
+      <Banner type='product' />
+      <ArtGrid gridList={gridList} type={'product'} />
+      <div className='hrLine'></div>
       <LimitedEdition logo={homeObject?.smallLogo} type="product" />
       <div className="hrLine"></div>
 

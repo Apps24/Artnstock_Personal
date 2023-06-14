@@ -72,7 +72,6 @@ const Wishlist2 = () => {
           `/wishlist_master/delete/${wishlistId}`
         );
         console.log(res.data);
-
         setdeletewishid('');
         getAllWishlistByUserId();
       } catch (error) {
@@ -104,16 +103,36 @@ const Wishlist2 = () => {
                       className='w-[570px]
                  rounded-[40px] flex justify-between'
                     >
-                      <div
-                        style={{
-                          backgroundImage: `url(${item.artMaster.image})`,
-                        }}
-                        className='w-[210px] h-[210px] bg-cover bg-no-repeat rounded-[16px]'
-                      ></div>
+                      {item.artMaster !== null ? (
+                        <div
+                          style={{
+                            backgroundImage: `url(${item.artMaster?.image})`,
+                          }}
+                          className='w-[210px] h-[210px] bg-cover bg-no-repeat rounded-[16px]'
+                        ></div>
+                      ) : (
+                        <div
+                          style={{
+                            backgroundImage: `url(${item.artProductMaster?.image})`,
+                          }}
+                          className='w-[210px] h-[210px] bg-cover bg-no-repeat rounded-[16px]'
+                        ></div>
+                      )}
+
                       <div className='w-[345px]'>
-                        <p className='text-[18px] text-[#333333] font-medium'>
-                          {item.artMaster.artName}
-                        </p>
+                        {item.artMaster !== null ? (
+                          <p className='text-[18px] text-[#333333] font-medium'>
+                            {item.artMaster?.artName}
+                          </p>
+                        ) : (
+                          <p className='text-[18px] text-[#333333] font-medium'>
+                            {
+                              item.artProductMaster?.productMaster
+                                .productName
+                            }
+                          </p>
+                        )}
+
                         <p className='text-[11px] pb-2 text-[#757575]'>
                           by{' '}
                           <span className='text-[#f88331]'>
@@ -121,28 +140,54 @@ const Wishlist2 = () => {
                           </span>
                         </p>
                         <div className='text-[11px] text-[#757575] border-t-2 border-[#d6d6d6] '>
-                          <span className='text-[12px] font-medium'>
-                            Combo ID:
-                          </span>{' '}
-                          {item.artMaster.arProductNo}
+                          {item.artMaster !== null ? (
+                            <span className='text-[12px] font-medium'>
+                              Art ID: {item.artMaster?.artId}
+                            </span>
+                          ) : (
+                            <span className='text-[12px] font-medium'>
+                              Combo ID:{' '}
+                              {item.artProductMaster?.artProductId}
+                            </span>
+                          )}
                         </div>
                         <div className='text-[11pt] border-y-2 text-[#7e7e7e] border-[#d6d6d6]'>
                           <span className='text-[12px] font-medium'>
                             Availability:
                           </span>{' '}
                           <span className='text-[12px]'>
-                            {item.artMaster.stock > 0 ? (
+                            {item.artMaster !== null ? (
                               <div>
-                                In Stock
-                                <img
-                                  src={Checkmark}
-                                  alt=''
-                                  className='inline px-2'
-                                />
+                                {item.artMaster?.stock > 0 ? (
+                                  <div>
+                                    In Stock
+                                    <img
+                                      src={Checkmark}
+                                      alt=''
+                                      className='inline px-2'
+                                    />
+                                  </div>
+                                ) : (
+                                  <p>No Stock Available</p>
+                                )}
                               </div>
                             ) : (
-                              <p>No Stock Available</p>
+                              <div>
+                                {item.artProductMaster?.stock > 0 ? (
+                                  <div>
+                                    In Stock
+                                    <img
+                                      src={Checkmark}
+                                      alt=''
+                                      className='inline px-2'
+                                    />
+                                  </div>
+                                ) : (
+                                  <p>No Stock Available</p>
+                                )}
+                              </div>
                             )}
+
                             {/* {item.availability}
                           <img
                             src={Checkmark}
@@ -154,14 +199,34 @@ const Wishlist2 = () => {
                         <p className='text-[15px] pt-3 font-medium text-[#333333]'>
                           Description:
                         </p>
-                        <p className='text-[11px] text-[#757575] leading-4'>
-                          {item.artMaster.description}
-                        </p>
+
+                        {item.artMaster !== null ? (
+                          <p className='text-[11px] text-[#757575] leading-4'>
+                            {item.artMaster?.description}
+                          </p>
+                        ) : (
+                          <p className='text-[11px] text-[#757575] leading-4'>
+                            {
+                              item.artProductMaster?.productMaster
+                                .description
+                            }
+                          </p>
+                        )}
+
                         <p className='text-[#f88331] my-3'>
-                          ${' '}
-                          <span className='text-[25px]'>
-                            {item.artMaster.price}
-                          </span>
+                          {item.artMaster !== null ? (
+                            <span className='text-[25px]'>
+                              ${item.artMaster?.price}
+                            </span>
+                          ) : (
+                            <span className='text-[25px]'>
+                              $
+                              {
+                                item.artProductMaster?.productMaster
+                                  .price
+                              }
+                            </span>
+                          )}
                         </p>
 
                         <button className='blackBtn flex items-center text-[12px] py-2'>

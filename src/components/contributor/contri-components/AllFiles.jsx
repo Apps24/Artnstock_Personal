@@ -59,14 +59,20 @@ const AllFiles = ({ image }) => {
               backgroundImage: `url("${image.image}")`,
             }}
           ></div>
-          {hovered && (
+          {selectedAllFilesImages.find(
+            (img) => img.artId === image.artId
+          ) || hovered ? (
             <div className='absolute inset-0 flex items-center justify-center'>
               <button className='w-[52px] h-[20px] bg-[#e8e8e8] text-[11px] opacity-[100%] cursor-pointer rounded-[10px] font-medium'>
                 <span>Edit</span>
               </button>
             </div>
+          ) : (
+            <div></div>
           )}
-          {hovered && (
+          {selectedAllFilesImages.find(
+            (img) => img.artId === image.artId
+          ) || hovered ? (
             <div className='absolute top-0 right-0 p-2'>
               <input
                 type='checkbox'
@@ -79,15 +85,21 @@ const AllFiles = ({ image }) => {
                 onChange={handleCheckboxChange}
               />
             </div>
+          ) : (
+            <div></div>
           )}
 
           {/* 3buttons */}
-          {hovered && (
+          {selectedAllFilesImages.find(
+            (img) => img.artId === image.artId
+          ) || hovered ? (
             <div className='absolute bottom-0 left-0 p-2 flex items-center justify-center gap-[7px]'>
               <img src={infofile} alt='' />
               <img src={sharefile} alt='' />
               <img src={deletefile} alt='' />
             </div>
+          ) : (
+            <div></div>
           )}
 
           {/* 3buttons */}

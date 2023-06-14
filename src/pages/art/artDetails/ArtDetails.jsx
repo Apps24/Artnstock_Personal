@@ -381,9 +381,18 @@ const ArtDetails = () => {
   // above code is for valdating if artId already exists in wishlist
 
   const addToWishlist = (artId) => {
-    const findId = wishlist.find(
-      (obj) => obj.artMaster.artId === artId
-    );
+    let findId;
+    wishlist.forEach((obj) => {
+      if (obj.artMaster !== null) {
+        if (obj.artMaster.artId === artId) {
+          findId = undefined;
+        }
+      }
+    });
+
+    // findId = wishlist.find(
+    //   (obj) => obj.artMaster.artId === artId
+    // );
 
     if (!findId) {
       const object = {
@@ -468,7 +477,7 @@ const ArtDetails = () => {
                 <img src={addIcon} alt='' />
 
                 {wishlist?.find(
-                  (obj) => obj.artMaster.artId === artDetails.artId
+                  (obj) => obj.artMaster?.artId === artDetails.artId
                 ) === undefined ? (
                   <WishlistIcon
                     onClick={() => {

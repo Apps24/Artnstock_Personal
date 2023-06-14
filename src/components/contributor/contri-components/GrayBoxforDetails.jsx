@@ -58,7 +58,7 @@ const GrayBoxforDetails = ({
         }`}
         style={backgroundImageStyle}
       ></div>
-      {hovered && (
+      {selectedImages.find((item) => item === card) || hovered ? (
         <div className='absolute inset-0 flex items-center justify-center'>
           <button
             className='w-[52px] h-[20px] bg-[#e8e8e8] text-[11px] opacity-[100%] cursor-pointer rounded-[20px]'
@@ -67,8 +67,10 @@ const GrayBoxforDetails = ({
             Select
           </button>
         </div>
+      ) : (
+        <div></div>
       )}
-      {hovered && (
+      {selectedImages.find((item) => item === card) || hovered ? (
         <div>
           {' '}
           {isSelected ? (
@@ -94,6 +96,8 @@ const GrayBoxforDetails = ({
             </div>
           )}
         </div>
+      ) : (
+        <div></div>
       )}
     </div>
   );
