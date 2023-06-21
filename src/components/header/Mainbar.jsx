@@ -54,6 +54,8 @@ import LoadingBar from "react-top-loading-bar";
 import { searchSliceAction } from "../../store/searchSlice";
 import { setUserRole } from '../../store/authSlice';
 import { logDOM } from '@testing-library/react';
+import { styleSliceAction } from "../../store/styleSlice";
+import { setSubjectId } from "../../store/subjectidSlice";
 
 
 const StyledPopup = styled(Popup)`
@@ -154,16 +156,16 @@ const Mainbar = () => {
   };
 
   // Recently Search
-  useEffect(() => {
-    // console.log(userDetails.userId);
-    httpClient
-      .get(
-        `/recently_search_master/getUserIdWiseRecentlyKeywordSearch/${userDetails.userId}`
-      )
-      .then((res) => {
-        // console.log(res.data);
-      });
-  }, []);
+  // useEffect(() => {
+  //   // console.log(userDetails.userId);
+  //   httpClient
+  //     .get(
+  //       `/recently_search_master/getUserIdWiseRecentlyKeywordSearch/${userDetails?.userId}`
+  //     )
+  //     .then((res) => {
+  //       // console.log(res.data);
+  //     });
+  // }, []);
 
   const removeArt = () => {
     setsearchedArtList("");
@@ -190,7 +192,9 @@ const Mainbar = () => {
       state: searchedArtList,
     });
     dispatch(searchSliceAction.setSearchText(searchedArtList));
+    dispatch(styleSliceAction.setStyle(null))
   }
+
   const [artDropdownList, setartDropdownList] = useState([]);
   const getArtDropdownTrue = () => {
     httpClient.get(`/style_master/getArtDropdownTrue`).then((res) => {
@@ -215,6 +219,13 @@ const Mainbar = () => {
     location.pathname === "/product-home" && setSelectItems("Products");
   }, [location]);
 
+
+  const setStyle = (val) => {
+    dispatch(styleSliceAction.setStyle(val));
+    navigate("/search")
+    dispatch(searchSliceAction.setSearchText(""));
+    
+  };
   
 
   return (
@@ -254,7 +265,7 @@ const Mainbar = () => {
                         src={artDropdownList[0]?.image}
                         alt=''
                       />
-                      <p className='my-2.5 font-medium text-[15px] text-primaryBlack'>
+                      <p onClick={() => setStyle(artDropdownList[0])} className='my-2.5 font-medium text-[15px] text-primaryBlack'>
                         {artDropdownList[0]?.name}
                       </p>
                       <ul>
@@ -281,7 +292,7 @@ const Mainbar = () => {
                         src={artDropdownList[1]?.image}
                         alt=''
                       />
-                      <p className='my-2.5 font-medium text-[15px] text-primaryBlack'>
+                      <p onClick={() => setStyle(artDropdownList[1])} className='my-2.5 font-medium text-[15px] text-primaryBlack'>
                         {artDropdownList[1]?.name}
                       </p>
                       <ul>
@@ -308,7 +319,7 @@ const Mainbar = () => {
                         src={artDropdownList[2]?.image}
                         alt=''
                       />
-                      <p className='my-2.5 font-medium text-[15px] text-primaryBlack'>
+                      <p onClick={() => setStyle(artDropdownList[2])} className='my-2.5 font-medium text-[15px] text-primaryBlack'>
                         {artDropdownList[2]?.name}
                       </p>
                       <ul>
@@ -335,7 +346,7 @@ const Mainbar = () => {
                         src={artDropdownList[3]?.image}
                         alt=''
                       />
-                      <p className='my-2.5 font-medium text-[15px] text-primaryBlack'>
+                      <p onClick={() => setStyle(artDropdownList[3])} className='my-2.5 font-medium text-[15px] text-primaryBlack'>
                         {artDropdownList[3]?.name}
                       </p>
                       <ul>
@@ -362,7 +373,7 @@ const Mainbar = () => {
                         src={artDropdownList[4]?.image}
                         alt=''
                       />
-                      <p className='my-2.5 font-medium text-[15px] text-primaryBlack'>
+                      <p onClick={() => setStyle(artDropdownList[4])} className='my-2.5 font-medium text-[15px] text-primaryBlack'>
                         {artDropdownList[4]?.name}
                       </p>
                       <ul>
@@ -389,7 +400,7 @@ const Mainbar = () => {
                         src={artDropdownList[5]?.image}
                         alt=''
                       />
-                      <p className='my-2.5 font-medium text-[15px] text-primaryBlack'>
+                      <p onClick={() => setStyle(artDropdownList[5])} className='my-2.5 font-medium text-[15px] text-primaryBlack'>
                         {artDropdownList[5]?.name}
                       </p>
                       <ul>
@@ -411,7 +422,10 @@ const Mainbar = () => {
                       </ul>
                     </div>
                   </div>
-                  <button className="block mx-auto text-[#ffffff] text-sm12 font-medium bg-secGray py-1.5 px-4 rounded-2xl">
+                  <button onClick={() => {
+          navigate('/art-list');
+          dispatch(setSubjectId(null));
+        }} className="block mx-auto text-[#ffffff] text-sm12 font-medium bg-secGray py-1.5 px-4 rounded-2xl">
                     See All Subjects
                   </button>
                 </div>

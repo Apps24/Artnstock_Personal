@@ -16,7 +16,7 @@ import Footer from "../../components/footer/Footer";
 import smallRightArrow from "../../assets/images/Icons/smallRightArrow.svg";
 import smallLeftArrow from "../../assets/images/Icons/smallLeftArrow.svg";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { filteredMasterModel } from "../../models/allModel";
 import { useLocation } from "react-router-dom";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
@@ -29,6 +29,7 @@ import shopCart from "../../assets/images/artList/shopCart.png";
 import enlarge from "../../assets/images/artList/enlarge.png";
 import share from "../../assets/images/artList/Share.png";
 import { ReactComponent as Wishlist } from "../../assets/images/artList/wishlistsvg.svg";
+import { setSubjectId } from "../../store/subjectidSlice";
 
 const popularList = [
   {
@@ -58,7 +59,7 @@ const ArtList = () => {
   const [showMedium, setShowMedium] = useState(false);
   const [selectValue, setSelectValue] = useState();
   const [selectStylesValue, setSelectStylesValue] = useState();
-  const [selectSubValue, setSelectSubValue] = useState();
+  const [selectSubValue, setSelectSubValue] = useState("");
   const [selectMediumValue, setSelectMediumValue] = useState();
   const ref1 = useDetectClickOutside({ onTriggered: apps1 });
   const ref2 = useDetectClickOutside({ onTriggered: apps2 });
@@ -66,6 +67,9 @@ const ArtList = () => {
   const ref3 = useDetectClickOutside({ onTriggered: apps3 });
 
   const [isHovered, setIsHovered] = useState(false);
+  const dispatch = useDispatch();
+
+
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -101,12 +105,21 @@ const ArtList = () => {
     // console.log(e);
     setShowStyles(false);
     setSelectStylesValue(e);
+    setFilterObj({
+      ...filterObj,
+      styleName: e === "All Styles" ? "" : e,
+    });
   }
 
   function changeValue3(e) {
     // console.log(e);
+    dispatch(setSubjectId(e));
     setShowSub(false);
-    setSelectSubValue(e);
+    setSelectSubValue(e.subjectName);
+    setFilterObj({
+      ...filterObj,
+      subjectName: e === "All Subjects" ? "" : e.subjectName,
+    });
   }
 
   function changeValue4(e) {
@@ -125,17 +138,31 @@ const ArtList = () => {
 
   const userId = useSelector((state) => state.auth.userId);
 
+  const [subDis, setSubDis] = useState(false);
+
+  // console.log(subjectId);
   // api calls
   const getAllArtList = async () => {
     try {
+      console.log(filterObj);
       if (subjectId === null) {
-        const res = await httpClient.get("/art_master/getActiveArtMasterList");
+        setSubDis(false);
+      let o = Object.fromEntries(Object.entries(filterObj).filter(([_, v]) => v !== "" && v !== 0));
+
+        const res = await httpClient.post(
+          `/art_master/ArtFilter/${"All"}/${"All"}`,
+          o
+        );
         setTitle("All Art");
         setArtsList(res.data);
         // console.log(res.data);
       } else {
-        const res = await httpClient.get(
-          `/art_master/subjectNameWiseArtList/${subjectId.subjectName}`
+        setSubDis(true);
+      let o = Object.fromEntries(Object.entries(filterObj).filter(([_, v]) => v !== "" && v !== 0));
+
+        const res = await httpClient.post(
+          `/art_master/ArtFilter/${"subject"}/${subjectId.subjectName}`,
+          o
         );
         setTitle(subjectId.subjectName);
         // console.log(res.data);
@@ -146,13 +173,17 @@ const ArtList = () => {
     }
   };
 
+  useEffect(() => {
+    getAllArtList();
+  }, [subjectId]);
+
   const [styleList, setStyleList] = useState(null);
 
   const getActiveStyleList = async () => {
     try {
       const res = await httpClient.get("/style_master/getActiveStyleMaster");
       setStyleList(res.data);
-      console.log(res.data);
+      // console.log(res.data);
     } catch (error) {
       console.error(error);
     }
@@ -164,14 +195,13 @@ const ArtList = () => {
     try {
       const res = await httpClient.get("/subject_master/getActiveSubject");
       setSubjectList(res.data);
-      console.log(res.data);
+      // console.log(res.data);
     } catch (error) {
       console.error(error);
     }
   };
 
   useEffect(() => {
-    getAllArtList();
     getActiveStyleList();
     getActiveSubjectList();
   }, []);
@@ -304,6 +334,21 @@ const ArtList = () => {
     setTotalPage(Math.ceil(artsList.length / 18));
   }, [artsList]);
 
+  // Filter
+  const [filterObj, setFilterObj] = useState({
+    orientation: "",
+    price: 0,
+    size: "",
+    styleName: "",
+    subjectName: "",
+    userFirstName: "",
+  });
+
+  useEffect(() => {
+    // console.log(filterObj);
+    getAllArtList();
+  }, [filterObj]);
+
   return (
     <>
       <div className="main py-7">
@@ -375,7 +420,7 @@ const ArtList = () => {
                     />
                   </div>
                   {show && (
-                    <div className="relative">
+                    <div  className="relative">
                       <ul className="w-[100%] border border-[#D6D6D6] border-t-0 absolute rounded-bl-3xl rounded-br-3xl  bg-[#ffffff]">
                         <li
                           onClick={() => changeValue1("Most Popular")}
@@ -442,6 +487,7 @@ const ArtList = () => {
                         {/* binded already */}
                         {styleList.map((obj) => (
                           <li
+                          key={obj.name}
                             onClick={() => {
                               changeValue2(obj.name);
                             }}
@@ -468,9 +514,10 @@ const ArtList = () => {
                       showSub ? "rounded-tl-3xl rounded-tr-3xl" : "rounded-3xl"
                     } bg-[#ffffff] border border-[#D6D6D6]  flex items-center py-3 px-4 justify-between w-[100%] `}
                   >
-                    <p className="text-[#BBBBBB] text-[13px] leading-[13px] font-medium">
-                      {selectSubValue ? selectSubValue : "All Subjects"}
-                    </p>
+                 
+                      <p className="text-[#BBBBBB] text-[13px] leading-[13px] font-medium">
+                        {subDis ? subjectId?.subjectName : selectSubValue ? selectSubValue : "All Subjects"}
+                      </p>
                     <img
                       className={`${
                         showSub === true ? "transform rotate-180" : ""
@@ -492,8 +539,9 @@ const ArtList = () => {
                         </li>
                         {subjectList.map((obj) => (
                           <li
+                          key={obj.subjectName}
                             onClick={() => {
-                              changeValue3(obj.subjectName);
+                              changeValue3(obj);
                             }}
                             className="py-3 px-4 cursor-pointer text-[#BBBBBB] text-[13px] leading-[13px] font-medium border-b border-[#D6D6D6]"
                           >
@@ -857,7 +905,7 @@ const ArtList = () => {
                               className="rounded-2xl"
                             />
                             <div
-                              className="group-hover:flex hidden rounded-2xl bg-blackRgba items-center justify-center absolute top-0 left-0 rounded-2xl"
+                              className="group-hover:flex hidden  bg-blackRgba items-center justify-center absolute top-0 left-0 rounded-2xl"
                               style={{ height: "100%", width: "100%" }}
                             >
                               <p className="text-[25px] text-[#fff]">

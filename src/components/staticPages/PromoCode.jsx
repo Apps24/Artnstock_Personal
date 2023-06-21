@@ -1,6 +1,6 @@
 import React from "react";
 import BannerPromo from "../../assets/images/footer/BannerPromo.png";
-import RolloverImg from "../../assets/images/promocode/RolloverImg.png"
+// import RolloverImg from "../../assets/images/promocode/RolloverImg.png"
 import Discount from "../../assets/images/promocode/Discount.png"
 
 const PromoCode = () => {
@@ -57,11 +57,11 @@ const PromoCode = () => {
       </div>
 
       {/* Roll over */}
-        <div >
+        {/* <div >
           <div className="border absolute top-[10%] left-[39%]">
           <img src={RolloverImg} alt="" />
           </div>
-        </div>
+        </div> */}
     </>
   );
 };

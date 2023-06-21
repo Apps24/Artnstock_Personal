@@ -68,10 +68,7 @@ const ProductHomepage = () => {
     <>
 
       <Banner type="product" />
-      <ArtGrid gridList={gridList} />
-      <div className="hrLine"></div>
-      <Banner type='product' />
-      <ArtGrid gridList={gridList} type={'product'} />
+      <ArtGrid type="product" gridList={gridList} />
       <div className='hrLine'></div>
       <LimitedEdition logo={homeObject?.smallLogo} type="product" />
       <div className="hrLine"></div>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDetectClickOutside } from "react-detect-click-outside";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { httpClient } from "../../axios";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
@@ -20,6 +20,7 @@ import productsIcon from "../../assets/images/Icons/productsIcon.svg";
 import dropArrow from "../../assets/images/Icons/Down arrow.svg";
 import smallRightArrow from "../../assets/images/Icons/smallRightArrow.svg";
 import smallLeftArrow from "../../assets/images/Icons/smallLeftArrow.svg";
+import { styleSliceAction } from "../../store/styleSlice";
 
 const popularList = [
   {
@@ -56,6 +57,8 @@ const SearchList = () => {
   const ref3 = useDetectClickOutside({ onTriggered: apps3 });
   const ref4 = useDetectClickOutside({ onTriggered: apps4 });
 
+  const dispatch = useDispatch();
+
   function apps1(e) {
     setShow(false);
   }
@@ -80,14 +83,17 @@ const SearchList = () => {
 
   function changeValue2(e) {
     // console.log(e);
+    dispatch(styleSliceAction.setStyle(e));
     setShowStyles(false);
-    setSelectStylesValue(e);
+    setSelectStylesValue(e.name);
+    setFilterObj({ ...filterObj, styleName: e === "All Styles" ? "" : e.name });
   }
 
   function changeValue3(e) {
     // console.log(e);
     setShowSub(false);
     setSelectSubValue(e);
+    setFilterObj({ ...filterObj, subjectName: e === "All Subjects" ? "" : e });
   }
 
   function changeValue4(e) {
@@ -109,9 +115,11 @@ const SearchList = () => {
   const searchText = useSelector((state) => state.searchText);
   // console.log(searchText);
 
-  useEffect(() => {
-    getAllArtList(searchText.searchText);
-  }, [searchText]);
+  const style = useSelector((state) => state.style.style);
+
+  // console.log(style);
+
+  const [showStyle, setShowStyle] = useState(false);
 
   useEffect(() => {
     getActiveStyleList();
@@ -121,22 +129,57 @@ const SearchList = () => {
   // api calls
   const getAllArtList = async (searchText) => {
     try {
-      // if (subjectId === null) {
-      //   const res = await httpClient.get("/art_master/getActiveArtMasterList");
-      //   setTitle("All Art");
-      //   setArtsList(res.data);
-      // } else {
-      setTitle(searchText);
-      const res = await httpClient.get(
-        `/art_master/searchTextByArtName/${searchText}`
-      );
-      //   console.log(res);
-      setArtsList(res.data);
-      // }
+      // console.log(searchText);
+      if (
+        searchText === null ||
+        searchText === undefined ||
+        searchText === ""
+      ) {
+        // console.log("style");
+        let o = Object.fromEntries(
+          Object.entries(filterObj).filter(([_, v]) => v !== "" && v !== 0)
+        );
+
+        // console.log(o);
+        const res = await httpClient.post(
+          `/art_master/ArtFilter/${"style"}/${style?.name}`,
+          o
+        );
+        setTitle(style?.name);
+        setShowStyle(true);
+        setArtsList(res.data);
+      } else {
+        // console.log("searcj");
+        setShowStyle(false);
+        setTitle(searchText);
+        let o = Object.fromEntries(
+          Object.entries(filterObj).filter(([_, v]) => v !== "" && v !== 0)
+        );
+        const res = await httpClient.post(
+          `/art_master/ArtFilter/${"search"}/${searchText}`,
+          o
+        );
+        //   console.log(res);
+        setArtsList(res.data);
+      }
     } catch (error) {
       console.error(error);
     }
   };
+
+  // Filter
+  const [filterObj, setFilterObj] = useState({
+    orientation: "",
+    price: 0,
+    size: "",
+    styleName: "",
+    subjectName: "",
+    userFirstName: "",
+  });
+
+  useEffect(() => {
+    getAllArtList(searchText.searchText);
+  }, [searchText, style, filterObj]);
 
   const [styleList, setStyleList] = useState(null);
 
@@ -174,27 +217,27 @@ const SearchList = () => {
     navigate(`/art/art-details`, { state: { id } });
   };
 
- // Image Optimization
+  // Image Optimization
 
- const [imageGrid, setImageGrid] = useState("grid");
+  const [imageGrid, setImageGrid] = useState("grid");
 
- const imageLinkChange = (url) => {
-   const str = url;
-   const newStr = !showSidebar ? "upload/c_fit,w_299/" : "upload/c_fit,w_308/";
-   const updatedStr = str.replace("upload/", newStr);
+  const imageLinkChange = (url) => {
+    const str = url;
+    const newStr = !showSidebar ? "upload/c_fit,w_299/" : "upload/c_fit,w_308/";
+    const updatedStr = str.replace("upload/", newStr);
 
-   return updatedStr;
- };
+    return updatedStr;
+  };
 
- const imageLinkChangeSquaregrid = (url) => {
-   const str = url;
-   const newStr = !showSidebar
-     ? "upload/c_scale,w_299,h_299/"
-     : "upload/c_scale,w_308,h_299/";
-   const updatedStr = str.replace("upload/", newStr);
+  const imageLinkChangeSquaregrid = (url) => {
+    const str = url;
+    const newStr = !showSidebar
+      ? "upload/c_scale,w_299,h_299/"
+      : "upload/c_scale,w_308,h_299/";
+    const updatedStr = str.replace("upload/", newStr);
 
-   return updatedStr;
- };
+    return updatedStr;
+  };
 
   // Pagination
   const [firstPage, setFirstPage] = useState(0);
@@ -217,7 +260,6 @@ const SearchList = () => {
     }
   };
 
-
   useEffect(() => {
     setTotalPage(Math.ceil(artsList.length / 18));
   }, [artsList]);
@@ -235,7 +277,7 @@ const SearchList = () => {
               </p>
             </div>
             <div className="flex items-center">
-            <Grid
+              <Grid
                 onClick={() => setImageGrid("sqaure")}
                 fill={imageGrid === "sqaure" ? "#333333" : "#757575"}
                 className="mr-2.5 w-[23px] h-[23px]"
@@ -336,7 +378,11 @@ const SearchList = () => {
                     } bg-[#ffffff] border border-[#D6D6D6]  flex items-center py-3 px-4 justify-between w-[100%] `}
                   >
                     <p className="text-[#BBBBBB] text-[13px] leading-[13px] font-medium">
-                      {selectStylesValue ? selectStylesValue : "All Styles"}
+                      {showStyle
+                        ? style?.name
+                        : selectStylesValue
+                        ? selectStylesValue
+                        : "All Styles"}
                     </p>
                     <img
                       className={`${
@@ -361,7 +407,7 @@ const SearchList = () => {
                         {styleList.map((obj) => (
                           <li
                             onClick={() => {
-                              changeValue2(obj.name);
+                              changeValue2(obj);
                             }}
                             className="py-3 px-4 cursor-pointer text-[#BBBBBB] text-[13px] leading-[13px] font-medium border-b border-[#D6D6D6]"
                           >
@@ -828,7 +874,10 @@ const SearchList = () => {
                 of {totalPage}
               </p>
             </div>
-            <button onClick={nextPage} className="blackBtn mt-2.5 mb-24 mx-auto block">
+            <button
+              onClick={nextPage}
+              className="blackBtn mt-2.5 mb-24 mx-auto block"
+            >
               Next
             </button>
           </div>
