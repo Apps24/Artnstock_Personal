@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import grid1 from '../../assets/images/Icons/grid1.svg';
-import grid from '../../assets/images/Icons/grid.svg';
+import { ReactComponent as Grid1 } from '../../assets/images/Icons/grid1.svg';
+import { ReactComponent as Grid } from '../../assets/images/Icons/grid.svg';
 import filterIcon from '../../assets/images/Icons/FilterIcon.svg';
 import { httpClient } from '../../axios';
 import closeIcon from '../../assets/images/Icons/crossIcon.svg';
@@ -16,7 +16,7 @@ import Footer from '../../components/footer/Footer';
 import smallRightArrow from '../../assets/images/Icons/smallRightArrow.svg';
 import smallLeftArrow from '../../assets/images/Icons/smallLeftArrow.svg';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { filteredMasterModel } from '../../models/allModel';
 import { useLocation } from 'react-router-dom';
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
@@ -29,6 +29,7 @@ import shopCart from '../../assets/images/artList/shopCart.png';
 import enlarge from '../../assets/images/artList/enlarge.png';
 import share from '../../assets/images/artList/Share.png';
 import { ReactComponent as Wishlist } from '../../assets/images/artList/wishlistsvg.svg';
+import { setSubjectId } from '../../store/subjectidSlice';
 
 const popularList = [
   {
@@ -58,7 +59,7 @@ const ArtList = () => {
   const [showMedium, setShowMedium] = useState(false);
   const [selectValue, setSelectValue] = useState();
   const [selectStylesValue, setSelectStylesValue] = useState();
-  const [selectSubValue, setSelectSubValue] = useState();
+  const [selectSubValue, setSelectSubValue] = useState('');
   const [selectMediumValue, setSelectMediumValue] = useState();
   const ref1 = useDetectClickOutside({ onTriggered: apps1 });
   const ref2 = useDetectClickOutside({ onTriggered: apps2 });
@@ -66,6 +67,7 @@ const ArtList = () => {
   const ref3 = useDetectClickOutside({ onTriggered: apps3 });
 
   const [isHovered, setIsHovered] = useState(false);
+  const dispatch = useDispatch();
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -101,12 +103,21 @@ const ArtList = () => {
     // console.log(e);
     setShowStyles(false);
     setSelectStylesValue(e);
+    setFilterObj({
+      ...filterObj,
+      styleName: e === 'All Styles' ? '' : e,
+    });
   }
 
   function changeValue3(e) {
     // console.log(e);
+    dispatch(setSubjectId(e));
     setShowSub(false);
-    setSelectSubValue(e);
+    setSelectSubValue(e.subjectName);
+    setFilterObj({
+      ...filterObj,
+      subjectName: e === 'All Subjects' ? '' : e.subjectName,
+    });
   }
 
   function changeValue4(e) {
@@ -125,35 +136,57 @@ const ArtList = () => {
 
   const userId = useSelector((state) => state.auth.userId);
 
-  useEffect(() => {
-    console.log(subjectId);
-  }, [subjectId]);
+  const [subDis, setSubDis] = useState(false);
 
+  // console.log(subjectId);
   // api calls
   const getAllArtList = async () => {
     try {
+      console.log(filterObj);
       if (subjectId === null) {
-        const res = await httpClient.get(
-          '/art_master/getActiveArtMasterList'
+        setSubDis(false);
+        let o = Object.fromEntries(
+          Object.entries(filterObj).filter(
+            ([_, v]) => v !== '' && v !== 0
+          )
+        );
+
+        const res = await httpClient.post(
+          `/art_master/ArtFilter/${'All'}/${'All'}`,
+          o
         );
         setTitle('All Art');
         setArtsList(res.data);
-        console.log(res.data);
+        // console.log(res.data);
       } else {
-        const res = await httpClient.get(
-          `/art_master/subjectNameWiseArtList/${subjectId.subjectName}`
+        setSubDis(true);
+        let o = Object.fromEntries(
+          Object.entries(filterObj).filter(
+            ([_, v]) => v !== '' && v !== 0
+          )
+        );
+
+        const res = await httpClient.post(
+          `/art_master/ArtFilter/${'subject'}/${
+            subjectId.subjectName
+          }`,
+          o
         );
         // const res = await httpClient.get(
         //   `/art_master/getSubjectIdWiseSubjectMaster/${subjectId.subjectId}`
         // );
         setTitle(subjectId.subjectName);
-        console.log(res.data);
+        // console.log(res.data);
         setArtsList(res.data);
       }
     } catch (error) {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    getAllArtList();
+  }, [subjectId]);
 
   const [styleList, setStyleList] = useState(null);
 
@@ -163,7 +196,7 @@ const ArtList = () => {
         '/style_master/getActiveStyleMaster'
       );
       setStyleList(res.data);
-      console.log(res.data);
+      // console.log(res.data);
     } catch (error) {
       console.error(error);
     }
@@ -177,14 +210,13 @@ const ArtList = () => {
         '/subject_master/getActiveSubject'
       );
       setSubjectList(res.data);
-      console.log(res.data);
+      // console.log(res.data);
     } catch (error) {
       console.error(error);
     }
   };
 
   useEffect(() => {
-    getAllArtList();
     getActiveStyleList();
     getActiveSubjectList();
   }, []);
@@ -270,6 +302,10 @@ const ArtList = () => {
     });
   };
 
+  // Image Optimization
+
+  const [imageGrid, setImageGrid] = useState('grid');
+
   const imageLinkChange = (url) => {
     const str = url;
     const newStr = !showSidebar
@@ -279,6 +315,56 @@ const ArtList = () => {
 
     return updatedStr;
   };
+
+  const imageLinkChangeSquaregrid = (url) => {
+    const str = url;
+    const newStr = !showSidebar
+      ? 'upload/c_scale,w_299,h_299/'
+      : 'upload/c_scale,w_308,h_299/';
+    const updatedStr = str.replace('upload/', newStr);
+
+    return updatedStr;
+  };
+
+  // Pagination
+  const [firstPage, setFirstPage] = useState(0);
+  const [lastPage, setLastPage] = useState(18);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(0);
+
+  const nextPage = () => {
+    if (currentPage < totalPage) {
+      setCurrentPage(currentPage + 1);
+      setFirstPage(firstPage + 18);
+      setLastPage(lastPage + 18);
+    }
+  };
+  const prevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+      setFirstPage(firstPage - 18);
+      setLastPage(lastPage - 18);
+    }
+  };
+
+  useEffect(() => {
+    setTotalPage(Math.ceil(artsList.length / 18));
+  }, [artsList]);
+
+  // Filter
+  const [filterObj, setFilterObj] = useState({
+    orientation: '',
+    price: 0,
+    size: '',
+    styleName: '',
+    subjectName: '',
+    userFirstName: '',
+  });
+
+  useEffect(() => {
+    // console.log(filterObj);
+    getAllArtList();
+  }, [filterObj]);
 
   return (
     <>
@@ -297,12 +383,16 @@ const ArtList = () => {
               </p>
             </div>
             <div className='flex items-center'>
-              <img
-                src={grid}
+              <Grid
+                onClick={() => setImageGrid('sqaure')}
+                fill={imageGrid === 'sqaure' ? '#333333' : '#757575'}
                 className='mr-2.5 w-[23px] h-[23px]'
-                alt=''
               />
-              <img src={grid1} className='w-[23px] h-[23px]' alt='' />
+              <Grid1
+                onClick={() => setImageGrid('grid')}
+                fill={imageGrid === 'grid' ? '#333333' : '#757575'}
+                className='w-[23px] h-[23px]'
+              />
             </div>
           </div>
         </div>
@@ -426,6 +516,7 @@ const ArtList = () => {
                         {/* binded already */}
                         {styleList.map((obj) => (
                           <li
+                            key={obj.name}
                             onClick={() => {
                               changeValue2(obj.name);
                             }}
@@ -455,7 +546,9 @@ const ArtList = () => {
                     } bg-[#ffffff] border border-[#D6D6D6]  flex items-center py-3 px-4 justify-between w-[100%] `}
                   >
                     <p className='text-[#BBBBBB] text-[13px] leading-[13px] font-medium'>
-                      {selectSubValue
+                      {subDis
+                        ? subjectId?.subjectName
+                        : selectSubValue
                         ? selectSubValue
                         : 'All Subjects'}
                     </p>
@@ -480,8 +573,9 @@ const ArtList = () => {
                         </li>
                         {subjectList.map((obj) => (
                           <li
+                            key={obj.subjectName}
                             onClick={() => {
-                              changeValue3(obj.subjectName);
+                              changeValue3(obj);
                             }}
                             className='py-3 px-4 cursor-pointer text-[#BBBBBB] text-[13px] leading-[13px] font-medium border-b border-[#D6D6D6]'
                           >
@@ -831,174 +925,173 @@ const ArtList = () => {
                 }
               >
                 <Masonry gutter='15px'>
-                  {artsList.map((data) => {
-                    return (
-                      <div
-                        onMouseEnter={() => {
-                          setPopupArray([]);
-                        }}
-                        key={data?.artId}
-                        className={` ${
-                          showSidebar
-                            ? 'w-[19.25rem]'
-                            : 'w-[18.688rem]'
-                        }`}
-                        style={{ height: 'fit-content' }}
-                      >
+                  {artsList.map((data, i) => {
+                    if (i >= firstPage && i < lastPage) {
+                      return (
                         <div
-                          className={` w-full group rounded-2xl relative`}
-                          onClick={() =>
-                            goToArtDetailsPage(data?.artId)
-                          }
+                          onMouseEnter={() => {
+                            setPopupArray([]);
+                          }}
+                          key={data?.artId}
+                          className={` ${
+                            showSidebar
+                              ? 'w-[19.25rem]'
+                              : 'w-[18.688rem]'
+                          }`}
+                          style={{ height: 'fit-content' }}
                         >
-                          <img
-                            className='rounded-2xl'
-                            style={{ height: '100%' }}
-                            src={imageLinkChange(data?.image)}
-                            alt=''
-                          />
                           <div
-                            className='group-hover:flex hidden bg-blackRgba items-center justify-center absolute top-0 left-0 rounded-2xl'
-                            style={{ height: '100%', width: '100%' }}
+                            className={` w-full group  rounded-2xl relative`}
+                            onClick={() =>
+                              goToArtDetailsPage(data?.artId)
+                            }
                           >
-                            <p className='text-[25px] text-[#fff]'>
-                              {data.subjectMaster.subjectName}
-                            </p>
-                            <div className='absolute bottom-[10px] left-[10px] flex gap-[10px]'>
-                              <div
-                                onClick={(e) => {
-                                  popupOfHover({ id: data.artId });
-                                  e.stopPropagation();
-                                }}
-                              >
-                                <img src={save} alt='' />
-                              </div>
-                              <div>
-                                <img src={similar} alt='' />
-                              </div>
-                              <div>
-                                <img src={profile} alt='' />
-                              </div>
-                              <div>
-                                <img src={shopCart} alt='' />
-                              </div>
-                              <div>
-                                <img
+                            <img
+                              style={{ height: '100%' }}
+                              src={
+                                imageGrid === 'grid'
+                                  ? imageLinkChange(data?.image)
+                                  : imageLinkChangeSquaregrid(
+                                      data?.image
+                                    )
+                              }
+                              alt=''
+                              className='rounded-2xl'
+                            />
+                            <div
+                              className='group-hover:flex hidden  bg-blackRgba items-center justify-center absolute top-0 left-0 rounded-2xl'
+                              style={{
+                                height: '100%',
+                                width: '100%',
+                              }}
+                            >
+                              <p className='text-[25px] text-[#fff]'>
+                                {data.subjectMaster.subjectName}
+                              </p>
+                              <div className='absolute bottom-[10px] left-[10px] flex gap-[10px]'>
+                                <div
                                   onClick={(e) => {
-                                    navigate('/BuyerReferralProgram');
+                                    popupOfHover({ id: data.artId });
                                     e.stopPropagation();
                                   }}
-                                  src={share}
-                                  alt=''
-                                />
-                              </div>
-                            </div>
-                            <div className='absolute right-[10px] bottom-[10px]'>
-                              <img src={enlarge} alt='' />
-                            </div>
-                            <div className='absolute right-[3px] top-[3px]'>
-                              {/* <img
-                            className='cursor-pointer'
-                            onMouseEnter={handleMouseEnter}
-                            onMouseLeave={handleMouseLeave}
-                            src={wishlist}
-                            alt=''
-                          /> */}
-
-                              {/* test */}
-                              {wishlist?.find(
-                                (obj) =>
-                                  obj.artMaster?.artId === data.artId
-                              ) === undefined ? (
-                                <Wishlist
-                                  className='cursor-pointer'
-                                  onMouseEnter={handleMouseEnter}
-                                  onMouseLeave={handleMouseLeave}
-                                  onClick={(e) => {
-                                    addToWishlist(data?.artId);
-                                    e.stopPropagation();
-                                  }}
-                                  style={{
-                                    fill: '#fff',
-                                    width: '100%',
-                                  }}
-                                />
-                              ) : (
-                                <Wishlist
-                                  className='cursor-pointer'
-                                  onMouseEnter={handleMouseEnter}
-                                  onMouseLeave={handleMouseLeave}
-                                  onClick={(e) => {
-                                    wishlistDelete(data?.artId);
-                                    e.stopPropagation();
-                                  }}
-                                  style={{
-                                    fill: 'red',
-                                    width: '100%',
-                                  }}
-                                />
-                              )}
-                              {/* test */}
-
-                              {/* <Wishlist
-                             className='cursor-pointer'
-                            onMouseEnter={handleMouseEnter}
-                            onMouseLeave={handleMouseLeave}
-                          /> */}
-                            </div>
-                            {isHovered && (
-                              <button className='w-[164px] z-[99] mt-[3px] h-[20px] flex justify-center items-center text-[11px] bg-[#f7f7f7] rounded-[10px] text-primaryGray absolute top-[33px] left-[203px] border border-[#e4e4e4]'>
-                                <span className='leading-[1]'>
-                                  Save to Wishlist
-                                </span>
-                              </button>
-                            )}
-                            {popupArray.find(
-                              (obj) => obj.id === data.artId
-                            ) && (
-                              <div
-                                className={`z-999 right-[117px] bottom-[15px] bg-[#fff] rounded-[16px] w-[266px] absolute bottom-[44px] left-[-117px]`}
-                                style={{
-                                  boxShadow:
-                                    '0px 0px 18px rgba(0, 0, 0, 0.2)',
-                                }}
-                              >
-                                <div className='flex gap-[5px] flex-col p-[14px] leading-[1.3] text-center'>
-                                  <p className='font-medium text-primaryBlack text-[15px]'>
-                                    Create Account
-                                  </p>
-                                  <p className='text-primaryGray text-[11px]'>
-                                    To create and add to a collection,
-                                    you must be a logged-in member
-                                  </p>
-                                  <button className='bg-[#8e8e8e] rounded-[14px] h-[28px] w-[108px] text-[12px] font-medium text-[white] mx-[auto]'>
-                                    Create Account
-                                  </button>
-                                  <p className='text-orangeColor text-[11px]'>
-                                    Already a member? Sign in
-                                  </p>
-                                  <p className='text-pinkColor text-[11px]'>
-                                    Note: Downloaded images will be
-                                    saved in ‘Collections’ folder
-                                  </p>
+                                >
+                                  <img src={save} alt='' />
                                 </div>
-                                <div class='absolute left-[47%] bottom-[-10px] w-[20px] h-[20px] bg-[white] rounded-br-[5px] transform rotate-45 shadow-inner'></div>
+                                <div>
+                                  <img src={similar} alt='' />
+                                </div>
+                                <div>
+                                  <img src={profile} alt='' />
+                                </div>
+                                <div>
+                                  <img src={shopCart} alt='' />
+                                </div>
+                                <div>
+                                  <img
+                                    onClick={(e) => {
+                                      navigate(
+                                        '/BuyerReferralProgram'
+                                      );
+                                      e.stopPropagation();
+                                    }}
+                                    src={share}
+                                    alt=''
+                                  />
+                                </div>
                               </div>
-                            )}
+                              <div className='absolute right-[10px] bottom-[10px]'>
+                                <img src={enlarge} alt='' />
+                              </div>
+                              <div className='absolute right-[3px] top-[3px]'>
+                                {wishlist?.find(
+                                  (obj) =>
+                                    obj.artMaster?.artId ===
+                                    data.artId
+                                ) === undefined ? (
+                                  <Wishlist
+                                    className='cursor-pointer'
+                                    onMouseEnter={handleMouseEnter}
+                                    onMouseLeave={handleMouseLeave}
+                                    onClick={(e) => {
+                                      addToWishlist(data?.artId);
+                                      e.stopPropagation();
+                                    }}
+                                    style={{
+                                      fill: '#fff',
+                                      width: '100%',
+                                    }}
+                                  />
+                                ) : (
+                                  <Wishlist
+                                    className='cursor-pointer'
+                                    onMouseEnter={handleMouseEnter}
+                                    onMouseLeave={handleMouseLeave}
+                                    onClick={(e) => {
+                                      wishlistDelete(data?.artId);
+                                      e.stopPropagation();
+                                    }}
+                                    style={{
+                                      fill: 'red',
+                                      width: '100%',
+                                    }}
+                                  />
+                                )}
+                              </div>
+                              {isHovered && (
+                                <button className='w-[164px] z-[99] mt-[3px] h-[20px] flex justify-center items-center text-[11px] bg-[#f7f7f7] rounded-[10px] text-primaryGray absolute top-[33px] left-[203px] border border-[#e4e4e4]'>
+                                  <span className='leading-[1]'>
+                                    Save to Wishlist
+                                  </span>
+                                </button>
+                              )}
+                              {popupArray.find(
+                                (obj) => obj.id === data.artId
+                              ) && (
+                                <div
+                                  className={`z-999 right-[117px] bottom-[15px] bg-[#fff] rounded-[16px] w-[266px] absolute bottom-[44px] left-[-117px]`}
+                                  style={{
+                                    boxShadow:
+                                      '0px 0px 18px rgba(0, 0, 0, 0.2)',
+                                  }}
+                                >
+                                  <div className='flex gap-[5px] flex-col p-[14px] leading-[1.3] text-center'>
+                                    <p className='font-medium text-primaryBlack text-[15px]'>
+                                      Create Account
+                                    </p>
+                                    <p className='text-primaryGray text-[11px]'>
+                                      To create and add to a
+                                      collection, you must be a
+                                      logged-in member
+                                    </p>
+                                    <button className='bg-[#8e8e8e] rounded-[14px] h-[28px] w-[108px] text-[12px] font-medium text-[white] mx-[auto]'>
+                                      Create Account
+                                    </button>
+                                    <p className='text-orangeColor text-[11px]'>
+                                      Already a member? Sign in
+                                    </p>
+                                    <p className='text-pinkColor text-[11px]'>
+                                      Note: Downloaded images will be
+                                      saved in ‘Collections’ folder
+                                    </p>
+                                  </div>
+                                  <div class='absolute left-[47%] bottom-[-10px] w-[20px] h-[20px] bg-[white] rounded-br-[5px] transform rotate-45 shadow-inner'></div>
+                                </div>
+                              )}
+                            </div>
                           </div>
+                          <p className='text-primaryBlack text-[15px] leading-[18px] font-semibold mt-1.5'>
+                            {data?.artName}
+                          </p>
+                          <p className='text-primaryGray text-sm12 leading-[15px]'>
+                            Artnstock <br />
+                            35.4” x 31.5” Multiple Sizes
+                          </p>
+                          <p className='text-primaryBlack text-[15px] leading-[18px] font-semibold mt-1.5'>
+                            ${data?.price}
+                          </p>
                         </div>
-                        <p className='text-primaryBlack text-[15px] leading-[18px] font-semibold mt-1.5'>
-                          {data?.artName}
-                        </p>
-                        <p className='text-primaryGray text-sm12 leading-[15px]'>
-                          Artnstock <br />
-                          35.4” x 31.5” Multiple Sizes
-                        </p>
-                        <p className='text-primaryBlack text-[15px] leading-[18px] font-semibold mt-1.5'>
-                          ${data?.price}
-                        </p>
-                      </div>
-                    );
+                      );
+                    }
                   })}
                 </Masonry>
               </ResponsiveMasonry>
@@ -1010,23 +1103,32 @@ const ArtList = () => {
                 Page
               </p>
               <div className='flex w-[88px] border border-[#D6D6D6] rounded-2xl overflow-hidden'>
-                <button className='bg-[#F7F7F7] py-2.5 px-3'>
+                <button
+                  onClick={prevPage}
+                  className='bg-[#F7F7F7] py-2.5 px-3'
+                >
                   <img src={smallLeftArrow} alt='' />
                 </button>
                 <input
                   className='w-[30px] text-[13px] leading-[15px] font-normal text-primaryGray text-center'
                   type='text'
-                  value={1}
+                  value={currentPage}
                 />
-                <button className='bg-[#F7F7F7] py-2.5 px-3'>
+                <button
+                  onClick={nextPage}
+                  className='bg-[#F7F7F7] py-2.5 px-3'
+                >
                   <img src={smallRightArrow} alt='' />
                 </button>
               </div>
               <p className='text-[13px] text-primaryGray leading-[15px] font-normal'>
-                of 18
+                of {totalPage}
               </p>
             </div>
-            <button className='blackBtn mt-2.5 mb-24 mx-auto block'>
+            <button
+              onClick={nextPage}
+              className='blackBtn mt-2.5 mb-24 mx-auto block'
+            >
               Next
             </button>
           </div>

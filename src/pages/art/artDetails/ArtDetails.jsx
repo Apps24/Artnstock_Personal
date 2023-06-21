@@ -75,6 +75,12 @@ import Popup from 'reactjs-popup';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Wishlist from '../../../utils/wishlist';
+import colorPaletimg from '../../../assets/images/art-details/Group 133.svg';
+import proImg from '../../../assets/images/art-details/Pro.svg';
+import locatiomIcon from '../../../assets/images/art-details/Icon - Location Pointer.svg';
+import faceBookIcon from '../../../assets/images/footer/FacebookIcon.png';
+import linkdinIcon from '../../../assets/images/footer/LinkedinIcon.png';
+import instaIcon from '../../../assets/images/footer/InstagramIcon.png';
 
 const styleDrop = [
   { a: 'ddsdd' },
@@ -1965,9 +1971,127 @@ const ArtDetails = () => {
             </Tab.Group>
           </div>
         </div>
-        <div className='hrLine'></div>
-        {/* User Details */}
       </div>
+
+      <div className='hrLine'></div>
+      {/* User Details */}
+      <div className='w-w1168 flex mx-auto'>
+        <div className='left flex-1'>
+          <p className='text-[25px] text-primaryBlack font-medium leading-3 mb-5'>
+            Art Description
+          </p>
+          <p className='text-sm14 text-primaryGray font-normal mb-2'>
+            {artDetails?.description}
+          </p>
+          <img
+            className='w-[300px] h-[160px] rounded-2xl mb-5'
+            src={artDetails?.image}
+            alt=''
+          />
+          <div className='mb-5 border-t-2 border-b-2 border-[#EFEFEF]'>
+            <table className='w-[100%]'>
+              <tr className='border-b border-[#EFEFEF]'>
+                <td className='text-primaryGray text-sm12 font-medium leading-4 w-[100px]'>
+                  Category:
+                </td>
+                <td className='text-primaryGray text-sm12 font-normal leading-4 '>
+                  Abstract Art
+                </td>
+              </tr>
+              <tr className='border-b border-[#EFEFEF]'>
+                <td className='text-primaryGray text-sm12 font-medium leading-4 '>
+                  Subject:
+                </td>
+                <td className='text-primaryGray text-sm12 font-normal leading-4 '>
+                  Abstract
+                </td>
+              </tr>
+              <tr className=''>
+                <td className='text-primaryGray text-sm12 font-medium leading-4 '>
+                  Medium:
+                </td>
+                <td className='text-primaryGray text-sm12 font-normal leading-4 '>
+                  Digital
+                </td>
+              </tr>
+            </table>
+          </div>
+          <p className='text-[15px] text-primaryBlack font-medium leading-4 mb-1.5'>
+            Colour Palette
+          </p>
+          <img src={colorPaletimg} alt='' />
+        </div>
+        <div className='right flex-1  pl-7'>
+          <p className='text-sm11 text-primaryGray '>Artist Info</p>
+          <div className='flex mb-5'>
+            <div>
+              <img
+                className='w-[7rem] h-[7rem] rounded-full'
+                src={artDetails?.userMaster?.profileImage}
+                alt=''
+              />
+            </div>
+            <div className='ml-2'>
+              <img src={proImg} alt='' />
+              <p className='text-sm11 text-primaryGray font-normal leading-[16px]'>
+                {artDetails?.userMaster?.displayName}
+              </p>
+              <p className='text-sm11 text-primaryGray font-normal leading-[16px]'>
+                Freelance Illustrator/Photographer
+              </p>
+              <div className='flex items-center mb-3'>
+                <img className='mr-0.5' src={locatiomIcon} alt='' />
+                <p className='text-sm11 text-primaryGray font-normal leading-[16px]'>
+                  {
+                    artDetails?.userMaster?.residentialAddress
+                      ?.cityName
+                  }
+                  ,{' '}
+                  {
+                    artDetails?.userMaster?.residentialAddress
+                      ?.countryName
+                  }
+                </p>
+              </div>
+              <button className='bg-[#00F9C6] text-sm12 text-primaryBlack font-medium px-4 py-1.5 rounded-3xl '>
+                View Store
+              </button>
+            </div>
+          </div>
+          <p className='text-sm14 leading-5 text-primaryGray font-normal mb-4'>
+            International Artist Azra's art work dictates the
+            expression of man and beast exploring our role and place
+            in this universe. Taking inspiration from Primitive Art
+            work and a various assortment of Modern Art.
+          </p>
+          <p className='text-sm14 leading-5 text-primaryGray font-normal mb-0.5'>
+            Recognition
+          </p>
+          <ul className='mb-5'>
+            <li className='mb-1.5 flex'>
+              <img className='mr-2.5' src={proImg} alt='' />
+              <p className='text-sm11 leading-3 font-normal text-primaryGray'>
+                Lorem ipsum dolor sit amet consectetur adipiscing{' '}
+                <br />
+                elit sed do eiusmod tempor
+              </p>
+            </li>
+          </ul>
+          <div className='flex gap-4'>
+            <a
+              href='http://'
+              target='_blank'
+              rel='noopener noreferrer'
+            >
+              {' '}
+              <img src={faceBookIcon} alt='' />
+            </a>
+            <img src={linkdinIcon} alt='' />
+            <img src={instaIcon} alt='' />
+          </div>
+        </div>
+      </div>
+      <div className='hrLine'></div>
 
       {/* userDetails */}
       <div className='w-w1409 flex justify-center mx-auto'>
