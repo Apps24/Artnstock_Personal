@@ -944,15 +944,6 @@ const ArtList = () => {
                                 <img src={enlarge} alt="" />
                               </div>
                               <div className="absolute right-[3px] top-[3px]">
-                                {/* <img
-                            className='cursor-pointer'
-                            onMouseEnter={handleMouseEnter}
-                            onMouseLeave={handleMouseLeave}
-                            src={wishlist}
-                            alt=''
-                          /> */}
-
-                                {/* test */}
                                 {wishlist?.find(
                                   (obj) => obj.artMaster?.artId === data.artId
                                 ) === undefined ? (
@@ -984,13 +975,7 @@ const ArtList = () => {
                                     }}
                                   />
                                 )}
-                                {/* test */}
-
-                                {/* <Wishlist
-                             className='cursor-pointer'
-                            onMouseEnter={handleMouseEnter}
-                            onMouseLeave={handleMouseLeave}
-                          /> */}
+                   
                               </div>
                               {isHovered && (
                                 <button className="w-[164px] z-[99] mt-[3px] h-[20px] flex justify-center items-center text-[11px] bg-[#f7f7f7] rounded-[10px] text-primaryGray absolute top-[33px] left-[203px] border border-[#e4e4e4]">
