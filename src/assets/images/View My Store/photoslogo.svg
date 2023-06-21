@@ -1,0 +1,17 @@
+<svg id="Icon_-_Photos" data-name="Icon - Photos" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #f58b59;
+      }
+
+      .cls-2 {
+        fill: #fff;
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <rect id="Icon_BG_-_Art" data-name="Icon BG - Art" class="cls-1" width="32" height="32" rx="8" ry="8"/>
+  <path id="Icon_-_Photos-2" data-name="Icon - Photos" class="cls-2" d="M86,749H84l-1-2a4.376,4.376,0,0,0-1.161-1H78a3.962,3.962,0,0,0-1,1l-1,2H74a1.809,1.809,0,0,0-2,2v7a1.808,1.808,0,0,0,2,2H86a1.808,1.808,0,0,0,2-2v-7A1.809,1.809,0,0,0,86,749Z" transform="translate(-64 -737)"/>
+  <circle id="Icon_-_Photos-3" data-name="Icon - Photos" class="cls-1" cx="16" cy="17" r="3"/>
+</svg>

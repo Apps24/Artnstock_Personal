@@ -1,24 +1,24 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import "./index.css";
-import App from "./App";
-import reportWebVitals from "./reportWebVitals";
-import { Provider } from "react-redux";
-import store from "./store";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { PersistGate } from "redux-persist/integration/react";
-import { persistStore } from "redux-persist";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+import { Provider } from 'react-redux';
+import store from './store';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { PersistGate } from 'redux-persist/integration/react';
+import { persistStore } from 'redux-persist';
 import 'reactjs-popup/dist/index.css';
 
 let persistor = persistStore(store);
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Provider store={store}>
       <ToastContainer
-        position="top-right"
+        position='top-right'
         autoClose={4000}
         hideProgressBar={false}
         newestOnTop={false}
@@ -27,7 +27,7 @@ root.render(
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="light"
+        theme='light'
       />
       <PersistGate persistor={persistor}>
         <App />

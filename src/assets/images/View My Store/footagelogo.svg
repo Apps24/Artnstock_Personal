@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <defs>
+    <style>
+      .cls-1 {
+        opacity: 0.4;
+      }
+
+      .cls-2 {
+        fill: #ffd14a;
+      }
+
+      .cls-3 {
+        fill: #fff;
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <g id="Icon_-_Footage" data-name="Icon - Footage" class="cls-1">
+    <rect id="Icon_BG_-_Art" data-name="Icon BG - Art" class="cls-2" width="32" height="32" rx="8" ry="8"/>
+    <path id="Icon_-_Footage-2" data-name="Icon - Footage" class="cls-3" d="M128,747a1.718,1.718,0,0,0-2-2H115c-1.5,0-2,.534-2,2v11c0,1.432.48,2,2,2h11c1.477,0,2-.526,2-2V747Zm-10-1h2v2h-2v-2Zm-1,13h-2v-2h2v2Zm0-11h-2v-2h2v2Zm3,11h-2v-2h2v2Zm-2-3v-7h1l4,3v1l-4,3h-1Zm5,3h-2v-2h2v2Zm0-11h-2v-2h2v2Zm3,11h-2v-2h2v2Zm0-11h-2v-2h2v2Z" transform="translate(-104 -737)"/>
+  </g>
+</svg>

@@ -48,30 +48,33 @@ import cottonFabric from '../../../assets/images/lifestyle/cottonFabric.png';
 import MensShirt from '../../../assets/images/lifestyle/2MensShirt.png';
 import cards from '../../../assets/images/lifestyle/cards.png';
 import certificate from '../../../assets/images/lifestyle/Certificate.png';
+// import pro from '../../../assets/images/art-details/pro.png';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 // Pratiksha
-import profile from "../../../assets/images/Menubar/Profile.png";
-import pro from "../../../assets/images/art-details/Pro.png";
-import locationImg from "../../../assets/images/art-details/location.png";
-import R1 from "../../../assets/images/art-details/R1.png";
-import R2 from "../../../assets/images/art-details/R2.png";
-import R3 from "../../../assets/images/art-details/R3.png";
-import IconFacebook from "../../../assets/images/art-details/IconFacebook.png";
-import IconInstagram from "../../../assets/images/art-details/IconInstagram.png";
-import IconLinkedin from "../../../assets/images/art-details/IconLinkedin.png";
-import azra1 from "../../../assets/images/art-details/azra1.png";
-import azra2 from "../../../assets/images/art-details/azra2.png";
-import azra3 from "../../../assets/images/art-details/azra3.png";
-import azra4 from "../../../assets/images/art-details/azra4.png";
-import azra5 from "../../../assets/images/art-details/azra5.png";
-import grp from "../../../assets/images/art-details/grp.png";
-import grp144 from "../../../assets/images/art-details/grp144.png";
-import stars from "../../../assets/images/art-details/stars.png"
-import Footer from "../../../components/footer/Footer";
-import styled from "styled-components";
-import Popup from "reactjs-popup"
+import profile from '../../../assets/images/Menubar/Profile.png';
+import pro from '../../../assets/images/art-details/Pro.png';
+import locationImg from '../../../assets/images/art-details/location.png';
+import R1 from '../../../assets/images/art-details/R1.png';
+import R2 from '../../../assets/images/art-details/R2.png';
+import R3 from '../../../assets/images/art-details/R3.png';
+import IconFacebook from '../../../assets/images/art-details/IconFacebook.png';
+import IconInstagram from '../../../assets/images/art-details/IconInstagram.png';
+import IconLinkedin from '../../../assets/images/art-details/IconLinkedin.png';
+import azra1 from '../../../assets/images/art-details/azra1.png';
+import azra2 from '../../../assets/images/art-details/azra2.png';
+import azra3 from '../../../assets/images/art-details/azra3.png';
+import azra4 from '../../../assets/images/art-details/azra4.png';
+import azra5 from '../../../assets/images/art-details/azra5.png';
+import grp from '../../../assets/images/art-details/grp.png';
+import grp144 from '../../../assets/images/art-details/grp144.png';
+import stars from '../../../assets/images/art-details/stars.png';
+import Footer from '../../../components/footer/Footer';
+import styled from 'styled-components';
+import Popup from 'reactjs-popup';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import Wishlist from '../../../utils/wishlist';
 
 const styleDrop = [
   { a: 'ddsdd' },
@@ -361,74 +364,17 @@ const ArtDetails = () => {
   };
 
   // this code is for valdating if artId already exists in wishlist
-  const [wishlist, setwishlist] = useState();
 
-  useEffect(() => {
-    getAllWishlistByUserId();
-  }, []);
-
-  const getAllWishlistByUserId = async () => {
-    try {
-      const res = await httpClient.get(
-        `/wishlist_master/getByUserIdList/${userId}`
-      );
-      setwishlist(res.data);
-      // console.log(res.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
   // above code is for valdating if artId already exists in wishlist
-
-  const addToWishlist = (artId) => {
-    let findId;
-    wishlist.forEach((obj) => {
-      if (obj.artMaster !== null) {
-        if (obj.artMaster.artId === artId) {
-          findId = undefined;
-        }
-      }
-    });
-
-    // findId = wishlist.find(
-    //   (obj) => obj.artMaster.artId === artId
-    // );
-
-    if (!findId) {
-      const object = {
-        artId: artId,
-        id: userId,
-      };
-      httpClient.post(`/wishlist_master/save`, object).then((res) => {
-        // console.log(res);
-        getAllWishlistByUserId();
-      });
-    }
-  };
-
-  const wishlistDelete = async (id) => {
-    wishlist?.forEach(async (obj) => {
-      if (obj.artMaster.artId === id) {
-        try {
-          const res = await httpClient.delete(
-            `/wishlist_master/delete/${obj.wishListId}`
-          );
-          getAllWishlistByUserId();
-        } catch (error) {
-          console.error(error);
-        }
-      }
-    });
-  };
 
   const checkoutPage = () => {
     // navigate to checkout page
     navigate('/checkout');
   };
 
-  useEffect(() => {
-    console.log(artDetails);
-  }, [artDetails]);
+  // useEffect(() => {
+  //   console.log(artDetails);
+  // }, [artDetails]);
 
   return (
     <>
@@ -475,45 +421,7 @@ const ArtDetails = () => {
               </div>
               <div className='flex gap-x-2.5 items-center'>
                 <img src={addIcon} alt='' />
-
-                {wishlist?.find(
-                  (obj) => obj.artMaster?.artId === artDetails.artId
-                ) === undefined ? (
-                  <WishlistIcon
-                    onClick={() => {
-                      addToWishlist(artDetails?.artId);
-                    }}
-                    style={{ fill: '#888888', width: '100%' }}
-                  />
-                ) : (
-                  <WishlistIcon
-                    onClick={() => {
-                      wishlistDelete(artDetails?.artId);
-                    }}
-                    style={{
-                      fill: 'red',
-                      width: '100%',
-                    }}
-                  />
-                )}
-
-                {/* <WishlistIcon
-                  style={{
-                    width: '100%',
-                    fill: `${
-                      wishlist?.find(
-                        (obj) =>
-                          obj.artMaster.artId === artDetails.artId
-                      ) === undefined
-                        ? '#888888'
-                        : 'red'
-                    }`,
-                  }}
-                  onClick={() => {
-                    addToWishlist(artDetails?.artId);
-                  }}
-                /> */}
-
+                <Wishlist id={artDetails.artId} />
                 <img src={shareIcon} alt='' />
               </div>
             </div>
@@ -529,7 +437,43 @@ const ArtDetails = () => {
             <p className='text-[1.563rem] font-medium leading-7 text-primaryBlack mb-0.5'>
               {artDetails?.artName}
             </p>
-            <img src={conHead} alt='' />
+            {/* <img src={conHead} alt='' /> */}
+            <div className='flex gap-[4px]'>
+              {artDetails?.userMaster?.coverImage === null ? (
+                <AccountCircleIcon
+                  style={{
+                    fontSize: 'xx-large',
+                  }}
+                />
+              ) : (
+                <img
+                  src={artDetails?.userMaster?.coverImage}
+                  alt=''
+                />
+              )}
+
+              {/* <div className=''></div> */}
+              <div className='flex flex-col mt-[3px]'>
+                <img
+                  className='w-[43px] h-[15px]'
+                  src={pro}
+                  alt='pro image'
+                />
+                <p className='text-[11px] text-primaryGray leading-[1] '>
+                  by{' '}
+                  <span
+                    onClick={() => {
+                      navigate('/view-my-store', {
+                        state: artDetails?.userMaster,
+                      });
+                    }}
+                    className='text-orangeColor'
+                  >
+                    {artDetails?.userMaster?.displayName}
+                  </span>
+                </p>
+              </div>
+            </div>
             <div className='mt-2 mb-8 border-t-2 border-b-2 border-[#EFEFEF]'>
               <table className='w-[100%]'>
                 <tr className='border-b border-[#EFEFEF]'>
