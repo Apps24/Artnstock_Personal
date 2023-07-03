@@ -1,49 +1,49 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import captcha from "../../../assets/recaptcha.jpg";
-import { httpClient } from "../../../axios";
-import { authSliceAction } from "../../../store/authSlice";
-import { toast } from 'react-toastify';
+// import { useDispatch } from "react-redux";
+// import { useNavigate } from "react-router-dom";
+// import captcha from "../../../assets/recaptcha.jpg";
+// import { httpClient } from "../../../axios";
+// import { authSliceAction } from "../../../store/authSlice";
+// import { toast } from 'react-toastify';
 
 
 const HomeJoin = ({ mainBackgroundImg, leftBackgroundImg, leftTextImg }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  // const [email, setEmail] = useState('');
+  // const [password, setPassword] = useState('');
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  // const dispatch = useDispatch();
+  // const navigate = useNavigate();
 
-  const loginForm = {
-    userName: '',
-    password: '',
-  };
+  // const loginForm = {
+  //   userName: '',
+  //   password: '',
+  // };
 
-  const login = () => {
-    if (email.length > 0 && password.length > 0) {
-      loginForm.userName = email;
-      loginForm.password = password;
-      console.log(loginForm);
-      httpClient
-        .post('/user_master/userLogin', loginForm)
-        .then((res) => {
-          console.log(res.data);
-          if (res.data.responseCode === 200) {
-            toast.success('Successfully Logged In');
-            dispatch(authSliceAction.loginUser(true));
-            dispatch(
-              authSliceAction.setUserRole(res.data.userRole[0])
-            );
-            dispatch(authSliceAction.setUserId(res.data.userId));
-            navigate('/');
-          } else {
-            toast.error(res.data.message);
-          }
-        });
-    } else {
-      toast.error('Please enter email and password');
-    }
-  };
+  // const login = () => {
+  //   if (email.length > 0 && password.length > 0) {
+  //     loginForm.userName = email;
+  //     loginForm.password = password;
+  //     console.log(loginForm);
+  //     httpClient
+  //       .post('/user_master/userLogin', loginForm)
+  //       .then((res) => {
+  //         // console.log(res.data);
+  //         if (res.data.responseCode === 200) {
+  //           toast.success('Successfully Logged In');
+  //           dispatch(authSliceAction.loginUser(true));
+  //           dispatch(
+  //             authSliceAction.setUserRole(res.data.userRole[0])
+  //           );
+  //           dispatch(authSliceAction.setUserId(res.data.userId));
+  //           navigate('/');
+  //         } else {
+  //           toast.error(res.data.message);
+  //         }
+  //       });
+  //   } else {
+  //     toast.error('Please enter email and password');
+  //   }
+  // };
   return (
     <div
       style={{ backgroundImage: `url('${mainBackgroundImg}')` }}

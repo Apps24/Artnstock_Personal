@@ -116,8 +116,9 @@ const SearchList = () => {
   // console.log(searchText);
 
   const style = useSelector((state) => state.style.style);
+  const userDetails = useSelector((state) => state.auth.userDetails);
 
-  // console.log(style);
+  // console.log(userDetails);
 
   const [showStyle, setShowStyle] = useState(false);
 
@@ -159,9 +160,27 @@ const SearchList = () => {
           `/art_master/ArtFilter/${"search"}/${searchText}`,
           o
         );
+        recentSearch()
         //   console.log(res);
         setArtsList(res.data);
       }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // Recent search
+
+  const recentSearch = async () => {
+    const data = {
+      text: "",
+      userId: ""
+    }
+    try {
+      data.userId = userDetails?.userId
+      data.text = searchText.searchText
+      const res = await httpClient.post("/recently_search_master", data);
+      console.log(res.data);
     } catch (error) {
       console.error(error);
     }

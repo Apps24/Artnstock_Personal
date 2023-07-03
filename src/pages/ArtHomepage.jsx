@@ -20,7 +20,7 @@ const ArtHomepage = () => {
     httpClient
       .get(`/dynamic_homepage_content_master/getTypeWiseList/art`)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         setHomeObject(res.data);
       });
   }, []);
@@ -31,7 +31,7 @@ const ArtHomepage = () => {
       .get(`/subject_master/getTypeWiseSubjectList/art`)
       .then((res) => {
         setGridList(res.data);
-        console.log(res.data);
+        // console.log(res.data);
       });
   }, []);
 
@@ -41,7 +41,7 @@ const ArtHomepage = () => {
       .get(`/frequently_asked_master/getTypeWiseFaq/art`)
       .then((res) => {
         setfaq(res.data);
-        console.log(res);
+        // console.log(res);
       });
   };
 

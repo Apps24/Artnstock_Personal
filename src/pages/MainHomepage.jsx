@@ -17,7 +17,7 @@ const MainHomepage = () => {
     httpClient
       .get(`/dynamic_homepage_content_master/getTypeWiseList/home`)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         setHomeObject(res.data);
       });
   }, []);
