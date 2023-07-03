@@ -20,7 +20,7 @@ const ArtGrid = ({ gridList, type }) => {
   // }, []);
 
   const artNextPage = (text) => {
-    console.log(text);
+    // console.log(text);
     // /art-list
     navigate('/art-list');
   };

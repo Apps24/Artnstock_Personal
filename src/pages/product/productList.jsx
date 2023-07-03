@@ -99,7 +99,7 @@ const ProductList = () => {
         '/art_product_master/getActiveArtProductMaster'
       );
       setTitle('All Products');
-      console.log(res.data);
+      // console.log(res.data);
       setArtsList(res.data);
     } else {
       const res = await httpClient.get(
@@ -110,9 +110,9 @@ const ProductList = () => {
     }
   };
 
-  useEffect(() => {
-    console.log(subjectId);
-  }, []);
+  // useEffect(() => {
+  //   console.log(subjectId);
+  // }, []);
 
   // useEffect(() => {
   //   console.log(artsList);

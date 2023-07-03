@@ -28,7 +28,8 @@ import profile from '../../assets/images/artList/profile.png';
 import shopCart from '../../assets/images/artList/shopCart.png';
 import enlarge from '../../assets/images/artList/enlarge.png';
 import share from '../../assets/images/artList/Share.png';
-import { ReactComponent as Wishlist } from '../../assets/images/artList/wishlistsvg.svg';
+// import { ReactComponent as Wishlist } from '../../assets/images/artList/wishlistsvg.svg';
+import Wishlist from '../../utils/wishlist';
 import { setSubjectId } from '../../store/subjectidSlice';
 
 const popularList = [
@@ -140,9 +141,13 @@ const ArtList = () => {
 
   // console.log(subjectId);
   // api calls
+  useEffect(() => {
+    getAllWishlistByUserId();
+  }, []);
+
   const getAllArtList = async () => {
     try {
-      console.log(filterObj);
+      // console.log(filterObj);
       if (subjectId === null) {
         setSubDis(false);
         let o = Object.fromEntries(
@@ -236,7 +241,7 @@ const ArtList = () => {
   const [popupArray, setPopupArray] = useState([]);
 
   const popupOfHover = (id) => {
-    console.log(typeof popupArray);
+    // console.log(typeof popupArray);
 
     const find = popupArray.find((obj) => obj.id === id.id);
     if (find === undefined) {
@@ -247,10 +252,6 @@ const ArtList = () => {
   };
 
   const [wishlist, setwishlist] = useState();
-
-  useEffect(() => {
-    getAllWishlistByUserId();
-  }, []);
 
   const getAllWishlistByUserId = async () => {
     try {
@@ -281,7 +282,7 @@ const ArtList = () => {
         id: userId,
       };
       httpClient.post(`/wishlist_master/save`, object).then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         getAllWishlistByUserId();
       });
     }
@@ -1002,9 +1003,13 @@ const ArtList = () => {
                               <div className='absolute right-[10px] bottom-[10px]'>
                                 <img src={enlarge} alt='' />
                               </div>
-                              <div className="absolute right-[3px] top-[3px]">
-
-                                {wishlist?.find(
+                              <div className='absolute right-[10px] top-[10px]'>
+                                <Wishlist
+                                  id={data?.artId}
+                                  type='large'
+                                  prodType='art'
+                                />
+                                {/* {wishlist?.find(
                                   (obj) =>
                                     obj.artMaster?.artId ===
                                     data.artId
@@ -1036,9 +1041,7 @@ const ArtList = () => {
                                       width: '100%',
                                     }}
                                   />
-                                )}
-             
-
+                                )} */}
                               </div>
                               {isHovered && (
                                 <button className='w-[164px] z-[99] mt-[3px] h-[20px] flex justify-center items-center text-[11px] bg-[#f7f7f7] rounded-[10px] text-primaryGray absolute top-[33px] left-[203px] border border-[#e4e4e4]'>
@@ -1077,7 +1080,7 @@ const ArtList = () => {
                                       saved in ‘Collections’ folder
                                     </p>
                                   </div>
-                                  <div class='absolute left-[47%] bottom-[-10px] w-[20px] h-[20px] bg-[white] rounded-br-[5px] transform rotate-45 shadow-inner'></div>
+                                  <div className='absolute left-[47%] bottom-[-10px] w-[20px] h-[20px] bg-[white] rounded-br-[5px] transform rotate-45 shadow-inner'></div>
                                 </div>
                               )}
                             </div>

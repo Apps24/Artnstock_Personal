@@ -59,7 +59,7 @@ const UserDetails = () => {
     userModel.userRole.push(userType.userType);
 
     httpClient.post('/user_master/save', userModel).then((res) => {
-      console.log(res);
+      // console.log(res);
       if (res.data.flag === true) {
         toast('Successfully Added');
         userType.userType === 'customer'

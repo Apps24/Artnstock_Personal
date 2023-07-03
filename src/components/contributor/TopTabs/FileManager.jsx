@@ -160,19 +160,30 @@ const FileManager = () => {
   };
 
   useEffect(() => {
-    getUserIdWiseArts();
-    getFolders();
+    onMountAllFiles();
   }, []);
 
-  useEffect(() => {
-    console.log(categories);
-  }, [categories]);
+  const onMountAllFiles = () => {
+    getUserIdWiseArts();
+    getFolders();
+  };
+
+  // useEffect(() => {
+  //   console.log(categories);
+  // }, [categories]);
 
   const namee = (event) => {
     const n = event.target.value;
     setname(n);
     // createFolder(n);
   };
+
+  // const [editName, setEditName] = useState('');
+  // const nameeEdit = (event) => {
+  //   const n = event.target.value;
+  //   setEditName(n);
+  //   // createFolder(n);
+  // };
 
   const handleKeyDown = (event) => {
     if (event.keyCode === 13) {
@@ -229,7 +240,7 @@ const FileManager = () => {
     httpClient
       .post('/file_manager_master/fileManagerIdWiseAddArt', object)
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
 
         getUserIdWiseArts();
         getFolders();
@@ -252,9 +263,98 @@ const FileManager = () => {
     }
   }, [categoriesFocus, create]);
 
+  const deleteFolders = async () => {
+    if (categoriesFocus === 'folderImages') {
+      const res = await httpClient.delete(
+        `file_manager_master/deleteFileManager/${imagesFolderArray.fileManagerId}`
+      );
+      getUserIdWiseArts();
+      getFolders();
+      setCategoriesFocus('all');
+      console.log(res.status);
+    }
+  };
+
+  const [editFolder, seteditFolder] = useState(false);
+
+  const inputRefEdit = useRef(null);
+
+  const editFolderFunc = async () => {
+    seteditFolder(!editFolder);
+  };
+
+  const [editName, setEditName] = useState('');
+  const nameeEdit = (event) => {
+    const n = event.target.value;
+    setEditName(n);
+    // createFolder(n);
+  };
+
+  const handleKeyDownEdit = async (event) => {
+    if (event.keyCode === 13 && editName !== '') {
+      const object = {
+        fileManagerId: imagesFolderArray.fileManagerId,
+        title: editName,
+      };
+      // Enter key
+      const res = await httpClient.put(
+        '/file_manager_master/updateIdWiseTitle',
+        object
+      );
+      getUserIdWiseArts();
+      getFolders();
+      seteditFolder(!editFolder);
+
+      console.log(res.data);
+    }
+  };
+
   useEffect(() => {
-    console.log(categories);
-  }, [categories]);
+    if (inputRefEdit.current) {
+      inputRefEdit.current.focus();
+    }
+  }, [editFolder]);
+
+  const [searchObj, setsearchObj] = useState({});
+
+  const searchApi = async () => {
+    if (searchObj.text === '') {
+      // console.log('iff');
+      getUserIdWiseArts();
+    } else if (searchObj.text !== '') {
+      try {
+        const res = await httpClient.post(
+          '/file_manager_master/FileManagerFilter',
+          searchObj
+        );
+        // console.log('elseiff');
+        // console.log(object);
+        // console.log(res.data);
+        setCategories((prevCategories) => ({
+          ...prevCategories,
+          all: res.data,
+        }));
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
+
+  const handleSearchBoxChange = async (event) => {
+    let val = event.target.value;
+    console.log(val);
+    let object = {
+      text: val,
+      type: 'All',
+      userId: userId,
+    };
+
+    setsearchObj(object);
+  };
+
+  useEffect(() => {
+    console.log(searchObj);
+  }, [searchObj]);
 
   return (
     <div>
@@ -335,7 +435,7 @@ const FileManager = () => {
           <div className='flex gap-[20px] mt-[17px] ml-[112px]'>
             <div
               onClick={() => {
-                setCreate(true);
+                setCreate(!create);
               }}
               className='flex-column max-w-[41px] text-center cursor-pointer'
             >
@@ -348,7 +448,10 @@ const FileManager = () => {
                 Create New Set
               </p>
             </div>
-            <div className='flex-column max-w-[34px] text-center'>
+            <div
+              onClick={editFolderFunc}
+              className='flex-column max-w-[34px] text-center cursor-pointer'
+            >
               <img
                 src={renameSet}
                 alt=''
@@ -592,7 +695,7 @@ const FileManager = () => {
 
             {/* popup */}
 
-            <div className='flex-column max-w-[34px] text-center'>
+            <div className='flex-column max-w-[34px] text-center cursor-pointer'>
               <img
                 src={editContentSet}
                 alt=''
@@ -612,7 +715,10 @@ const FileManager = () => {
                 Select All
               </p>
             </div>
-            <div className='flex-column max-w-[34px] text-center'>
+            <div
+              onClick={deleteFolders}
+              className='flex-column max-w-[34px] text-center cursor-pointer'
+            >
               <img
                 src={deleteicon}
                 alt=''
@@ -705,12 +811,18 @@ const FileManager = () => {
 
         <div className='mt-3.5 flex items-center max-w-[1410px] mx-[auto]'>
           <input
+            onChange={(e) => {
+              handleSearchBoxChange(e);
+            }}
             className='bg-[#EEEEEE] flex-1 outline-0 py-3 px-5 w-fit placeholder:text-placeholderColor placeholder:font-medium rounded-tl-3xl rounded-bl-3xl  border-[#DADADA]'
             type='text'
             placeholder='Search by Title or Tags'
           />
 
-          <button className=' py-3.5 rounded-tr-3xl rounded-br-3xl bg-[#e6e6e6] px-4 text-primaryBlack text-sm14 font-medium'>
+          <button
+            onClick={searchApi}
+            className=' py-3.5 rounded-tr-3xl rounded-br-3xl bg-[#e6e6e6] px-4 text-primaryBlack text-sm14 font-medium'
+          >
             <img
               className='inline-block mr-2'
               src={searchIcon}
@@ -791,34 +903,62 @@ const FileManager = () => {
 
             {artTabFocus === true &&
               categories.art.map((obj) => (
-                <div
-                  onClick={() => {
-                    folderImages(obj);
-                  }}
-                  className={`flex h-[27px] gap-[8px] bg-[${
-                    categoriesFocus === 'folderImages' &&
-                    imagesFolderArray.fileManagerId ===
-                      obj.fileManagerId
-                      ? '#f0f0f0'
-                      : '#ffffff'
-                  }] py-[5px] border-b border-[#efefef] cursor-pointer`}
-                >
-                  <div className='my-[auto]'>
-                    <img src={folder} alt='' />
-                  </div>
-                  <div className='flex w-[184px] justify-between'>
-                    <div className='flex flex-col justify-center'>
-                      <p className='text-[12px] text-primaryGray font-medium leading-[1]'>
-                        {obj.title}
-                      </p>
+                <div>
+                  <div
+                    onClick={() => {
+                      folderImages(obj);
+                    }}
+                    className={`flex h-[27px] gap-[8px] bg-[${
+                      categoriesFocus === 'folderImages' &&
+                      imagesFolderArray.fileManagerId ===
+                        obj.fileManagerId
+                        ? '#f0f0f0'
+                        : '#ffffff'
+                    }] py-[5px] border-b border-[#efefef] cursor-pointer`}
+                  >
+                    <div className='my-[auto]'>
+                      <img src={folder} alt='' />
                     </div>
-                    <div>
-                      <p className='text-[12px]'>
-                        {obj.artMaster.length}
-                      </p>
+                    <div className='flex w-[184px] justify-between'>
+                      <div className='flex flex-col justify-center'>
+                        <p className='text-[12px] text-primaryGray font-medium leading-[1]'>
+                          {obj.title}
+                        </p>
+                      </div>
+                      <div>
+                        <p className='text-[12px]'>
+                          {obj.artMaster.length}
+                        </p>
+                      </div>
                     </div>
                   </div>
+
+                  {imagesFolderArray?.fileManagerId ===
+                    obj.fileManagerId && editFolder === true ? (
+                    <div className='flex h-[27px] gap-[8px] bg-[#ffffff] py-[5px] border-b border-[#efefef] cursor-pointer'>
+                      <div className='my-[auto]'>
+                        <img src={folder} alt='' />
+                      </div>
+                      <div className='flex w-[184px] justify-between'>
+                        <div className='flex flex-col justify-center'>
+                          <input
+                            onChange={nameeEdit}
+                            onKeyDown={handleKeyDownEdit}
+                            ref={inputRefEdit}
+                            placeholder='edit above folder name'
+                            className='text-[12px] text-primaryGray font-medium leading-[1] outline-none'
+                            type='text'
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div></div>
+                  )}
                 </div>
+                // test
+
+                // test
               ))}
 
             {/* test */}

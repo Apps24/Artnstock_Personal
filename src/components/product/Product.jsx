@@ -17,7 +17,7 @@ const Product = ({ heading }) => {
 
   const getProductList = () => {
     httpClient.get('/product_master').then((res) => {
-      console.log(res);
+      // console.log(res);
       setProdList(res.data);
     });
   };

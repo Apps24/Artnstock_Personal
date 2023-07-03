@@ -44,10 +44,11 @@ const HomeJoin = ({ mainBackgroundImg, leftBackgroundImg, leftTextImg }) => {
   //     toast.error('Please enter email and password');
   //   }
   // };
+
   return (
     <div
       style={{ backgroundImage: `url('${mainBackgroundImg}')` }}
-      className="h-[500px] flex justify-center items-center flex-col"
+      className='h-[500px] flex justify-center items-center flex-col'
     >
       {/* <div className="w-[690px] h-[388px] flex bg-[#ffffff] rounded-[30px] overflow-hidden">
         <div

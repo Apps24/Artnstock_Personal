@@ -5,7 +5,7 @@ const ArtHomeFaq = ({ type }) => {
 
   const showw = (id) => {
     const find = show.find((obj) => obj.id === id.id);
-    console.log(find);
+    // console.log(find);
     if (find === undefined) {
       setShow((prev) => [...prev, id]);
     } else if (find !== undefined) {

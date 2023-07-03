@@ -18,9 +18,9 @@ const AllFilesCust = ({ image }) => {
     (state) => state.fileimages.selectedAllFilesImagesCustomer
   );
 
-  useEffect(() => {
-    console.log('Cust ', selectedAllFilesImagesCustomer);
-  }, [selectedAllFilesImagesCustomer]);
+  // useEffect(() => {
+  //   console.log('Cust ', selectedAllFilesImagesCustomer);
+  // }, [selectedAllFilesImagesCustomer]);
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);

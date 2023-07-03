@@ -206,15 +206,15 @@ const AllRelease = () => {
   const totalPages = Math.ceil(dataToRender.length / itemsPerPage);
 
   const handlePrevPage = () => {
-    console.log(currentPage);
+    // console.log(currentPage);
     if (currentPage > 1 && currentPage <= totalPages) {
-      console.log('i am running');
+      // console.log('i am running');
       setCurrentPage((prevPage) => prevPage - 1);
     }
   };
 
   const handleNextPage = () => {
-    console.log(currentPage);
+    // console.log(currentPage);
     if (currentPage >= 1 && currentPage < totalPages) {
       setCurrentPage((prevPage) => prevPage + 1);
     }

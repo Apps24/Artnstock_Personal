@@ -87,6 +87,7 @@ import Cotton from '../../../assets/images/lifestyle/Cotton.png';
 import Quantity from '../../../assets/images/lifestyle/Quantity.png';
 import Colour from '../../../assets/images/lifestyle/Colour.png';
 import DescriptionPic from '../../../assets/images/lifestyle/Description.png';
+import Wishlist from '../../../utils/wishlist';
 
 const ProductDetails = () => {
   const [isOpenSortBy, setIsOpenSortBy] = useState(false);
@@ -360,9 +361,9 @@ const ProductDetails = () => {
   useEffect(() => {
     getAllWishlistByUserId();
   }, []);
-  useEffect(() => {
-    console.log(data);
-  }, []);
+  // useEffect(() => {
+  //   console.log(data);
+  // }, []);
 
   const getAllWishlistByUserId = async () => {
     try {
@@ -377,48 +378,51 @@ const ProductDetails = () => {
   };
   // above code is for valdating if artProductId already exists in wishlist
 
-  const addToWishlist = (artProductId) => {
-    // console.log('here', artProductId);
-    // const findId = wishlist.find(
-    //   (obj) => obj.artProductMaster.artProductId === artProductId
+  // productArt wishlist function
 
-    // );
+  //  const addToWishlist = (artProductId) => {
+  //   console.log('here', artProductId);
+  //   // const findId = wishlist.find(
+  //   //   (obj) => obj.artProductMaster.artProductId === artProductId
+  //   // );
 
-    let findId;
-    wishlist.forEach((wishlist) => {
-      if (wishlist.artMaster === null) {
-        if (wishlist.artProductMaster.artProductId === artProductId) {
-          findId = undefined;
-        }
-      }
-    });
+  //   let findId;
+  //   wishlist.forEach((wishlist) => {
+  //     if (wishlist.artMaster === null) {
+  //       if (
+  //         wishlist.artProductMaster?.artProductId === artProductId
+  //       ) {
+  //         findId = undefined;
+  //       }
+  //     }
+  //   });
 
-    if (!findId) {
-      const object = {
-        artProductId: artProductId,
-        id: userId,
-      };
-      httpClient.post(`/wishlist_master/save`, object).then((res) => {
-        // console.log(res);
-        getAllWishlistByUserId();
-      });
-    }
-  };
+  //   if (!findId) {
+  //     const object = {
+  //       artProductId: artProductId,
+  //       id: userId,
+  //     };
+  //     httpClient.post(`/wishlist_master/save`, object).then((res) => {
+  //       // console.log(res);
+  //       getAllWishlistByUserId();
+  //     });
+  //   }
+  // };
 
-  const wishlistDelete = async (id) => {
-    wishlist?.forEach(async (obj) => {
-      if (obj.artProductMaster.artProductId === id) {
-        try {
-          const res = await httpClient.delete(
-            `/wishlist_master/delete/${obj.wishListId}`
-          );
-          getAllWishlistByUserId();
-        } catch (error) {
-          console.error(error);
-        }
-      }
-    });
-  };
+  // const wishlistDelete = async (id) => {
+  //   wishlist?.forEach(async (obj) => {
+  //     if (obj.artProductMaster?.artProductId === id) {
+  //       try {
+  //         const res = await httpClient.delete(
+  //           `/wishlist_master/delete/${obj.wishListId}`
+  //         );
+  //         getAllWishlistByUserId();
+  //       } catch (error) {
+  //         console.error(error);
+  //       }
+  //     }
+  //   });
+  // };
 
   return (
     <>
@@ -454,32 +458,37 @@ const ProductDetails = () => {
                 {/* <img src={roomViewImg} alt='' /> */}
                 <img src={threeDImg} alt='' />
               </div>
-              <div className='flex gap-x-2.5'>
+              <div className='flex items-center gap-x-2.5'>
                 <img src={addIcon} alt='' />
-                {/* <img src={wishlistIcon} alt='' /> */}
 
-                {wishlist?.find(
-                  (obj) =>
-                    obj.artProductMaster?.artProductId ===
-                    data?.artProductId
-                ) === undefined ? (
-                  <WishlistIcon
-                    onClick={() => {
-                      addToWishlist(data?.artProductId);
-                    }}
-                    style={{ fill: '#888888', width: '100%' }}
-                  />
-                ) : (
-                  <WishlistIcon
-                    onClick={() => {
-                      wishlistDelete(data?.artProductId);
-                    }}
-                    style={{
-                      fill: 'red',
-                      width: '100%',
-                    }}
-                  />
-                )}
+                <Wishlist
+                  id={data?.artProductId}
+                  prodType='product'
+                />
+                {/* <div>
+                  {wishlist?.find(
+                    (obj) =>
+                      obj.artProductMaster?.artProductId ===
+                      data?.artProductId
+                  ) === undefined ? (
+                    <WishlistIcon
+                      onClick={() => {
+                        addToWishlist(data?.artProductId);
+                      }}
+                      style={{ fill: '#888888', width: '100%' }}
+                    />
+                  ) : (
+                    <WishlistIcon
+                      onClick={() => {
+                        wishlistDelete(data?.artProductId);
+                      }}
+                      style={{
+                        fill: 'red',
+                        width: '100%',
+                      }}
+                    />
+                  )}
+                </div> */}
                 <img src={shareIcon} alt='' />
               </div>
             </div>
@@ -487,8 +496,8 @@ const ProductDetails = () => {
             <p className='text-primaryBlack text-[15px] font-medium leading-5 mb-1'>
               You have selected
             </p>
-            <div class='w-full rounded-2xl bg-gradient-to-r from-[#DC4C9A] via-[#9593CD] via-[#84D49C] via-[#CCEC3B] to-[#F7941D] p-[1px]'>
-              <div class='flex flex-col h-[100%] w-[100%] bg-[#ffffff] rounded-2xl p-[12px] text-primaryGray text-[12px]'>
+            <div className='w-full rounded-2xl bg-gradient-to-r from-[#DC4C9A] via-[#9593CD] via-[#84D49C] via-[#CCEC3B] to-[#F7941D] p-[1px]'>
+              <div className='flex flex-col h-[100%] w-[100%] bg-[#ffffff] rounded-2xl p-[12px] text-primaryGray text-[12px]'>
                 <div className='flex gap-[10px] text-[11px]'>
                   <div className='flex-col'>
                     <div className='w-[48px]'>
@@ -1022,8 +1031,8 @@ const ProductDetails = () => {
                       <p className='text-primaryBlack text-[15px] font-medium leading-5 mb-1'>
                         You have selected
                       </p>
-                      <div class='w-full rounded-2xl bg-gradient-to-r from-[#DC4C9A] via-[#9593CD] via-[#84D49C] via-[#CCEC3B] to-[#F7941D] p-[1px]'>
-                        <div class='flex flex-col h-[100%] w-[100%] bg-[#ffffff] rounded-2xl p-[12px] text-primaryGray text-[12px]'>
+                      <div className='w-full rounded-2xl bg-gradient-to-r from-[#DC4C9A] via-[#9593CD] via-[#84D49C] via-[#CCEC3B] to-[#F7941D] p-[1px]'>
+                        <div className='flex flex-col h-[100%] w-[100%] bg-[#ffffff] rounded-2xl p-[12px] text-primaryGray text-[12px]'>
                           <div className='flex gap-[10px] text-[11px]'>
                             <div className='flex-col'>
                               <div className='w-[48px]'>

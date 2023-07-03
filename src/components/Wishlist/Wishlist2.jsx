@@ -11,36 +11,6 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-// const wishlist = [
-//   {
-//     img: `${wishlist1}`,
-//     title: 'Office Merchandise Combo',
-//     id: '15994539',
-//     availability: 'In Stock',
-//     description:
-//       "International Artist Azra's art work dictates  the expression of man and beast exploring our role and place in this universe.",
-//     price: '189.00',
-//   },
-//   {
-//     img: `${wishlist2}`,
-//     title: 'Nature vector art printed on mug',
-//     id: '15994539',
-//     availability: 'In Stock',
-//     description:
-//       "International Artist Azra's art work dictates the expression of man and beast exploring our role and place in this universe.",
-//     price: '10.00',
-//   },
-//   {
-//     img: `${wishlist3}`,
-//     title: 'Sunset art printed on Mouse Pad',
-//     id: '15994539',
-//     availability: 'In Stock',
-//     description:
-//       "International Artist Azra's art work dictates the expression of man and beast exploring our role and place in this universe.",
-//     price: '10.00',
-//   },
-// ];
-
 const Wishlist2 = () => {
   const [popup, setPopup] = useState(false);
 
@@ -60,7 +30,7 @@ const Wishlist2 = () => {
         `/wishlist_master/getByUserIdList/${userId}`
       );
       setwishlist(res.data);
-      console.log(res.data);
+      // console.log(res.data);
     } catch (error) {
       console.error(error);
     }
@@ -74,7 +44,7 @@ const Wishlist2 = () => {
         const res = await httpClient.delete(
           `/wishlist_master/delete/${wishlistId}`
         );
-        console.log(res.data);
+        // console.log(res.data);
         setdeletewishid('');
         getAllWishlistByUserId();
       } catch (error) {
@@ -86,6 +56,41 @@ const Wishlist2 = () => {
 
   return (
     <>
+      {/* test */}
+      <div className='w-[100%] fixed'>
+        {popup === true ? (
+          <div className='bg-[#ffffff] w-[345px] py-8 px-[50px] mx-[auto] rounded-2xl text-center shadow-dropShadow'>
+            <p className='text-[#757575] text-[13px] leading-[1.2]'>
+              {' '}
+              Are you sure you want to remove this item <br /> from
+              your wishlist?
+            </p>
+            <div className='flex gap-[10px] mt-5 justify-center'>
+              <button
+                onClick={() => {
+                  wishlistDelete(deletewishid);
+                  setPopup(false);
+                }}
+                className='blackBtn'
+              >
+                Yes
+              </button>
+              <button
+                onClick={() => {
+                  setPopup(false);
+                }}
+                className='blackBtn bg-[#ffffff] text-[#333333] border border-[#333333] '
+              >
+                No
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div></div>
+        )}
+      </div>
+      {/* test */}
+
       {wishlist?.length > 0 ? (
         <div>
           <div className='wrapper justify-center flex '>
@@ -258,36 +263,6 @@ const Wishlist2 = () => {
           </div>
 
           {/* Rollover */}
-          {popup === true ? (
-            <div className='bg-[#ffffff] w-[345px] py-8 px-[50px] rounded-2xl text-center absolute top-[17%] left-[40%] shadow-dropShadow'>
-              <p className='text-[#757575] text-[13px] leading-[1.2]'>
-                {' '}
-                Are you sure you want to remove this item <br /> from
-                your wishlist?
-              </p>
-              <div className='flex gap-[10px] mt-5 justify-center'>
-                <button
-                  onClick={() => {
-                    wishlistDelete(deletewishid);
-                    setPopup(false);
-                  }}
-                  className='blackBtn'
-                >
-                  Yes
-                </button>
-                <button
-                  onClick={() => {
-                    setPopup(false);
-                  }}
-                  className='blackBtn bg-[#ffffff] text-[#333333] border border-[#333333] '
-                >
-                  No
-                </button>
-              </div>
-            </div>
-          ) : (
-            <div></div>
-          )}
         </div>
       ) : (
         <div className='wrapper text-center'>

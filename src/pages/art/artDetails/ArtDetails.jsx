@@ -254,6 +254,7 @@ const StyledPopup = styled(Popup)`
     border: none;
   }
 `;
+
 const SeeAllFramesPopup = styled(Popup)`
   // use your custom style for ".popup-overlay"
   /* &-overlay {
@@ -327,6 +328,7 @@ const ArtDetails = () => {
       textColor: 'black',
     },
   ]);
+
   const [checked, setChecked] = useState('icon7'); //Store ID temporary
   const [selectedSize, setSelectedSize] = useState('M');
 
@@ -347,7 +349,7 @@ const ArtDetails = () => {
     httpClient
       .get(`/art_master/editArtMaster/${location?.state?.id}`)
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setArtDetails(res.data);
       });
   }, []);
@@ -381,6 +383,47 @@ const ArtDetails = () => {
   // useEffect(() => {
   //   console.log(artDetails);
   // }, [artDetails]);
+
+  const [sizeFrameList, setSizeFrameList] = useState([]);
+
+  const getActiveFrameSizeList = async () => {
+    const res = await httpClient.get(
+      '/frame_master/getActiveFrameMaster'
+    );
+    setSizeFrameList(res.data);
+    console.log(res.data);
+  };
+
+  const [activePaperMasterList, setActivePaperMasterList] =
+    useState(null);
+
+  const getActivePaperMasterList = async () => {
+    const res = await httpClient.get(
+      '/paper_master/getActivePaperMasterList'
+    );
+    setActivePaperMasterList(res.data);
+  };
+
+  const [colorFrame, setcolorFrame] = useState(false);
+
+  const [frames, setframes] = useState(null);
+
+  const getActiveFrameMaster = async () => {
+    const res = await httpClient.get(
+      '/frame_master/getActiveFrameMaster'
+    );
+    setframes(res.data);
+  };
+
+  const [frameColorr, setFrameColorr] = useState(null);
+
+  const [colorFrameFocus, setcolorFrameFocus] = useState(null);
+
+  useEffect(() => {
+    getActiveFrameSizeList();
+    getActivePaperMasterList();
+    getActiveFrameMaster();
+  }, []);
 
   return (
     <>
@@ -427,7 +470,11 @@ const ArtDetails = () => {
               </div>
               <div className='flex gap-x-2.5 items-center'>
                 <img src={addIcon} alt='' />
-                <Wishlist id={artDetails.artId} />
+                <Wishlist
+                  id={artDetails.artId}
+                  type='small'
+                  prodType='art'
+                />
                 <img src={shareIcon} alt='' />
               </div>
             </div>
@@ -435,8 +482,8 @@ const ArtDetails = () => {
             <p className='text-primaryBlack text-[15px] font-medium leading-5 mb-1'>
               You have selected
             </p>
-            <div class='h-[220px] w-full rounded-2xl bg-gradient-to-r from-[#DC4C9A] via-[#9593CD] via-[#84D49C] via-[#CCEC3B] to-[#F7941D] p-[1px]'>
-              <div class='flex h-[100%] w-[100%] bg-[#ffffff] rounded-2xl pt-2.5 pl-2.5'></div>
+            <div className='h-[220px] w-full rounded-2xl bg-gradient-to-r from-[#DC4C9A] via-[#9593CD] via-[#84D49C] via-[#CCEC3B] to-[#F7941D] p-[1px]'>
+              <div className='flex h-[100%] w-[100%] bg-[#ffffff] rounded-2xl pt-2.5 pl-2.5'></div>
             </div>
           </div>
           <div className='right pl-7'>
@@ -688,27 +735,81 @@ const ArtDetails = () => {
                       </p>
                     </div>
                   </div>
-                  <p className='text-primaryBlack text-[15px] font-medium leading-5 mb-1'>
-                    Select{' '}
-                    <span className='capitalize'>
-                      {orientationBtn}
-                    </span>{' '}
-                    Orientation
-                  </p>
-                  <div className='flex gap-5 flex-wrap mb-2.5'>
-                    <div className='flex items-center'>
-                      <input className=' mr-1' type='checkbox' />
-                      <p className='text-[13px] text-primaryGray '>
-                        25cm x 20cm
+
+                  {orientationBtn === 'horizontal' ? (
+                    <div>
+                      <p className='text-primaryBlack text-[15px] font-medium leading-5 mb-1'>
+                        Select{' '}
+                        <span className='capitalize'>Horizontal</span>{' '}
+                        Orientation
                       </p>
+                      <div className='flex gap-5 flex-wrap mb-2.5'>
+                        {/* {sizeFrameList?.length > 0 &&
+                          sizeFrameList[0]?.orientationList[0]?.horizontal?.map(
+                            (obj) => (
+                              <div className='flex items-center'>
+                                <input
+                                  className=' mr-1'
+                                  type='checkbox'
+                                />
+                                <p className='text-[13px] text-primaryGray '>
+                                  {obj.height} x {obj.width}
+                                </p>
+                              </div>
+                            )
+                          )} */}
+                      </div>
                     </div>
-                    <div className='flex items-center'>
-                      <input className=' mr-1' type='checkbox' />
-                      <p className='text-[13px] text-primaryGray '>
-                        36cm x 28cm
+                  ) : orientationBtn === 'verticle' ? (
+                    <div>
+                      <p className='text-primaryBlack text-[15px] font-medium leading-5 mb-1'>
+                        Select{' '}
+                        <span className='capitalize'>Vertical</span>{' '}
+                        Orientation
                       </p>
+                      <div className='flex gap-5 flex-wrap mb-2.5'>
+                        {/* {sizeFrameList.length > 0 &&
+                          sizeFrameList[0]?.orientationList[0]?.vertical?.map(
+                            (obj) => (
+                              <div className='flex items-center'>
+                                <input
+                                  className=' mr-1'
+                                  type='checkbox'
+                                />
+                                <p className='text-[13px] text-primaryGray'>
+                                  {obj.height} x {obj.width}
+                                </p>
+                              </div>
+                            )
+                          )} */}
+                      </div>
                     </div>
-                  </div>
+                  ) : (
+                    <div>
+                      <p className='text-primaryBlack text-[15px] font-medium leading-5 mb-1'>
+                        Select{' '}
+                        <span className='capitalize'>Square</span>{' '}
+                        Orientation
+                      </p>
+                      <div className='flex gap-5 flex-wrap mb-2.5'>
+                        {/* {sizeFrameList.length > 0 &&
+                          sizeFrameList[0]?.orientationList[0]?.square.map(
+                            (obj) => (
+                              <div className='flex items-center'>
+                                <input
+                                  className=' mr-1'
+                                  type='checkbox'
+                                />
+                                <p className='text-[13px] text-primaryGray '>
+                                  {obj.height} x {obj.width}
+                                </p>
+                              </div>
+                            )
+                          )} */}
+                      </div>
+                    </div>
+                  )}
+
                   <p className='text-sm11 text-primaryGray font-medium'>
                     The artwork will be cropped to fit the selected
                     size. <br />
@@ -816,86 +917,154 @@ const ArtDetails = () => {
                       </p>
                     </div>
                     {/*  Frame color */}
-                    <div className='text-center ml-5'>
-                      <svg
-                        width='48'
-                        height='48'
-                        viewBox='0 0 48 48'
-                        fill='none'
-                        xmlns='http://www.w3.org/2000/svg'
-                      >
-                        <path
-                          fill-rule='evenodd'
-                          clip-rule='evenodd'
-                          d='M4 0H16V3H10.5H5C3.89539 3 3 3.89542 3 5V16H0V4C0 1.79086 1.79089 0 4 0Z'
-                          fill='#A6CF4F'
-                        />
-                        <rect
-                          x='16'
-                          width='16'
-                          height='3'
-                          fill='#FED303'
-                        />
-                        <rect
-                          x='16'
-                          y='45'
-                          width='16'
-                          height='3'
-                          fill='#283897'
-                        />
-                        <path
-                          fill-rule='evenodd'
-                          clip-rule='evenodd'
-                          d='M44 0H32V3H37.5H43C44.1046 3 45 3.89542 45 5V16H48V4C48 1.79086 46.2091 0 44 0Z'
-                          fill='#FFAC14'
-                        />
-                        <path
-                          fill-rule='evenodd'
-                          clip-rule='evenodd'
-                          d='M44 48H32V45H37.5H43C44.1046 45 45 44.1046 45 43V32H48V44C48 46.2091 46.2091 48 44 48Z'
-                          fill='#BB0271'
-                        />
-                        <path
-                          fill-rule='evenodd'
-                          clip-rule='evenodd'
-                          d='M4 48H16V45H10.5H5C3.89539 45 3 44.1046 3 43V32H0V44C0 46.2091 1.79089 48 4 48Z'
-                          fill='#02A2B8'
-                        />
-                        <rect
-                          x='45'
-                          y='16'
-                          width='3'
-                          height='16'
-                          fill='#F25721'
-                        />
-                        <rect
-                          y='16'
-                          width='3'
-                          height='16'
-                          fill='#01A566'
-                        />
-                        <rect
-                          x='10'
-                          y='10'
-                          width='28'
-                          height='28'
-                          rx='2'
-                          fill='#EEEEEE'
-                        />
-                      </svg>
+                    <div className='relative'>
+                      {/* test */}
+                      {colorFrame && (
+                        <div
+                          className={`z-999 bg-[#fff] rounded-[16px] w-[350px] h-[180px] absolute bottom-[90px] left-[-130px]`}
+                          style={{
+                            boxShadow:
+                              '0px 0px 18px rgba(0, 0, 0, 0.2)',
+                          }}
+                        >
+                          <div className='flex gap-[5px] flex-col p-[14px] leading-[1.3] text-center'>
+                            <p className='font-medium text-primaryBlack text-[15px]'>
+                              Select Frame Colour
+                            </p>
+                            <p className='text-primaryGray text-[11px]'>
+                              Click the colour icon to select the
+                              colour <br />
+                              of the frame
+                            </p>
 
-                      <p className={`text-sm11  text-primaryGray `}>
-                        Frame <br /> Color
-                      </p>
+                            <div className='w-[100%] flex'>
+                              {frameColorr?.map((color) => (
+                                <div
+                                  key={color.frameId}
+                                  onClick={() => {
+                                    setcolorFrameFocus(color);
+                                  }}
+                                  className={`h-[67px] cursor-pointer w-[40px] rounded-[8px] ${
+                                    colorFrameFocus === color
+                                      ? 'bg-[#f5f5f7]'
+                                      : ''
+                                  } flex flex-col p-[4px]`}
+                                >
+                                  <div
+                                    className='h-[32px] w-[32px] rounded-[50%]'
+                                    style={{
+                                      backgroundColor: `${color}`,
+                                    }}
+                                  ></div>
+                                  <p className='text-primaryGray text-[11px] leading-[1.1] mt-[3px]'>
+                                    {color}
+                                  </p>
+                                </div>
+                              ))}
+                            </div>
+                            <button className='z-[999] bg-[#8e8e8e] rounded-[14px] h-[28px] w-[108px] text-[12px] font-medium text-[white] mx-[auto]'>
+                              Select Colour
+                            </button>
+                          </div>
+                          <div className='absolute left-[47%] bottom-[-10px] w-[20px] h-[20px] bg-[white] rounded-br-[5px] transform rotate-45 shadow-inner'></div>
+                        </div>
+                      )}
+
+                      {/* test */}
+                      <div
+                        onClick={() => {
+                          setcolorFrame(!colorFrame);
+                        }}
+                        className='text-center ml-5 cursor-pointer '
+                      >
+                        <svg
+                          width='48'
+                          height='48'
+                          viewBox='0 0 48 48'
+                          fill='none'
+                          xmlns='http://www.w3.org/2000/svg'
+                        >
+                          <path
+                            fill-rule='evenodd'
+                            clip-rule='evenodd'
+                            d='M4 0H16V3H10.5H5C3.89539 3 3 3.89542 3 5V16H0V4C0 1.79086 1.79089 0 4 0Z'
+                            fill='#A6CF4F'
+                          />
+                          <rect
+                            x='16'
+                            width='16'
+                            height='3'
+                            fill='#FED303'
+                          />
+                          <rect
+                            x='16'
+                            y='45'
+                            width='16'
+                            height='3'
+                            fill='#283897'
+                          />
+                          <path
+                            fill-rule='evenodd'
+                            clip-rule='evenodd'
+                            d='M44 0H32V3H37.5H43C44.1046 3 45 3.89542 45 5V16H48V4C48 1.79086 46.2091 0 44 0Z'
+                            fill='#FFAC14'
+                          />
+                          <path
+                            fill-rule='evenodd'
+                            clip-rule='evenodd'
+                            d='M44 48H32V45H37.5H43C44.1046 45 45 44.1046 45 43V32H48V44C48 46.2091 46.2091 48 44 48Z'
+                            fill='#BB0271'
+                          />
+                          <path
+                            fill-rule='evenodd'
+                            clip-rule='evenodd'
+                            d='M4 48H16V45H10.5H5C3.89539 45 3 44.1046 3 43V32H0V44C0 46.2091 1.79089 48 4 48Z'
+                            fill='#02A2B8'
+                          />
+                          <rect
+                            x='45'
+                            y='16'
+                            width='3'
+                            height='16'
+                            fill='#F25721'
+                          />
+                          <rect
+                            y='16'
+                            width='3'
+                            height='16'
+                            fill='#01A566'
+                          />
+                          <rect
+                            x='10'
+                            y='10'
+                            width='28'
+                            height='28'
+                            rx='2'
+                            fill='#EEEEEE'
+                          />
+                        </svg>
+
+                        <p className={`text-sm11  text-primaryGray `}>
+                          Frame <br /> Color
+                        </p>
+                      </div>
                     </div>
                   </div>
                   <p className='text-primaryBlack text-[15px] font-medium leading-5 mb-1'>
                     Select Frame Type
                   </p>
                   <div className='flex gap-5 flex-wrap mb-0.5'>
-                    <div className=''>
-                      <img src={frameType1} alt='' />
-                    </div>
+                    {frames?.map((frame) => (
+                      <div
+                        onClick={() => {
+                          setFrameColorr(frame.frameColor);
+                        }}
+                        key={frame.frameId}
+                        className=''
+                      >
+                        <img src={frameType1} alt='' />
+                      </div>
+                    ))}
                   </div>
                   <p className='text-orangeColor text-sm12 font-normal'>
                     See all frames
@@ -1261,30 +1430,17 @@ const ArtDetails = () => {
                     Select Material
                   </p>
                   <div className='flex gap-x-7 flex-wrap w-[308px]'>
-                    <div className='flex items-center'>
-                      <input className=' mr-1' type='checkbox' />
-                      <p className='text-[13px] text-primaryGray '>
-                        Cavas
-                      </p>
-                    </div>
-                    <div className='flex items-center'>
-                      <input className=' mr-1' type='checkbox' />
-                      <p className='text-[13px] text-primaryGray '>
-                        Picture Rag
-                      </p>
-                    </div>
-                    <div className='flex items-center'>
-                      <input className=' mr-1' type='checkbox' />
-                      <p className='text-[13px] text-primaryGray '>
-                        Glossy Photo Paper
-                      </p>
-                    </div>
-                    <div className='flex items-center'>
-                      <input className=' mr-1' type='checkbox' />
-                      <p className='text-[13px] text-primaryGray '>
-                        Somerset Velvet
-                      </p>
-                    </div>
+                    {activePaperMasterList?.map((obj) => (
+                      <div
+                        key={obj?.paperId}
+                        className='flex items-center'
+                      >
+                        <input className=' mr-1' type='checkbox' />
+                        <p className='text-[13px] text-primaryGray '>
+                          {obj?.type}
+                        </p>
+                      </div>
+                    ))}
                   </div>
                 </Tab.Panel>
               </Tab.Panels>
@@ -1574,8 +1730,8 @@ const ArtDetails = () => {
                         <p className='text-primaryBlack text-[15px] font-medium leading-5 mb-1'>
                           You have selected
                         </p>
-                        <div class='w-full rounded-2xl bg-gradient-to-r from-[#DC4C9A] via-[#9593CD] via-[#84D49C] via-[#CCEC3B] to-[#F7941D] p-[1px]'>
-                          <div class='flex flex-col h-[100%] w-[100%] bg-[#ffffff] rounded-2xl p-[12px] text-primaryGray text-[12px]'>
+                        <div className='w-full rounded-2xl bg-gradient-to-r from-[#DC4C9A] via-[#9593CD] via-[#84D49C] via-[#CCEC3B] to-[#F7941D] p-[1px]'>
+                          <div className='flex flex-col h-[100%] w-[100%] bg-[#ffffff] rounded-2xl p-[12px] text-primaryGray text-[12px]'>
                             <div className='flex gap-[10px] text-[11px]'>
                               <div className='flex-col'>
                                 <div className='w-[48px]'>

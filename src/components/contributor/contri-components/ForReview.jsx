@@ -10,60 +10,20 @@ import iconphotos from '../../../assets/images/contributor/icon-photos.png';
 import iconfootage from '../../../assets/images/contributor/icon-footage.png';
 import iconmusic from '../../../assets/images/contributor/icon-music.png';
 import icontemplates from '../../../assets/images/contributor/icon-templates.png';
-
+import { httpClient } from '../../../axios';
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { setpath2 } from '../../../store/contriPathSlice';
-
-const keyw = [
-  'hjcrbj',
-  'j3rbf',
-  'j3bj',
-  'j3nf',
-  'ijjb34f',
-  'hjcrbj',
-  'j3rbf',
-  'j3bj',
-  'j3nf',
-  'ijjb34f',
-  'j3bj',
-  'j3nf',
-  'ijjb34f',
-];
+import { useSelector } from 'react-redux';
 
 const ForReview = () => {
   const [hoveredId, setHoveredId] = useState(null);
   const [checkedId, setCheckedId] = useState(null);
-  const [photo, setPhoto] = useState(''); //Store ID temporary
+  const [object, setObject] = useState(null); //Store ID temporary
 
-  // const [image, setImage] = useState(null);
-  const [image, setImage] = useState([
-    {
-      id: '1',
-      image:
-        'https://images.pexels.com/photos/2245436/pexels-photo-2245436.png?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    },
-    {
-      id: '2',
-      image:
-        'https://images.pexels.com/photos/6791741/pexels-photo-6791741.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    },
-    {
-      id: '3',
-      image:
-        'https://images.pexels.com/photos/2132126/pexels-photo-2132126.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    },
-    {
-      id: '4',
-      image:
-        'https://images.pexels.com/photos/2827374/pexels-photo-2827374.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    },
-    {
-      id: '5',
-      image:
-        'https://images.pexels.com/photos/2622179/pexels-photo-2622179.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    },
-  ]);
+  const [image, setImage] = useState(null);
+
+  const userId = useSelector((state) => state.auth.userId);
 
   const handleMouseEnter = (id) => {
     setHoveredId(id);
@@ -74,19 +34,47 @@ const ForReview = () => {
   };
 
   const handleClick = (card) => {
-    if (card.id === checkedId) {
+    if (card.artId === checkedId) {
       setCheckedId(null);
-      setPhoto(null);
+      setObject(null);
     } else {
-      setCheckedId(card.id);
-      setPhoto(card.image);
+      setCheckedId(card.artId);
+      setObject(card);
     }
   };
 
   const dispatch = useDispatch();
 
+  const getForReviewList = async () => {
+    const res = await httpClient.get(
+      `/art_master/getUserIdAndStatusWiseUserMaster/${userId}/Review`
+    );
+    console.log(res.data);
+
+    setImage(res.data);
+  };
+
+  const datePipeReact = (obj) => {
+    // Input date string
+    const dateString = obj;
+
+    // Step 1: Parse the input string into a Date object
+    const date = new Date(dateString);
+
+    // Step 2: Extract the day, month, and year from the Date object
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+
+    // Step 3: Format the date components into the desired format
+    const formattedDate = `${day}/${month}/${year}`;
+
+    return formattedDate; // Output: "08/06/2023"
+  };
+
   useEffect(() => {
     dispatch(setpath2('/ For Review'));
+    getForReviewList();
   }, []);
 
   return (
@@ -231,22 +219,22 @@ const ForReview = () => {
               <div className='flex justify-start flex-wrap gap-[10px]'>
                 {image.map((card, index) => (
                   <div
-                    key={card.id}
+                    key={card.artId}
                     className='h-[108px] w-[108px] rounded-[10px] relative'
-                    onMouseEnter={() => handleMouseEnter(card.id)}
+                    onMouseEnter={() => handleMouseEnter(card.artId)}
                     onMouseLeave={() => handleMouseLeave()}
                   >
                     <div
                       className={` rounded-[10px] h-full w-full bg-no-repeat bg-center bg-cover filter brightness-[${
-                        hoveredId === card.id ? '70%' : '100%'
+                        hoveredId === card.artId ? '70%' : '100%'
                       }] absolute overflow-hidden inset-0`}
                       style={{
                         backgroundImage: `url(${card.image})`,
                       }}
                     ></div>
 
-                    {hoveredId === card.id ||
-                    checkedId === card.id ? (
+                    {hoveredId === card.artId ||
+                    checkedId === card.artId ? (
                       <>
                         <div className='absolute inset-0 flex items-center justify-center'>
                           <button
@@ -261,7 +249,7 @@ const ForReview = () => {
                           <input
                             type='checkbox'
                             className='w-6 h-6'
-                            checked={checkedId === card.id}
+                            checked={checkedId === card.artId}
                             onChange={() => handleClick(card)}
                           />
                         </div>
@@ -279,10 +267,10 @@ const ForReview = () => {
             <div
               className='flex flex-col justify-center w-w690 h-[27.813rem] mx-[auto] bg-[#f7f7f7] rounded-[16px] h-full w-full bg-no-repeat bg-center bg-cover'
               style={{
-                backgroundImage: `url(${photo})`,
+                backgroundImage: `url(${object?.image})`,
               }}
             >
-              {!photo && (
+              {!object?.image && (
                 <div>
                   <p className='text-pinkColor text-[18px] my-[auto]'>
                     Select thumbnail to view the image.
@@ -329,7 +317,7 @@ const ForReview = () => {
                         Image Title
                       </td>
                       <td className='border-b border-t border-r rounded-tr-[8px] text-[13px] text-primaryGray border-[#dddddd] pl-[6px]'>
-                        Abstract blue sky and nature
+                        {object?.artName}
                       </td>
                     </tr>
                     <tr>
@@ -337,7 +325,7 @@ const ForReview = () => {
                         Subject
                       </td>
                       <td className='border-b border-r text-[13px] text-primaryGray border-[#dddddd] pl-[6px]'>
-                        Nature
+                        {object?.subjectMaster?.subjectName}
                       </td>
                     </tr>
                     <tr>
@@ -345,7 +333,7 @@ const ForReview = () => {
                         Style
                       </td>
                       <td className='border-b border-r text-[13px] pr-[197px] text-primaryGray border-[#dddddd] pl-[6px]'>
-                        Abstract
+                        {object?.styleMaster?.name}
                       </td>
                     </tr>
                     <tr>
@@ -353,7 +341,7 @@ const ForReview = () => {
                         Medium
                       </td>
                       <td className='border-b border-r text-[13px] text-primaryGray border-[#dddddd] pl-[6px]'>
-                        Digital
+                        {object?.artMedium}
                       </td>
                     </tr>
                     <tr>
@@ -361,7 +349,7 @@ const ForReview = () => {
                         Usage
                       </td>
                       <td className='border-b border-r text-[13px] text-primaryGray border-[#dddddd] pl-[6px]'>
-                        Web Media, Print Media, Print on Products
+                        {/* Web Media, Print Media, Print on Products */}
                       </td>
                     </tr>
                     <tr>
@@ -369,7 +357,11 @@ const ForReview = () => {
                         Type of Content
                       </td>
                       <td className='border-b border-r text-[13px] text-primaryGray border-[#dddddd] pl-[6px]'>
-                        Content with reference
+                        {object?.typeOfContent.map((obj) => (
+                          <div>
+                            <span>{obj}</span>{' '}
+                          </div>
+                        ))}
                       </td>
                     </tr>
                     <tr>
@@ -377,7 +369,7 @@ const ForReview = () => {
                         Date Submitted
                       </td>
                       <td className='border-b border-r rounded-br-[8px] text-[13px] text-primaryGray border-[#dddddd] pl-[6px]'>
-                        05/01/2022
+                        {datePipeReact(object?.submittedDate)}
                       </td>
                     </tr>
                   </tbody>
@@ -388,13 +380,7 @@ const ForReview = () => {
                     Description
                   </p>
                   <p className='text-[13px] text-primaryGray mt-[3px]'>
-                    Art can mimic nature, by seeking to visually
-                    replicate objects as they actually appear in real
-                    life. But abstract paintings can also take their
-                    visual cue from actual forms in nature, such as
-                    the painting below. This piece arose from the
-                    study, observation, and contemplation of natural
-                    phenomena and natural forms.
+                    {object?.description}
                   </p>
                 </div>
 
@@ -403,7 +389,7 @@ const ForReview = () => {
                     Keywords Added
                   </p>
                   <div className='flex flex-wrap gap-[5px]'>
-                    {keyw.map((keyword) => (
+                    {object?.keywords.map((keyword) => (
                       <div className='text-[11px] text-primaryGray border border-[#dddddd] rounded-[13px] px-[8px] h-[26px]'>
                         {keyword} &nbsp;&nbsp;
                         <span className='text-[15px] text-primaryGray cursor-pointer'>

@@ -12,9 +12,9 @@ const GrayBox = ({ card, style }) => {
     (state) => state.images.selectedImages
   );
 
-  useEffect(() => {
-    console.log(selectedImages);
-  }, [selectedImages]);
+  // useEffect(() => {
+  //   console.log(selectedImages);
+  // }, [selectedImages]);
 
   const backgroundImageStyle = useMemo(
     () => ({

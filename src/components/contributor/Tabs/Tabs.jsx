@@ -58,9 +58,9 @@ const Tabs = () => {
     }
   }, [sta]);
 
-  useEffect(() => {
-    console.log(sta);
-  }, []);
+  // useEffect(() => {
+  //   console.log(sta);
+  // }, []);
 
   const dispatch = useDispatch();
 
@@ -90,7 +90,7 @@ const Tabs = () => {
 
   const handleClick = (event) => {
     event.preventDefault();
-    console.log('Button clicked');
+    // console.log('Button clicked');
   };
 
   return (

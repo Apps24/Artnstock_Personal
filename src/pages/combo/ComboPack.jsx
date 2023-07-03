@@ -25,7 +25,7 @@ const ComboPack = () => {
   useEffect(() => {
     httpClient.get(`/combo_master/getActiveList`).then((res) => {
       setData(res.data);
-      console.log(res);
+      // console.log(res);
     });
   }, []);
 

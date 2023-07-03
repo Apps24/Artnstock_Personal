@@ -52,7 +52,7 @@ const ArtHomepage = () => {
   return (
     <>
       <Banner type='art' />
-      <ArtGrid type="art" gridList={gridList} />
+      <ArtGrid type='art' gridList={gridList} />
       <div className='hrLine'></div>
       <LimitedEdition logo={homeObject?.smallLogo} type='art' />
       <div className='hrLine'></div>
