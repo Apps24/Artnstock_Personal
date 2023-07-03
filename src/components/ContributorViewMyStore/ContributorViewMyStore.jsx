@@ -123,9 +123,9 @@ const ContributorViewMyStore = () => {
 
   const userId = useSelector((state) => state.auth.userId);
 
-  useEffect(() => {
-    console.log(subjectId);
-  }, [subjectId]);
+  // useEffect(() => {
+  //   console.log(subjectId);
+  // }, [subjectId]);
 
   // api calls
   const getAllArtList = async () => {
@@ -136,7 +136,7 @@ const ContributorViewMyStore = () => {
         );
         setTitle('All Art');
         setArtsList(res.data);
-        console.log(res.data);
+        // console.log(res.data);
       } else {
         const res = await httpClient.get(
           `/art_master/subjectNameWiseArtList/${subjectId.subjectName}`
@@ -145,7 +145,7 @@ const ContributorViewMyStore = () => {
         //   `/art_master/getSubjectIdWiseSubjectMaster/${subjectId.subjectId}`
         // );
         setTitle(subjectId.subjectName);
-        console.log(res.data);
+        // console.log(res.data);
         setArtsList(res.data);
       }
     } catch (error) {
@@ -172,7 +172,7 @@ const ContributorViewMyStore = () => {
   const [popupArray, setPopupArray] = useState([]);
 
   const popupOfHover = (id) => {
-    console.log(typeof popupArray);
+    // console.log(typeof popupArray);
     const find = popupArray.find((obj) => obj.id === id.id);
     if (find === undefined) {
       setPopupArray((prev) => [...prev, id]);
@@ -183,7 +183,7 @@ const ContributorViewMyStore = () => {
   const [popupArrayFolder, setPopupArrayFolder] = useState([]);
 
   const popupOfHoverFolder = (id) => {
-    console.log(typeof popupArray);
+    // console.log(typeof popupArray);
     const find = popupArrayFolder.find((obj) => obj.id === id.id);
     if (find === undefined) {
       setPopupArrayFolder((prev) => [...prev, id]);
@@ -229,7 +229,7 @@ const ContributorViewMyStore = () => {
         id: userId,
       };
       httpClient.post(`/wishlist_master/save`, object).then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         getAllWishlistByUserId();
       });
     }
@@ -276,7 +276,7 @@ const ContributorViewMyStore = () => {
     const newStr = !showSidebar
       ? 'upload/w_299,h_299,c_scale/'
       : 'upload/w_308,h_308,c_scale/';
-    const updatedStr = str.replace('upload/', newStr);
+    const updatedStr = str?.replace('upload/', newStr);
     return updatedStr;
   };
   // test
@@ -331,7 +331,7 @@ const ContributorViewMyStore = () => {
         ...prevCategories,
         all: response.data,
       }));
-      console.log(response.data);
+      // console.log(response.data);
     } catch (error) {
       console.error(error);
     }
@@ -372,55 +372,10 @@ const ContributorViewMyStore = () => {
     }
   };
 
-  const createFolder = async (name) => {
-    const newFolder = {
-      artId: [],
-      category: categoriesFocus,
-      title: name,
-      userId: userId,
-    };
-
-    try {
-      const response = await httpClient.post(
-        '/file_manager_master/create',
-        newFolder
-      );
-    } catch (error) {
-      console.error(error);
-    }
-    setCreate(false);
-    await getUserIdWiseArts();
-    await getFolders();
-  };
-
   useEffect(() => {
     getUserIdWiseArts();
     getFolders();
   }, []);
-
-  useEffect(() => {
-    console.log(categories);
-  }, [categories]);
-
-  const namee = (event) => {
-    const n = event.target.value;
-    setname(n);
-    // createFolder(n);
-  };
-
-  const handleKeyDown = (event) => {
-    if (event.keyCode === 13) {
-      // Enter key
-      createFolder(name);
-    }
-  };
-
-  const inputRef = useRef(null);
-
-  // redux slice
-  const selectedAllFilesImages = useSelector(
-    (state) => state.fileimages.selectedAllFilesImages
-  );
 
   // pagination **dont change the sequence of the code below** else will give undefined error
   // const [currentPage, setCurrentPage] = useState(1);
@@ -455,21 +410,6 @@ const ContributorViewMyStore = () => {
 
   //pagination ends
 
-  const addToFolder = () => {
-    const object = {
-      artId: selectedAllFilesImages[0].artId,
-      fileManagerId: folderName.fileManagerId,
-    };
-    httpClient
-      .post('/file_manager_master/fileManagerIdWiseAddArt', object)
-      .then((res) => {
-        console.log(res.data);
-
-        getUserIdWiseArts();
-        getFolders();
-      });
-  };
-
   const [imagesFolderArray, setImagesFolderArray] = useState(null);
   // mapping folders photos/arts
   const folderImages = (obj) => {
@@ -478,17 +418,9 @@ const ContributorViewMyStore = () => {
     setCategoriesFocus('folderImages');
   };
 
-  useEffect(() => {
-    if (categoriesFocus === 'art' && create) {
-      inputRef.current.focus();
-    } else if (categoriesFocus === 'photos' && create) {
-      inputRef.current.focus();
-    }
-  }, [categoriesFocus, create]);
-
-  useEffect(() => {
-    console.log(categories);
-  }, [categories]);
+  // useEffect(() => {
+  //   console.log(categories);
+  // }, [categories]);
 
   // test
 
@@ -1215,98 +1147,147 @@ const ContributorViewMyStore = () => {
 
             {/* test */}
             {categoriesFocus === 'art' && (
-              <div className={`mainImagesCon mt-[15px] }`}>
-                <ResponsiveMasonry
-                  columnsCountBreakPoints={
-                    !showSidebar ? { 1920: 6 } : { 1920: 5 }
-                  }
-                >
-                  <Masonry gutter='15px'>
-                    {categories.art.map((data) => {
-                      return (
-                        <div
-                          onMouseEnter={() => {
-                            setPopupArray([]);
-                          }}
-                          // key={data?.artId}
-                          className={` ${
-                            showSidebar
-                              ? 'w-[19.25rem]'
-                              : 'w-[18.688rem]'
-                          }`}
-                          style={{ height: 'fit-content' }}
-                          onClick={() => {
-                            folderImages(data);
-                          }}
-                        >
-                          <div
-                            className={` w-full group rounded-2xl relative`}
-                          >
-                            <img
-                              className='rounded-2xl'
-                              style={{ height: '308px' }}
-                              src={imageLinkChangeFolder(
-                                data?.artMaster[0].image
-                              )}
-                              alt=''
-                            />
-
-                            <div
-                              className='bg-[#3333334D] flex items-center justify-center absolute top-0 left-0 rounded-2xl'
-                              style={{
-                                height: '100%',
-                                width: '100%',
-                              }}
-                            >
+              <div>
+                {categories.art.length > 0 ? (
+                  <div>
+                    <div className={`mainImagesCon mt-[15px] }`}>
+                      <ResponsiveMasonry
+                        columnsCountBreakPoints={
+                          !showSidebar ? { 1920: 6 } : { 1920: 5 }
+                        }
+                      >
+                        <Masonry gutter='15px'>
+                          {categories.art.map((data) => {
+                            return (
                               <div
-                                style={{
-                                  backgroundImage: `url(${folderImg})`,
+                                onMouseEnter={() => {
+                                  setPopupArray([]);
                                 }}
-                                className='bg-cover bg-center w-[64px] h-[57px] flex items-center justify-center pt-[5px]'
+                                // key={data?.artId}
+                                className={` ${
+                                  showSidebar
+                                    ? 'w-[19.25rem]'
+                                    : 'w-[18.688rem]'
+                                }`}
+                                style={{ height: 'fit-content' }}
+                                onClick={() => {
+                                  folderImages(data);
+                                }}
                               >
-                                <p className='font-medium text-[18px] text-primaryBlack'>
-                                  {data?.artMaster.length}
-                                </p>
-                              </div>
-                              <div className='absolute bottom-[10px] left-[10px] flex gap-[10px]'>
-                                <div>
-                                  <img src={view} alt='' />
-                                </div>
-                                <div>
+                                <div
+                                  className={` w-full group rounded-2xl relative`}
+                                >
                                   <img
-                                    onClick={(e) => {
-                                      navigate(
-                                        '/BuyerReferralProgram'
-                                      );
-                                      e.stopPropagation();
-                                    }}
-                                    src={share}
+                                    className='rounded-2xl'
+                                    style={{ height: '308px' }}
+                                    src={imageLinkChangeFolder(
+                                      data?.artMaster[0]?.image
+                                    )}
                                     alt=''
                                   />
+
+                                  <div
+                                    className='bg-[#3333334D] flex items-center justify-center absolute top-0 left-0 rounded-2xl'
+                                    style={{
+                                      height: '100%',
+                                      width: '100%',
+                                    }}
+                                  >
+                                    <div
+                                      style={{
+                                        backgroundImage: `url(${folderImg})`,
+                                      }}
+                                      className='bg-cover bg-center w-[64px] h-[57px] flex items-center justify-center pt-[5px]'
+                                    >
+                                      <p className='font-medium text-[18px] text-primaryBlack'>
+                                        {data?.artMaster.length}
+                                      </p>
+                                    </div>
+                                    <div className='absolute bottom-[10px] left-[10px] flex gap-[10px]'>
+                                      <div>
+                                        <img src={view} alt='' />
+                                      </div>
+                                      <div>
+                                        <img
+                                          onClick={(e) => {
+                                            navigate(
+                                              '/BuyerReferralProgram'
+                                            );
+                                            e.stopPropagation();
+                                          }}
+                                          src={share}
+                                          alt=''
+                                        />
+                                      </div>
+                                    </div>
+                                    {/* <div className='absolute right-[10px] bottom-[10px]'>
+                     <img src={enlarge} alt='' />
+                   </div> */}
+                                  </div>
                                 </div>
+                                <p className='text-primaryBlack text-[15px] leading-[18px] font-semibold mt-1.5'>
+                                  {data?.title}
+                                </p>
+                                <p className='text-primaryGray text-[12px]'>
+                                  {data?.artMaster.length} Art
+                                </p>
                               </div>
-                              {/* <div className='absolute right-[10px] bottom-[10px]'>
-                                  <img src={enlarge} alt='' />
-                                </div> */}
-                            </div>
-                          </div>
-                          <p className='text-primaryBlack text-[15px] leading-[18px] font-semibold mt-1.5'>
-                            {data?.title}
-                          </p>
-                          <p className='text-primaryGray text-[12px]'>
-                            {data?.artMaster.length} Art
-                          </p>
-                        </div>
-                      );
-                    })}
-                  </Masonry>
-                </ResponsiveMasonry>
+                            );
+                          })}
+                        </Masonry>
+                      </ResponsiveMasonry>
+                    </div>
+                    {/* Pagination */}
+                    <div className='flex gap-[5px] mt-24 mx-auto items-center justify-center'>
+                      <p className='text-[13px] text-primaryGray leading-[15px] font-normal'>
+                        Page
+                      </p>
+                      <div className='flex w-[88px] border border-[#D6D6D6] rounded-2xl overflow-hidden'>
+                        <button className='bg-[#F7F7F7] py-2.5 px-3'>
+                          <img src={smallLeftArrow} alt='' />
+                        </button>
+                        <input
+                          className='w-[30px] text-[13px] leading-[15px] font-normal text-primaryGray text-center'
+                          type='text'
+                          value={1}
+                        />
+                        <button className='bg-[#F7F7F7] py-2.5 px-3'>
+                          <img src={smallRightArrow} alt='' />
+                        </button>
+                      </div>
+                      <p className='text-[13px] text-primaryGray leading-[15px] font-normal'>
+                        of 18
+                      </p>
+                    </div>
+                    <button className='blackBtn mt-2.5 mb-24 mx-auto block'>
+                      Next
+                    </button>
+                  </div>
+                ) : (
+                  <div className='w-[100%]'>
+                    <div className='mt-[30px] mx-[auto] text-center'>
+                      <p className='text-[#ff369f] text-[18px]'>
+                        This contributor have not uploaded any files
+                        on ArtnStock yet.
+                      </p>
+                      <p className='mt-[10px] mb-[20px] text-[12px] text-[#757575]'>
+                        After uploading files by the contributor on
+                        Artnstock will show up Here.
+                      </p>
+                      <button
+                        onClick={() => {
+                          navigate('/art-list');
+                        }}
+                        className='blackBtn text-[14px]'
+                      >
+                        Start Here
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
-            {/* test */}
 
-            {/* test photo */}
-            {/* test */}
             {categoriesFocus === 'photos' && (
               <div className={`mainImagesCon mt-[15px] }`}>
                 <ResponsiveMasonry
@@ -1396,233 +1377,273 @@ const ContributorViewMyStore = () => {
                 </ResponsiveMasonry>
               </div>
             )}
-            {/* test */}
-            {/* test photo */}
 
-            {/* test inside folder files */}
+            {/* test */}
 
             {categoriesFocus === 'folderImages' && (
-              <div className={`mainImagesCon mt-[15px] }`}>
-                <ResponsiveMasonry
-                  columnsCountBreakPoints={
-                    !showSidebar ? { 1920: 6 } : { 1920: 5 }
-                  }
-                >
-                  <Masonry gutter='15px'>
-                    {imagesFolderArray.artMaster.map((data) => {
-                      return (
-                        <div
-                          onMouseEnter={() => {
-                            setPopupArray([]);
-                          }}
-                          key={data?.artId}
-                          className={` ${
-                            showSidebar
-                              ? 'w-[19.25rem]'
-                              : 'w-[18.688rem]'
-                          }`}
-                          style={{ height: 'fit-content' }}
-                        >
-                          <div
-                            className={` w-full group rounded-2xl relative`}
-                            onClick={() =>
-                              goToArtDetailsPage(data?.artId)
-                            }
-                          >
-                            <img
-                              className='rounded-2xl'
-                              style={{ height: '100%' }}
-                              src={
-                                imageGrid === 'grid'
-                                  ? imageLinkChange(data?.image)
-                                  : imageLinkChangeSquaregrid(
-                                      data?.image
-                                    )
-                              }
-                              alt=''
-                            />
-                            <div
-                              className='group-hover:flex hidden bg-blackRgba items-center justify-center absolute top-0 left-0 rounded-2xl'
-                              style={{
-                                height: '100%',
-                                width: '100%',
-                              }}
-                            >
-                              <p className='text-[25px] text-[#fff]'>
-                                {data.subjectMaster.subjectName}
-                              </p>
-                              <div className='absolute bottom-[10px] left-[10px] flex gap-[10px]'>
+              <div>
+                {imagesFolderArray?.artMaster?.length > 0 ? (
+                  <div>
+                    <div className={`mainImagesCon mt-[15px] }`}>
+                      <ResponsiveMasonry
+                        columnsCountBreakPoints={
+                          !showSidebar ? { 1920: 6 } : { 1920: 5 }
+                        }
+                      >
+                        <Masonry gutter='15px'>
+                          {imagesFolderArray.artMaster.map((data) => {
+                            return (
+                              <div
+                                onMouseEnter={() => {
+                                  setPopupArray([]);
+                                }}
+                                key={data?.artId}
+                                className={` ${
+                                  showSidebar
+                                    ? 'w-[19.25rem]'
+                                    : 'w-[18.688rem]'
+                                }`}
+                                style={{ height: 'fit-content' }}
+                              >
                                 <div
-                                  onClick={(e) => {
-                                    popupOfHover({ id: data.artId });
-                                    e.stopPropagation();
-                                  }}
+                                  className={` w-full group rounded-2xl relative`}
+                                  onClick={() =>
+                                    goToArtDetailsPage(data?.artId)
+                                  }
                                 >
-                                  <img src={save} alt='' />
-                                </div>
-                                <div>
-                                  <img src={similar} alt='' />
-                                </div>
-                                <div>
-                                  <img src={profile} alt='' />
-                                </div>
-                                <div>
-                                  <img src={shopCart} alt='' />
-                                </div>
-                                <div>
                                   <img
-                                    onClick={(e) => {
-                                      navigate(
-                                        '/BuyerReferralProgram'
-                                      );
-                                      e.stopPropagation();
-                                    }}
-                                    src={share}
+                                    className='rounded-2xl'
+                                    style={{ height: '100%' }}
+                                    src={
+                                      imageGrid === 'grid'
+                                        ? imageLinkChange(data?.image)
+                                        : imageLinkChangeSquaregrid(
+                                            data?.image
+                                          )
+                                    }
                                     alt=''
                                   />
-                                </div>
-                              </div>
-                              <div className='absolute right-[10px] bottom-[10px]'>
-                                <img src={enlarge} alt='' />
-                              </div>
-                              <div className='absolute right-[3px] top-[3px]'>
-                                {/* <img
-                            className='cursor-pointer'
-                            onMouseEnter={handleMouseEnter}
-                            onMouseLeave={handleMouseLeave}
-                            src={wishlist}
-                            alt=''
-                          /> */}
-
-                                {/* test */}
-                                {wishlist?.find(
-                                  (obj) =>
-                                    obj.artMaster?.artId ===
-                                    data.artId
-                                ) === undefined ? (
-                                  <Wishlist
-                                    className='cursor-pointer'
-                                    onMouseEnter={handleMouseEnter}
-                                    onMouseLeave={handleMouseLeave}
-                                    onClick={(e) => {
-                                      addToWishlist(data?.artId);
-                                      e.stopPropagation();
-                                    }}
+                                  <div
+                                    className='group-hover:flex hidden bg-blackRgba items-center justify-center absolute top-0 left-0 rounded-2xl'
                                     style={{
-                                      fill: '#fff',
+                                      height: '100%',
                                       width: '100%',
                                     }}
-                                  />
-                                ) : (
-                                  <Wishlist
-                                    className='cursor-pointer'
-                                    onMouseEnter={handleMouseEnter}
-                                    onMouseLeave={handleMouseLeave}
-                                    onClick={(e) => {
-                                      wishlistDelete(data?.artId);
-                                      e.stopPropagation();
-                                    }}
-                                    style={{
-                                      fill: 'red',
-                                      width: '100%',
-                                    }}
-                                  />
-                                )}
-                                {/* test */}
+                                  >
+                                    <p className='text-[25px] text-[#fff]'>
+                                      {data.subjectMaster.subjectName}
+                                    </p>
+                                    <div className='absolute bottom-[10px] left-[10px] flex gap-[10px]'>
+                                      <div
+                                        onClick={(e) => {
+                                          popupOfHover({
+                                            id: data.artId,
+                                          });
+                                          e.stopPropagation();
+                                        }}
+                                      >
+                                        <img src={save} alt='' />
+                                      </div>
+                                      <div>
+                                        <img src={similar} alt='' />
+                                      </div>
+                                      <div>
+                                        <img src={profile} alt='' />
+                                      </div>
+                                      <div>
+                                        <img src={shopCart} alt='' />
+                                      </div>
+                                      <div>
+                                        <img
+                                          onClick={(e) => {
+                                            navigate(
+                                              '/BuyerReferralProgram'
+                                            );
+                                            e.stopPropagation();
+                                          }}
+                                          src={share}
+                                          alt=''
+                                        />
+                                      </div>
+                                    </div>
+                                    <div className='absolute right-[10px] bottom-[10px]'>
+                                      <img src={enlarge} alt='' />
+                                    </div>
+                                    <div className='absolute right-[3px] top-[3px]'>
+                                      {/* <img
+  className='cursor-pointer'
+  onMouseEnter={handleMouseEnter}
+  onMouseLeave={handleMouseLeave}
+  src={wishlist}
+  alt=''
+/> */}
 
-                                {/* <Wishlist
-                             className='cursor-pointer'
-                            onMouseEnter={handleMouseEnter}
-                            onMouseLeave={handleMouseLeave}
-                          /> */}
-                              </div>
-                              {isHovered && (
-                                <button className='w-[164px] z-[99] mt-[3px] h-[20px] flex justify-center items-center text-[11px] bg-[#f7f7f7] rounded-[10px] text-primaryGray absolute top-[33px] left-[203px] border border-[#e4e4e4]'>
-                                  <span className='leading-[1]'>
-                                    Save to Wishlist
-                                  </span>
-                                </button>
-                              )}
-                              {popupArray.find(
-                                (obj) => obj.id === data.artId
-                              ) && (
-                                <div
-                                  className={`z-999 right-[117px] bottom-[15px] bg-[#fff] rounded-[16px] w-[266px] absolute bottom-[44px] left-[-117px]`}
-                                  style={{
-                                    boxShadow:
-                                      '0px 0px 18px rgba(0, 0, 0, 0.2)',
-                                  }}
-                                >
-                                  <div className='flex gap-[5px] flex-col p-[14px] leading-[1.3] text-center'>
-                                    <p className='font-medium text-primaryBlack text-[15px]'>
-                                      Create Account
-                                    </p>
-                                    <p className='text-primaryGray text-[11px]'>
-                                      To create and add to a
-                                      collection, you must be a
-                                      logged-in member
-                                    </p>
-                                    <button className='bg-[#8e8e8e] rounded-[14px] h-[28px] w-[108px] text-[12px] font-medium text-[white] mx-[auto]'>
-                                      Create Account
-                                    </button>
-                                    <p className='text-orangeColor text-[11px]'>
-                                      Already a member? Sign in
-                                    </p>
-                                    <p className='text-pinkColor text-[11px]'>
-                                      Note: Downloaded images will be
-                                      saved in ‘Collections’ folder
-                                    </p>
+                                      {/* test */}
+                                      {wishlist?.find(
+                                        (obj) =>
+                                          obj.artMaster?.artId ===
+                                          data.artId
+                                      ) === undefined ? (
+                                        <Wishlist
+                                          className='cursor-pointer'
+                                          onMouseEnter={
+                                            handleMouseEnter
+                                          }
+                                          onMouseLeave={
+                                            handleMouseLeave
+                                          }
+                                          onClick={(e) => {
+                                            addToWishlist(
+                                              data?.artId
+                                            );
+                                            e.stopPropagation();
+                                          }}
+                                          style={{
+                                            fill: '#fff',
+                                            width: '100%',
+                                          }}
+                                        />
+                                      ) : (
+                                        <Wishlist
+                                          className='cursor-pointer'
+                                          onMouseEnter={
+                                            handleMouseEnter
+                                          }
+                                          onMouseLeave={
+                                            handleMouseLeave
+                                          }
+                                          onClick={(e) => {
+                                            wishlistDelete(
+                                              data?.artId
+                                            );
+                                            e.stopPropagation();
+                                          }}
+                                          style={{
+                                            fill: 'red',
+                                            width: '100%',
+                                          }}
+                                        />
+                                      )}
+                                      {/* test */}
+
+                                      {/* <Wishlist
+   className='cursor-pointer'
+  onMouseEnter={handleMouseEnter}
+  onMouseLeave={handleMouseLeave}
+/> */}
+                                    </div>
+                                    {isHovered && (
+                                      <button className='w-[164px] z-[99] mt-[3px] h-[20px] flex justify-center items-center text-[11px] bg-[#f7f7f7] rounded-[10px] text-primaryGray absolute top-[33px] left-[203px] border border-[#e4e4e4]'>
+                                        <span className='leading-[1]'>
+                                          Save to Wishlist
+                                        </span>
+                                      </button>
+                                    )}
+                                    {popupArray.find(
+                                      (obj) => obj.id === data.artId
+                                    ) && (
+                                      <div
+                                        className={`z-999 right-[117px] bottom-[15px] bg-[#fff] rounded-[16px] w-[266px] absolute bottom-[44px] left-[-117px]`}
+                                        style={{
+                                          boxShadow:
+                                            '0px 0px 18px rgba(0, 0, 0, 0.2)',
+                                        }}
+                                      >
+                                        <div className='flex gap-[5px] flex-col p-[14px] leading-[1.3] text-center'>
+                                          <p className='font-medium text-primaryBlack text-[15px]'>
+                                            Create Account
+                                          </p>
+                                          <p className='text-primaryGray text-[11px]'>
+                                            To create and add to a
+                                            collection, you must be a
+                                            logged-in member
+                                          </p>
+                                          <button className='bg-[#8e8e8e] rounded-[14px] h-[28px] w-[108px] text-[12px] font-medium text-[white] mx-[auto]'>
+                                            Create Account
+                                          </button>
+                                          <p className='text-orangeColor text-[11px]'>
+                                            Already a member? Sign in
+                                          </p>
+                                          <p className='text-pinkColor text-[11px]'>
+                                            Note: Downloaded images
+                                            will be saved in
+                                            ‘Collections’ folder
+                                          </p>
+                                        </div>
+                                        <div className='absolute left-[47%] bottom-[-10px] w-[20px] h-[20px] bg-[white] rounded-br-[5px] transform rotate-45 shadow-inner'></div>
+                                      </div>
+                                    )}
                                   </div>
-                                  <div class='absolute left-[47%] bottom-[-10px] w-[20px] h-[20px] bg-[white] rounded-br-[5px] transform rotate-45 shadow-inner'></div>
                                 </div>
-                              )}
-                            </div>
-                          </div>
-                          <p className='text-primaryBlack text-[15px] leading-[18px] font-semibold mt-1.5'>
-                            {data?.artName}
-                          </p>
-                          <p className='text-primaryGray text-sm12 leading-[15px]'>
-                            Artnstock <br />
-                            35.4” x 31.5” Multiple Sizes
-                          </p>
-                          <p className='text-primaryBlack text-[15px] leading-[18px] font-semibold mt-1.5'>
-                            ${data?.price}
-                          </p>
-                        </div>
-                      );
-                    })}
-                  </Masonry>
-                </ResponsiveMasonry>
+                                <p className='text-primaryBlack text-[15px] leading-[18px] font-semibold mt-1.5'>
+                                  {data?.artName}
+                                </p>
+                                <p className='text-primaryGray text-sm12 leading-[15px]'>
+                                  Artnstock <br />
+                                  35.4” x 31.5” Multiple Sizes
+                                </p>
+                                <p className='text-primaryBlack text-[15px] leading-[18px] font-semibold mt-1.5'>
+                                  ${data?.price}
+                                </p>
+                              </div>
+                            );
+                          })}
+                        </Masonry>
+                      </ResponsiveMasonry>
+                    </div>
+                    {/* Pagination */}
+                    <div className='flex gap-[5px] mt-24 mx-auto items-center justify-center'>
+                      <p className='text-[13px] text-primaryGray leading-[15px] font-normal'>
+                        Page
+                      </p>
+                      <div className='flex w-[88px] border border-[#D6D6D6] rounded-2xl overflow-hidden'>
+                        <button className='bg-[#F7F7F7] py-2.5 px-3'>
+                          <img src={smallLeftArrow} alt='' />
+                        </button>
+                        <input
+                          className='w-[30px] text-[13px] leading-[15px] font-normal text-primaryGray text-center'
+                          type='text'
+                          value={1}
+                        />
+                        <button className='bg-[#F7F7F7] py-2.5 px-3'>
+                          <img src={smallRightArrow} alt='' />
+                        </button>
+                      </div>
+                      <p className='text-[13px] text-primaryGray leading-[15px] font-normal'>
+                        of 18
+                      </p>
+                    </div>
+                    <button className='blackBtn mt-2.5 mb-24 mx-auto block'>
+                      Next
+                    </button>
+                  </div>
+                ) : (
+                  <div>
+                    <div className='w-[100%]'>
+                      <div className='mt-[30px] mx-[auto] text-center'>
+                        <p className='text-[#ff369f] text-[18px]'>
+                          It seems contributor have not have not added{' '}
+                          <br />
+                          any files yet.
+                        </p>
+                        <p className='mt-[10px] mb-[20px] text-[12px] text-[#757575]'>
+                          After adding files by the contributor on
+                          Artnstock will show up Here.
+                        </p>
+                        <button
+                          onClick={() => {
+                            navigate('/art-list');
+                          }}
+                          className='blackBtn text-[14px]'
+                        >
+                          Browse Artnstock
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
-
-            {/* test inside folder files */}
-
-            {/* Pagination */}
-            <div className='flex gap-[5px] mt-24 mx-auto items-center justify-center'>
-              <p className='text-[13px] text-primaryGray leading-[15px] font-normal'>
-                Page
-              </p>
-              <div className='flex w-[88px] border border-[#D6D6D6] rounded-2xl overflow-hidden'>
-                <button className='bg-[#F7F7F7] py-2.5 px-3'>
-                  <img src={smallLeftArrow} alt='' />
-                </button>
-                <input
-                  className='w-[30px] text-[13px] leading-[15px] font-normal text-primaryGray text-center'
-                  type='text'
-                  value={1}
-                />
-                <button className='bg-[#F7F7F7] py-2.5 px-3'>
-                  <img src={smallRightArrow} alt='' />
-                </button>
-              </div>
-              <p className='text-[13px] text-primaryGray leading-[15px] font-normal'>
-                of 18
-              </p>
-            </div>
-            <button className='blackBtn mt-2.5 mb-24 mx-auto block'>
-              Next
-            </button>
           </div>
         </div>
       </div>

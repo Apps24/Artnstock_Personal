@@ -20,7 +20,7 @@ const ProductHomepage = () => {
     httpClient
       .get(`/dynamic_homepage_content_master/getTypeWiseList/art`)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         setHomeObject(res.data);
       });
   }, []);
@@ -49,7 +49,7 @@ const ProductHomepage = () => {
       .get(`/frequently_asked_master/getTypeWiseFaq/product`)
       .then((res) => {
         setfaq(res.data);
-        console.log(res);
+        // console.log(res);
       });
   };
 

@@ -73,7 +73,7 @@ const VerifyEmail = () => {
     httpClient
       .get('/user_master/checkUserStatus/' + userDetails.userId)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         dispatch(userRegSliceAction.setUserStatus(res.data));
         if (res.data.status === 'Active') {
           dispatch(authSliceAction.loginUser(true));

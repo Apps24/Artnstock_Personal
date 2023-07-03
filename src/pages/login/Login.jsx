@@ -23,11 +23,11 @@ const Login = () => {
     if (email.length > 0 && password.length > 0) {
       loginForm.userName = email;
       loginForm.password = password;
-      console.log(loginForm);
+      // console.log(loginForm);
       httpClient
         .post('/user_master/userLogin', loginForm)
         .then((res) => {
-          console.log(res.data);
+          // console.log(res.data);
           if (res.data.responseCode === 200) {
             toast.success('Successfully Logged In');
             dispatch(authSliceAction.loginUser(true));
@@ -47,11 +47,9 @@ const Login = () => {
     }
   };
 
-
   const onChangeCaptcha = (value) => {
-    console.log('Captcha value:', value);
+    // console.log('Captcha value:', value);
   };
-
 
   return (
     <div className='w-full h-[100vh] bg-[#FF369F] flex justify-center'>
@@ -76,12 +74,15 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
         {/* <img className='mx-auto my-5' src={captcha} alt='' /> */}
-        <div className='mx-auto my-5 ' style={{width: "fit-content"}}>
-        <ReCAPTCHA
-    sitekey="6LenqnImAAAAAFpIjwhtNCTk1ElnUEot9oJ5J7iT"
-    onChange={onChangeCaptcha}
-  />
-  </div>
+        <div
+          className='mx-auto my-5 '
+          style={{ width: 'fit-content' }}
+        >
+          <ReCAPTCHA
+            sitekey='6LenqnImAAAAAFpIjwhtNCTk1ElnUEot9oJ5J7iT'
+            onChange={onChangeCaptcha}
+          />
+        </div>
         <button onClick={login} className='blackBtn'>
           Sign In
         </button>

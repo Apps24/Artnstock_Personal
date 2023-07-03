@@ -62,7 +62,7 @@ const UploadRelease = () => {
         )
         .then((res) => {
           console.log('file uploaded successfully');
-          console.log(res.data.url);
+          // console.log(res.data.url);
           const dataa = res.data;
           setCards((prevCards) => [...prevCards, { dataa, cards }]);
         })
@@ -144,7 +144,7 @@ const UploadRelease = () => {
         '/release_master/createReleaseMaster',
         data
       );
-      console.log(res);
+      // console.log(res);
     } catch (error) {
       console.error(error);
     }

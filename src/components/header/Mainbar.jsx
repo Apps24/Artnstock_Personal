@@ -190,7 +190,7 @@ const Mainbar = () => {
   const getArtDropdownTrue = () => {
     httpClient.get(`/style_master/getArtDropdownTrue`).then((res) => {
       setartDropdownList(res.data);
-      console.log(res.data);
+      // console.log(res.data);
     });
   };
 

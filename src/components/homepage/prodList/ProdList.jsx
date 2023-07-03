@@ -19,7 +19,7 @@ const ProdList = ({ heading }) => {
     httpClient
       .get('/art_product_master/getActiveArtProductMaster')
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         setProdList(res.data);
       });
   };

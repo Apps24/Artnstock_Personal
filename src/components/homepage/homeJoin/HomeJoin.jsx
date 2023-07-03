@@ -1,13 +1,16 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import captcha from "../../../assets/recaptcha.jpg";
-import { httpClient } from "../../../axios";
-import { authSliceAction } from "../../../store/authSlice";
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import captcha from '../../../assets/recaptcha.jpg';
+import { httpClient } from '../../../axios';
+import { authSliceAction } from '../../../store/authSlice';
 import { toast } from 'react-toastify';
 
-
-const HomeJoin = ({ mainBackgroundImg, leftBackgroundImg, leftTextImg }) => {
+const HomeJoin = ({
+  mainBackgroundImg,
+  leftBackgroundImg,
+  leftTextImg,
+}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -23,11 +26,11 @@ const HomeJoin = ({ mainBackgroundImg, leftBackgroundImg, leftTextImg }) => {
     if (email.length > 0 && password.length > 0) {
       loginForm.userName = email;
       loginForm.password = password;
-      console.log(loginForm);
+      // console.log(loginForm);
       httpClient
         .post('/user_master/userLogin', loginForm)
         .then((res) => {
-          console.log(res.data);
+          // console.log(res.data);
           if (res.data.responseCode === 200) {
             toast.success('Successfully Logged In');
             dispatch(authSliceAction.loginUser(true));
@@ -47,7 +50,7 @@ const HomeJoin = ({ mainBackgroundImg, leftBackgroundImg, leftTextImg }) => {
   return (
     <div
       style={{ backgroundImage: `url('${mainBackgroundImg}')` }}
-      className="h-[500px] flex justify-center items-center flex-col"
+      className='h-[500px] flex justify-center items-center flex-col'
     >
       {/* <div className="w-[690px] h-[388px] flex bg-[#ffffff] rounded-[30px] overflow-hidden">
         <div

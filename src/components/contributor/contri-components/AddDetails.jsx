@@ -54,9 +54,9 @@ const AddDetails = () => {
 
   const userId = useSelector((state) => state.auth.userId);
 
-  useEffect(() => {
-    console.log(userId);
-  }, []);
+  // useEffect(() => {
+  //   console.log(userId);
+  // }, []);
 
   useEffect(() => {
     dispatch(setpath2('/ Add Details'));
@@ -87,7 +87,7 @@ const AddDetails = () => {
         '/art_master/create',
         formData
       );
-      console.log(response);
+      // console.log(response);
     } catch (error) {
       console.log(error);
     }
@@ -103,7 +103,7 @@ const AddDetails = () => {
 
     setCards((prevCards) => [...prevCards, ...newCards]);
 
-    console.log('new card', newCards);
+    // console.log('new card', newCards);
     newCards.forEach((cards) => {
       let formData = new FormData();
       formData.append('file', cards);
@@ -115,7 +115,7 @@ const AddDetails = () => {
         })
         .then((res) => {
           console.log('file uploaded successfully');
-          console.log(res);
+          // console.log(res);
           setFormData((prevFormData) => ({
             ...prevFormData,
             referenceFile: [...prevFormData.referenceFile, res.data],
@@ -250,9 +250,9 @@ const AddDetails = () => {
     }
   };
 
-  useEffect(() => {
-    console.log(formData);
-  }, [formData]);
+  // useEffect(() => {
+  //   console.log(formData);
+  // }, [formData]);
 
   useEffect(() => {
     setImages(selectedImages);
@@ -272,7 +272,7 @@ const AddDetails = () => {
   useEffect(() => {
     if (selectedImages && selectedImages.length > 0) {
       const firstImg = selectedImages[0];
-      console.log(firstImg);
+      // console.log(firstImg);
       let formData = new FormData();
       formData.append('file', firstImg);
       httpClient

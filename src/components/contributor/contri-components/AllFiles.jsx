@@ -16,9 +16,9 @@ const AllFiles = ({ image }) => {
     (state) => state.fileimages.selectedAllFilesImages
   );
 
-  useEffect(() => {
-    console.log('Contri ', selectedAllFilesImages);
-  }, [selectedAllFilesImages]);
+  // useEffect(() => {
+  //   console.log('Contri ', selectedAllFilesImages);
+  // }, [selectedAllFilesImages]);
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);

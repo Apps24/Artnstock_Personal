@@ -137,7 +137,7 @@ const Combo = ({ logo, comboHeading }) => {
                             />
                           </div>
                         </div>
-                        <div class='absolute left-[47%] bottom-[-10px] w-[20px] h-[20px] bg-[white] rounded-br-[5px] transform rotate-45 shadow-inner'></div>
+                        <div className='absolute left-[47%] bottom-[-10px] w-[20px] h-[20px] bg-[white] rounded-br-[5px] transform rotate-45 shadow-inner'></div>
                       </div>
                     )}
 

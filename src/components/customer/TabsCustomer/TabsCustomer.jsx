@@ -44,9 +44,9 @@ const TabsCustomer = () => {
     }
   }, [sta]);
 
-  useEffect(() => {
-    console.log(value, 'val');
-  }, []);
+  // useEffect(() => {
+  //   console.log(value, 'val');
+  // }, []);
 
   const path2 = useSelector((state) => state.contriPath.path2cust);
 

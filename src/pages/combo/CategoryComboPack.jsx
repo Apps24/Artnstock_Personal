@@ -245,7 +245,7 @@ const CategoryComboPack = () => {
       .get(`/combo_master/editComboMaster/${combo.comboId}`)
       .then((res) => {
         setList(res.data);
-        console.log(res.data);
+        // console.log(res.data);
       });
   }, []);
 

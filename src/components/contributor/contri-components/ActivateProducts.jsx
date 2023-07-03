@@ -172,7 +172,7 @@ const ActivateProducts = () => {
     const value = event.target.value;
     if (value !== 0) {
       setSizeRangeValue(value);
-      console.log(value);
+      // console.log(value);
     }
   };
 
@@ -203,7 +203,7 @@ const ActivateProducts = () => {
     const getStyleList = async () => {
       const response = await httpClient.get('/style_master');
       setStyleList(response.data);
-      console.log(response.data);
+      // console.log(response.data);
     };
     getStyleList();
   }, []);

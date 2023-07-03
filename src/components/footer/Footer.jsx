@@ -19,7 +19,7 @@ const Footer = () => {
   return (
     <div className='footer'>
       <div className='footer-top text-center text-14px bg-[#F5F5F5] h-[38px] flex justify-center items-center'>
-        <p className='class="font-normal text-[14px] leading-4 text-[#757575]'>
+        <p className='font-normal text-[14px] leading-4 text-[#757575]'>
           Help us improve your
           <span className='text-[#333333]'>
             {' '}
