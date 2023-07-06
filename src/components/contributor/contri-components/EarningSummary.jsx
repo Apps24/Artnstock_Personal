@@ -24,9 +24,444 @@ const EarningSummary = () => {
   }, []);
 
   // const data = null;
-  const data = [
+  // const data = [
+  //   {
+  //     date: '09/09/2022',
+  //     d1: '1',
+  //     d2: '-',
+  //     d3: '1',
+  //     d4: '-',
+  //     d5: '1',
+  //     d6: '-',
+  //     d7: '-',
+  //     d8: '1',
+  //     d9: '-',
+  //     d10: '-',
+  //     d11: '1',
+  //     d12: '1',
+  //     d13: '-',
+  //     d14: '1',
+  //     d15: '-',
+  //   },
+  //   {
+  //     date: '09/09/2022',
+  //     d1: '1',
+  //     d2: '-',
+  //     d3: '1',
+  //     d4: '-',
+  //     d5: '1',
+  //     d6: '-',
+  //     d7: '-',
+  //     d8: '1',
+  //     d9: '-',
+  //     d10: '-',
+  //     d11: '1',
+  //     d12: '1',
+  //     d13: '-',
+  //     d14: '1',
+  //     d15: '-',
+  //   },
+  //   {
+  //     date: '09/09/2022',
+  //     d1: '1',
+  //     d2: '-',
+  //     d3: '1',
+  //     d4: '-',
+  //     d5: '1',
+  //     d6: '-',
+  //     d7: '-',
+  //     d8: '1',
+  //     d9: '-',
+  //     d10: '-',
+  //     d11: '1',
+  //     d12: '1',
+  //     d13: '-',
+  //     d14: '1',
+  //     d15: '-',
+  //   },
+  //   {
+  //     date: '09/09/2022',
+  //     d1: '1',
+  //     d2: '-',
+  //     d3: '1',
+  //     d4: '-',
+  //     d5: '1',
+  //     d6: '-',
+  //     d7: '-',
+  //     d8: '1',
+  //     d9: '-',
+  //     d10: '-',
+  //     d11: '1',
+  //     d12: '1',
+  //     d13: '-',
+  //     d14: '1',
+  //     d15: '-',
+  //   },
+  //   {
+  //     date: '09/09/2022',
+  //     d1: '1',
+  //     d2: '-',
+  //     d3: '1',
+  //     d4: '-',
+  //     d5: '1',
+  //     d6: '-',
+  //     d7: '-',
+  //     d8: '1',
+  //     d9: '-',
+  //     d10: '-',
+  //     d11: '1',
+  //     d12: '1',
+  //     d13: '-',
+  //     d14: '1',
+  //     d15: '-',
+  //   },
+  //   {
+  //     date: '09/09/2022',
+  //     d1: '1',
+  //     d2: '-',
+  //     d3: '1',
+  //     d4: '-',
+  //     d5: '1',
+  //     d6: '-',
+  //     d7: '-',
+  //     d8: '1',
+  //     d9: '-',
+  //     d10: '-',
+  //     d11: '1',
+  //     d12: '1',
+  //     d13: '-',
+  //     d14: '1',
+  //     d15: '-',
+  //   },
+  //   {
+  //     date: '09/09/2022',
+  //     d1: '1',
+  //     d2: '-',
+  //     d3: '1',
+  //     d4: '-',
+  //     d5: '1',
+  //     d6: '-',
+  //     d7: '-',
+  //     d8: '1',
+  //     d9: '-',
+  //     d10: '-',
+  //     d11: '1',
+  //     d12: '1',
+  //     d13: '-',
+  //     d14: '1',
+  //     d15: '-',
+  //   },
+  //   {
+  //     date: '09/09/2022',
+  //     d1: '1',
+  //     d2: '-',
+  //     d3: '1',
+  //     d4: '-',
+  //     d5: '1',
+  //     d6: '-',
+  //     d7: '-',
+  //     d8: '1',
+  //     d9: '-',
+  //     d10: '-',
+  //     d11: '1',
+  //     d12: '1',
+  //     d13: '-',
+  //     d14: '1',
+  //     d15: '-',
+  //   },
+  //   {
+  //     date: '09/09/2022',
+  //     d1: '1',
+  //     d2: '-',
+  //     d3: '1',
+  //     d4: '-',
+  //     d5: '1',
+  //     d6: '-',
+  //     d7: '-',
+  //     d8: '1',
+  //     d9: '-',
+  //     d10: '-',
+  //     d11: '1',
+  //     d12: '1',
+  //     d13: '-',
+  //     d14: '1',
+  //     d15: '-',
+  //   },
+  //   {
+  //     date: '09/09/2022',
+  //     d1: '1',
+  //     d2: '-',
+  //     d3: '1',
+  //     d4: '-',
+  //     d5: '1',
+  //     d6: '-',
+  //     d7: '-',
+  //     d8: '1',
+  //     d9: '-',
+  //     d10: '-',
+  //     d11: '1',
+  //     d12: '1',
+  //     d13: '-',
+  //     d14: '1',
+  //     d15: '-',
+  //   },
+  //   {
+  //     date: '09/09/2022',
+  //     d1: '1',
+  //     d2: '-',
+  //     d3: '1',
+  //     d4: '-',
+  //     d5: '1',
+  //     d6: '-',
+  //     d7: '-',
+  //     d8: '1',
+  //     d9: '-',
+  //     d10: '-',
+  //     d11: '1',
+  //     d12: '1',
+  //     d13: '-',
+  //     d14: '1',
+  //     d15: '-',
+  //   },
+  //   {
+  //     date: '09/09/2022',
+  //     d1: '1',
+  //     d2: '-',
+  //     d3: '1',
+  //     d4: '-',
+  //     d5: '1',
+  //     d6: '-',
+  //     d7: '-',
+  //     d8: '1',
+  //     d9: '-',
+  //     d10: '-',
+  //     d11: '1',
+  //     d12: '1',
+  //     d13: '-',
+  //     d14: '1',
+  //     d15: '-',
+  //   },
+  //   {
+  //     date: '09/09/2022',
+  //     d1: '1',
+  //     d2: '-',
+  //     d3: '1',
+  //     d4: '-',
+  //     d5: '1',
+  //     d6: '-',
+  //     d7: '-',
+  //     d8: '1',
+  //     d9: '-',
+  //     d10: '-',
+  //     d11: '1',
+  //     d12: '1',
+  //     d13: '-',
+  //     d14: '1',
+  //     d15: '-',
+  //   },
+  //   {
+  //     date: '09/09/2022',
+  //     d1: '1',
+  //     d2: '-',
+  //     d3: '1',
+  //     d4: '-',
+  //     d5: '1',
+  //     d6: '-',
+  //     d7: '-',
+  //     d8: '1',
+  //     d9: '-',
+  //     d10: '-',
+  //     d11: '1',
+  //     d12: '1',
+  //     d13: '-',
+  //     d14: '1',
+  //     d15: '-',
+  //   },
+  //   {
+  //     date: '09/09/2022',
+  //     d1: '1',
+  //     d2: '-',
+  //     d3: '1',
+  //     d4: '-',
+  //     d5: '1',
+  //     d6: '-',
+  //     d7: '-',
+  //     d8: '1',
+  //     d9: '-',
+  //     d10: '-',
+  //     d11: '1',
+  //     d12: '1',
+  //     d13: '-',
+  //     d14: '1',
+  //     d15: '-',
+  //   },
+  //   {
+  //     date: '09/09/2022',
+  //     d1: '1',
+  //     d2: '-',
+  //     d3: '1',
+  //     d4: '-',
+  //     d5: '1',
+  //     d6: '-',
+  //     d7: '-',
+  //     d8: '1',
+  //     d9: '-',
+  //     d10: '-',
+  //     d11: '1',
+  //     d12: '1',
+  //     d13: '-',
+  //     d14: '1',
+  //     d15: '-',
+  //   },
+  //   {
+  //     date: '09/09/2022',
+  //     d1: '1',
+  //     d2: '-',
+  //     d3: '1',
+  //     d4: '-',
+  //     d5: '1',
+  //     d6: '-',
+  //     d7: '-',
+  //     d8: '1',
+  //     d9: '-',
+  //     d10: '-',
+  //     d11: '1',
+  //     d12: '1',
+  //     d13: '-',
+  //     d14: '1',
+  //     d15: '-',
+  //   },
+  //   {
+  //     date: '09/09/2022',
+  //     d1: '1',
+  //     d2: '-',
+  //     d3: '1',
+  //     d4: '-',
+  //     d5: '1',
+  //     d6: '-',
+  //     d7: '-',
+  //     d8: '1',
+  //     d9: '-',
+  //     d10: '-',
+  //     d11: '1',
+  //     d12: '1',
+  //     d13: '-',
+  //     d14: '1',
+  //     d15: '-',
+  //   },
+  //   {
+  //     date: '09/09/2022',
+  //     d1: '1',
+  //     d2: '-',
+  //     d3: '1',
+  //     d4: '-',
+  //     d5: '1',
+  //     d6: '-',
+  //     d7: '-',
+  //     d8: '1',
+  //     d9: '-',
+  //     d10: '-',
+  //     d11: '1',
+  //     d12: '1',
+  //     d13: '-',
+  //     d14: '1',
+  //     d15: '-',
+  //   },
+  //   {
+  //     date: '09/09/2022',
+  //     d1: '1',
+  //     d2: '-',
+  //     d3: '1',
+  //     d4: '-',
+  //     d5: '1',
+  //     d6: '-',
+  //     d7: '-',
+  //     d8: '1',
+  //     d9: '-',
+  //     d10: '-',
+  //     d11: '1',
+  //     d12: '1',
+  //     d13: '-',
+  //     d14: '1',
+  //     d15: '-',
+  //   },
+  //   {
+  //     date: '09/09/2022',
+  //     d1: '1',
+  //     d2: '-',
+  //     d3: '1',
+  //     d4: '-',
+  //     d5: '1',
+  //     d6: '-',
+  //     d7: '-',
+  //     d8: '1',
+  //     d9: '-',
+  //     d10: '-',
+  //     d11: '1',
+  //     d12: '1',
+  //     d13: '-',
+  //     d14: '1',
+  //     d15: '-',
+  //   },
+  //   {
+  //     date: '09/09/2022',
+  //     d1: '1',
+  //     d2: '-',
+  //     d3: '1',
+  //     d4: '-',
+  //     d5: '1',
+  //     d6: '-',
+  //     d7: '-',
+  //     d8: '1',
+  //     d9: '-',
+  //     d10: '-',
+  //     d11: '1',
+  //     d12: '1',
+  //     d13: '-',
+  //     d14: '1',
+  //     d15: '-',
+  //   },
+  //   {
+  //     date: '09/09/2022',
+  //     d1: '1',
+  //     d2: '-',
+  //     d3: '1',
+  //     d4: '-',
+  //     d5: '1',
+  //     d6: '-',
+  //     d7: '-',
+  //     d8: '1',
+  //     d9: '-',
+  //     d10: '-',
+  //     d11: '1',
+  //     d12: '1',
+  //     d13: '-',
+  //     d14: '1',
+  //     d15: '-',
+  //   },
+  //   {
+  //     date: '09/09/2022',
+  //     d1: '1',
+  //     d2: '-',
+  //     d3: '1',
+  //     d4: '-',
+  //     d5: '1',
+  //     d6: '-',
+  //     d7: '-',
+  //     d8: '1',
+  //     d9: '-',
+  //     d10: '-',
+  //     d11: '1',
+  //     d12: '1',
+  //     d13: '-',
+  //     d14: '1',
+  //     d15: '-',
+  //   },
+  // ];
+
+  const dataa = [
     {
-      date: '09/09/2022',
+      date: '01/08/2023',
       d1: '1',
       d2: '-',
       d3: '1',
@@ -39,12 +474,10 @@ const EarningSummary = () => {
       d10: '-',
       d11: '1',
       d12: '1',
-      d13: '-',
-      d14: '1',
-      d15: '-',
+      d12: 'Processing',
     },
     {
-      date: '09/09/2022',
+      date: '02/08/2023',
       d1: '1',
       d2: '-',
       d3: '1',
@@ -57,12 +490,10 @@ const EarningSummary = () => {
       d10: '-',
       d11: '1',
       d12: '1',
-      d13: '-',
-      d14: '1',
-      d15: '-',
+      d12: 'Processing',
     },
     {
-      date: '09/09/2022',
+      date: '03/08/2023',
       d1: '1',
       d2: '-',
       d3: '1',
@@ -75,387 +506,7 @@ const EarningSummary = () => {
       d10: '-',
       d11: '1',
       d12: '1',
-      d13: '-',
-      d14: '1',
-      d15: '-',
-    },
-    {
-      date: '09/09/2022',
-      d1: '1',
-      d2: '-',
-      d3: '1',
-      d4: '-',
-      d5: '1',
-      d6: '-',
-      d7: '-',
-      d8: '1',
-      d9: '-',
-      d10: '-',
-      d11: '1',
-      d12: '1',
-      d13: '-',
-      d14: '1',
-      d15: '-',
-    },
-    {
-      date: '09/09/2022',
-      d1: '1',
-      d2: '-',
-      d3: '1',
-      d4: '-',
-      d5: '1',
-      d6: '-',
-      d7: '-',
-      d8: '1',
-      d9: '-',
-      d10: '-',
-      d11: '1',
-      d12: '1',
-      d13: '-',
-      d14: '1',
-      d15: '-',
-    },
-    {
-      date: '09/09/2022',
-      d1: '1',
-      d2: '-',
-      d3: '1',
-      d4: '-',
-      d5: '1',
-      d6: '-',
-      d7: '-',
-      d8: '1',
-      d9: '-',
-      d10: '-',
-      d11: '1',
-      d12: '1',
-      d13: '-',
-      d14: '1',
-      d15: '-',
-    },
-    {
-      date: '09/09/2022',
-      d1: '1',
-      d2: '-',
-      d3: '1',
-      d4: '-',
-      d5: '1',
-      d6: '-',
-      d7: '-',
-      d8: '1',
-      d9: '-',
-      d10: '-',
-      d11: '1',
-      d12: '1',
-      d13: '-',
-      d14: '1',
-      d15: '-',
-    },
-    {
-      date: '09/09/2022',
-      d1: '1',
-      d2: '-',
-      d3: '1',
-      d4: '-',
-      d5: '1',
-      d6: '-',
-      d7: '-',
-      d8: '1',
-      d9: '-',
-      d10: '-',
-      d11: '1',
-      d12: '1',
-      d13: '-',
-      d14: '1',
-      d15: '-',
-    },
-    {
-      date: '09/09/2022',
-      d1: '1',
-      d2: '-',
-      d3: '1',
-      d4: '-',
-      d5: '1',
-      d6: '-',
-      d7: '-',
-      d8: '1',
-      d9: '-',
-      d10: '-',
-      d11: '1',
-      d12: '1',
-      d13: '-',
-      d14: '1',
-      d15: '-',
-    },
-    {
-      date: '09/09/2022',
-      d1: '1',
-      d2: '-',
-      d3: '1',
-      d4: '-',
-      d5: '1',
-      d6: '-',
-      d7: '-',
-      d8: '1',
-      d9: '-',
-      d10: '-',
-      d11: '1',
-      d12: '1',
-      d13: '-',
-      d14: '1',
-      d15: '-',
-    },
-    {
-      date: '09/09/2022',
-      d1: '1',
-      d2: '-',
-      d3: '1',
-      d4: '-',
-      d5: '1',
-      d6: '-',
-      d7: '-',
-      d8: '1',
-      d9: '-',
-      d10: '-',
-      d11: '1',
-      d12: '1',
-      d13: '-',
-      d14: '1',
-      d15: '-',
-    },
-    {
-      date: '09/09/2022',
-      d1: '1',
-      d2: '-',
-      d3: '1',
-      d4: '-',
-      d5: '1',
-      d6: '-',
-      d7: '-',
-      d8: '1',
-      d9: '-',
-      d10: '-',
-      d11: '1',
-      d12: '1',
-      d13: '-',
-      d14: '1',
-      d15: '-',
-    },
-    {
-      date: '09/09/2022',
-      d1: '1',
-      d2: '-',
-      d3: '1',
-      d4: '-',
-      d5: '1',
-      d6: '-',
-      d7: '-',
-      d8: '1',
-      d9: '-',
-      d10: '-',
-      d11: '1',
-      d12: '1',
-      d13: '-',
-      d14: '1',
-      d15: '-',
-    },
-    {
-      date: '09/09/2022',
-      d1: '1',
-      d2: '-',
-      d3: '1',
-      d4: '-',
-      d5: '1',
-      d6: '-',
-      d7: '-',
-      d8: '1',
-      d9: '-',
-      d10: '-',
-      d11: '1',
-      d12: '1',
-      d13: '-',
-      d14: '1',
-      d15: '-',
-    },
-    {
-      date: '09/09/2022',
-      d1: '1',
-      d2: '-',
-      d3: '1',
-      d4: '-',
-      d5: '1',
-      d6: '-',
-      d7: '-',
-      d8: '1',
-      d9: '-',
-      d10: '-',
-      d11: '1',
-      d12: '1',
-      d13: '-',
-      d14: '1',
-      d15: '-',
-    },
-    {
-      date: '09/09/2022',
-      d1: '1',
-      d2: '-',
-      d3: '1',
-      d4: '-',
-      d5: '1',
-      d6: '-',
-      d7: '-',
-      d8: '1',
-      d9: '-',
-      d10: '-',
-      d11: '1',
-      d12: '1',
-      d13: '-',
-      d14: '1',
-      d15: '-',
-    },
-    {
-      date: '09/09/2022',
-      d1: '1',
-      d2: '-',
-      d3: '1',
-      d4: '-',
-      d5: '1',
-      d6: '-',
-      d7: '-',
-      d8: '1',
-      d9: '-',
-      d10: '-',
-      d11: '1',
-      d12: '1',
-      d13: '-',
-      d14: '1',
-      d15: '-',
-    },
-    {
-      date: '09/09/2022',
-      d1: '1',
-      d2: '-',
-      d3: '1',
-      d4: '-',
-      d5: '1',
-      d6: '-',
-      d7: '-',
-      d8: '1',
-      d9: '-',
-      d10: '-',
-      d11: '1',
-      d12: '1',
-      d13: '-',
-      d14: '1',
-      d15: '-',
-    },
-    {
-      date: '09/09/2022',
-      d1: '1',
-      d2: '-',
-      d3: '1',
-      d4: '-',
-      d5: '1',
-      d6: '-',
-      d7: '-',
-      d8: '1',
-      d9: '-',
-      d10: '-',
-      d11: '1',
-      d12: '1',
-      d13: '-',
-      d14: '1',
-      d15: '-',
-    },
-    {
-      date: '09/09/2022',
-      d1: '1',
-      d2: '-',
-      d3: '1',
-      d4: '-',
-      d5: '1',
-      d6: '-',
-      d7: '-',
-      d8: '1',
-      d9: '-',
-      d10: '-',
-      d11: '1',
-      d12: '1',
-      d13: '-',
-      d14: '1',
-      d15: '-',
-    },
-    {
-      date: '09/09/2022',
-      d1: '1',
-      d2: '-',
-      d3: '1',
-      d4: '-',
-      d5: '1',
-      d6: '-',
-      d7: '-',
-      d8: '1',
-      d9: '-',
-      d10: '-',
-      d11: '1',
-      d12: '1',
-      d13: '-',
-      d14: '1',
-      d15: '-',
-    },
-    {
-      date: '09/09/2022',
-      d1: '1',
-      d2: '-',
-      d3: '1',
-      d4: '-',
-      d5: '1',
-      d6: '-',
-      d7: '-',
-      d8: '1',
-      d9: '-',
-      d10: '-',
-      d11: '1',
-      d12: '1',
-      d13: '-',
-      d14: '1',
-      d15: '-',
-    },
-    {
-      date: '09/09/2022',
-      d1: '1',
-      d2: '-',
-      d3: '1',
-      d4: '-',
-      d5: '1',
-      d6: '-',
-      d7: '-',
-      d8: '1',
-      d9: '-',
-      d10: '-',
-      d11: '1',
-      d12: '1',
-      d13: '-',
-      d14: '1',
-      d15: '-',
-    },
-    {
-      date: '09/09/2022',
-      d1: '1',
-      d2: '-',
-      d3: '1',
-      d4: '-',
-      d5: '1',
-      d6: '-',
-      d7: '-',
-      d8: '1',
-      d9: '-',
-      d10: '-',
-      d11: '1',
-      d12: '1',
-      d13: '-',
-      d14: '1',
-      d15: '-',
+      d12: 'Pending',
     },
   ];
 
@@ -598,7 +649,7 @@ const EarningSummary = () => {
           </div>
         </div>
       </div>
-      {data !== null ? (
+      {/* {data !== null ? (
         <div className='w-full flex justify-center pt-[15px] pb-[215px]'>
           <div className='wrapper'>
             <table className='w-[1410px] border-separate border-spacing-0'>
@@ -876,7 +927,281 @@ const EarningSummary = () => {
             <span className='text-orangeColor'> Learn more</span>
           </p>
         </div>
-      )}
+      )} */}
+      <div className='w-[100%] flex justify-center'>
+        {/* <div className='w-[1170px]'> */}
+        <table className='w-[100%] max-w-[1170px] border-separate border-spacing-0'>
+          <tbody>
+            <tr className=' border text-[13px] text-[15px] font-medium leading-[1.5] text-primaryBlack text-center'>
+              <td
+                colspan='3'
+                className='border border-[#dddddd] bg-[#e7e7e7] rounded-tl-[10px]'
+              >
+                August, 2023
+              </td>
+
+              <td
+                colspan='2'
+                className='border-t border-[#dddddd] bg-[#ececec] border-r border-b leading-[1.2]'
+              >
+                Art
+              </td>
+              <td
+                colspan='2'
+                className='border-t border-[#dddddd] bg-[#ececec] border-r border-b h-[35px]'
+              >
+                Photos
+              </td>
+              <td
+                colspan='2'
+                className='border-t border-[#dddddd] bg-[#ececec] border-r border-b'
+              >
+                Footage
+              </td>
+              <td
+                colspan='2'
+                className='border-t border-[#dddddd] bg-[#ececec] border-r border-b'
+              >
+                Music
+              </td>
+              <td
+                colspan='2'
+                className='border-t border-[#dddddd] bg-[#ececec] border-r border-b'
+              >
+                Templates
+              </td>
+              <td
+                colspan='2'
+                className='border-t border-[#dddddd] bg-[#ececec]  border-r border-b rounded-tr-[10px]'
+              >
+                Payment Status
+              </td>
+            </tr>
+
+            <tr className='text-[13px] font-medium' height='30'>
+              <td className='border-r border-b border-l border-[#dddddd] bg-[#eeeeee] font-normal  text-primaryBlack  pl-[10px]'>
+                Date
+              </td>
+              <td className='border-r border-b border-[#dddddd] bg-[#eeeeee] font-normal text-primaryBlack text-center'>
+                Items Sold
+              </td>
+              <td className='border-r border-b border-[#dddddd] bg-[#eeeeee] font-normal text-primaryBlack text-center'>
+                Earnings
+              </td>
+              <td className='border-r border-b border-[#dddddd] bg-[#f3f3f3] font-normal text-primaryBlack text-center'>
+                Arts Prints
+              </td>
+              <td className='border-r border-b border-[#dddddd] bg-[#f3f3f3] font-normal text-primaryBlack text-center'>
+                Products
+              </td>
+              <td className='border-r border-b border-[#dddddd] bg-[#f3f3f3] font-normal text-primaryBlack text-center'>
+                Standards
+              </td>
+              <td className='border-r border-b border-[#dddddd] bg-[#f3f3f3] font-normal text-primaryBlack text-center'>
+                Enhanced
+              </td>
+              <td className='border-r border-b border-[#dddddd] bg-[#f3f3f3] font-normal text-primaryBlack text-center'>
+                Standards
+              </td>
+              <td className='border-r border-b border-[#dddddd] bg-[#f3f3f3] font-normal text-primaryBlack text-center'>
+                Enhanced
+              </td>
+              <td className='border-r border-b border-[#dddddd] bg-[#f3f3f3] font-normal text-primaryBlack text-center'>
+                Standards
+              </td>
+              <td className='border-r border-b border-[#dddddd] bg-[#f3f3f3] font-normal text-primaryBlack text-center'>
+                Enhanced
+              </td>
+              <td className='border-r border-b border-[#dddddd] bg-[#f3f3f3] font-normal text-primaryBlack text-center'>
+                Standards
+              </td>
+              <td className='border-r border-b border-[#dddddd] bg-[#f3f3f3] font-normal text-primaryBlack text-center'>
+                Enhanced
+              </td>
+              <td className='border-r border-b border-[#dddddd] bg-[#f3f3f3] font-normal text-primaryBlack pl-[10px]'>
+                601
+              </td>
+            </tr>
+            {/* test */}
+            <tr className='text-[13px] font-medium' height='30'>
+              <td className='border-r border-b border-l border-[#dddddd] bg-[#f9e9e9] font-normal  text-primaryBlack  pl-[10px]'>
+                All-Time
+              </td>
+              <td className='border-r border-b border-[#dddddd] bg-[#f9e9e9] font-normal text-primaryBlack text-center'>
+                123.2
+              </td>
+              <td className='border-r border-b border-[#dddddd] bg-[#f9e9e9] font-normal text-primaryBlack text-center'>
+                123.2
+              </td>
+              <td className='border-r border-b border-[#dddddd] bg-[#feeeee] font-normal text-primaryBlack text-center'>
+                123.2
+              </td>
+              <td className='border-r border-b border-[#dddddd] bg-[#feeeee] font-normal text-primaryBlack text-center'>
+                123.2
+              </td>
+              <td className='border-r border-b border-[#dddddd] bg-[#feeeee] font-normal text-primaryBlack text-center'>
+                123.2
+              </td>
+              <td className='border-r border-b border-[#dddddd] bg-[#feeeee] font-normal text-primaryBlack text-center'>
+                123.2
+              </td>
+              <td className='border-r border-b border-[#dddddd] bg-[#feeeee] font-normal text-primaryBlack text-center'>
+                123.2
+              </td>
+              <td className='border-r border-b border-[#dddddd] bg-[#feeeee] font-normal text-primaryBlack text-center'>
+                123.2
+              </td>
+              <td className='border-r border-b border-[#dddddd] bg-[#feeeee] font-normal text-primaryBlack text-center'>
+                123.2
+              </td>
+              <td className='border-r border-b border-[#dddddd] bg-[#feeeee] font-normal text-primaryBlack text-center'>
+                123.2
+              </td>
+              <td className='border-r border-b border-[#dddddd] bg-[#feeeee] font-normal text-primaryBlack text-center'>
+                123.2
+              </td>
+              <td className='border-r border-b border-[#dddddd] bg-[#feeeee] font-normal text-primaryBlack text-center'>
+                123.2
+              </td>
+              <td className='border-r border-b border-[#dddddd] bg-[#feeeee] font-normal text-primaryBlack pl-[10px]'>
+                601
+              </td>
+            </tr>
+            {/* test */}
+
+            {/* test */}
+            <tr className='text-[13px] font-medium' height='30'>
+              <td className='border-r border-b border-l border-[#dddddd] bg-[#f9e9e9] font-normal  text-primaryBlack  pl-[10px]'>
+                August 2023
+              </td>
+              <td className='border-r border-b border-[#dddddd] bg-[#f9e9e9] font-normal text-primaryBlack text-center'>
+                123.2
+              </td>
+              <td className='border-r border-b border-[#dddddd] bg-[#f9e9e9] font-normal text-primaryBlack text-center'>
+                123.2
+              </td>
+              <td className='border-r border-b border-[#dddddd] bg-[#feeeee] font-normal text-primaryBlack text-center'>
+                123.2
+              </td>
+              <td className='border-r border-b border-[#dddddd] bg-[#feeeee] font-normal text-primaryBlack text-center'>
+                123.2
+              </td>
+              <td className='border-r border-b border-[#dddddd] bg-[#feeeee] font-normal text-primaryBlack text-center'>
+                123.2
+              </td>
+              <td className='border-r border-b border-[#dddddd] bg-[#feeeee] font-normal text-primaryBlack text-center'>
+                123.2
+              </td>
+              <td className='border-r border-b border-[#dddddd] bg-[#feeeee] font-normal text-primaryBlack text-center'>
+                123.2
+              </td>
+              <td className='border-r border-b border-[#dddddd] bg-[#feeeee] font-normal text-primaryBlack text-center'>
+                123.2
+              </td>
+              <td className='border-r border-b border-[#dddddd] bg-[#feeeee] font-normal text-primaryBlack text-center'>
+                123.2
+              </td>
+              <td className='border-r border-b border-[#dddddd] bg-[#feeeee] font-normal text-primaryBlack text-center'>
+                123.2
+              </td>
+              <td className='border-r border-b border-[#dddddd] bg-[#feeeee] font-normal text-primaryBlack text-center'>
+                123.2
+              </td>
+              <td className='border-r border-b border-[#dddddd] bg-[#feeeee] font-normal text-primaryBlack text-center'>
+                123.2
+              </td>
+              <td className='border-r border-b border-[#dddddd] bg-[#feeeee] font-normal text-primaryBlack pl-[10px]'>
+                601
+              </td>
+            </tr>
+            {/* test */}
+            {/* test */}
+
+            {dataa.map((data, index) => (
+              <>
+                <tr
+                  key={index}
+                  className='text-[13px] font-medium'
+                  height='30'
+                >
+                  <td
+                    className={`border-r border-b border-l border-[#dddddd] ${
+                      index === dataa.length - 1
+                        ? 'rounded-bl-[10px]'
+                        : ''
+                    } bg-[#fafafa] font-normal  text-primaryBlack  pl-[10px]`}
+                  >
+                    {data.date}
+                  </td>
+                  <td className='border-r border-b border-[#dddddd] bg-[#fafafa] font-normal text-primaryBlack text-center'>
+                    {data.d1}
+                  </td>
+                  <td className='border-r border-b border-[#dddddd] bg-[#fafafa] font-normal text-primaryBlack text-center'>
+                    {data.d2}
+                  </td>
+                  <td className='border-r border-b border-[#dddddd] bg-[#fafafa] font-normal text-primaryBlack text-center'>
+                    {data.d3}
+                  </td>
+                  <td className='border-r border-b border-[#dddddd] bg-[#ffffff] font-normal text-primaryBlack text-center'>
+                    {data.d4}
+                  </td>
+                  <td className='border-r border-b border-[#dddddd] bg-[#ffffff] font-normal text-primaryBlack text-center'>
+                    {data.d4}
+                  </td>
+                  <td className='border-r border-b border-[#dddddd] bg-[#ffffff] font-normal text-primaryBlack text-center'>
+                    {data.d5}
+                  </td>
+                  <td className='border-r border-b border-[#dddddd] bg-[#ffffff] font-normal text-primaryBlack text-center'>
+                    {data.d6}
+                  </td>
+                  <td className='border-r border-b border-[#dddddd] bg-[#ffffff] font-normal text-primaryBlack text-center'>
+                    {data.d7}
+                  </td>
+                  <td className='border-r border-b border-[#dddddd] bg-[#ffffff] font-normal text-primaryBlack text-center'>
+                    {data.d8}
+                  </td>
+                  <td className='border-r border-b border-[#dddddd] bg-[#ffffff] font-normal text-primaryBlack text-center'>
+                    {data.d9}
+                  </td>
+                  <td className='border-r border-b border-[#dddddd] bg-[#ffffff] font-normal text-primaryBlack text-center'>
+                    {data.d10}
+                  </td>
+                  <td className='border-r border-b border-[#dddddd] bg-[#ffffff] font-normal text-primaryBlack text-center'>
+                    {data.d11}
+                  </td>
+                  <td
+                    className={`border-r border-b border-[#dddddd] bg-[#ffffff] ${
+                      index === dataa.length - 1
+                        ? 'rounded-br-[10px]'
+                        : ''
+                    } font-normal text-primaryBlack pl-[10px] pr-[10px]`}
+                  >
+                    <div className='w-[100%] h-[100%] flex justify-between items-center'>
+                      {data.d12}{' '}
+                      <div>
+                        <img src={dropdown} alt='' />
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr className='py-[20px] px-[10px] border-l border-r border-[#dddddd]'>
+                  <td>
+                    <p className='text-primaryBlack text-[18px] font-medium leading-[1]'>
+                      Your Earnings
+                    </p>
+                    <p className='text-primaryGray text-[11px]'>
+                      Items purchased by customer
+                    </p>
+                  </td>
+                </tr>
+              </>
+            ))}
+
+            {/* test */}
+          </tbody>
+        </table>
+        {/* </div> */}
+      </div>
     </>
   );
 };
