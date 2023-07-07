@@ -35,6 +35,7 @@ import { setpath2 } from '../../../store/contriPathSlice';
 import Footer from '../../footer/Footer';
 import { useLocation } from 'react-router-dom';
 import Certificate from '../contri-components/Certificate';
+import TopSales from '../contri-components/TopSales';
 
 const theme = createTheme({
   typography: {
@@ -328,7 +329,7 @@ const Tabs = () => {
                           color: '#7e7e7e',
                         },
                       }}
-                      disabled={true}
+                      // disabled={true}
                     />
                     <Tab
                       onClick={() => {
@@ -700,27 +701,27 @@ const Tabs = () => {
                         paddingLeft: '12px!important',
                       }}
                     />
-                    <Tab
-                      onClick={() => {
-                        dispatch(setpath2('/ Unpaid Earnings'));
-                      }}
-                      label='Unpaid Earnings'
-                      value='5.3'
-                      sx={{
-                        textTransform: 'none!important',
-                        border: '2px solid #eaeaea',
-                        borderRadius: '25px',
-                        color: '#7e7e7e',
-                        fontSize: '12px',
-                        marginLeft: '2.5px',
-                        marginRight: '2.5px',
-                        height: '28px!important',
-                        minHeight: 0,
-                        minWidth: 'fit-content!important',
-                        paddingRight: '12px!important',
-                        paddingLeft: '12px!important',
-                      }}
-                    />
+                    {/* <Tab
+                        onClick={() => {
+                          dispatch(setpath2('/ Unpaid Earnings'));
+                        }}
+                        label='Unpaid Earnings'
+                        value='5.3'
+                        sx={{
+                          textTransform: 'none!important',
+                          border: '2px solid #eaeaea',
+                          borderRadius: '25px',
+                          color: '#7e7e7e',
+                          fontSize: '12px',
+                          marginLeft: '2.5px',
+                          marginRight: '2.5px',
+                          height: '28px!important',
+                          minHeight: 0,
+                          minWidth: 'fit-content!important',
+                          paddingRight: '12px!important',
+                          paddingLeft: '12px!important',
+                        }}
+                      /> */}
                     <Tab
                       onClick={() => {
                         dispatch(setpath2('/ Payment History'));
@@ -744,6 +745,28 @@ const Tabs = () => {
                     />
                     <Tab
                       onClick={() => {
+                        dispatch(setpath2('/ Top Sales'));
+                      }}
+                      label='Top Sales'
+                      value='5.7'
+                      sx={{
+                        textTransform: 'none!important',
+                        border: '2px solid #eaeaea',
+                        borderRadius: '25px',
+                        color: '#7e7e7e',
+                        fontSize: '12px',
+                        marginLeft: '2.5px',
+                        marginRight: '2.5px',
+                        height: '28px!important',
+                        minHeight: 0,
+                        minWidth: 'fit-content!important',
+                        paddingRight: '12px!important',
+                        paddingLeft: '12px!important',
+                      }}
+                    />
+
+                    {/* <Tab
+                      onClick={() => {
                         dispatch(setpath2('/ Top Downloads'));
                       }}
                       label='Top Downloads'
@@ -762,7 +785,7 @@ const Tabs = () => {
                         paddingRight: '12px!important',
                         paddingLeft: '12px!important',
                       }}
-                    />
+                    /> */}
                     <Tab
                       onClick={() => {
                         dispatch(setpath2('/ Tax'));
@@ -803,6 +826,9 @@ const Tabs = () => {
                 </TabPanel>
                 <TabPanel value='5.6' sx={{ paddingTop: '0px' }}>
                   <TaxMain />
+                </TabPanel>
+                <TabPanel value='5.7' sx={{ paddingTop: '0px' }}>
+                  <TopSales />
                 </TabPanel>
               </TabContext>
             </TabPanel>
