@@ -935,9 +935,10 @@ const ArtList = () => {
                           }}
                           key={data?.artId}
                           className={` ${
-                            showSidebar
-                              ? 'w-[19.25rem]'
-                              : 'w-[18.688rem]'
+                            // showSidebar
+                            //   ? 'w-[19.25rem]'
+                            //   : 'w-[18.688rem]'
+                            'w-[100%]'
                           }`}
                           style={{ height: 'fit-content' }}
                         >

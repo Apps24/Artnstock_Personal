@@ -131,6 +131,7 @@ const SearchList = () => {
   const getAllArtList = async (searchText) => {
     try {
       // console.log(searchText);
+
       if (
         searchText === null ||
         searchText === undefined ||
@@ -197,8 +198,25 @@ const SearchList = () => {
   });
 
   useEffect(() => {
-    getAllArtList(searchText.searchText);
+    // console.log(searchText);
+    if(searchText.type === "keyword") {
+      getKeywordWiseSearchList(searchText.searchText)
+    } else {
+      getAllArtList(searchText.searchText);
+    }
   }, [searchText, style, filterObj]);
+
+
+  // KeyWord Search List
+
+  const getKeywordWiseSearchList = (keyword) => {
+    setTitle(keyword)
+    httpClient.get(`/art_master/getKeywordWiseArtMasterList/${keyword}`)
+    .then((res) => {
+      setArtsList(res.data);
+      recentSearch()
+    })
+  }
 
   const [styleList, setStyleList] = useState(null);
 
@@ -816,7 +834,7 @@ const SearchList = () => {
                         <div
                           key={data?.artId}
                           className={` ${
-                            showSidebar ? "w-[19.25rem]" : "w-[18.688rem]"
+                            "w-[100%]"
                           }`}
                           style={{ height: "fit-content" }}
                         >

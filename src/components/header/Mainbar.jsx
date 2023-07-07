@@ -55,8 +55,7 @@ import { searchSliceAction } from "../../store/searchSlice";
 import { styleSliceAction } from "../../store/styleSlice";
 import { setSubjectId } from "../../store/subjectidSlice";
 
-import { useDetectClickOutside } from 'react-detect-click-outside';
-
+import { useDetectClickOutside } from "react-detect-click-outside";
 
 const StyledPopup = styled(Popup)`
   // use your custom style for ".popup-overlay"
@@ -93,9 +92,6 @@ const Mainbar = () => {
     setShowDrop(false);
   };
   const ref1 = useDetectClickOutside({ onTriggered: apps1 });
-
-
- 
 
   //loading bar
   const [progress, setProgress] = useState(0);
@@ -139,10 +135,6 @@ const Mainbar = () => {
     });
   };
 
-  // const customerSetting = () => {
-  //   navigate("/customer");
-  // };
-
   const logout = () => {
     // dispatch(setUserRole(''));
     dispatch(authSliceAction.logoutUser());
@@ -157,6 +149,9 @@ const Mainbar = () => {
   };
 
   const [searchedArtList, setsearchedArtList] = useState("");
+  const [searchKeywords, setSearchKeywords] = useState();
+  // const [keyword, setKeyword] = useState("")
+  const [recentlyViewd, setRecentlyViewd] = useState();
 
   const changeinput = (e) => {
     setsearchedArtList(e.target.value);
@@ -179,12 +174,67 @@ const Mainbar = () => {
       }
     }
     getRecentSearch();
+    getSearchKeyword();
+    getRecentlyViwedArt();
   }, [searchText]);
 
+  useEffect(() => {
+    getSearchKeyword();
+  }, [searchedArtList]);
+
+  const getSearchKeyword = () => {
+    // console.log(searchedArtList);
+    if (searchedArtList === null || searchedArtList.length === 0) {
+      httpClient.get("/art_master/getKeywordMasterList").then((res) => {
+        // console.log(res);
+        setSearchKeywords(res?.data);
+      });
+    } else {
+      httpClient
+        .get(`/art_master/searchKeywordCountMaster/${searchedArtList}`)
+        .then((res) => {
+          // console.log(res);
+          setSearchKeywords(res?.data);
+        });
+    }
+  };
+
+  useEffect(() => {
+    getRecentlyViwedArt();
+  }, [location.pathname]);
+
+  const getRecentlyViwedArt = () => {
+    httpClient
+      .get(
+        `/recently_view_master/getUserIdWiseRecentlyViewMaster/${userDetails?.userId}`
+      )
+      .then((res) => {
+        setRecentlyViewd(res.data);
+      });
+  };
+
+  const searchKeyword = (keyword) => {
+    getRecentSearch();
+    apps1();
+    navigate("/search");
+    dispatch(searchSliceAction.setSearchType("keyword"));
+    dispatch(searchSliceAction.setSearchText(keyword));
+  };
+
+  const searchRecentArt = (text) => {
+    getRecentSearch();
+    navigate("/search");
+    apps1();
+    dispatch(searchSliceAction.setSearchType("normal"));
+    dispatch(searchSliceAction.setSearchText(text));
+    dispatch(styleSliceAction.setStyle(null));
+  };
+
   const searchArts = () => {
-    navigate("/search", {
-      state: searchedArtList,
-    });
+    getRecentSearch();
+    navigate("/search");
+    apps1();
+    dispatch(searchSliceAction.setSearchType("normal"));
     dispatch(searchSliceAction.setSearchText(searchedArtList));
     dispatch(styleSliceAction.setStyle(null));
   };
@@ -218,7 +268,6 @@ const Mainbar = () => {
     dispatch(searchSliceAction.setSearchText(""));
   };
 
-
   // Recently search
   const [recentSearch, setRecentSearch] = useState([]);
 
@@ -240,16 +289,36 @@ const Mainbar = () => {
   const cleaRecentSearch = (userId) => {
     // console.log(userId);
     try {
-      httpClient.delete(`/recently_search_master/deleteCart/${userId}`)
-      .then((res) => {
-        // console.log(res);
-        getRecentSearch()
-      // console.log(res);
-      });
+      httpClient
+        .delete(`/recently_search_master/deleteCart/${userId}`)
+        .then((res) => {
+          // console.log(res);
+          getRecentSearch();
+          // console.log(res);
+        });
     } catch (err) {
       console.log(err);
     }
-  }
+  };
+
+  const goToArtDetailsPage = (id) => {
+    apps1();
+    navigate(`/art/art-details`, { state: { id } });
+  };
+
+  const clearRecentSearch = (userId) => {
+    try {
+      httpClient
+        .delete(`/recently_view_master/deleteByUserId/${userId}`)
+        .then((res) => {
+          // console.log(res);
+          getRecentlyViwedArt();
+          // console.log(res);
+        });
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <>
       {/* loading bar */}
@@ -1005,7 +1074,10 @@ const Mainbar = () => {
         </div>
         <div className="mt-3.5 flex items-center ">
           {/* Search Input */}
-          <div className="group relative w-fit flex-1 bg-[#EEEEEE] rounded-tl-3xl rounded-bl-3xl" ref={ref1}>
+          <div
+            className="group relative w-fit flex-1 bg-[#EEEEEE] rounded-tl-3xl rounded-bl-3xl"
+            ref={ref1}
+          >
             <input
               className={`${showDrop ? styles.activeIp : styles.normalIp}`}
               type="text"
@@ -1026,24 +1098,27 @@ const Mainbar = () => {
             <div
               className={`${
                 showDrop ? "block" : "hidden"
-              } absolute border border-[#E9E9E9] bg-[#ffffff] w-[100%] px-5  border-t-0 rounded-bl-3xl rounded-br-3xl z-10`}
+              } absolute border border-[#E9E9E9] bg-[#ffffff] w-[100%] pl-5 pr-4  border-t-0 rounded-bl-3xl rounded-br-3xl z-10`}
             >
               <div className=" border-t border-[#EFEFEF] pt-5 pb-7 flex">
-                <div className="flex-1 border-r border-[#EFEFEF]">
+                <div className=" w-[340px] border-r border-[#EFEFEF]">
                   <ul>
-                    <li className="linkSearch">Arts for Kids</li>
-                    <li className="linkSearch">Astronomy & Space</li>
-                    <li className="linkSearch">Beverages</li>
-                    <li className="linkSearch">Book Illustration</li>
-                    <li className="linkSearch">Comics</li>
-                    <li className="linkSearch">Dance</li>
-                    <li className="linkSearch">Education</li>
-                    <li className="linkSearch">Fantasy</li>
-                    <li className="linkSearch">Fashion</li>
-                    <li className="linkSearch">Figurative</li>
+                    {searchKeywords?.map((keyword, i) => {
+                      if (i < 10) {
+                        return (
+                          <li
+                            key={keyword?.keywordCountId}
+                            className="linkSearch cursor-pointer"
+                            onClick={() => searchKeyword(keyword?.keyword)}
+                          >
+                            {keyword?.keyword}
+                          </li>
+                        );
+                      }
+                    })}
                   </ul>
                 </div>
-                <div className="flex-1 flex flex-col justify-between border-r  border-[#EFEFEF] pl-5">
+                <div className="w-[340px] flex flex-col justify-between border-r  border-[#EFEFEF] pl-5">
                   <div>
                     <p className="text-sm18 leading-[29.7px] text-primaryBlack font-semibold">
                       Recent Searches
@@ -1053,8 +1128,8 @@ const Mainbar = () => {
                         return (
                           <li
                             key={item?.recentlySearchId}
-                            className="linkSearch"
-                            onClick={() => console.log("test")}
+                            className="linkSearch cursor-pointer"
+                            onClick={() => searchRecentArt(item?.text)}
                           >
                             {item?.text}
                           </li>
@@ -1063,8 +1138,7 @@ const Mainbar = () => {
                     </ul>
                   </div>
                   <button
-                  
-                  onClick={() => cleaRecentSearch(userDetails?.userId)}
+                    onClick={() => cleaRecentSearch(userDetails?.userId)}
                     style={{ width: "fit-content" }}
                     className="bg-[#888888] rounded-2xl text-sm12 text-[#ffffff] font-medium px-2.5 py-1.5"
                   >
@@ -1077,26 +1151,29 @@ const Mainbar = () => {
                       Recently Viewed
                     </p>
                     <div className="flex gap-2.5 flex-wrap">
-                      <div className="rounded-2xl w-[6.25rem] h-[6.25rem] overflow-hidden ">
-                        <img src={searchThumb} alt="" />
-                      </div>
-                      <div className="rounded-2xl w-[6.25rem] h-[6.25rem] overflow-hidden ">
-                        <img src={searchThumb} alt="" />
-                      </div>
-                      <div className="rounded-2xl w-[6.25rem] h-[6.25rem] overflow-hidden ">
-                        <img src={searchThumb} alt="" />
-                      </div>
-                      <div className="rounded-2xl w-[6.25rem] h-[6.25rem] overflow-hidden ">
-                        <img src={searchThumb} alt="" />
-                      </div>
-                      <div className="rounded-2xl w-[6.25rem] h-[6.25rem] overflow-hidden ">
-                        <img src={searchThumb} alt="" />
-                      </div>
+                      {recentlyViewd?.map((recent) => {
+                        return (
+                          <div
+                            key={recent.recentlyViewId}
+                            className="rounded-2xl w-[6.25rem] h-[6.25rem] overflow-hidden "
+                            onClick={() =>
+                              goToArtDetailsPage(recent?.artMaster?.artId)
+                            }
+                          >
+                            <img
+                              className="w-[6.25rem] h-[6.25rem]"
+                              src={recent?.artMaster?.image}
+                              alt=""
+                            />
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                   <button
                     style={{ width: "fit-content" }}
                     className="bg-[#888888] rounded-2xl mt-7 text-sm12 text-[#ffffff] font-medium px-2.5 py-1.5"
+                    onClick={() => clearRecentSearch(userDetails?.userId)}
                   >
                     Clear All Recently Viewed
                   </button>
@@ -1106,9 +1183,55 @@ const Mainbar = () => {
           </div>
 
           {/* <div className="rightdiv py-3 bg-[#E6E6E6] flex"> */}
-          <div className="group relative dropdown cursor-pointer  py-3 bg-[#E6E6E6]">
-            <a className=" px-4 text-primaryGray text-sm14 font-medium">
-              {selectItems !== null ? selectItems : "All Items"}
+          <div className="group relative dropdown cursor-pointer py-3.5 bg-[#E6E6E6]">
+            <a className=" px-4 text-primaryGray text-sm14 font-medium flex">
+              {selectItems !== null ? (
+                selectItems === "Art" ? (
+                  <div>
+                    <img src={artIcon} className="inline-block mr-3" alt="" />
+                    Art
+                  </div>
+                ) : selectItems === "Photos" ? (
+                  <div>
+                    <img src={photoIcon} className="inline-block mr-3" alt="" />
+                    Photos
+                  </div>
+                ) : selectItems === "Footage" ? (
+                  <div>
+                    <img
+                      src={footageIcon}
+                      className="inline-block mr-3"
+                      alt=""
+                    />
+                    Footage
+                  </div>
+                ) : selectItems === "Music" ? (
+                  <div>
+                    <img src={musicIcon} className="inline-block mr-3" alt="" />
+                    Music
+                  </div>
+                ) : selectItems === "Templates" ? (
+                  <div>
+                    <img
+                      src={templatesIcon}
+                      className="inline-block mr-3"
+                      alt=""
+                    />
+                    Templates
+                  </div>
+                ) : (
+                  <div>
+                    <img
+                      src={productsIcon}
+                      className="inline-block mr-3"
+                      alt=""
+                    />
+                    Products
+                  </div>
+                )
+              ) : (
+                "All Items"
+              )}
               <img className="inline-block ml-2" src={dropArrow} alt="" />
             </a>
             <div className="group-hover:block  z-10 dropdown-menu absolute top-12 hidden h-auto w-[8.813rem]">
