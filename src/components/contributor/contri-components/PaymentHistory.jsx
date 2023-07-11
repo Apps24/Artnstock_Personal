@@ -29,244 +29,124 @@ const PaymentHistory = () => {
   // const data = null;
   const data = [
     {
+      id: '1',
       d0: '09/09/2022',
-      d1: 'Buyers Referrals',
-      d2: '7653445676',
-      d3: 'Bank Deposite',
-      d4: '$ 1.15',
-      d5: 'Processing',
+      d1: '0',
+      d2: '2',
+      d3: '1',
+      d4: '51.15',
+      d5: '1',
+      d6: '0',
+      d7: '1',
+      d8: '76',
+      d9: '5',
+      d10: '1.15',
+      d11: 'Paid Paypal',
     },
     {
+      id: '2',
       d0: '09/09/2022',
-      d1: 'Buyers Referrals',
-      d2: '7653445676',
-      d3: 'Bank Deposite',
-      d4: '$ 1.15',
-      d5: 'Pending',
+      d1: '0',
+      d2: '2',
+      d3: '1',
+      d4: '51.15',
+      d5: '1',
+      d6: '0',
+      d7: '1',
+      d8: '76',
+      d9: '5',
+      d10: '1.15',
+      d11: 'Paid Paypal',
     },
     {
+      id: '3',
       d0: '09/09/2022',
-      d1: 'Buyers Referrals',
-      d2: '7653445676',
-      d3: 'Bank Deposite',
-      d4: '$ 1.15',
-      d5: 'Processing',
+      d1: '0',
+      d2: '2',
+      d3: '1',
+      d4: '51.15',
+      d5: '1',
+      d6: '0',
+      d7: '1',
+      d8: '76',
+      d9: '5',
+      d10: '1.15',
+      d11: 'Paid Paypal',
     },
     {
+      id: '4',
       d0: '09/09/2022',
-      d1: 'Buyers Referrals',
-      d2: '7653445676',
-      d3: 'Bank Deposite',
-      d4: '$ 1.15',
-      d5: 'Pending',
+      d1: '0',
+      d2: '2',
+      d3: '1',
+      d4: '51.15',
+      d5: '1',
+      d6: '0',
+      d7: '1',
+      d8: '76',
+      d9: '5',
+      d10: '1.15',
+      d11: 'Paid Paypal',
     },
     {
+      id: '5',
       d0: '09/09/2022',
-      d1: 'Buyers Referrals',
-      d2: '7653445676',
-      d3: 'Bank Deposite',
-      d4: '$ 1.15',
-      d5: 'Processing',
+      d1: '0',
+      d2: '2',
+      d3: '1',
+      d4: '51.15',
+      d5: '1',
+      d6: '0',
+      d7: '1',
+      d8: '76',
+      d9: '5',
+      d10: '1.15',
+      d11: 'Paid Paypal',
     },
     {
+      id: '6',
       d0: '09/09/2022',
-      d1: 'Buyers Referrals',
-      d2: '7653445676',
-      d3: 'Bank Deposite',
-      d4: '$ 1.15',
-      d5: 'Pending',
+      d1: '0',
+      d2: '2',
+      d3: '1',
+      d4: '51.15',
+      d5: '1',
+      d6: '0',
+      d7: '1',
+      d8: '76',
+      d9: '5',
+      d10: '1.15',
+      d11: 'Paid Paypal',
     },
     {
+      id: '7',
       d0: '09/09/2022',
-      d1: 'Buyers Referrals',
-      d2: '7653445676',
-      d3: 'Bank Deposite',
-      d4: '$ 1.15',
-      d5: 'Processing',
+      d1: '0',
+      d2: '2',
+      d3: '1',
+      d4: '51.15',
+      d5: '1',
+      d6: '0',
+      d7: '4',
+      d8: '26',
+      d9: '4',
+      d10: '1.15',
+      d11: 'Paid Paypal',
     },
     {
+      id: '8',
       d0: '09/09/2022',
-      d1: 'Buyers Referrals',
-      d2: '7653445676',
-      d3: 'Bank Deposite',
-      d4: '$ 1.15',
-      d5: 'Pending',
-    },
-    {
-      d0: '09/09/2022',
-      d1: 'Buyers Referrals',
-      d2: '7653445676',
-      d3: 'Bank Deposite',
-      d4: '$ 1.15',
-      d5: 'Processing',
-    },
-    {
-      d0: '09/09/2022',
-      d1: 'Buyers Referrals',
-      d2: '7653445676',
-      d3: 'Bank Deposite',
-      d4: '$ 1.15',
-      d5: 'Pending',
-    },
-    {
-      d0: '09/09/2022',
-      d1: 'Buyers Referrals',
-      d2: '7653445676',
-      d3: 'Bank Deposite',
-      d4: '$ 1.15',
-      d5: 'Processing',
-    },
-    {
-      d0: '09/09/2022',
-      d1: 'Buyers Referrals',
-      d2: '7653445676',
-      d3: 'Bank Deposite',
-      d4: '$ 1.15',
-      d5: 'Pending',
-    },
-    {
-      d0: '09/09/2022',
-      d1: 'Buyers Referrals',
-      d2: '7653445676',
-      d3: 'Bank Deposite',
-      d4: '$ 1.15',
-      d5: 'Processing',
-    },
-    {
-      d0: '09/09/2022',
-      d1: 'Buyers Referrals',
-      d2: '7653445676',
-      d3: 'Bank Deposite',
-      d4: '$ 1.15',
-      d5: 'Pending',
-    },
-    {
-      d0: '09/09/2022',
-      d1: 'Buyers Referrals',
-      d2: '7653445676',
-      d3: 'Bank Deposite',
-      d4: '$ 1.15',
-      d5: 'Processing',
-    },
-    {
-      d0: '09/09/2022',
-      d1: 'Buyers Referrals',
-      d2: '7653445676',
-      d3: 'Bank Deposite',
-      d4: '$ 1.15',
-      d5: 'Pending',
-    },
-    {
-      d0: '09/09/2022',
-      d1: 'Buyers Referrals',
-      d2: '7653445676',
-      d3: 'Bank Deposite',
-      d4: '$ 1.15',
-      d5: 'Processing',
-    },
-    {
-      d0: '09/09/2022',
-      d1: 'Buyers Referrals',
-      d2: '7653445676',
-      d3: 'Bank Deposite',
-      d4: '$ 1.15',
-      d5: 'Processing',
-    },
-    {
-      d0: '09/09/2022',
-      d1: 'Buyers Referrals',
-      d2: '7653445676',
-      d3: 'Bank Deposite',
-      d4: '$ 1.15',
-      d5: 'Pending',
-    },
-    {
-      d0: '09/09/2022',
-      d1: 'Buyers Referrals',
-      d2: '7653445676',
-      d3: 'Bank Deposite',
-      d4: '$ 1.15',
-      d5: 'Processing',
-    },
-    {
-      d0: '09/09/2022',
-      d1: 'Buyers Referrals',
-      d2: '7653445676',
-      d3: 'Bank Deposite',
-      d4: '$ 1.15',
-      d5: 'Pending',
-    },
-    {
-      d0: '09/09/2022',
-      d1: 'Buyers Referrals',
-      d2: '7653445676',
-      d3: 'Bank Deposite',
-      d4: '$ 1.15',
-      d5: 'Processing',
-    },
-    {
-      d0: '09/09/2022',
-      d1: 'Buyers Referrals',
-      d2: '7653445676',
-      d3: 'Bank Deposite',
-      d4: '$ 1.15',
-      d5: 'Pending',
-    },
-    {
-      d0: '09/09/2022',
-      d1: 'Buyers Referrals',
-      d2: '7653445676',
-      d3: 'Bank Deposite',
-      d4: '$ 1.15',
-      d5: 'Processing',
-    },
-    {
-      d0: '09/09/2022',
-      d1: 'Buyers Referrals',
-      d2: '7653445676',
-      d3: 'Bank Deposite',
-      d4: '$ 1.15',
-      d5: 'Pending',
-    },
-    {
-      d0: '09/09/2022',
-      d1: 'Buyers Referrals',
-      d2: '7653445676',
-      d3: 'Bank Deposite',
-      d4: '$ 1.15',
-      d5: 'Processing',
-    },
-    {
-      d0: '09/09/2022',
-      d1: 'Buyers Referrals',
-      d2: '7653445676',
-      d3: 'Bank Deposite',
-      d4: '$ 1.15',
-      d5: 'Pending',
-    },
-    {
-      d0: '09/09/2022',
-      d1: 'Buyers Referrals',
-      d2: '7653445676',
-      d3: 'Bank Deposite',
-      d4: '$ 1.15',
-      d5: 'Processing',
-    },
-    {
-      d0: '09/09/2022',
-      d1: 'Buyers Referrals',
-      d2: '7653445676',
-      d3: 'Bank Deposite',
-      d4: '$ 1.15',
-      d5: 'Pending',
-    },
-    {
-      d0: '09/09/2022',
-      d1: 'Buyers Referrals',
-      d2: '7653445676',
-      d3: 'Bank Deposite',
-      d4: '$ 1.15',
-      d5: 'Processing',
+      d1: '0',
+      d2: '2',
+      d3: '1',
+      d4: '51.15',
+      d5: '1',
+      d6: '0',
+      d7: '1',
+      d8: '86',
+      d9: '4',
+      d10: '2.15',
+      d11: 'Paid Paypal',
     },
   ];
 
@@ -276,7 +156,7 @@ const PaymentHistory = () => {
 
   //   paginationn **dont change the sequence of the code below** else will give undefined error
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 4;
   const dataToRender = data || [];
 
   const start = (currentPage - 1) * itemsPerPage;
@@ -299,6 +179,8 @@ const PaymentHistory = () => {
       setCurrentPage((prevPage) => prevPage + 1);
     }
   };
+
+  const [hoverFocus, sethoverFocus] = useState(null);
 
   return (
     <>
@@ -445,75 +327,253 @@ const PaymentHistory = () => {
             <table className='w-[1170px] border-separate border-spacing-0'>
               <tbody>
                 <tr className='text-[15px] font-medium' height='30'>
-                  <td className='border border-[#dddddd] bg-[#f3f3f3] text-primaryBlack  pl-[10px] rounded-tl-[10px]'>
-                    Date
+                  <td className='border border-[#dddddd] bg-[#ececec] text-primaryBlack  pl-[10px] rounded-tl-[10px]'>
+                    Aug 2022
                   </td>
-                  <td className='border-r border-b border-t border-[#dddddd] bg-[#f3f3f3] text-primaryBlack  pl-[10px] w-[360px]'>
+                  <td
+                    colspan='5'
+                    className='border-r border-b border-t border-[#dddddd] bg-[#ececec] text-primaryBlack  pl-[10px] w-[360px]'
+                  >
                     Earning Type
                   </td>
-                  <td className='border-r  border-b border-t  border-[#dddddd] bg-[#f3f3f3] text-primaryBlack  pl-[10px]'>
+                  <td
+                    colspan='4'
+                    className='border-r  border-b border-t  border-[#dddddd] bg-[#ececec] text-primaryBlack  pl-[10px]'
+                  >
                     Transaction ID
                   </td>
-                  <td className='border-r  border-b border-t  border-[#dddddd] bg-[#f3f3f3] text-primaryBlack  pl-[10px]'>
+                  {/* <td className='border-r  border-b border-t  border-[#dddddd] bg-[#f3f3f3] text-primaryBlack  pl-[10px]'>
                     Payment Mode
+                  </td> */}
+                  <td className='border-r  border-b border-t  border-[#dddddd] bg-[#ececec] text-primaryBlack  pl-[10px]'>
+                    Total Earnings
+                  </td>
+
+                  <td className='border-r w-[280px] border-b border-t border-[#dddddd] bg-[#ececec] text-primaryBlack rounded-tr-[10px]'>
+                    <div className='flex gap-[5px] items-center justify-center'>
+                      <span>Payment Status</span>
+                    </div>
+                  </td>
+                </tr>
+
+                <tr className='text-[13px] font-medium'>
+                  <td className='border-r border-l border-b border-t  border-[#dddddd] bg-[#f3f3f3] text-primaryBlack  pl-[10px]'>
+                    Date
+                  </td>
+                  <td className='border-r  border-b border-t  border-[#dddddd] bg-[#f3f3f3] text-primaryBlack  pl-[10px]'>
+                    Items Sold
+                  </td>
+                  <td className='border-r  border-b border-t  border-[#dddddd] bg-[#f3f3f3] text-primaryBlack  pl-[10px]'>
+                    Item Price
                   </td>
                   <td className='border-r  border-b border-t  border-[#dddddd] bg-[#f3f3f3] text-primaryBlack  pl-[10px]'>
                     Amount
                   </td>
+                  <td className='border-r  border-b border-t  border-[#dddddd] bg-[#f3f3f3] text-primaryBlack  pl-[10px]'>
+                    Tax Paid
+                  </td>
+                  <td className='border-r  border-b border-t  border-[#dddddd] bg-[#f3f3f3] text-primaryBlack  pl-[10px]'>
+                    Earnings
+                  </td>
+                  <td className='border-r  border-b border-t  border-[#dddddd] bg-[#f3f3f3] text-primaryBlack  pl-[10px]'>
+                    Referrals
+                  </td>
+                  <td className='border-r  border-b border-t  border-[#dddddd] bg-[#f3f3f3] text-primaryBlack  pl-[10px]'>
+                    Amount
+                  </td>
+                  <td className='border-r  border-b border-t  border-[#dddddd] bg-[#f3f3f3] text-primaryBlack  pl-[10px]'>
+                    Tax Paid
+                  </td>
+                  <td className='border-r  border-b border-t  border-[#dddddd] bg-[#f3f3f3] text-primaryBlack  pl-[10px]'>
+                    Earnings
+                  </td>
+                  <td className='border-r  border-b border-t  border-[#dddddd] bg-[#f3f3f3] text-primaryBlack  pl-[10px]'>
+                    Sales + Referrals
+                  </td>
 
-                  <td className='border-r w-[280px] border-b border-t border-[#dddddd] bg-[#f3f3f3] text-primaryBlack  pl-[10px] rounded-tr-[10px]'>
-                    <div className='flex gap-[5px] items-center'>
-                      <span>Status</span>
-                      <button className='inline-block flex flex-col justify-center items-center bg-pinkColor text-[11px] text-[white] font-medium w-[107px] h-[17px] rounded-[8.5px]'>
-                        <span> Updated: 5 hrs ago</span>
-                      </button>
-                    </div>
+                  <td className='border-r  border-b border-t  border-[#dddddd] bg-[#f3f3f3] text-primaryBlack  pl-[10px]'>
+                    <button
+                      style={{
+                        background:
+                          'linear-gradient(90deg, rgba(220,76,154,1) 0%, rgba(149,147,205,1) 35%, rgba(132,212,156,1) 65%, rgba(204,236,59,1) 100%)',
+                      }}
+                      className='w-[101px] h-[19px] rounded-[9.5px] flex justify-center items-center'
+                    >
+                      <span className='text-[10px] font-semibold text-primaryBlack'>
+                        Updated: 2hrs ago
+                      </span>
+                    </button>
                   </td>
                 </tr>
+
+                <tr className='text-[13px] text-primaryGray font-medium'>
+                  <td className='border-r border-l border-b border-[#dddddd] bg-[#feeeee]  pl-[10px]'>
+                    All Time
+                  </td>
+                  <td className='border-r border-b border-[#dddddd] bg-[#feeeee]  pl-[10px]'>
+                    12
+                  </td>
+                  <td className='border-r border-b border-[#dddddd] bg-[#feeeee]  pl-[10px]'>
+                    12
+                  </td>
+                  <td className='border-r border-b border-[#dddddd] bg-[#feeeee]  pl-[10px]'>
+                    12
+                  </td>
+                  <td className='border-r border-b border-[#dddddd] bg-[#feeeee]  pl-[10px]'>
+                    12
+                  </td>
+                  <td className='border-r border-b border-[#dddddd] bg-[#feeeee]  pl-[10px]'>
+                    12
+                  </td>
+                  <td className='border-r border-b border-[#dddddd] bg-[#f9e9e9]  pl-[10px]'>
+                    12
+                  </td>
+                  <td className='border-r border-b border-[#dddddd] bg-[#feeeee]  pl-[10px]'>
+                    12
+                  </td>
+                  <td className='border-r border-b border-[#dddddd] bg-[#feeeee]  pl-[10px]'>
+                    12
+                  </td>
+                  <td className='border-r border-b border-[#dddddd] bg-[#feeeee]  pl-[10px]'>
+                    12
+                  </td>
+                  <td className='border-r border-b border-[#dddddd] bg-[#feeeee]  pl-[10px]'>
+                    12
+                  </td>
+                  <td className='border-r border-b border-[#dddddd] bg-[#feeeee]  pl-[10px]'>
+                    Paid Paypal
+                  </td>
+                </tr>
+
                 {currentData &&
                   currentData.map((da, index) => (
                     <tr
                       className='text-[13px] text-primaryGray'
                       height='30'
+                      onMouseEnter={() => {
+                        sethoverFocus(da.id);
+                      }}
+                      onMouseLeave={() => {
+                        sethoverFocus(null);
+                      }}
                     >
                       <td
-                        className={`border-r border-b border-l border-[#dddddd] bg-[#ffffff]  pl-[10px] ${
+                        className={`border-r border-b border-l border-[#dddddd]  pl-[10px] ${
                           index == currentData.length - 1
                             ? 'rounded-bl-[10px]'
                             : ''
-                        }`}
+                        } ${
+                          hoverFocus === da.id
+                            ? 'bg-[#ddf5f7]'
+                            : 'bg-[#fafafa]'
+                        } `}
                       >
                         {da.d0}
                       </td>
-                      <td className='border-r border-b border-[#dddddd] bg-[#ffffff]  pl-[10px]'>
+                      <td
+                        className={`border-r border-b border-[#dddddd]  pl-[10px] ${
+                          hoverFocus === da.id
+                            ? 'bg-[#ddf5f7]'
+                            : 'bg-[#fafafa]'
+                        }`}
+                      >
                         {da.d1}
                       </td>
-                      <td className='border-r border-b border-[#dddddd] bg-[#ffffff]  pl-[10px]'>
+                      <td
+                        className={`border-r border-b border-[#dddddd]  pl-[10px] ${
+                          hoverFocus === da.id
+                            ? 'bg-[#e1fafc]'
+                            : 'bg-[#ffffff]'
+                        }`}
+                      >
                         {da.d2}
                       </td>
-                      <td className='border-r border-b border-[#dddddd] bg-[#ffffff]  pl-[10px]'>
+                      <td
+                        className={`border-r border-b border-[#dddddd]  pl-[10px] ${
+                          hoverFocus === da.id
+                            ? 'bg-[#e1fafc]'
+                            : 'bg-[#ffffff]'
+                        }`}
+                      >
                         {da.d3}
                       </td>
-                      <td className='border-r border-b border-[#dddddd] bg-[#ffffff]  pl-[10px]'>
+                      <td
+                        className={`border-r border-b border-[#dddddd]  pl-[10px] ${
+                          hoverFocus === da.id
+                            ? 'bg-[#e1fafc]'
+                            : 'bg-[#ffffff]'
+                        }`}
+                      >
                         {da.d4}
+                      </td>
+                      <td
+                        className={`border-r border-b border-[#dddddd]  pl-[10px] ${
+                          hoverFocus === da.id
+                            ? 'bg-[#e1fafc]'
+                            : 'bg-[#ffffff]'
+                        }`}
+                      >
+                        {da.d5}
+                      </td>
+                      <td
+                        className={`border-r border-b border-[#dddddd]  pl-[10px] ${
+                          hoverFocus === da.id
+                            ? 'bg-[#ddf5f7]'
+                            : 'bg-[#fafafa]'
+                        }`}
+                      >
+                        {da.d6}
+                      </td>
+                      <td
+                        className={`border-r border-b border-[#dddddd]  pl-[10px] ${
+                          hoverFocus === da.id
+                            ? 'bg-[#e1fafc]'
+                            : 'bg-[#ffffff]'
+                        }`}
+                      >
+                        {da.d7}
+                      </td>
+                      <td
+                        className={`border-r border-b border-[#dddddd]  pl-[10px] ${
+                          hoverFocus === da.id
+                            ? 'bg-[#e1fafc]'
+                            : 'bg-[#ffffff]'
+                        }`}
+                      >
+                        {da.d8}
+                      </td>
+                      <td
+                        className={`border-r border-b border-[#dddddd]  pl-[10px] ${
+                          hoverFocus === da.id
+                            ? 'bg-[#e1fafc]'
+                            : 'bg-[#ffffff]'
+                        }`}
+                      >
+                        {da.d9}
+                      </td>
+                      <td
+                        className={`border-r border-b border-[#dddddd]  pl-[10px] ${
+                          hoverFocus === da.id
+                            ? 'bg-[#e1fafc]'
+                            : 'bg-[#ffffff]'
+                        }`}
+                      >
+                        {da.d10}
                       </td>
 
                       <td
-                        className={`border-r border-b border-[#dddddd] bg-[#ffffff] pr-[10px] pl-[10px] ${
+                        className={`border-r border-b border-[#dddddd] pl-[10px] pr-[10px] ${
                           index === currentData.length - 1
                             ? 'rounded-br-[10px]'
                             : ''
-                        } `}
+                        } ${
+                          hoverFocus === da.id
+                            ? 'bg-[#e1fafc]'
+                            : 'bg-[#ffffff]'
+                        }`}
                       >
-                        <div className='flex justify-between '>
-                          {da.d5}{' '}
-                          <div>
-                            <img
-                              className='inline-block w-[10px] h-[6px]'
-                              src={dropdown}
-                              alt=''
-                            />
-                          </div>
+                        <div className='flex justify-between'>
+                          {da.d11}{' '}
                         </div>
                       </td>
                     </tr>
