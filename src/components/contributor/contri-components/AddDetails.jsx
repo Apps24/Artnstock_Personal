@@ -108,7 +108,7 @@ const AddDetails = () => {
       let formData = new FormData();
       formData.append('file', cards);
       httpClient
-        .post('/bucket/push', formData, {
+        .post('/CloudinaryImageUpload', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -118,7 +118,10 @@ const AddDetails = () => {
           // console.log(res);
           setFormData((prevFormData) => ({
             ...prevFormData,
-            referenceFile: [...prevFormData.referenceFile, res.data],
+            referenceFile: [
+              ...prevFormData.referenceFile,
+              res.data.secureUrl,
+            ],
           }));
         })
         .catch((err) => {
@@ -276,7 +279,7 @@ const AddDetails = () => {
       let formData = new FormData();
       formData.append('file', firstImg);
       httpClient
-        .post('/bucket/push', formData, {
+        .post('/CloudinaryImageUpload', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -286,7 +289,7 @@ const AddDetails = () => {
           // console.log(res);
           setFormData((prevFormData) => ({
             ...prevFormData,
-            image: res.data,
+            image: res.data.secureUrl,
           }));
         })
         .catch((err) => {

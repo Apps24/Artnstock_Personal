@@ -84,7 +84,7 @@ const Wishlist = ({ id, type, prodType }) => {
         id: userId,
       };
       httpClient.post(`/wishlist_master/save`, object).then((res) => {
-        // console.log(res);
+        console.log(res);
         getAllWishlistByUserId();
       });
     }

@@ -11,11 +11,19 @@ import usflag from '../../assets/images/socials/usflag.jpg';
 import dropdown from '../../assets/images/socials/dropdown.png';
 import signuptext from '../../assets/images/Icons/signup.svg';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 const Footer = () => {
   const [isOpenLang, setIsOpenLang] = useState(false);
   const [isOpenCurr, setIsOpenCurr] = useState(false);
+
+  const userRole = useSelector((state) => state.auth.userRole);
+
+  // useEffect(() => {
+  //   console.log(userRole);
+  // }, []);
+
   return (
     <div className='footer'>
       <div className='footer-top text-center text-14px bg-[#F5F5F5] h-[38px] flex justify-center items-center'>
@@ -74,7 +82,9 @@ const Footer = () => {
             <div className=''>
               <p className='footerHeadings'>SHOP</p>
 
-              <p className='footerLinks'>Art</p>
+              <p className='footerLinks'>
+                <Link to='/art-home'>Art</Link>
+              </p>
 
               <p className='footerLinks'>Images</p>
 
@@ -84,7 +94,9 @@ const Footer = () => {
 
               <p className='footerLinks'>Templates</p>
 
-              <p className='footerLinks'>Products</p>
+              <p className='footerLinks'>
+                <Link to='/product-home'>Products</Link>
+              </p>
             </div>
             {/* Column 3 */}
 

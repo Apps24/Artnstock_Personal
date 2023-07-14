@@ -324,7 +324,7 @@ const PaymentHistory = () => {
       {data !== null ? (
         <div className='w-full flex flex-col pt-[15px] pb-[100px]'>
           <div className='wrapper mx-auto'>
-            <table className='w-[1170px] border-separate border-spacing-0'>
+            <table className='w-[1170px] border-separate border-spacing-0 mt-[20px]'>
               <tbody>
                 <tr className='text-[15px] font-medium' height='30'>
                   <td className='border border-[#dddddd] bg-[#ececec] text-primaryBlack  pl-[10px] rounded-tl-[10px]'>

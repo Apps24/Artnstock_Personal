@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import Topbar from './Topbar';
 import mainLogo from '../../assets/images/header/mainLogo.svg';
-import notficationIcon from '../../assets/images/Icons/notificationIcon.svg';
+import { ReactComponent as NotficationIcon } from '../../assets/images/Icons/notificationIcon.svg';
 // import wishlistIcon from '../../assets/images/Icons/wishlistIcon.svg';
 import { ReactComponent as WishlistIcon } from '../../assets/images/Icons/wishlistIcon.svg';
 import cartIcon from '../../assets/images/Icons/cartIcon.svg';
@@ -11,12 +11,12 @@ import imageIcon from '../../assets/images/Icons/pictureIcon.svg';
 import userIcon from '../../assets/images/Icons/userIcon.svg';
 // dropdown
 
-import artIcon from '../../assets/images/Icons/artIcon.svg';
-import photoIcon from '../../assets/images/Icons/photosIcon.svg';
-import footageIcon from '../../assets/images/Icons/videoIcon.svg';
-import musicIcon from '../../assets/images/Icons/music.svg';
-import templatesIcon from '../../assets/images/Icons/templatesIcon.svg';
-import productsIcon from '../../assets/images/Icons/productsIcon.svg';
+import { ReactComponent as ArtIcon } from '../../assets/images/Icons/artIcon.svg';
+import { ReactComponent as PhotoIcon } from '../../assets/images/Icons/photosIcon.svg';
+import { ReactComponent as FootageIcon } from '../../assets/images/Icons/videoIcon.svg';
+import { ReactComponent as MusicIcon } from '../../assets/images/Icons/music.svg';
+import { ReactComponent as TemplatesIcon } from '../../assets/images/Icons/templatesIcon.svg';
+import { ReactComponent as ProductsIcon } from '../../assets/images/Icons/productsIcon.svg';
 import {
   Link,
   NavLink,
@@ -60,8 +60,7 @@ import { searchSliceAction } from '../../store/searchSlice';
 import { styleSliceAction } from '../../store/styleSlice';
 import { setSubjectId } from '../../store/subjectidSlice';
 
-import { useDetectClickOutside } from "react-detect-click-outside";
-
+import { useDetectClickOutside } from 'react-detect-click-outside';
 
 const StyledPopup = styled(Popup)`
   // use your custom style for ".popup-overlay"
@@ -156,11 +155,10 @@ const Mainbar = () => {
     }
   };
 
-  const [searchedArtList, setsearchedArtList] = useState("");
+  const [searchedArtList, setsearchedArtList] = useState('');
   const [searchKeywords, setSearchKeywords] = useState();
   // const [keyword, setKeyword] = useState("")
   const [recentlyViewd, setRecentlyViewd] = useState();
-
 
   const changeinput = (e) => {
     setsearchedArtList(e.target.value);
@@ -194,13 +192,17 @@ const Mainbar = () => {
   const getSearchKeyword = () => {
     // console.log(searchedArtList);
     if (searchedArtList === null || searchedArtList.length === 0) {
-      httpClient.get("/art_master/getKeywordMasterList").then((res) => {
-        // console.log(res);
-        setSearchKeywords(res?.data);
-      });
+      httpClient
+        .get('/art_master/getKeywordMasterList')
+        .then((res) => {
+          // console.log(res);
+          setSearchKeywords(res?.data);
+        });
     } else {
       httpClient
-        .get(`/art_master/searchKeywordCountMaster/${searchedArtList}`)
+        .get(
+          `/art_master/searchKeywordCountMaster/${searchedArtList}`
+        )
         .then((res) => {
           // console.log(res);
           setSearchKeywords(res?.data);
@@ -225,25 +227,25 @@ const Mainbar = () => {
   const searchKeyword = (keyword) => {
     getRecentSearch();
     apps1();
-    navigate("/search");
-    dispatch(searchSliceAction.setSearchType("keyword"));
+    navigate('/search');
+    dispatch(searchSliceAction.setSearchType('keyword'));
     dispatch(searchSliceAction.setSearchText(keyword));
   };
 
   const searchRecentArt = (text) => {
     getRecentSearch();
-    navigate("/search");
+    navigate('/search');
     apps1();
-    dispatch(searchSliceAction.setSearchType("normal"));
+    dispatch(searchSliceAction.setSearchType('normal'));
     dispatch(searchSliceAction.setSearchText(text));
     dispatch(styleSliceAction.setStyle(null));
   };
 
   const searchArts = () => {
     getRecentSearch();
-    navigate("/search");
+    navigate('/search');
     apps1();
-    dispatch(searchSliceAction.setSearchType("normal"));
+    dispatch(searchSliceAction.setSearchType('normal'));
     dispatch(searchSliceAction.setSearchText(searchedArtList));
     dispatch(styleSliceAction.setStyle(null));
   };
@@ -332,6 +334,19 @@ const Mainbar = () => {
     }
   };
 
+  const [WishIconHoverColor, setWishIconHoverColor] =
+    useState('#888888');
+  const [NotficationIconHoverColor, setNotficationIconHoverColor] =
+    useState('#888888');
+
+  const [DropArtColor, setDropArtColor] = useState('#888888');
+  const [DropPhotosColor, setDropPhotosColor] = useState('#888888');
+  const [DropFootageColor, setDropFootageColor] = useState('#888888');
+  const [DropMusicColor, setDropMusicColor] = useState('#888888');
+  const [DropTemplatesColor, setDropTemplatesColor] =
+    useState('#888888');
+  const [DropProductColor, setDropProductColor] = useState('#888888');
+
   return (
     <>
       {/* loading bar */}
@@ -346,7 +361,7 @@ const Mainbar = () => {
         <div className='flex items-center justify-between relative'>
           <div className='left flex items-center'>
             <img
-              className='mr-5'
+              className='mr-5 cursor-pointer'
               onClick={() => changeNavigation('home')}
               src={mainLogo}
               alt=''
@@ -558,10 +573,18 @@ const Mainbar = () => {
                   </button>
                 </div>
               </li>
-              <li className='menu-link'>PHOTOS</li>
-              <li className='menu-link'>FOOTAGE</li>
-              <li className='menu-link'>MUSIC</li>
-              <li className='menu-link'>TEMPLATES</li>
+              <li className='menu-link hover:text-primaryBlack'>
+                PHOTOS
+              </li>
+              <li className='menu-link hover:text-primaryBlack'>
+                FOOTAGE
+              </li>
+              <li className='menu-link hover:text-primaryBlack'>
+                MUSIC
+              </li>
+              <li className='menu-link hover:text-primaryBlack'>
+                TEMPLATES
+              </li>
               <li
                 className={`${
                   activeLink === 'Products' && 'text-primaryBlack'
@@ -736,8 +759,12 @@ const Mainbar = () => {
                   </button>
                 </div>
               </li>
-              <li className='menu-link'>BLOG</li>
-              <li className='menu-link'>AUCTIONS</li>
+              <li className='menu-link hover:text-primaryBlack'>
+                BLOG
+              </li>
+              <li className='menu-link hover:text-primaryBlack'>
+                AUCTIONS
+              </li>
             </ul>
           </div>
           <div
@@ -755,7 +782,9 @@ const Mainbar = () => {
           </div>
           <div className='right'>
             <ul>
-              <li className='menu-link'>PLANS & PRICING</li>
+              <li className='menu-link hover:text-primaryBlack'>
+                PLANS & PRICING
+              </li>
               {userAuth.login ? (
                 <li className='menu-link'>
                   <div className=''>
@@ -773,7 +802,7 @@ const Mainbar = () => {
                         leaveFrom='transform opacity-100 scale-100'
                         leaveTo='transform opacity-0 scale-95'
                       >
-                        <Menu.Items className='absolute right-0 mt-2 w-w245 z-50 origin-top-right divide-y divide-[#efefef] rounded-[16px] bg-[#ffffff] shadow-dropShadow focus:outline-none'>
+                        <Menu.Items className='absolute right-0 mt-2 w-w245 z-[99] origin-top-right divide-y divide-[#efefef] rounded-[16px] bg-[#ffffff] shadow-dropShadow focus:outline-none'>
                           <div className='px-[14px] text-[12px] text-[#757575] '>
                             <Menu.Item>
                               <div>
@@ -1016,7 +1045,18 @@ const Mainbar = () => {
                 <div className=''>
                   <Menu as='div' className='relative '>
                     <Menu.Button className='inline-flex w-full justify-center rounded-md bg-black bg-opacity-20 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'>
-                      <img src={notficationIcon} alt='' />
+                      {/* <img src={notficationIcon} alt='' /> */}
+                      <NotficationIcon
+                        onMouseEnter={() => {
+                          setNotficationIconHoverColor('#333333');
+                        }}
+                        onMouseLeave={() => {
+                          setNotficationIconHoverColor('#888888');
+                        }}
+                        style={{
+                          fill: NotficationIconHoverColor,
+                        }}
+                      />
                     </Menu.Button>
 
                     <Transition
@@ -1078,11 +1118,17 @@ const Mainbar = () => {
                   alt=''
                 /> */}
                 <WishlistIcon
+                  onMouseEnter={() => {
+                    setWishIconHoverColor('#333333');
+                  }}
+                  onMouseLeave={() => {
+                    setWishIconHoverColor('#888888');
+                  }}
                   onClick={() => {
                     navigate('/wishlist');
                   }}
                   style={{
-                    fill: '#888888',
+                    fill: WishIconHoverColor,
                   }}
                 />
               </li>
@@ -1101,7 +1147,7 @@ const Mainbar = () => {
         <div className='mt-3.5 flex items-center '>
           {/* Search Input */}
           <div
-            className="group relative w-fit flex-1 bg-[#EEEEEE] rounded-tl-3xl rounded-bl-3xl"
+            className='group relative w-fit flex-1 bg-[#EEEEEE] rounded-tl-3xl rounded-bl-3xl'
             ref={ref1}
           >
             <input
@@ -1126,19 +1172,21 @@ const Mainbar = () => {
             />
             <div
               className={`${
-                showDrop ? "block" : "hidden"
+                showDrop ? 'block' : 'hidden'
               } absolute border border-[#E9E9E9] bg-[#ffffff] w-[100%] pl-5 pr-4  border-t-0 rounded-bl-3xl rounded-br-3xl z-10`}
             >
-              <div className=" border-t border-[#EFEFEF] pt-5 pb-7 flex">
-                <div className=" w-[340px] border-r border-[#EFEFEF]">
+              <div className=' border-t border-[#EFEFEF] pt-5 pb-7 flex'>
+                <div className=' w-[340px] border-r border-[#EFEFEF]'>
                   <ul>
                     {searchKeywords?.map((keyword, i) => {
                       if (i < 10) {
                         return (
                           <li
                             key={keyword?.keywordCountId}
-                            className="linkSearch cursor-pointer"
-                            onClick={() => searchKeyword(keyword?.keyword)}
+                            className='linkSearch cursor-pointer'
+                            onClick={() =>
+                              searchKeyword(keyword?.keyword)
+                            }
                           >
                             {keyword?.keyword}
                           </li>
@@ -1147,7 +1195,7 @@ const Mainbar = () => {
                     })}
                   </ul>
                 </div>
-                <div className="w-[340px] flex flex-col justify-between border-r  border-[#EFEFEF] pl-5">
+                <div className='w-[340px] flex flex-col justify-between border-r  border-[#EFEFEF] pl-5'>
                   <div>
                     <p className='text-sm18 leading-[29.7px] text-primaryBlack font-semibold'>
                       Recent Searches
@@ -1157,8 +1205,10 @@ const Mainbar = () => {
                         return (
                           <li
                             key={item?.recentlySearchId}
-                            className="linkSearch cursor-pointer"
-                            onClick={() => searchRecentArt(item?.text)}
+                            className='linkSearch cursor-pointer'
+                            onClick={() =>
+                              searchRecentArt(item?.text)
+                            }
                           >
                             {item?.text}
                           </li>
@@ -1167,9 +1217,11 @@ const Mainbar = () => {
                     </ul>
                   </div>
                   <button
-                    onClick={() => cleaRecentSearch(userDetails?.userId)}
-                    style={{ width: "fit-content" }}
-                    className="bg-[#888888] rounded-2xl text-sm12 text-[#ffffff] font-medium px-2.5 py-1.5"
+                    onClick={() =>
+                      cleaRecentSearch(userDetails?.userId)
+                    }
+                    style={{ width: 'fit-content' }}
+                    className='bg-[#888888] rounded-2xl text-sm12 text-[#ffffff] font-medium px-2.5 py-1.5'
                   >
                     Clear All Recent Searches
                   </button>
@@ -1179,20 +1231,22 @@ const Mainbar = () => {
                     <p className='text-sm18 leading-[29.7px] text-primaryBlack font-semibold'>
                       Recently Viewed
                     </p>
-                    <div className="flex gap-2.5 flex-wrap">
+                    <div className='flex gap-2.5 flex-wrap'>
                       {recentlyViewd?.map((recent) => {
                         return (
                           <div
                             key={recent.recentlyViewId}
-                            className="rounded-2xl w-[6.25rem] h-[6.25rem] overflow-hidden "
+                            className='rounded-2xl w-[6.25rem] h-[6.25rem] overflow-hidden '
                             onClick={() =>
-                              goToArtDetailsPage(recent?.artMaster?.artId)
+                              goToArtDetailsPage(
+                                recent?.artMaster?.artId
+                              )
                             }
                           >
                             <img
-                              className="w-[6.25rem] h-[6.25rem]"
+                              className='w-[6.25rem] h-[6.25rem]'
                               src={recent?.artMaster?.image}
-                              alt=""
+                              alt=''
                             />
                           </div>
                         );
@@ -1200,9 +1254,11 @@ const Mainbar = () => {
                     </div>
                   </div>
                   <button
-                    style={{ width: "fit-content" }}
-                    className="bg-[#888888] rounded-2xl mt-7 text-sm12 text-[#ffffff] font-medium px-2.5 py-1.5"
-                    onClick={() => clearRecentSearch(userDetails?.userId)}
+                    style={{ width: 'fit-content' }}
+                    className='bg-[#888888] rounded-2xl mt-7 text-sm12 text-[#ffffff] font-medium px-2.5 py-1.5'
+                    onClick={() =>
+                      clearRecentSearch(userDetails?.userId)
+                    }
                   >
                     Clear All Recently Viewed
                   </button>
@@ -1213,133 +1269,269 @@ const Mainbar = () => {
 
           {/* <div className="rightdiv py-3 bg-[#E6E6E6] flex"> */}
 
-          <div className="group relative dropdown cursor-pointer py-3.5 bg-[#E6E6E6]">
-            <a className=" px-4 text-primaryGray text-sm14 font-medium flex">
+          <div className='group relative dropdown cursor-pointer py-3.5 bg-[#E6E6E6]'>
+            <a className=' px-4 text-primaryGray text-sm14 font-medium flex'>
               {selectItems !== null ? (
-                selectItems === "Art" ? (
+                selectItems === 'Art' ? (
                   <div>
-                    <img src={artIcon} className="inline-block mr-3" alt="" />
+                    {/* <img
+                      src={artIcon}
+                      className='inline-block mr-3'
+                      alt=''
+                    /> */}
+                    <ArtIcon
+                      style={{
+                        fill: '#888888',
+                        display: 'inline-block',
+                        marginRight: '12px',
+                      }}
+                    />
                     Art
                   </div>
-                ) : selectItems === "Photos" ? (
+                ) : selectItems === 'Photos' ? (
                   <div>
-                    <img src={photoIcon} className="inline-block mr-3" alt="" />
+                    {/* <img
+                      src={photoIcon}
+                      className='inline-block mr-3'
+                      alt=''
+                    /> */}
+                    <PhotoIcon
+                      style={{
+                        fill: '#888888',
+                        display: 'inline-block',
+                        marginRight: '12px',
+                      }}
+                    />
                     Photos
                   </div>
-                ) : selectItems === "Footage" ? (
+                ) : selectItems === 'Footage' ? (
                   <div>
-                    <img
+                    {/* <img
                       src={footageIcon}
-                      className="inline-block mr-3"
-                      alt=""
+                      className='inline-block mr-3'
+                      alt=''
+                    /> */}
+                    <FootageIcon
+                      style={{
+                        fill: '#888888',
+                        display: 'inline-block',
+                        marginRight: '12px',
+                      }}
                     />
                     Footage
                   </div>
-                ) : selectItems === "Music" ? (
+                ) : selectItems === 'Music' ? (
                   <div>
-                    <img src={musicIcon} className="inline-block mr-3" alt="" />
+                    {/* <img
+                      src={musicIcon}
+                      className='inline-block mr-3'
+                      alt=''
+                    /> */}
+                    <MusicIcon
+                      style={{
+                        fill: '#888888',
+                        display: 'inline-block',
+                        marginRight: '12px',
+                      }}
+                    />
                     Music
                   </div>
-                ) : selectItems === "Templates" ? (
+                ) : selectItems === 'Templates' ? (
                   <div>
-                    <img
+                    {/* <img
                       src={templatesIcon}
-                      className="inline-block mr-3"
-                      alt=""
+                      className='inline-block mr-3'
+                      alt=''
+                    /> */}
+                    <TemplatesIcon
+                      style={{
+                        fill: '#888888',
+                        display: 'inline-block',
+                        marginRight: '12px',
+                      }}
                     />
                     Templates
                   </div>
                 ) : (
                   <div>
-                    <img
+                    {/* <img
                       src={productsIcon}
-                      className="inline-block mr-3"
-                      alt=""
+                      className='inline-block mr-3'
+                      alt=''
+                    /> */}
+                    <ProductsIcon
+                      style={{
+                        fill: '#888888',
+                        display: 'inline-block',
+                        marginRight: '12px',
+                      }}
                     />
                     Products
                   </div>
                 )
               ) : (
-                "All Items"
+                'All Items'
               )}
-              <img className="inline-block ml-2" src={dropArrow} alt="" />
+              <img
+                className='inline-block ml-2'
+                src={dropArrow}
+                alt=''
+              />
             </a>
             <div className='group-hover:block  z-10 dropdown-menu absolute top-12 hidden h-auto w-[8.813rem]'>
               <ul className='top-0 bg-white shadow-dropShadow rounded-2xl bg-[#ffffff] hover:overflow-hidden'>
                 <li
-                  className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
+                  className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF] text-primaryGray hover:text-primaryBlack'
                   onClick={() => setSelectItems('Art')}
+                  onMouseEnter={() => {
+                    setDropArtColor('#333333');
+                  }}
+                  onMouseLeave={() => {
+                    setDropArtColor('#888888');
+                  }}
                 >
-                  <a className='block cursor-pointer text-[0.813rem] text-primaryGray font-normal hover:text-primaryBlack leading-[2.438rem]'>
-                    <img
+                  <a className='block cursor-pointer text-[0.813rem]  font-normal leading-[2.438rem]'>
+                    {/* <img
                       src={artIcon}
                       className='inline-block mr-3'
                       alt=''
+                    /> */}
+                    <ArtIcon
+                      style={{
+                        fill: DropArtColor,
+                        display: 'inline-block',
+                        marginRight: '12px',
+                      }}
                     />
                     Art
                   </a>
                 </li>
                 <li
-                  className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
+                  className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF] text-primaryGray hover:text-primaryBlack'
                   onClick={() => setSelectItems('Photos')}
+                  onMouseEnter={() => {
+                    setDropPhotosColor('#333333');
+                  }}
+                  onMouseLeave={() => {
+                    setDropPhotosColor('#888888');
+                  }}
                 >
-                  <a className='block cursor-pointer text-[0.813rem] text-primaryGray font-normal hover:text-primaryBlack leading-[2.438rem]'>
-                    <img
+                  <a className='block cursor-pointer text-[0.813rem]  font-normal leading-[2.438rem]'>
+                    {/* <img
                       src={photoIcon}
                       className='inline-block mr-3'
                       alt=''
+                    /> */}
+                    <PhotoIcon
+                      style={{
+                        fill: DropPhotosColor,
+                        display: 'inline-block',
+                        marginRight: '12px',
+                      }}
                     />
                     Photos
                   </a>
                 </li>
                 <li
-                  className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
+                  className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF] text-primaryGray hover:text-primaryBlack'
                   onClick={() => setSelectItems('Footage')}
+                  onMouseEnter={() => {
+                    setDropFootageColor('#333333');
+                  }}
+                  onMouseLeave={() => {
+                    setDropFootageColor('#888888');
+                  }}
                 >
-                  <a className='block cursor-pointer text-[0.813rem] text-primaryGray font-normal hover:text-primaryBlack leading-[2.438rem]'>
-                    <img
+                  <a className='block cursor-pointer text-[0.813rem] font-normal  leading-[2.438rem]'>
+                    {/* <img
                       src={footageIcon}
                       className='inline-block mr-3'
                       alt=''
+                    /> */}
+                    <FootageIcon
+                      style={{
+                        fill: DropFootageColor,
+                        display: 'inline-block',
+                        marginRight: '12px',
+                      }}
                     />
                     Footage
                   </a>
                 </li>
                 <li
-                  className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
+                  className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF] text-primaryGray hover:text-primaryBlack'
                   onClick={() => setSelectItems('Music')}
+                  onMouseEnter={() => {
+                    setDropMusicColor('#333333');
+                  }}
+                  onMouseLeave={() => {
+                    setDropMusicColor('#888888');
+                  }}
                 >
-                  <a className='block cursor-pointer text-[0.813rem] text-primaryGray font-normal hover:text-primaryBlack leading-[2.438rem]'>
-                    <img
+                  <a className='block cursor-pointer text-[0.813rem]  font-normal  leading-[2.438rem]'>
+                    {/* <img
                       src={musicIcon}
                       className='inline-block mr-3'
                       alt=''
+                    /> */}
+                    <MusicIcon
+                      style={{
+                        fill: DropMusicColor,
+                        display: 'inline-block',
+                        marginRight: '12px',
+                      }}
                     />
                     Music
                   </a>
                 </li>
                 <li
-                  className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
+                  className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF] text-primaryGray hover:text-primaryBlack'
                   onClick={() => setSelectItems('Templates')}
+                  onMouseEnter={() => {
+                    setDropTemplatesColor('#333333');
+                  }}
+                  onMouseLeave={() => {
+                    setDropTemplatesColor('#888888');
+                  }}
                 >
-                  <a className='block cursor-pointer text-[0.813rem] text-primaryGray font-normal hover:text-primaryBlack leading-[2.438rem]'>
-                    <img
+                  <a className='block cursor-pointer text-[0.813rem]  font-normal  leading-[2.438rem]'>
+                    {/* <img
                       src={templatesIcon}
                       className='inline-block mr-3'
                       alt=''
+                    /> */}
+                    <TemplatesIcon
+                      style={{
+                        fill: DropTemplatesColor,
+                        display: 'inline-block',
+                        marginRight: '12px',
+                      }}
                     />
                     Templates
                   </a>
                 </li>
                 <li
-                  className='py-1 px-3.5 hover:bg-[#F0F0F0] '
+                  className='py-1 px-3.5 hover:bg-[#F0F0F0] text-primaryGray hover:text-primaryBlack'
                   onClick={() => setSelectItems('Products')}
+                  onMouseEnter={() => {
+                    setDropProductColor('#333333');
+                  }}
+                  onMouseLeave={() => {
+                    setDropProductColor('#888888');
+                  }}
                 >
-                  <a className='block cursor-pointer text-[0.813rem] text-primaryGray font-normal hover:text-primaryBlack leading-[2.438rem]'>
-                    <img
+                  <a className='block cursor-pointer text-[0.813rem]  font-normal  leading-[2.438rem]'>
+                    {/* <img
                       src={productsIcon}
                       className='inline-block mr-3'
                       alt=''
+                    /> */}
+                    <ProductsIcon
+                      style={{
+                        fill: DropProductColor,
+                        display: 'inline-block',
+                        marginRight: '12px',
+                      }}
                     />
                     Products
                   </a>

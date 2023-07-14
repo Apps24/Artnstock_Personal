@@ -3,20 +3,14 @@ import download from '../../../assets/images/contributor/download.png';
 import backArrow from '../../../assets/images/contributor/backArrow.png';
 import nextArrow from '../../../assets/images/contributor/nextArrow.png';
 import { useState, useEffect } from 'react';
-import { setpath2cust } from '../../../store/contriPathSlice';
 import { useDispatch } from 'react-redux';
+import { setpath2 } from '../../../store/contriPathSlice';
 
 const PaymentHistory = () => {
   const [isHovered, setIsHovered] = useState(false);
   //   const [currentData, setCurrentData] = useState([]);
   const [isOpenSortByYear, setIsOpenSortByYear] = useState(false);
   const [isOpenSortByMonth, setIsOpenSortByMonth] = useState(false);
-
-  useEffect(() => {
-    dispatch(setpath2cust('/ Payment History'));
-  }, []);
-
-  const dispatch = useDispatch();
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -26,292 +20,143 @@ const PaymentHistory = () => {
     setIsHovered(false);
   };
 
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setpath2('/ Payment History'));
+  }, []);
+
   // const data = null;
   const data = [
     {
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: 'Buyers Referrals',
-      d4: '7653445676',
-      d5: '$ 1.15',
-      d6: 'Payment after first purshase/download',
+      id: '1',
+      d0: '09/09/2022',
+      d1: '0',
+      d2: '2',
+      d3: '1',
+      d4: '51.15',
+      d5: '1',
+      d6: '0',
+      d7: '1',
+      d8: '76',
+      d9: '5',
+      d10: '1.15',
+      d11: 'Paid Paypal',
     },
     {
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: 'Buyers Referrals',
-      d4: '7653445676',
-      d5: '$ 1.15',
-      d6: 'Processing',
+      id: '2',
+      d0: '09/09/2022',
+      d1: '0',
+      d2: '2',
+      d3: '1',
+      d4: '51.15',
+      d5: '1',
+      d6: '0',
+      d7: '1',
+      d8: '76',
+      d9: '5',
+      d10: '1.15',
+      d11: 'Paid Paypal',
     },
     {
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: 'Buyers Referrals',
-      d4: '7653445676',
-      d5: '$ 1.15',
-      d6: 'Payment after first purshase/download',
+      id: '3',
+      d0: '09/09/2022',
+      d1: '0',
+      d2: '2',
+      d3: '1',
+      d4: '51.15',
+      d5: '1',
+      d6: '0',
+      d7: '1',
+      d8: '76',
+      d9: '5',
+      d10: '1.15',
+      d11: 'Paid Paypal',
     },
     {
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: 'Buyers Referrals',
-      d4: '7653445676',
-      d5: '$ 1.15',
-      d6: 'Processing',
+      id: '4',
+      d0: '09/09/2022',
+      d1: '0',
+      d2: '2',
+      d3: '1',
+      d4: '51.15',
+      d5: '1',
+      d6: '0',
+      d7: '1',
+      d8: '76',
+      d9: '5',
+      d10: '1.15',
+      d11: 'Paid Paypal',
     },
     {
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: 'Buyers Referrals',
-      d4: '7653445676',
-      d5: '$ 1.15',
-      d6: 'Payment after first purshase/download',
+      id: '5',
+      d0: '09/09/2022',
+      d1: '0',
+      d2: '2',
+      d3: '1',
+      d4: '51.15',
+      d5: '1',
+      d6: '0',
+      d7: '1',
+      d8: '76',
+      d9: '5',
+      d10: '1.15',
+      d11: 'Paid Paypal',
     },
     {
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: 'Buyers Referrals',
-      d4: '7653445676',
-      d5: '$ 1.15',
-      d6: 'Processing',
+      id: '6',
+      d0: '09/09/2022',
+      d1: '0',
+      d2: '2',
+      d3: '1',
+      d4: '51.15',
+      d5: '1',
+      d6: '0',
+      d7: '1',
+      d8: '76',
+      d9: '5',
+      d10: '1.15',
+      d11: 'Paid Paypal',
     },
     {
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: 'Buyers Referrals',
-      d4: '7653445676',
-      d5: '$ 1.15',
-      d6: 'Payment after first purshase/download',
+      id: '7',
+      d0: '09/09/2022',
+      d1: '0',
+      d2: '2',
+      d3: '1',
+      d4: '51.15',
+      d5: '1',
+      d6: '0',
+      d7: '4',
+      d8: '26',
+      d9: '4',
+      d10: '1.15',
+      d11: 'Paid Paypal',
     },
     {
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: 'Buyers Referrals',
-      d4: '7653445676',
-      d5: '$ 1.15',
-      d6: 'Processing',
-    },
-    {
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: 'Buyers Referrals',
-      d4: '7653445676',
-      d5: '$ 1.15',
-      d6: 'Processing',
-    },
-    {
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: 'Buyers Referrals',
-      d4: '7653445676',
-      d5: '$ 1.15',
-      d6: 'Processing',
-    },
-    {
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: 'Buyers Referrals',
-      d4: '7653445676',
-      d5: '$ 1.15',
-      d6: 'Processing',
-    },
-    {
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: 'Buyers Referrals',
-      d4: '7653445676',
-      d5: '$ 1.15',
-      d6: 'Processing',
-    },
-    {
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: 'Buyers Referrals',
-      d4: '7653445676',
-      d5: '$ 1.15',
-      d6: 'Processing',
-    },
-    {
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: 'Buyers Referrals',
-      d4: '7653445676',
-      d5: '$ 1.15',
-      d6: 'Processing',
-    },
-    {
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: 'Buyers Referrals',
-      d4: '7653445676',
-      d5: '$ 1.15',
-      d6: 'Processing',
-    },
-    {
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: 'Buyers Referrals',
-      d4: '7653445676',
-      d5: '$ 1.15',
-      d6: 'Processing',
-    },
-    {
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: 'Buyers Referrals',
-      d4: '7653445676',
-      d5: '$ 1.15',
-      d6: 'Payment after first purshase/download',
-    },
-    {
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: 'Buyers Referrals',
-      d4: '7653445676',
-      d5: '$ 1.15',
-      d6: 'Processing',
-    },
-    {
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: 'Buyers Referrals',
-      d4: '7653445676',
-      d5: '$ 1.15',
-      d6: 'Payment after first purshase/download',
-    },
-    {
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: 'Buyers Referrals',
-      d4: '7653445676',
-      d5: '$ 1.15',
-      d6: 'Processing',
-    },
-    {
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: 'Buyers Referrals',
-      d4: '7653445676',
-      d5: '$ 1.15',
-      d6: 'Payment after first purshase/download',
-    },
-    {
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: 'Buyers Referrals',
-      d4: '7653445676',
-      d5: '$ 1.15',
-      d6: 'Processing',
-    },
-    {
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: 'Buyers Referrals',
-      d4: '7653445676',
-      d5: '$ 1.15',
-      d6: 'Processing',
-    },
-    {
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: 'Buyers Referrals',
-      d4: '7653445676',
-      d5: '$ 1.15',
-      d6: 'Payment after first purshase/download',
-    },
-    {
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: 'Buyers Referrals',
-      d4: '7653445676',
-      d5: '$ 1.15',
-      d6: 'Processing',
-    },
-    {
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: 'Buyers Referrals',
-      d4: '7653445676',
-      d5: '$ 1.15',
-      d6: 'Payment after first purshase/download',
-    },
-    {
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: 'Buyers Referrals',
-      d4: '7653445676',
-      d5: '$ 1.15',
-      d6: 'Processing',
-    },
-    {
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: 'Buyers Referrals',
-      d4: '7653445676',
-      d5: '$ 1.15',
-      d6: 'Payment after first purshase/download',
-    },
-    {
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: 'Buyers Referrals',
-      d4: '7653445676',
-      d5: '$ 1.15',
-      d6: 'Processing',
-    },
-    {
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: 'Buyers Referrals',
-      d4: '7653445676',
-      d5: '$ 1.15',
-      d6: 'Payment after first purshase/download',
-    },
-    {
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: 'Buyers Referrals',
-      d4: '7653445676',
-      d5: '$ 1.15',
-      d6: 'Payment after first purshase/download aaaaaaa',
+      id: '8',
+      d0: '09/09/2022',
+      d1: '0',
+      d2: '2',
+      d3: '1',
+      d4: '51.15',
+      d5: '1',
+      d6: '0',
+      d7: '1',
+      d8: '86',
+      d9: '4',
+      d10: '2.15',
+      d11: 'Paid Paypal',
     },
   ];
 
+  // useEffect(() => {
+  //   console.log(dataToRender.length);
+  // }, [data]);
+
   //   paginationn **dont change the sequence of the code below** else will give undefined error
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 4;
   const dataToRender = data || [];
 
   const start = (currentPage - 1) * itemsPerPage;
@@ -323,7 +168,7 @@ const PaymentHistory = () => {
   const handlePrevPage = () => {
     // console.log(currentPage);
     if (currentPage > 1 && currentPage <= totalPages) {
-      // console.log('i am running');
+      console.log('i am running');
       setCurrentPage((prevPage) => prevPage - 1);
     }
   };
@@ -335,6 +180,8 @@ const PaymentHistory = () => {
     }
   };
 
+  const [hoverFocus, sethoverFocus] = useState(null);
+
   return (
     <>
       {' '}
@@ -345,7 +192,7 @@ const PaymentHistory = () => {
               <span className='text-[27px]'>$</span>328.25
             </p>
             <p className='text-[0.688rem] text-[#cfcfcf] pt-[0.375rem] pr-[5px] max-w-[75px] leading-3'>
-              Buyer's Earnings from Referrals
+              Total Earnings from Sales and Referrals
             </p>
           </div>
           <div className='flex gap-[0.125rem] h-[2.938rem]'>
@@ -355,8 +202,20 @@ const PaymentHistory = () => {
               </p>
             </div>
             <div>
-              <p className='text-[0.688rem] text-[#cfcfcf] max-w-[5.2rem] pt-[0.375rem] leading-3'>
-                Buyer's <br /> Unpaid Referrals Earnings
+              <p className='text-[0.688rem] text-[#cfcfcf] max-w-[4.375rem] pt-[0.375rem] leading-3'>
+                Files Uploaded in Photos
+              </p>
+            </div>
+          </div>
+          <div className='flex gap-[0.125rem] h-[2.938rem]'>
+            <div className='h-[2.375rem] border-l-[0.063rem] relative top-[0.313rem] border-[#efefef]'>
+              <p className='text-[3.000rem] text-[#cfcfcf]  pl-[0.438rem] relative bottom-[0.938rem] font-thin'>
+                <span className='text-[27px]'>$</span>198.00
+              </p>
+            </div>
+            <div>
+              <p className='text-[0.688rem] text-[#cfcfcf] max-w-[4.375rem] pt-[0.375rem] leading-3'>
+                Files Uploaded in Footage
               </p>
             </div>
           </div>
@@ -463,85 +322,264 @@ const PaymentHistory = () => {
         </div>
       </div>
       {data !== null ? (
-        <div className='w-full flex flex-col pt-[15px] pb-[100px]'>
+        <div className='w-full flex flex-col pb-[100px]'>
           <div className='wrapper mx-auto'>
             <table className='w-[1170px] border-separate border-spacing-0'>
               <tbody>
-                <tr className='text-[15px] font-medium' height='30'>
-                  <td className='border border-[#dddddd] bg-[#f3f3f3] text-primaryBlack  pl-[10px] rounded-tl-[10px]'>
-                    Referral Types (Buyers & Contributors)
+                <tr
+                  className='text-[15px] text-center font-medium'
+                  height='35'
+                >
+                  <td className='border border-[#dddddd] bg-[#ececec] text-primaryBlack rounded-tl-[10px]'>
+                    Aug 2022
                   </td>
-                  <td className='border-r border-b border-t border-[#dddddd] bg-[#f3f3f3] text-primaryBlack  pl-[10px]'>
-                    Refer Date
+                  <td
+                    colspan='5'
+                    className='border-r border-b border-t border-[#dddddd] bg-[#ececec] text-primaryBlack  w-[360px]'
+                  >
+                    Items Sale
+                  </td>
+                  <td
+                    colspan='4'
+                    className='border-r border-b border-t border-[#dddddd] bg-[#ececec] text-primaryBlack '
+                  >
+                    Referrals Earnings
+                  </td>
+                  {/* <td className='border-r  border-b border-t  border-[#dddddd] bg-[#f3f3f3] text-primaryBlack  pl-[10px]'>
+                    Payment Mode
+                  </td> */}
+                  <td className='border-r  border-b border-t  border-[#dddddd] bg-[#ececec] text-primaryBlack'>
+                    Total Earnings
+                  </td>
+
+                  <td className='border-r w-[280px] border-b border-t border-[#dddddd] bg-[#ececec] text-primaryBlack rounded-tr-[10px]'>
+                    <div className='flex gap-[5px] items-center justify-center'>
+                      <span>Payment Status</span>
+                    </div>
+                  </td>
+                </tr>
+
+                <tr height='30' className='text-[13px] font-medium'>
+                  <td className='border-r border-l border-b border-t  border-[#dddddd] bg-[#f3f3f3] text-primaryBlack  pl-[10px]'>
+                    Date
                   </td>
                   <td className='border-r  border-b border-t  border-[#dddddd] bg-[#f3f3f3] text-primaryBlack  pl-[10px]'>
-                    Joining Date
+                    Items Sold
                   </td>
                   <td className='border-r  border-b border-t  border-[#dddddd] bg-[#f3f3f3] text-primaryBlack  pl-[10px]'>
-                    Earnings from
-                  </td>
-                  <td className='border-r  border-b border-t  border-[#dddddd] bg-[#f3f3f3] text-primaryBlack  pl-[10px]'>
-                    Transaction ID
+                    Item Price
                   </td>
                   <td className='border-r  border-b border-t  border-[#dddddd] bg-[#f3f3f3] text-primaryBlack  pl-[10px]'>
                     Amount
                   </td>
-                  <td className='border-r w-[280px] border-b border-t border-[#dddddd] bg-[#f3f3f3] text-primaryBlack  pl-[10px] rounded-tr-[10px]'>
-                    <div className='flex gap-[5px] items-center'>
-                      <span>Earning Details</span>
-                      <button className='inline-block flex flex-col justify-center items-center bg-pinkColor text-[11px] text-[white] font-medium w-[107px] h-[17px] rounded-[8.5px]'>
-                        <span> Updated: 5 hrs ago</span>
-                      </button>
-                    </div>
+                  <td className='border-r  border-b border-t  border-[#dddddd] bg-[#f3f3f3] text-primaryBlack  pl-[10px]'>
+                    Tax Paid
+                  </td>
+                  <td className='border-r  border-b border-t  border-[#dddddd] bg-[#f3f3f3] text-primaryBlack  pl-[10px]'>
+                    Earnings
+                  </td>
+                  <td className='border-r  border-b border-t  border-[#dddddd] bg-[#f3f3f3] text-primaryBlack  pl-[10px]'>
+                    Referrals
+                  </td>
+                  <td className='border-r  border-b border-t  border-[#dddddd] bg-[#f3f3f3] text-primaryBlack  pl-[10px]'>
+                    Amount
+                  </td>
+                  <td className='border-r  border-b border-t  border-[#dddddd] bg-[#f3f3f3] text-primaryBlack  pl-[10px]'>
+                    Tax Paid
+                  </td>
+                  <td className='border-r  border-b border-t  border-[#dddddd] bg-[#f3f3f3] text-primaryBlack  pl-[10px]'>
+                    Earnings
+                  </td>
+                  <td className='border-r  border-b border-t  border-[#dddddd] bg-[#f3f3f3] text-primaryBlack  pl-[10px]'>
+                    Sales + Referrals
+                  </td>
+
+                  <td className='border-r  border-b border-t  border-[#dddddd] bg-[#f3f3f3] text-primaryBlack  pl-[10px]'>
+                    <button
+                      style={{
+                        background:
+                          'linear-gradient(90deg, rgba(220,76,154,1) 0%, rgba(149,147,205,1) 35%, rgba(132,212,156,1) 65%, rgba(204,236,59,1) 100%)',
+                      }}
+                      className='w-[101px] h-[19px] rounded-[9.5px] flex justify-center items-center'
+                    >
+                      <span className='text-[10px] font-semibold text-primaryBlack'>
+                        Updated: 2hrs ago
+                      </span>
+                    </button>
                   </td>
                 </tr>
+
+                <tr
+                  height='30'
+                  className='text-[13px] text-primaryGray font-medium'
+                >
+                  <td className='border-r border-l border-b border-[#dddddd] bg-[#feeeee]  pl-[10px]'>
+                    All Time
+                  </td>
+                  <td className='border-r border-b border-[#dddddd] bg-[#feeeee]  pl-[10px]'>
+                    12
+                  </td>
+                  <td className='border-r border-b border-[#dddddd] bg-[#feeeee]  pl-[10px]'>
+                    12
+                  </td>
+                  <td className='border-r border-b border-[#dddddd] bg-[#feeeee]  pl-[10px]'>
+                    12
+                  </td>
+                  <td className='border-r border-b border-[#dddddd] bg-[#feeeee]  pl-[10px]'>
+                    12
+                  </td>
+                  <td className='border-r border-b border-[#dddddd] bg-[#feeeee]  pl-[10px]'>
+                    12
+                  </td>
+                  <td className='border-r border-b border-[#dddddd] bg-[#f9e9e9]  pl-[10px]'>
+                    12
+                  </td>
+                  <td className='border-r border-b border-[#dddddd] bg-[#feeeee]  pl-[10px]'>
+                    12
+                  </td>
+                  <td className='border-r border-b border-[#dddddd] bg-[#feeeee]  pl-[10px]'>
+                    12
+                  </td>
+                  <td className='border-r border-b border-[#dddddd] bg-[#feeeee]  pl-[10px]'>
+                    12
+                  </td>
+                  <td className='border-r border-b border-[#dddddd] bg-[#feeeee]  pl-[10px]'>
+                    12
+                  </td>
+                  <td className='border-r border-b border-[#dddddd] bg-[#feeeee]  pl-[10px]'>
+                    Paid Paypal
+                  </td>
+                </tr>
+
                 {currentData &&
                   currentData.map((da, index) => (
                     <tr
                       className='text-[13px] text-primaryGray'
                       height='30'
+                      onMouseEnter={() => {
+                        sethoverFocus(da.id);
+                      }}
+                      onMouseLeave={() => {
+                        sethoverFocus(null);
+                      }}
                     >
                       <td
-                        className={`border-r border-b border-l border-[#dddddd] bg-[#ffffff] pl-[10px] ${
+                        className={`border-r border-b border-l border-[#dddddd]  pl-[10px] ${
                           index == currentData.length - 1
                             ? 'rounded-bl-[10px]'
                             : ''
-                        }`}
+                        } ${
+                          hoverFocus === da.id
+                            ? 'bg-[#ddf5f7]'
+                            : 'bg-[#fafafa]'
+                        } `}
                       >
                         {da.d0}
                       </td>
-                      <td className='border-r border-b border-[#dddddd] bg-[#ffffff]  pl-[10px]'>
+                      <td
+                        className={`border-r border-b border-[#dddddd]  pl-[10px] ${
+                          hoverFocus === da.id
+                            ? 'bg-[#ddf5f7]'
+                            : 'bg-[#fafafa]'
+                        }`}
+                      >
                         {da.d1}
                       </td>
-                      <td className='border-r border-b border-[#dddddd] bg-[#ffffff]  pl-[10px]'>
+                      <td
+                        className={`border-r border-b border-[#dddddd]  pl-[10px] ${
+                          hoverFocus === da.id
+                            ? 'bg-[#e1fafc]'
+                            : 'bg-[#ffffff]'
+                        }`}
+                      >
                         {da.d2}
                       </td>
-                      <td className='border-r border-b border-[#dddddd] bg-[#ffffff]  pl-[10px]'>
+                      <td
+                        className={`border-r border-b border-[#dddddd]  pl-[10px] ${
+                          hoverFocus === da.id
+                            ? 'bg-[#e1fafc]'
+                            : 'bg-[#ffffff]'
+                        }`}
+                      >
                         {da.d3}
                       </td>
-                      <td className='border-r border-b border-[#dddddd] bg-[#ffffff]  pl-[10px]'>
+                      <td
+                        className={`border-r border-b border-[#dddddd]  pl-[10px] ${
+                          hoverFocus === da.id
+                            ? 'bg-[#e1fafc]'
+                            : 'bg-[#ffffff]'
+                        }`}
+                      >
                         {da.d4}
                       </td>
-                      <td className='border-r border-b border-[#dddddd] bg-[#ffffff]  pl-[10px]'>
+                      <td
+                        className={`border-r border-b border-[#dddddd]  pl-[10px] ${
+                          hoverFocus === da.id
+                            ? 'bg-[#e1fafc]'
+                            : 'bg-[#ffffff]'
+                        }`}
+                      >
                         {da.d5}
+                      </td>
+                      <td
+                        className={`border-r border-b border-[#dddddd]  pl-[10px] ${
+                          hoverFocus === da.id
+                            ? 'bg-[#ddf5f7]'
+                            : 'bg-[#fafafa]'
+                        }`}
+                      >
+                        {da.d6}
+                      </td>
+                      <td
+                        className={`border-r border-b border-[#dddddd]  pl-[10px] ${
+                          hoverFocus === da.id
+                            ? 'bg-[#e1fafc]'
+                            : 'bg-[#ffffff]'
+                        }`}
+                      >
+                        {da.d7}
+                      </td>
+                      <td
+                        className={`border-r border-b border-[#dddddd]  pl-[10px] ${
+                          hoverFocus === da.id
+                            ? 'bg-[#e1fafc]'
+                            : 'bg-[#ffffff]'
+                        }`}
+                      >
+                        {da.d8}
+                      </td>
+                      <td
+                        className={`border-r border-b border-[#dddddd]  pl-[10px] ${
+                          hoverFocus === da.id
+                            ? 'bg-[#e1fafc]'
+                            : 'bg-[#ffffff]'
+                        }`}
+                      >
+                        {da.d9}
+                      </td>
+                      <td
+                        className={`border-r border-b border-[#dddddd]  pl-[10px] ${
+                          hoverFocus === da.id
+                            ? 'bg-[#e1fafc]'
+                            : 'bg-[#ffffff]'
+                        }`}
+                      >
+                        {da.d10}
                       </td>
 
                       <td
-                        className={`border-r border-b border-[#dddddd] bg-[#ffffff] pr-[10px] pl-[10px] ${
+                        className={`border-r border-b border-[#dddddd] pl-[10px] pr-[10px] ${
                           index === currentData.length - 1
                             ? 'rounded-br-[10px]'
                             : ''
-                        } `}
+                        } ${
+                          hoverFocus === da.id
+                            ? 'bg-[#e1fafc]'
+                            : 'bg-[#ffffff]'
+                        }`}
                       >
-                        <div className='flex justify-between '>
-                          {da.d6}{' '}
-                          <div>
-                            <img
-                              className='inline-block w-[10px] h-[6px]'
-                              src={dropdown}
-                              alt=''
-                            />
-                          </div>
+                        <div className='flex justify-between'>
+                          {da.d11}{' '}
                         </div>
                       </td>
                     </tr>

@@ -36,10 +36,11 @@ import Canvass from './Canvass';
 import Slider from '@mui/material/Slider';
 import { httpClient } from '../../../axios';
 import { useRef } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setpath2 } from '../../../store/contriPathSlice';
 import trial from '../../../assets/images/combo/trial.png';
 import html2canvas from 'html2canvas';
+import CheckIcon from '@mui/icons-material/Check';
 
 const images = [
   {
@@ -136,6 +137,8 @@ const ActivateProducts = () => {
 
   const dispatch = useDispatch();
 
+  const userId = useSelector((state) => state.auth.userId);
+
   useEffect(() => {
     dispatch(setpath2('/ Activate Products'));
   }, []);
@@ -157,17 +160,22 @@ const ActivateProducts = () => {
     setHoveredId(null);
   };
 
+  const [artName, setartName] = useState(null);
+
   const handleClick = (card) => {
-    if (card.id === checkedId) {
+    if (card.artId === checkedId) {
       setCheckedId(null);
       setPhoto(null);
+      setartName(null);
     } else {
-      setCheckedId(card.id);
+      setCheckedId(card.artId);
       setPhoto(card.image);
+      setartName(card.artName);
     }
   };
 
   const [sizeRangeValue, setSizeRangeValue] = useState(50);
+
   const sizeRange = (event) => {
     const value = event.target.value;
     if (value !== 0) {
@@ -210,6 +218,7 @@ const ActivateProducts = () => {
 
   // state to hide dotted line around canvas
   const [dottedLine, setDottedLine] = useState(false);
+  const [productImage, setproductImage] = useState(null);
 
   function handleDownloadClick() {
     const element = document.querySelector('.myDiv'); // Replace '.myDiv' with the appropriate selector for your div element
@@ -219,17 +228,104 @@ const ActivateProducts = () => {
 
     // Delay the screenshot function until the next tick of the event loop
     setTimeout(() => {
-      html2canvas(element, { useCORS: true }).then((canvas) => {
+      html2canvas(element, { useCORS: true }).then(async (canvas) => {
         button.style.display = 'block'; // Show the button again after the download link is clicked
         setDottedLine(false); // Show the dotted line again after the download link is clicked
         const dataUrl = canvas.toDataURL('image/png');
-        const downloadLink = document.createElement('a');
-        downloadLink.href = dataUrl;
-        downloadLink.download = 'myDivImage.png';
-        downloadLink.click();
+
+        // const downloadLink = document.createElement('a');
+        // downloadLink.href = dataUrl;
+        // console.log(downloadLink.href);
+
+        // downloadLink.download = 'myDivImage.png';
+        // downloadLink.click();
+
+        let formData = new FormData();
+        formData.append('file', dataURItoBlob(dataUrl));
+
+        const res = await httpClient.post(
+          '/CloudinaryImageUpload',
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          }
+        );
+        // .then((res) => {
+        //   console.log(res);
+        // });
+        console.log(res);
+
+        let object = {
+          artId: checkedId,
+          artProductName: artName,
+          image: res.data.secureUrl,
+          productId: productImage.productId,
+          productSubCategoryId:
+            productImage.productSubCategoryMaster
+              .productSubCategoryId,
+          userId: userId,
+        };
+
+        const response = await httpClient.post(
+          '/art_product_master/create',
+          object
+        );
+        console.log(response.data);
       });
     }, 0);
   }
+
+  // Helper function to convert data URI to Blob
+  function dataURItoBlob(dataURI) {
+    const byteString = atob(dataURI.split(',')[1]);
+    const mimeString = dataURI
+      .split(',')[0]
+      .split(':')[1]
+      .split(';')[0];
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], { type: mimeString });
+  }
+
+  const getActiveProduct = async () => {
+    const res = await httpClient.get(
+      '/product_master/getActiveProductMaster'
+    );
+
+    let abc = res.data;
+    let a;
+
+    abc.forEach((product) =>
+      product.productName === 'shirt' ? (a = product) : ''
+    );
+
+    setproductImage(a);
+    console.log(a);
+  };
+
+  const [artList, setartList] = useState(null);
+
+  const getUserIdWiseArts = async () => {
+    try {
+      const res = await httpClient.get(
+        `/art_master/getUserIdAndStatusWiseUserMaster/${userId}/Approved`
+      );
+      setartList(res.data);
+      console.log(res.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getUserIdWiseArts();
+    getActiveProduct();
+  }, []);
 
   return (
     <div className='font-heebo'>
@@ -371,21 +467,22 @@ const ActivateProducts = () => {
         <div className='w-w1170 justify-center flex-column gap-[10px]'>
           <div className='flex justify-start flex-wrap gap-[10px]'>
             {/* px-[16.68px] */}
-            {images.map((card, index) => (
+            {artList?.map((card) => (
               <div
-                key={card.id}
+                key={card.artId}
                 className='h-[108px] w-[108px] rounded-[20px] relative'
-                onMouseEnter={() => handleMouseEnter(card.id)}
+                onMouseEnter={() => handleMouseEnter(card.artId)}
                 onMouseLeave={() => handleMouseLeave()}
               >
                 <div
                   className={`rounded-[10px] h-full w-full bg-no-repeat bg-center bg-cover filter brightness-[${
-                    hoveredId === card.id ? '70%' : '100%'
+                    hoveredId === card.artId ? '70%' : '100%'
                   }] absolute overflow-hidden inset-0`}
                   style={{ backgroundImage: `url(${card.image})` }}
                 ></div>
 
-                {hoveredId === card.id || checkedId === card.id ? (
+                {hoveredId === card.artId ||
+                checkedId === card.artId ? (
                   <>
                     <div className='absolute inset-0 flex items-center justify-center'>
                       <button
@@ -400,7 +497,7 @@ const ActivateProducts = () => {
                       <input
                         type='checkbox'
                         className='w-6 h-6'
-                        checked={checkedId === card.id}
+                        checked={checkedId === card.artId}
                         onChange={() => handleClick(card)}
                       />
                     </div>
@@ -613,7 +710,11 @@ const ActivateProducts = () => {
             >
               <div className='w-[50%]'>
                 <div className='myDiv w-[540px] h-[540px] rounded-[16.01px] bg-[#f5f5f7] flex flex-col justify-center  items-center'>
-                  <Shirt fill={`${shirt}`} />
+                  {/* <Shirt fill={`${shirt}`} /> */}
+                  <img
+                    src={productImage?.productDetails[0]?.frontImage}
+                    alt=''
+                  />
                   <div
                     className={`${
                       dottedLine
@@ -829,7 +930,7 @@ const ActivateProducts = () => {
                     <p className='text-[15px] font-medium'>
                       Select Markup
                     </p>
-                    <div className='max-h-full'>
+                    <div className='max-h-full flex items-center'>
                       <img src={info} className='my-[auto]' />
                     </div>
                   </div>
