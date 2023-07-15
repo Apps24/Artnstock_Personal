@@ -74,6 +74,7 @@ const SellOnArtnstock_Home = () => {
   useEffect(() => {
     getArtWiseFaqList();
   }, []);
+
   return (
     <>
       <div className='wrapper'>

@@ -5,12 +5,16 @@ import nextArrow from '../../../assets/images/contributor/nextArrow.png';
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { setpath2 } from '../../../store/contriPathSlice';
+import { useSelector } from 'react-redux';
+import { httpClient } from '../../../axios';
 
 const EarningSummary = () => {
   const [isHovered, setIsHovered] = useState(false);
   //   const [currentData, setCurrentData] = useState([]);
   const [isOpenSortByYear, setIsOpenSortByYear] = useState(false);
   const [isOpenSortByMonth, setIsOpenSortByMonth] = useState(false);
+
+  const userId = useSelector((state) => state.auth.userId);
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -22,73 +26,109 @@ const EarningSummary = () => {
 
   const dispatch = useDispatch();
 
+  // date pipe
+  const datePipeReact = (obj) => {
+    // Input date string
+    const dateString = obj;
+
+    // Step 1: Parse the input string into a Date object
+    const date = new Date(dateString);
+
+    // Step 2: Extract the day, month, and year from the Date object
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+
+    // Step 3: Format the date components into the desired format
+    const formattedDate = `${day}/${month}/${year}`;
+
+    return formattedDate; // Output: "08/06/2023"
+  };
+  // date pipe
+
+  const [data, setdata] = useState();
+
+  const getReferenceEarningList = async () => {
+    try {
+      const res = await httpClient.get(
+        `/reference_earning/getreference/${userId}`
+      );
+
+      console.log(res.data.referenceEarningSummaries);
+      setdata(res.data.referenceEarningSummaries);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   useEffect(() => {
-    dispatch(setpath2('/ Referral Earnings'));
+    dispatch(setpath2('/ Referral Earnings Summary'));
+    getReferenceEarningList();
   }, []);
 
   // const data = null;
-  const data = [
-    {
-      id: '1',
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: '-',
-      d4: '-',
-      d5: '-',
-      d6: 'Payment after first purshase/download',
-    },
-    {
-      id: '2',
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: '0.15',
-      d4: '-',
-      d5: '0.15',
-      d6: 'Processing',
-    },
-    {
-      id: '3',
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: '-',
-      d4: '-',
-      d5: '-',
-      d6: 'Payment after first purshase/download',
-    },
-    {
-      id: '4',
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: '0.15',
-      d4: '-',
-      d5: '0.15',
-      d6: 'Processing',
-    },
-    {
-      id: '5',
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: '-',
-      d4: '-',
-      d5: '-',
-      d6: 'Payment after first purshase/download',
-    },
-    {
-      id: '6',
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: '0.15',
-      d4: '-',
-      d5: '0.15',
-      d6: 'Processing',
-    },
-  ];
+  // const data = [
+  //   {
+  //     id: '1',
+  //     d0: 'bedrockcrawl',
+  //     d1: '09/09/2022',
+  //     d2: '09/09/2022',
+  //     d3: '-',
+  //     d4: '-',
+  //     d5: '-',
+  //     d6: 'Payment after first purshase/download',
+  //   },
+  //   {
+  //     id: '2',
+  //     d0: 'bedrockcrawl',
+  //     d1: '09/09/2022',
+  //     d2: '09/09/2022',
+  //     d3: '0.15',
+  //     d4: '-',
+  //     d5: '0.15',
+  //     d6: 'Processing',
+  //   },
+  //   {
+  //     id: '3',
+  //     d0: 'bedrockcrawl',
+  //     d1: '09/09/2022',
+  //     d2: '09/09/2022',
+  //     d3: '-',
+  //     d4: '-',
+  //     d5: '-',
+  //     d6: 'Payment after first purshase/download',
+  //   },
+  //   {
+  //     id: '4',
+  //     d0: 'bedrockcrawl',
+  //     d1: '09/09/2022',
+  //     d2: '09/09/2022',
+  //     d3: '0.15',
+  //     d4: '-',
+  //     d5: '0.15',
+  //     d6: 'Processing',
+  //   },
+  //   {
+  //     id: '5',
+  //     d0: 'bedrockcrawl',
+  //     d1: '09/09/2022',
+  //     d2: '09/09/2022',
+  //     d3: '-',
+  //     d4: '-',
+  //     d5: '-',
+  //     d6: 'Payment after first purshase/download',
+  //   },
+  //   {
+  //     id: '6',
+  //     d0: 'bedrockcrawl',
+  //     d1: '09/09/2022',
+  //     d2: '09/09/2022',
+  //     d3: '0.15',
+  //     d4: '-',
+  //     d5: '0.15',
+  //     d6: 'Processing',
+  //   },
+  // ];
 
   //   paginationn **dont change the sequence of the code below** else will give undefined error
   const [currentPage, setCurrentPage] = useState(1);
@@ -119,12 +159,12 @@ const EarningSummary = () => {
   const [show, setShow] = useState([]);
 
   const showw = (id) => {
-    const find = show.find((obj) => obj.id === id.id);
+    const find = show.find((obj) => obj.refereceId === id.refereceId);
     // console.log(find);
     if (find === undefined) {
       setShow((prev) => [...prev, id]);
     } else if (find !== undefined) {
-      setShow(show.filter((obj) => obj.id !== id.id));
+      setShow(show.filter((obj) => obj.refereceId !== id.refereceId));
     }
   };
 
@@ -352,114 +392,149 @@ const EarningSummary = () => {
                       <td
                         className={`border-r border-t border-l border-[#dddddd] ${
                           index === currentData.length - 1 &&
-                          show.find((obj) => obj.id === data.id) ===
-                            undefined
+                          show.find(
+                            (obj) =>
+                              obj.refereceId === data.refereceId
+                          ) === undefined
                             ? 'rounded-bl-[10px] border-b'
                             : ''
                         } ${
-                          show.find((obj) => obj.id === data.id)
+                          show.find(
+                            (obj) =>
+                              obj.refereceId === data.refereceId
+                          )
                             ? 'bg-[#ddf5f7]'
                             : 'bg-[#fafafa]'
                         }  font-medium  text-primaryBlack  pl-[10px]`}
                       >
-                        {data.d0}
+                        {data.clientName}
                       </td>
                       <td
                         className={`border-r border-t border-[#dddddd] ${
                           index === currentData.length - 1 &&
-                          show.find((obj) => obj.id === data.id) ===
-                            undefined
+                          show.find(
+                            (obj) =>
+                              obj.refereceId === data.refereceId
+                          ) === undefined
                             ? 'border-b'
                             : ''
                         } ${
-                          show.find((obj) => obj.id === data.id)
+                          show.find(
+                            (obj) =>
+                              obj.refereceId === data.refereceId
+                          )
                             ? 'bg-[#ddf5f7]'
                             : 'bg-[#fafafa]'
                         } font-medium text-primaryBlack text-center`}
                       >
-                        {data.d1}
+                        {datePipeReact(data.registedDate)}
                       </td>
                       <td
                         className={`border-r border-t border-[#dddddd] ${
                           index === currentData.length - 1 &&
-                          show.find((obj) => obj.id === data.id) ===
-                            undefined
+                          show.find(
+                            (obj) =>
+                              obj.refereceId === data.refereceId
+                          ) === undefined
                             ? 'border-b'
                             : ''
                         } ${
-                          show.find((obj) => obj.id === data.id)
+                          show.find(
+                            (obj) =>
+                              obj.refereceId === data.refereceId
+                          )
                             ? 'bg-[#ddf5f7]'
                             : 'bg-[#fafafa]'
                         } font-medium text-primaryBlack text-center`}
                       >
-                        {data.d2}
+                        {datePipeReact(data.firstPurchase)}
                       </td>
                       <td
                         className={`border-r border-t border-[#dddddd] ${
                           index === currentData.length - 1 &&
-                          show.find((obj) => obj.id === data.id) ===
-                            undefined
+                          show.find(
+                            (obj) =>
+                              obj.refereceId === data.refereceId
+                          ) === undefined
                             ? 'border-b'
                             : ''
                         } ${
-                          show.find((obj) => obj.id === data.id)
+                          show.find(
+                            (obj) =>
+                              obj.refereceId === data.refereceId
+                          )
                             ? 'bg-[#e1fafc]'
                             : 'bg-[#fafafa]'
                         } font-medium text-primaryBlack text-center`}
                       >
-                        {data.d3}
+                        {data.salePrice}
                       </td>
                       <td
                         className={`border-r border-t border-[#dddddd] ${
                           index === currentData.length - 1 &&
-                          show.find((obj) => obj.id === data.id) ===
-                            undefined
+                          show.find(
+                            (obj) =>
+                              obj.refereceId === data.refereceId
+                          ) === undefined
                             ? 'border-b'
                             : ''
                         } ${
-                          show.find((obj) => obj.id === data.id)
+                          show.find(
+                            (obj) =>
+                              obj.refereceId === data.refereceId
+                          )
                             ? 'bg-[#e1fafc]'
                             : 'bg-[#fafafa]'
                         } font-medium text-primaryBlack text-center`}
                       >
-                        {data.d4}
+                        {data.taxDeduction}
                       </td>
 
                       <td
                         className={`border-r border-t border-[#dddddd] ${
                           index === currentData.length - 1 &&
-                          show.find((obj) => obj.id === data.id) ===
-                            undefined
+                          show.find(
+                            (obj) =>
+                              obj.refereceId === data.refereceId
+                          ) === undefined
                             ? 'border-b'
                             : ''
                         } ${
-                          show.find((obj) => obj.id === data.id)
+                          show.find(
+                            (obj) =>
+                              obj.refereceId === data.refereceId
+                          )
                             ? 'bg-[#e1fafc]'
                             : 'bg-[#fafafa]'
                         } font-medium text-primaryBlack text-center`}
                       >
-                        {data.d5}
+                        {data?.yourEarning}
                       </td>
 
                       <td
                         onClick={() => {
-                          showw({ id: data.id });
+                          showw({ refereceId: data.refereceId });
                         }}
                         className={`border-r border-t border-[#dddddd] ${
-                          show.find((obj) => obj.id === data.id)
+                          show.find(
+                            (obj) =>
+                              obj.refereceId === data.refereceId
+                          )
                             ? 'bg-[#e1fafc]'
                             : 'bg-[#fafafa]'
                         }
               ${
                 index === currentData.length - 1 &&
-                show.find((obj) => obj.id === data.id) === undefined
+                show.find(
+                  (obj) => obj.refereceId === data.refereceId
+                ) === undefined
                   ? 'rounded-br-[10px] border-b'
                   : ''
               }
                font-medium text-primaryBlack pl-[10px] pr-[10px] cursor-pointer`}
                       >
                         <div className='w-[100%] h-[100%] flex justify-between items-center'>
-                          {data.d6}{' '}
+                          {data.paymentStatus}{' '}
                           <div>
                             <img src={dropdown} alt='' />
                           </div>
@@ -467,7 +542,9 @@ const EarningSummary = () => {
                       </td>
                     </tr>
                     <tr className='py-[20px] px-[10px] border-l border-r border-[#dddddd]'>
-                      {show.find((obj) => obj.id === data.id) && (
+                      {show.find(
+                        (obj) => obj.refereceId === data.refereceId
+                      ) && (
                         <td
                           colSpan='14'
                           className={`border-r border-l ${
@@ -756,151 +833,6 @@ const EarningSummary = () => {
           </div>
         </div>
       ) : (
-        // <div className='w-full flex flex-col pt-[15px] pb-[100px]'>
-        //   <div className='wrapper mx-auto'>
-        //     <table className='w-[1170px] border-separate border-spacing-0'>
-        //       <tbody>
-        //         <tr className='text-[15px] font-medium' height='30'>
-        //           <td className='border border-[#dddddd] bg-[#f3f3f3] text-primaryBlack  pl-[10px] rounded-tl-[10px]'>
-        //             Referral Types (Buyers & Contributors)
-        //           </td>
-        //           <td className='border-r border-b border-t border-[#dddddd] bg-[#f3f3f3] text-primaryBlack  pl-[10px]'>
-        //             Refer Date
-        //           </td>
-        //           <td className='border-r  border-b border-t  border-[#dddddd] bg-[#f3f3f3] text-primaryBlack  pl-[10px]'>
-        //             Joining Date
-        //           </td>
-        //           <td className='border-r  border-b border-t  border-[#dddddd] bg-[#f3f3f3] text-primaryBlack  pl-[10px]'>
-        //             Earnings from
-        //           </td>
-        //           <td className='border-r  border-b border-t  border-[#dddddd] bg-[#f3f3f3] text-primaryBlack  pl-[10px]'>
-        //             Transaction ID
-        //           </td>
-        //           <td className='border-r  border-b border-t  border-[#dddddd] bg-[#f3f3f3] text-primaryBlack  pl-[10px]'>
-        //             Amount
-        //           </td>
-        //           <td className='border-r w-[280px] border-b border-t border-[#dddddd] bg-[#f3f3f3] text-primaryBlack  pl-[10px] rounded-tr-[10px]'>
-        //             <div className='flex gap-[5px] items-center'>
-        //               <span>Status</span>
-        //               <button className='inline-block flex flex-col justify-center items-center bg-pinkColor text-[11px] text-[white] font-medium w-[107px] h-[17px] rounded-[8.5px]'>
-        //                 <span> Updated: 5 hrs ago</span>
-        //               </button>
-        //             </div>
-        //           </td>
-        //         </tr>
-        //         {currentData &&
-        //           currentData.map((da, index) => (
-        //             <tr
-        //               className='text-[13px] text-primaryGray'
-        //               height='30'
-        //             >
-        //               <td
-        //                 className={`border-r border-b border-l border-[#dddddd] bg-[#ffffff] pl-[10px] ${
-        //                   index == currentData.length - 1
-        //                     ? 'rounded-bl-[10px]'
-        //                     : ''
-        //                 }`}
-        //               >
-        //                 {da.d0}
-        //               </td>
-        //               <td className='border-r border-b border-[#dddddd] bg-[#ffffff]  pl-[10px]'>
-        //                 {da.d1}
-        //               </td>
-        //               <td className='border-r border-b border-[#dddddd] bg-[#ffffff]  pl-[10px]'>
-        //                 {da.d2}
-        //               </td>
-        //               <td className='border-r border-b border-[#dddddd] bg-[#ffffff]  pl-[10px]'>
-        //                 {da.d3}
-        //               </td>
-        //               <td className='border-r border-b border-[#dddddd] bg-[#ffffff]  pl-[10px]'>
-        //                 {da.d4}
-        //               </td>
-        //               <td className='border-r border-b border-[#dddddd] bg-[#ffffff]  pl-[10px]'>
-        //                 {da.d5}
-        //               </td>
-
-        //               <td
-        //                 className={`border-r border-b border-[#dddddd] bg-[#ffffff] pr-[10px] pl-[10px] ${
-        //                   index === currentData.length - 1
-        //                     ? 'rounded-br-[10px]'
-        //                     : ''
-        //                 } `}
-        //               >
-        //                 <div className='flex justify-between '>
-        //                   {da.d6}{' '}
-        //                   <div>
-        //                     <img
-        //                       className='inline-block w-[10px] h-[6px]'
-        //                       src={dropdown}
-        //                       alt=''
-        //                     />
-        //                   </div>
-        //                 </div>
-        //               </td>
-        //             </tr>
-        //           ))}
-        //       </tbody>
-        //     </table>
-        //   </div>
-
-        //   {/* terms and conditions */}
-        //   <div className='flex justify-center'>
-        //     <div className='w-[1170px]'>
-        //       <p className='text-[25px] text-[#333333] font-medium'>
-        //         Terms & Conditions
-        //       </p>
-        //       <p className='text-[15px] mt-[12px] text-[#333333] font-medium'>
-        //         Referring Contributors
-        //       </p>
-        //       <p className='text-[14px] text-[#757575]'>
-        //         For the first year after a referred contributor signs
-        //         up, you will earn 10% of the final sale price each
-        //         time one of their videos is downloaded. For the first
-        //         two years after a referred contributor is approved,
-        //         you will earn $0.04 each time one of their images is
-        //         downloaded
-        //       </p>
-        //       <p className='text-[15px] mt-[18px] text-[#333333]  font-medium'>
-        //         Referring Customers
-        //       </p>
-        //       <p className='text-[14px] text-[#757575]'>
-        //         Each time you refer a new customer to Artnstock, you
-        //         will earn 20% of their first payment, up to $200. For
-        //         monthly plans, you will earn a referral commission
-        //         based on the referred customer's first monthly payment
-        //         only. For example, if you refer a customer whose first
-        //         purchase is a $249 monthly membership, 20% ($49) will
-        //         be added to your account. Referred customers must make
-        //         their first purchase within 30 days after creating a
-        //         new Artnstock customer account for you to be credited
-        //         with their referral.
-        //       </p>
-        //       <p className='text-[15px] mt-[18px] text-[#333333]  font-medium'>
-        //         Delivery of Payment
-        //       </p>
-        //       <p className='text-[14px] text-[#757575]'>
-        //         Artnstock reserves the right to delay payment of your
-        //         referral earnings for up to 90 days from the date your
-        //         referred contributor or customer establishes their
-        //         account (see Paragraphs 10a and 10b of the{' '}
-        //         <span className='text-[#FF7A6D]'>
-        //           Terms of Service
-        //         </span>{' '}
-        //         ).
-        //       </p>
-        //       <p className='text-[14px] text-[#757575] mt-[18px]'>
-        //         To protect contributors from fraudulent activity,
-        //         Artnstock maintains a three month probationary period
-        //         on all earnings accrued from customer referrals.
-        //         Following the end of this probationary period, you
-        //         will see these earnings appear in your account. You
-        //         can review the status of pending earnings in the
-        //         customer referral earnings section.
-        //       </p>
-        //     </div>
-        //   </div>
-        // </div>
-
         <div className='text-center pt-[8px] pb-[1000px]'>
           <p className='text-pinkColor text-[18px]'>
             Looks like you havn’t made any <br /> sales yet

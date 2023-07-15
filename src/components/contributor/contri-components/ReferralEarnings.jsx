@@ -5,6 +5,8 @@ import nextArrow from '../../../assets/images/contributor/nextArrow.png';
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { setpath2 } from '../../../store/contriPathSlice';
+import { httpClient } from '../../../axios';
+import { useSelector } from 'react-redux';
 
 const ReferralEarnings = () => {
   const [isHovered, setIsHovered] = useState(false);
@@ -22,74 +24,72 @@ const ReferralEarnings = () => {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(setpath2('/ Referral Earnings'));
-  }, []);
+  const userId = useSelector((state) => state.auth.userId);
 
   // const data = null;
-  const data = [
-    {
-      id: '1',
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: '-',
-      d4: '-',
-      d5: '-',
-      d6: 'Payment after first purshase/download',
-    },
-    {
-      id: '2',
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: '0.15',
-      d4: '-',
-      d5: '0.15',
-      d6: 'Processing',
-    },
-    {
-      id: '3',
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: '-',
-      d4: '-',
-      d5: '-',
-      d6: 'Payment after first purshase/download',
-    },
-    {
-      id: '4',
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: '0.15',
-      d4: '-',
-      d5: '0.15',
-      d6: 'Processing',
-    },
-    {
-      id: '5',
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: '-',
-      d4: '-',
-      d5: '-',
-      d6: 'Payment after first purshase/download',
-    },
-    {
-      id: '6',
-      d0: 'bedrockcrawl',
-      d1: '09/09/2022',
-      d2: '09/09/2022',
-      d3: '0.15',
-      d4: '-',
-      d5: '0.15',
-      d6: 'Processing',
-    },
-  ];
-
+  // const data = [
+  //   {
+  //     id: '1',
+  //     d0: 'bedrockcrawl',
+  //     d1: '09/09/2022',
+  //     d2: '09/09/2022',
+  //     d3: '-',
+  //     d4: '-',
+  //     d5: '-',
+  //     d6: 'Payment after first purshase/download',
+  //   },
+  //   {
+  //     id: '2',
+  //     d0: 'bedrockcrawl',
+  //     d1: '09/09/2022',
+  //     d2: '09/09/2022',
+  //     d3: '0.15',
+  //     d4: '-',
+  //     d5: '0.15',
+  //     d6: 'Processing',
+  //   },
+  //   {
+  //     id: '3',
+  //     d0: 'bedrockcrawl',
+  //     d1: '09/09/2022',
+  //     d2: '09/09/2022',
+  //     d3: '-',
+  //     d4: '-',
+  //     d5: '-',
+  //     d6: 'Payment after first purshase/download',
+  //   },
+  //   {
+  //     id: '4',
+  //     d0: 'bedrockcrawl',
+  //     d1: '09/09/2022',
+  //     d2: '09/09/2022',
+  //     d3: '0.15',
+  //     d4: '-',
+  //     d5: '0.15',
+  //     d6: 'Processing',
+  //   },
+  //   {
+  //     id: '5',
+  //     d0: 'bedrockcrawl',
+  //     d1: '09/09/2022',
+  //     d2: '09/09/2022',
+  //     d3: '-',
+  //     d4: '-',
+  //     d5: '-',
+  //     d6: 'Payment after first purshase/download',
+  //   },
+  //   {
+  //     id: '6',
+  //     d0: 'bedrockcrawl',
+  //     d1: '09/09/2022',
+  //     d2: '09/09/2022',
+  //     d3: '0.15',
+  //     d4: '-',
+  //     d5: '0.15',
+  //     d6: 'Processing',
+  //   },
+  // ];
+  const [data, setdata] = useState();
   //   paginationn **dont change the sequence of the code below** else will give undefined error
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3;
@@ -119,14 +119,51 @@ const ReferralEarnings = () => {
   const [show, setShow] = useState([]);
 
   const showw = (id) => {
-    const find = show.find((obj) => obj.id === id.id);
+    const find = show.find((obj) => obj.refereceId === id.refereceId);
     // console.log(find);
     if (find === undefined) {
       setShow((prev) => [...prev, id]);
     } else if (find !== undefined) {
-      setShow(show.filter((obj) => obj.id !== id.id));
+      setShow(show.filter((obj) => obj.refereceId !== id.refereceId));
     }
   };
+
+  // date pipe
+  const datePipeReact = (obj) => {
+    // Input date string
+    const dateString = obj;
+
+    // Step 1: Parse the input string into a Date object
+    const date = new Date(dateString);
+
+    // Step 2: Extract the day, month, and year from the Date object
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+
+    // Step 3: Format the date components into the desired format
+    const formattedDate = `${day}/${month}/${year}`;
+
+    return formattedDate; // Output: "08/06/2023"
+  };
+  // date pipe
+
+  const getReferenceEarningList = async () => {
+    try {
+      const res = await httpClient.get(
+        `/reference_earning/getreference/${userId}`
+      );
+      setdata(res.data.referenceEarningSummaries);
+      console.log(res);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    dispatch(setpath2('/ Referral Earnings'));
+    getReferenceEarningList();
+  }, []);
 
   return (
     <>
@@ -269,7 +306,7 @@ const ReferralEarnings = () => {
       </div>
       {data !== null ? (
         <div>
-          <div className='w-[100%] flex justify-center'>
+          <div className='w-[100%] flex justify-center pt-[20px]'>
             {/* <div className='w-[1170px]'> */}
             <table className='w-[100%] max-w-[1170px] border-separate border-spacing-0'>
               <tbody>
@@ -351,114 +388,149 @@ const ReferralEarnings = () => {
                       <td
                         className={`border-r border-t border-l border-[#dddddd] ${
                           index === currentData.length - 1 &&
-                          show.find((obj) => obj.id === data.id) ===
-                            undefined
+                          show.find(
+                            (obj) =>
+                              obj.refereceId === data.refereceId
+                          ) === undefined
                             ? 'rounded-bl-[10px] border-b'
                             : ''
                         } ${
-                          show.find((obj) => obj.id === data.id)
+                          show.find(
+                            (obj) =>
+                              obj.refereceId === data.refereceId
+                          )
                             ? 'bg-[#ddf5f7]'
                             : 'bg-[#fafafa]'
                         }  font-medium  text-primaryBlack  pl-[10px]`}
                       >
-                        {data.d0}
+                        {data.clientName}
                       </td>
                       <td
                         className={`border-r border-t border-[#dddddd] ${
                           index === currentData.length - 1 &&
-                          show.find((obj) => obj.id === data.id) ===
-                            undefined
+                          show.find(
+                            (obj) =>
+                              obj.refereceId === data.refereceId
+                          ) === undefined
                             ? 'border-b'
                             : ''
                         } ${
-                          show.find((obj) => obj.id === data.id)
+                          show.find(
+                            (obj) =>
+                              obj.refereceId === data.refereceId
+                          )
                             ? 'bg-[#ddf5f7]'
                             : 'bg-[#fafafa]'
                         } font-medium text-primaryBlack text-center`}
                       >
-                        {data.d1}
+                        {datePipeReact(data.registedDate)}
                       </td>
                       <td
                         className={`border-r border-t border-[#dddddd] ${
                           index === currentData.length - 1 &&
-                          show.find((obj) => obj.id === data.id) ===
-                            undefined
+                          show.find(
+                            (obj) =>
+                              obj.refereceId === data.refereceId
+                          ) === undefined
                             ? 'border-b'
                             : ''
                         } ${
-                          show.find((obj) => obj.id === data.id)
+                          show.find(
+                            (obj) =>
+                              obj.refereceId === data.refereceId
+                          )
                             ? 'bg-[#ddf5f7]'
                             : 'bg-[#fafafa]'
                         } font-medium text-primaryBlack text-center`}
                       >
-                        {data.d2}
+                        {datePipeReact(data.firstPurchase)}
                       </td>
                       <td
                         className={`border-r border-t border-[#dddddd] ${
                           index === currentData.length - 1 &&
-                          show.find((obj) => obj.id === data.id) ===
-                            undefined
+                          show.find(
+                            (obj) =>
+                              obj.refereceId === data.refereceId
+                          ) === undefined
                             ? 'border-b'
                             : ''
                         } ${
-                          show.find((obj) => obj.id === data.id)
+                          show.find(
+                            (obj) =>
+                              obj.refereceId === data.refereceId
+                          )
                             ? 'bg-[#e1fafc]'
                             : 'bg-[#fafafa]'
                         } font-medium text-primaryBlack text-center`}
                       >
-                        {data.d3}
+                        {data.salePrice}
                       </td>
                       <td
                         className={`border-r border-t border-[#dddddd] ${
                           index === currentData.length - 1 &&
-                          show.find((obj) => obj.id === data.id) ===
-                            undefined
+                          show.find(
+                            (obj) =>
+                              obj.refereceId === data.refereceId
+                          ) === undefined
                             ? 'border-b'
                             : ''
                         } ${
-                          show.find((obj) => obj.id === data.id)
+                          show.find(
+                            (obj) =>
+                              obj.refereceId === data.refereceId
+                          )
                             ? 'bg-[#e1fafc]'
                             : 'bg-[#fafafa]'
                         } font-medium text-primaryBlack text-center`}
                       >
-                        {data.d4}
+                        {data.salePrice}
                       </td>
 
                       <td
                         className={`border-r border-t border-[#dddddd] ${
                           index === currentData.length - 1 &&
-                          show.find((obj) => obj.id === data.id) ===
-                            undefined
+                          show.find(
+                            (obj) =>
+                              obj.refereceId === data.refereceId
+                          ) === undefined
                             ? 'border-b'
                             : ''
                         } ${
-                          show.find((obj) => obj.id === data.id)
+                          show.find(
+                            (obj) =>
+                              obj.refereceId === data.refereceId
+                          )
                             ? 'bg-[#e1fafc]'
                             : 'bg-[#fafafa]'
                         } font-medium text-primaryBlack text-center`}
                       >
-                        {data.d5}
+                        {data.yourEarning}
                       </td>
 
                       <td
                         onClick={() => {
-                          showw({ id: data.id });
+                          showw({ refereceId: data.refereceId });
                         }}
                         className={`border-r border-t border-[#dddddd] ${
-                          show.find((obj) => obj.id === data.id)
+                          show.find(
+                            (obj) =>
+                              obj.refereceId === data.refereceId
+                          )
                             ? 'bg-[#e1fafc]'
                             : 'bg-[#fafafa]'
                         }
               ${
                 index === currentData.length - 1 &&
-                show.find((obj) => obj.id === data.id) === undefined
+                show.find(
+                  (obj) => obj.refereceId === data.refereceId
+                ) === undefined
                   ? 'rounded-br-[10px] border-b'
                   : ''
               }
                font-medium text-primaryBlack pl-[10px] pr-[10px] cursor-pointer`}
                       >
                         <div className='w-[100%] h-[100%] flex justify-between items-center'>
-                          {data.d6}{' '}
+                          {data.paymentStatus}{' '}
                           <div>
                             <img src={dropdown} alt='' />
                           </div>
@@ -466,7 +538,9 @@ const ReferralEarnings = () => {
                       </td>
                     </tr>
                     <tr className='py-[20px] px-[10px] border-l border-r border-[#dddddd]'>
-                      {show.find((obj) => obj.id === data.id) && (
+                      {show.find(
+                        (obj) => obj.refereceId === data.refereceId
+                      ) && (
                         <td
                           colSpan='14'
                           className={`border-r border-l ${
