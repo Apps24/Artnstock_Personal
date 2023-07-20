@@ -10,6 +10,7 @@ import contriPathSlice from './contriPathSlice';
 import subjectidSlice from './subjectidSlice';
 import searchSlice from './searchSlice';
 import styleSlice from './styleSlice';
+import cartSlice from './cartSlice';
 
 const persistConfig = {
   key: 'root',
@@ -33,7 +34,8 @@ const reducer = combineReducers({
   contriPath: contriPathSlice.reducer,
   subjectId: subjectidSlice.reducer,
   searchText: searchSlice.reducer,
-  style: styleSlice.reducer
+  style: styleSlice.reducer,
+  cart: cartSlice.reducer
 });
 
 const persistedReducer = persistReducer(persistConfig, reducer);

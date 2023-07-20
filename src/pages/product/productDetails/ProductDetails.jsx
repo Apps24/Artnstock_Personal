@@ -1496,8 +1496,8 @@ const ProductDetails = () => {
                                   xmlns='http://www.w3.org/2000/svg'
                                 >
                                   <path
-                                    fill-rule='evenodd'
-                                    clip-rule='evenodd'
+                                    fillRule='evenodd'
+                                    clipRule='evenodd'
                                     d='M4 0H16V3H10.5H5C3.89539 3 3 3.89542 3 5V16H0V4C0 1.79086 1.79089 0 4 0Z'
                                     fill='#A6CF4F'
                                   />
@@ -1515,20 +1515,20 @@ const ProductDetails = () => {
                                     fill='#283897'
                                   />
                                   <path
-                                    fill-rule='evenodd'
-                                    clip-rule='evenodd'
+                                    fillRule='evenodd'
+                                    clipRule='evenodd'
                                     d='M44 0H32V3H37.5H43C44.1046 3 45 3.89542 45 5V16H48V4C48 1.79086 46.2091 0 44 0Z'
                                     fill='#FFAC14'
                                   />
                                   <path
-                                    fill-rule='evenodd'
-                                    clip-rule='evenodd'
+                                    fillRule='evenodd'
+                                    clipRule='evenodd'
                                     d='M44 48H32V45H37.5H43C44.1046 45 45 44.1046 45 43V32H48V44C48 46.2091 46.2091 48 44 48Z'
                                     fill='#BB0271'
                                   />
                                   <path
-                                    fill-rule='evenodd'
-                                    clip-rule='evenodd'
+                                    fillRule='evenodd'
+                                    clipRule='evenodd'
                                     d='M4 48H16V45H10.5H5C3.89539 45 3 44.1046 3 43V32H0V44C0 46.2091 1.79089 48 4 48Z'
                                     fill='#02A2B8'
                                   />
@@ -1687,8 +1687,8 @@ const ProductDetails = () => {
                                       xmlns='http://www.w3.org/2000/svg'
                                     >
                                       <path
-                                        fill-rule='evenodd'
-                                        clip-rule='evenodd'
+                                        fillRule='evenodd'
+                                        clipRule='evenodd'
                                         d='M4 0H16V3H10.5H5C3.89539 3 3 3.89542 3 5V16H0V4C0 1.79086 1.79089 0 4 0Z'
                                         fill='#A6CF4F'
                                       />
@@ -1706,20 +1706,20 @@ const ProductDetails = () => {
                                         fill='#283897'
                                       />
                                       <path
-                                        fill-rule='evenodd'
-                                        clip-rule='evenodd'
+                                        fillRule='evenodd'
+                                        clipRule='evenodd'
                                         d='M44 0H32V3H37.5H43C44.1046 3 45 3.89542 45 5V16H48V4C48 1.79086 46.2091 0 44 0Z'
                                         fill='#FFAC14'
                                       />
                                       <path
-                                        fill-rule='evenodd'
-                                        clip-rule='evenodd'
+                                        fillRule='evenodd'
+                                        clipRule='evenodd'
                                         d='M44 48H32V45H37.5H43C44.1046 45 45 44.1046 45 43V32H48V44C48 46.2091 46.2091 48 44 48Z'
                                         fill='#BB0271'
                                       />
                                       <path
-                                        fill-rule='evenodd'
-                                        clip-rule='evenodd'
+                                        fillRule='evenodd'
+                                        clipRule='evenodd'
                                         d='M4 48H16V45H10.5H5C3.89539 45 3 44.1046 3 43V32H0V44C0 46.2091 1.79089 48 4 48Z'
                                         fill='#02A2B8'
                                       />
@@ -1868,8 +1868,8 @@ const ProductDetails = () => {
                                       xmlns='http://www.w3.org/2000/svg'
                                     >
                                       <path
-                                        fill-rule='evenodd'
-                                        clip-rule='evenodd'
+                                        fillRule='evenodd'
+                                        clipRule='evenodd'
                                         d='M4 0H16V3H10.5H5C3.89539 3 3 3.89542 3 5V16H0V4C0 1.79086 1.79089 0 4 0Z'
                                         fill='#A6CF4F'
                                       />
@@ -1887,20 +1887,20 @@ const ProductDetails = () => {
                                         fill='#283897'
                                       />
                                       <path
-                                        fill-rule='evenodd'
-                                        clip-rule='evenodd'
+                                        fillRule='evenodd'
+                                        clipRule='evenodd'
                                         d='M44 0H32V3H37.5H43C44.1046 3 45 3.89542 45 5V16H48V4C48 1.79086 46.2091 0 44 0Z'
                                         fill='#FFAC14'
                                       />
                                       <path
-                                        fill-rule='evenodd'
-                                        clip-rule='evenodd'
+                                        fillRule='evenodd'
+                                        clipRule='evenodd'
                                         d='M44 48H32V45H37.5H43C44.1046 45 45 44.1046 45 43V32H48V44C48 46.2091 46.2091 48 44 48Z'
                                         fill='#BB0271'
                                       />
                                       <path
-                                        fill-rule='evenodd'
-                                        clip-rule='evenodd'
+                                        fillRule='evenodd'
+                                        clipRule='evenodd'
                                         d='M4 48H16V45H10.5H5C3.89539 45 3 44.1046 3 43V32H0V44C0 46.2091 1.79089 48 4 48Z'
                                         fill='#02A2B8'
                                       />

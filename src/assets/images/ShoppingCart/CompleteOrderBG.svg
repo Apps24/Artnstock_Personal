@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="241" height="40" viewBox="0 0 241 40">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: url(#linear-gradient);
+      }
+    </style>
+    <linearGradient id="linear-gradient" y1="20" x2="241" y2="20" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fd4b9e"/>
+      <stop offset="0.33" stop-color="#9794d0"/>
+      <stop offset="0.66" stop-color="#46d59a"/>
+      <stop offset="1" stop-color="#beed10"/>
+    </linearGradient>
+  </defs>
+  <rect id="Complete_order_for_649_BG" data-name="Complete order for $649 BG" class="cls-1" width="241" height="40" rx="20" ry="20"/>
+</svg>

@@ -97,3 +97,79 @@ export const filteredMasterModel = {
   subjectId: '',
   userFirstName: '',
 };
+
+export const CartArtFrameModel = {
+  artId: String,
+  description: String,
+  imgUrl: String,
+  frameMaster: {
+    depth: String,
+    finish: String,
+    frameColor: String,
+    frameDrawingUrl: String,
+    frameId: String,
+    frameImageUrl: String,
+    frameMaterial: String,
+    frameName: String,
+    frameProductNo: String,
+    frameThumbnailUrl: String,
+    frameType: String,
+    glassType: String,
+    price: 0,
+    size: String,
+    status: String,
+    stockStatus: String,
+    style: String,
+    width: String
+  },
+  matMasterBottom: {
+    color: String,
+    matId: String,
+    matType: String,
+    matWidth: String,
+    price: 0,
+    status: String
+  },
+  matMasterTop: {
+    color: String,
+    matId: String,
+    matType: String,
+    matWidth: String,
+    price: 0,
+    status: String
+  },
+  orientationMaster: {
+    height: String,
+    orientationId: String,
+    price: 0,
+    shape: String,
+    shapeStatus: String,
+    width: String
+  },
+  printingMaterialMaster: {
+    checked: true,
+    description: String,
+    printingMaterialId: String,
+    printingMaterialName: String,
+    printingMaterialPrice: 0,
+    printingMaterialStatus: String
+  },
+  quantity: 0,
+  stockStatus: String,
+  userId: String
+}
+
+
+export const orderModel = {
+  cartArtFrameId: [
+    String
+  ],
+  orderPaymentStatus: String,
+  paymentInformation: {
+    razorpayOrderId: String,
+    razorpayPaymentId: String,
+    signature: String,
+    status: String
+  },
+  userId: String
+}

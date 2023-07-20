@@ -4,7 +4,7 @@ import mainLogo from '../../assets/images/header/mainLogo.svg';
 import notficationIcon from '../../assets/images/Icons/notificationIcon.svg';
 // import wishlistIcon from '../../assets/images/Icons/wishlistIcon.svg';
 import { ReactComponent as WishlistIcon } from '../../assets/images/Icons/wishlistIcon.svg';
-import cartIcon from '../../assets/images/Icons/cartIcon.svg';
+import {ReactComponent as CartIcon} from '../../assets/images/Icons/cartIcon.svg';
 import dropArrow from '../../assets/images/Icons/Down arrow.svg';
 import searchIcon from '../../assets/images/Icons/searchDarkIcon.svg';
 import imageIcon from '../../assets/images/Icons/pictureIcon.svg';
@@ -61,6 +61,7 @@ import { styleSliceAction } from '../../store/styleSlice';
 import { setSubjectId } from '../../store/subjectidSlice';
 
 import { useDetectClickOutside } from "react-detect-click-outside";
+import { cartSliceAction } from '../../store/cartSlice';
 
 
 const StyledPopup = styled(Popup)`
@@ -260,6 +261,33 @@ const Mainbar = () => {
     setProgress(100);
     getArtDropdownTrue();
   }, []);
+
+ 
+
+  // Get Cart Count
+  const cartCount = useSelector((state) => state.cart.cartCount);
+
+  const [cartQuantity, setCartQuantity] = useState(0)
+  
+  useEffect(() => {
+    getCartQuantity()
+    // console.log(cartCount);
+  },[cartCount])
+
+  const getCartQuantity = () => {
+    try{
+    httpClient.get(`/cart_master/UserWiseGetTotalCount/${userDetails?.userId}`).then((res) => {
+      // console.log(res);
+      setCartQuantity(res?.data?.totalCount)
+      dispatch(cartSliceAction.setCartCount(res?.data?.totalCount))
+      // dispatch(styleSliceAction.setStyle(val));
+    })
+  } catch(err) {
+    console.log(err);
+    setCartQuantity(0)
+      dispatch(cartSliceAction.setCartCount(0))
+  }
+  }
 
   useEffect(() => {
     location.pathname === '/' && setSelectItems(null);
@@ -753,7 +781,7 @@ const Mainbar = () => {
               Sell on Artnstock
             </button>
           </div>
-          <div className='right'>
+          <div className='right pr-[12px]'>
             <ul>
               <li className='menu-link'>PLANS & PRICING</li>
               {userAuth.login ? (
@@ -1086,14 +1114,22 @@ const Mainbar = () => {
                   }}
                 />
               </li>
-              <li className='menu-link m-0'>
-                <img
+              <li className='menu-link m-0 '>
+                <div className='relative'>
+                <CartIcon onClick={() => {
+                    navigate('/shopping-cart');
+                  }} />
+             {(cartQuantity !== 0 || cartQuantity !== null || cartQuantity !== undefined) &&   <div className='absolute top-[0.2px] right-[-12px] bg-[#FF369F] text-[#ffffff] text-[11px] border border-[#ffffff] font-medium w-[20px] h-[14px] rounded-lg flex justify-center items-center  '>
+                  {cartQuantity}
+                </div>}
+                </div>
+                {/* <img
                   onClick={() => {
                     navigate('/shopping-cart');
                   }}
                   src={cartIcon}
                   alt=''
-                />
+                /> */}
               </li>
             </ul>
           </div>
