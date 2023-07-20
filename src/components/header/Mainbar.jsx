@@ -145,6 +145,7 @@ const Mainbar = () => {
   const logout = () => {
     // dispatch(setUserRole(''));
     dispatch(authSliceAction.logoutUser());
+    navigate('/');
   };
 
   const changeNavigation = (nav) => {
@@ -261,6 +262,7 @@ const Mainbar = () => {
   useEffect(() => {
     setProgress(100);
     getArtDropdownTrue();
+    getAllActiveSubjects();
   }, []);
 
   useEffect(() => {
@@ -347,6 +349,72 @@ const Mainbar = () => {
     useState('#888888');
   const [DropProductColor, setDropProductColor] = useState('#888888');
 
+  // for random subjects
+
+  const getRandomObjects = (objects, count) => {
+    const shuffledArray = objects.sort(() => 0.5 - Math.random());
+    const selectedObjects = shuffledArray.slice(0, count);
+    return selectedObjects;
+  };
+
+  const [subjects, setSubjects] = useState({
+    sub1: [],
+    sub2: [],
+    sub3: [],
+    sub4: [],
+    sub5: [],
+    sub6: [],
+  });
+
+  const getAllActiveSubjects = async () => {
+    try {
+      const res = await httpClient.get(
+        '/subject_master/getActiveSubject'
+      );
+
+      for (let i = 1; i < 7; i++) {
+        const randomObjects = getRandomObjects(res.data, 5);
+        if (i == 1) {
+          setSubjects((prevObj) => ({
+            ...prevObj,
+            sub1: randomObjects,
+          }));
+        } else if (i == 2) {
+          setSubjects((prevObj) => ({
+            ...prevObj,
+            sub2: randomObjects,
+          }));
+        } else if (i == 3) {
+          setSubjects((prevObj) => ({
+            ...prevObj,
+            sub3: randomObjects,
+          }));
+        } else if (i == 4) {
+          setSubjects((prevObj) => ({
+            ...prevObj,
+            sub4: randomObjects,
+          }));
+        } else if (i == 5) {
+          setSubjects((prevObj) => ({
+            ...prevObj,
+            sub5: randomObjects,
+          }));
+        } else if (i == 6) {
+          setSubjects((prevObj) => ({
+            ...prevObj,
+            sub6: randomObjects,
+          }));
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    console.log(subjects);
+  }, [subjects]);
+
   return (
     <>
       {/* loading bar */}
@@ -394,21 +462,17 @@ const Mainbar = () => {
                         {artDropdownList[0]?.name}
                       </p>
                       <ul>
-                        <li className='text-[13px] text-primaryGray font-normal leading-[19px]'>
-                          Arts for Kids
-                        </li>
-                        <li className='text-[13px] text-primaryGray font-normal leading-[19px]'>
-                          Astronomy & Space
-                        </li>
-                        <li className='text-[13px] text-primaryGray font-normal leading-[19px]'>
-                          Bevrages
-                        </li>
-                        <li className='text-[13px] text-primaryGray font-normal leading-[19px]'>
-                          Book Illustration
-                        </li>
-                        <li className='text-[13px] text-primaryGray font-normal leading-[19px]'>
-                          Comics
-                        </li>
+                        {subjects?.sub1?.map((subject) => (
+                          <li
+                            onClick={() => {
+                              dispatch(setSubjectId(subject));
+                              navigate('/art-list');
+                            }}
+                            className='text-[13px] text-primaryGray font-normal leading-[19px]'
+                          >
+                            {subject?.subjectName}
+                          </li>
+                        ))}
                       </ul>
                     </div>
                     <div>
@@ -424,21 +488,17 @@ const Mainbar = () => {
                         {artDropdownList[1]?.name}
                       </p>
                       <ul>
-                        <li className='text-[13px] text-primaryGray font-normal leading-[19px]'>
-                          Arts for Kids
-                        </li>
-                        <li className='text-[13px] text-primaryGray font-normal leading-[19px]'>
-                          Astronomy & Space
-                        </li>
-                        <li className='text-[13px] text-primaryGray font-normal leading-[19px]'>
-                          Bevrages
-                        </li>
-                        <li className='text-[13px] text-primaryGray font-normal leading-[19px]'>
-                          Book Illustration
-                        </li>
-                        <li className='text-[13px] text-primaryGray font-normal leading-[19px]'>
-                          Comics
-                        </li>
+                        {subjects?.sub2?.map((subject) => (
+                          <li
+                            onClick={() => {
+                              dispatch(setSubjectId(subject));
+                              navigate('/art-list');
+                            }}
+                            className='text-[13px] text-primaryGray font-normal leading-[19px]'
+                          >
+                            {subject?.subjectName}
+                          </li>
+                        ))}
                       </ul>
                     </div>
                     <div>
@@ -454,21 +514,17 @@ const Mainbar = () => {
                         {artDropdownList[2]?.name}
                       </p>
                       <ul>
-                        <li className='text-[13px] text-primaryGray font-normal leading-[19px]'>
-                          Arts for Kids
-                        </li>
-                        <li className='text-[13px] text-primaryGray font-normal leading-[19px]'>
-                          Astronomy & Space
-                        </li>
-                        <li className='text-[13px] text-primaryGray font-normal leading-[19px]'>
-                          Bevrages
-                        </li>
-                        <li className='text-[13px] text-primaryGray font-normal leading-[19px]'>
-                          Book Illustration
-                        </li>
-                        <li className='text-[13px] text-primaryGray font-normal leading-[19px]'>
-                          Comics
-                        </li>
+                        {subjects?.sub3?.map((subject) => (
+                          <li
+                            onClick={() => {
+                              dispatch(setSubjectId(subject));
+                              navigate('/art-list');
+                            }}
+                            className='text-[13px] text-primaryGray font-normal leading-[19px]'
+                          >
+                            {subject?.subjectName}
+                          </li>
+                        ))}
                       </ul>
                     </div>
                     <div>
@@ -484,21 +540,17 @@ const Mainbar = () => {
                         {artDropdownList[3]?.name}
                       </p>
                       <ul>
-                        <li className='text-[13px] text-primaryGray font-normal leading-[19px]'>
-                          Arts for Kids
-                        </li>
-                        <li className='text-[13px] text-primaryGray font-normal leading-[19px]'>
-                          Astronomy & Space
-                        </li>
-                        <li className='text-[13px] text-primaryGray font-normal leading-[19px]'>
-                          Bevrages
-                        </li>
-                        <li className='text-[13px] text-primaryGray font-normal leading-[19px]'>
-                          Book Illustration
-                        </li>
-                        <li className='text-[13px] text-primaryGray font-normal leading-[19px]'>
-                          Comics
-                        </li>
+                        {subjects?.sub4?.map((subject) => (
+                          <li
+                            onClick={() => {
+                              dispatch(setSubjectId(subject));
+                              navigate('/art-list');
+                            }}
+                            className='text-[13px] text-primaryGray font-normal leading-[19px]'
+                          >
+                            {subject?.subjectName}
+                          </li>
+                        ))}
                       </ul>
                     </div>
                     <div>
@@ -514,21 +566,17 @@ const Mainbar = () => {
                         {artDropdownList[4]?.name}
                       </p>
                       <ul>
-                        <li className='text-[13px] text-primaryGray font-normal leading-[19px]'>
-                          Arts for Kids
-                        </li>
-                        <li className='text-[13px] text-primaryGray font-normal leading-[19px]'>
-                          Astronomy & Space
-                        </li>
-                        <li className='text-[13px] text-primaryGray font-normal leading-[19px]'>
-                          Bevrages
-                        </li>
-                        <li className='text-[13px] text-primaryGray font-normal leading-[19px]'>
-                          Book Illustration
-                        </li>
-                        <li className='text-[13px] text-primaryGray font-normal leading-[19px]'>
-                          Comics
-                        </li>
+                        {subjects?.sub5?.map((subject) => (
+                          <li
+                            onClick={() => {
+                              dispatch(setSubjectId(subject));
+                              navigate('/art-list');
+                            }}
+                            className='text-[13px] text-primaryGray font-normal leading-[19px]'
+                          >
+                            {subject?.subjectName}
+                          </li>
+                        ))}
                       </ul>
                     </div>
                     <div>
@@ -544,21 +592,17 @@ const Mainbar = () => {
                         {artDropdownList[5]?.name}
                       </p>
                       <ul>
-                        <li className='text-[13px] text-primaryGray font-normal leading-[19px]'>
-                          Arts for Kids
-                        </li>
-                        <li className='text-[13px] text-primaryGray font-normal leading-[19px]'>
-                          Astronomy & Space
-                        </li>
-                        <li className='text-[13px] text-primaryGray font-normal leading-[19px]'>
-                          Bevrages
-                        </li>
-                        <li className='text-[13px] text-primaryGray font-normal leading-[19px]'>
-                          Book Illustration
-                        </li>
-                        <li className='text-[13px] text-primaryGray font-normal leading-[19px]'>
-                          Comics
-                        </li>
+                        {subjects?.sub6?.map((subject) => (
+                          <li
+                            onClick={() => {
+                              dispatch(setSubjectId(subject));
+                              navigate('/art-list');
+                            }}
+                            className='text-[13px] text-primaryGray font-normal leading-[19px]'
+                          >
+                            {subject?.subjectName}
+                          </li>
+                        ))}
                       </ul>
                     </div>
                   </div>
@@ -813,7 +857,7 @@ const Mainbar = () => {
                                     <div
                                       className='w-[70px] h-[70px] rounded-[92%] bg-no-repeat bg-center bg-cover'
                                       style={{
-                                        backgroundImage: `url(${profile})`,
+                                        backgroundImage: `url(${userDetails?.profileImage})`,
                                       }}
                                     ></div>
                                   </div>
@@ -824,10 +868,7 @@ const Mainbar = () => {
                                     </p>
                                     <p className='text-[11px] text-[#757575]'>
                                       User ID:{' '}
-                                      {userDetails?.userId?.slice(
-                                        0,
-                                        10
-                                      )}
+                                      {userDetails?.userUniqueNo}
                                     </p>
                                     <p className='text-[11px] text-[#757575]'>
                                       Illustrator/Photographer

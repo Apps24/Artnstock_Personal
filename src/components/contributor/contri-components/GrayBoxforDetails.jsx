@@ -12,12 +12,12 @@ const GrayBoxforDetails = ({
 
   const dispatch = useDispatch();
 
-  const backgroundImageStyle = useMemo(
-    () => ({
-      backgroundImage: `url(${URL.createObjectURL(card)})`,
-    }),
-    [card]
-  );
+  // const backgroundImageStyle = useMemo(
+  //   () => ({
+  //     backgroundImage: `url(${URL.createObjectURL(card)})`,
+  //   }),
+  //   [card]
+  // );
 
   useEffect(() => {
     dispatch(setSelectedImages([]));
@@ -56,7 +56,7 @@ const GrayBoxforDetails = ({
         className={`rounded-[10px] h-full w-full bg-no-repeat bg-center bg-cover filter brightness-100 absolute overflow-hidden inset-0 ${
           hovered ? 'brightness-[70%]' : ''
         }`}
-        style={backgroundImageStyle}
+        style={{ backgroundImage: `url(${card})` }}
       ></div>
       {selectedImages.find((item) => item === card) || hovered ? (
         <div className='absolute inset-0 flex items-center justify-center'>

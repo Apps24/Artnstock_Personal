@@ -40,6 +40,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setpath2 } from '../../../store/contriPathSlice';
 import trial from '../../../assets/images/combo/trial.png';
 import html2canvas from 'html2canvas';
+
 import CheckIcon from '@mui/icons-material/Check';
 
 const images = [
@@ -128,7 +129,7 @@ const ActivateProducts = () => {
   ]);
   const [alignVerticalFocus, setAlignVerticalFocus] = useState(true);
 
-  const [checked, setChecked] = useState('icon7'); //Store ID temporary
+  const [checked, setChecked] = useState([]); //Store ID temporary
   const [shirt, setShirt] = useState('#fff'); //Store ID temporary
   const [photo, setPhoto] = useState(''); //Store ID temporary
 
@@ -143,10 +144,61 @@ const ActivateProducts = () => {
     dispatch(setpath2('/ Activate Products'));
   }, []);
 
-  const check = (item) => {
-    setChecked(item.id);
+  const check = async (item) => {
+    // const abc = handleDownloadClick();
     setShirt(item.backgroundColor);
+    // test
+    const element = document.querySelector('.myDiv'); // Replace '.myDiv' with the appropriate selector for your div element
+    const button = element.querySelector('.greenBlueButton'); // Replace '.greenBlueButton' with the appropriate selector for your button element
+    setDottedLine(true); //hide dotted line
+    button.style.display = 'none'; // Hide the button before taking the screenshot
+
+    // Delay the screenshot function until the next tick of the event loop
+    setTimeout(() => {
+      html2canvas(element, { useCORS: true }).then(async (canvas) => {
+        button.style.display = 'block'; // Show the button again after the download link is clicked
+        setDottedLine(false); // Show the dotted line again after the download link is clicked
+        const dataUrl = canvas.toDataURL('image/png');
+
+        let formData = new FormData();
+        formData.append('file', dataURItoBlob(dataUrl));
+
+        const res = await httpClient.post(
+          '/CloudinaryImageUpload?parameter=false',
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          }
+        );
+
+        const find = checked?.find((obj) => obj.id === item.id);
+
+        if (find === undefined) {
+          try {
+            const mergedObj = { ...item, image: res.data };
+
+            setChecked((prev) => [...prev, mergedObj]);
+          } catch (error) {
+            console.error('Error occurred during download:', error);
+          }
+        } else if (find !== undefined) {
+          setChecked(checked.filter((obj) => obj.id !== item.id));
+        }
+
+        setShirt('#ffffff');
+      });
+    }, 0);
+    // test
+
+    // setChecked(item);
+    // setShirt(item.backgroundColor);
   };
+
+  useEffect(() => {
+    console.log(checked);
+  }, [checked]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -207,6 +259,7 @@ const ActivateProducts = () => {
 
   // api calls
   const [styleList, setStyleList] = useState([]);
+
   useEffect(() => {
     const getStyleList = async () => {
       const response = await httpClient.get('/style_master');
@@ -244,7 +297,7 @@ const ActivateProducts = () => {
         formData.append('file', dataURItoBlob(dataUrl));
 
         const res = await httpClient.post(
-          '/CloudinaryImageUpload',
+          '/CloudinaryImageUpload?parameter=false',
           formData,
           {
             headers: {
@@ -252,27 +305,25 @@ const ActivateProducts = () => {
             },
           }
         );
-        // .then((res) => {
-        //   console.log(res);
-        // });
-        console.log(res);
+        console.log(res.data);
+        return res.data;
 
-        let object = {
-          artId: checkedId,
-          artProductName: artName,
-          image: res.data.secureUrl,
-          productId: productImage.productId,
-          productSubCategoryId:
-            productImage.productSubCategoryMaster
-              .productSubCategoryId,
-          userId: userId,
-        };
+        // let object = {
+        //   artId: checkedId,
+        //   artProductName: artName,
+        //   image: res.data.secureUrl,
+        //   productId: productImage.productId,
+        //   productSubCategoryId:
+        //     productImage.productSubCategoryMaster
+        //       .productSubCategoryId,
+        //   userId: userId,
+        // };
 
-        const response = await httpClient.post(
-          '/art_product_master/create',
-          object
-        );
-        console.log(response.data);
+        // const response = await httpClient.post(
+        //   '/art_product_master/create',
+        //   object
+        // );
+        // console.log(response.data);
       });
     }, 0);
   }
@@ -305,7 +356,7 @@ const ActivateProducts = () => {
     );
 
     setproductImage(a);
-    console.log(a);
+    // console.log(a);
   };
 
   const [artList, setartList] = useState(null);
@@ -316,7 +367,7 @@ const ActivateProducts = () => {
         `/art_master/getUserIdAndStatusWiseUserMaster/${userId}/Approved`
       );
       setartList(res.data);
-      console.log(res.data);
+      // console.log(res.data);
     } catch (error) {
       console.error(error);
     }
@@ -710,11 +761,11 @@ const ActivateProducts = () => {
             >
               <div className='w-[50%]'>
                 <div className='myDiv w-[540px] h-[540px] rounded-[16.01px] bg-[#f5f5f7] flex flex-col justify-center  items-center'>
-                  {/* <Shirt fill={`${shirt}`} /> */}
-                  <img
+                  <Shirt fill={`${shirt}`} />
+                  {/* <img
                     src={productImage?.productDetails[0]?.frontImage}
                     alt=''
-                  />
+                  /> */}
                   <div
                     className={`${
                       dottedLine
@@ -907,7 +958,7 @@ const ActivateProducts = () => {
                     Select Colours
                   </p>
                   <div className='flex gap-[8px] pt-[3px]'>
-                    {circle.map((item) => (
+                    {circle?.map((item) => (
                       <div
                         key={item.id}
                         className={`w-[32px] h-[32px] rounded-full border border-${item.borderColor} flex justify-center items-center cursor-pointer`}
@@ -917,8 +968,13 @@ const ActivateProducts = () => {
                         }}
                         onClick={() => check(item)}
                       >
-                        {item.id == checked && (
-                          <i className={`bi bi-check-lg`}></i>
+                        {checked?.find(
+                          (obj) => obj.id === item.id
+                        ) && (
+                          // <i
+                          //   className={`bi bi-check-lg`}
+                          // ></i>
+                          <CheckIcon />
                         )}
                       </div>
                     ))}

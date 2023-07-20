@@ -275,11 +275,41 @@ const AddDetails = () => {
   useEffect(() => {
     if (selectedImages && selectedImages.length > 0) {
       const firstImg = selectedImages[0];
-      // console.log(firstImg);
+
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        image: firstImg,
+      }));
+
+      const url = firstImg;
+      setThumbnail(url);
+    }
+  }, [selectedImages]);
+
+  useEffect(() => {
+    console.log(formData);
+  }, [formData]);
+
+  // releasefileInputRefRelease
+
+  const fileInputRefRelease = useRef(null);
+
+  const handleButtonClickRelease = () => {
+    fileInputRefRelease.current.click();
+  };
+
+  const [tempRelese, settempRelese] = useState([]);
+
+  const handleFileChangeRelease = (event) => {
+    const files = event.target.files;
+    const newImages = Array.from(files);
+
+    // upload images
+    newImages.forEach((cards) => {
       let formData = new FormData();
-      formData.append('file', firstImg);
+      formData.append('file', cards);
       httpClient
-        .post('/CloudinaryImageUpload', formData, {
+        .post('/CloudinaryImageUpload?parameter=false', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -287,18 +317,39 @@ const AddDetails = () => {
         .then((res) => {
           console.log('file uploaded successfully');
           // console.log(res);
-          setFormData((prevFormData) => ({
-            ...prevFormData,
-            image: res.data.secureUrl,
-          }));
+          const dataa = res.data;
+
+          settempRelese((prevImages) => [
+            ...prevImages,
+            { dataa, cards },
+          ]);
         })
+
         .catch((err) => {
           console.log(err);
         });
-      const url = `url(${URL.createObjectURL(firstImg)})`;
-      setThumbnail(url);
+    });
+    // upload images
+  };
+
+  const handleCheckboxChangeRelease = (obj) => {
+    const array = formData.releases.find(
+      (item) => item === obj.dataa
+    );
+    if (!array) {
+      setFormData((prevImages) => ({
+        ...prevImages,
+        releases: [...prevImages.releases, obj.dataa],
+      }));
+    } else {
+      setFormData((prevImages) => ({
+        ...prevImages,
+        releases: prevImages.releases.filter(
+          (item) => item !== obj.dataa
+        ),
+      }));
     }
-  }, [selectedImages]);
+  };
 
   return (
     <>
@@ -455,7 +506,7 @@ const AddDetails = () => {
           className='flex flex-col justify-center w-w690 h-[27.813rem] mx-[auto] bg-[#f7f7f7] rounded-[36px] h-full w-full bg-no-repeat bg-center bg-cover'
           style={{
             backgroundImage: selectedCard
-              ? `${thumbnail}`
+              ? `url(${thumbnail})`
               : undefined,
           }}
         >
@@ -821,13 +872,32 @@ const AddDetails = () => {
               Lorem Ipsum dolor sit amet consectetur adipiscing elit
               sed do.
             </p>
-            {releaseCards.length > 0 && (
+            <div>
+              <input
+                type='file'
+                multiple
+                onChange={handleFileChangeRelease}
+                accept='image/*'
+                style={{ display: 'none' }}
+                ref={fileInputRefRelease}
+              />
+              <button
+                onClick={handleButtonClickRelease}
+                className='w-[6.625rem] h-[1.750rem] bg-[#8e8e8e] text-[#ffffff] rounded-[0.875rem] text-[0.750rem] font-medium'
+              >
+                Attach Release
+              </button>
+              <p className='text-[0.688rem] mt-[0.188rem]'>
+                JPEG or PDF file only. Max 4MB.
+              </p>
+            </div>
+            {tempRelese.length > 0 && (
               <div className='text-[0.750rem] border border-[#d6d6d6] rounded-[0.625rem]'>
-                {releaseCards.map((obj, index) => (
+                {tempRelese.map((obj, index) => (
                   <p
                     key={index}
                     className={`${
-                      index !== releaseCards.length - 1
+                      index !== tempRelese.length - 1
                         ? 'border-b border-[#d6d6d6]'
                         : ''
                     } flex justify-between p-[0.250rem] px-[0.500rem]`}
@@ -835,9 +905,11 @@ const AddDetails = () => {
                     <div className='flex gap-[0.500rem]'>
                       <input
                         type='checkbox'
-                        // onChange={() => handleCheckboxChange(obj)}
+                        onChange={() =>
+                          handleCheckboxChangeRelease(obj)
+                        }
                       />
-                      {/* <span>{obj.cards.name}</span> */}
+                      <span>{obj.cards.name}</span>
                     </div>
                     <div className='flex gap-[1.188rem]'>
                       <div className='pt-[0.188rem]'>

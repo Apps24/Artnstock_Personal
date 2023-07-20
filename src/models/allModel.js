@@ -87,6 +87,7 @@ export const artMasterModel = {
   styleId: '',
   image: '',
   userId: '',
+  releases: [],
 };
 
 export const filteredMasterModel = {

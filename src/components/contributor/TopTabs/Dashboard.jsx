@@ -5,6 +5,7 @@ import map from '../../../assets/images/contributor/map.png';
 import Slider from '@mui/material/Slider';
 import { useState } from 'react';
 import dropdown from '../../../assets/images/socials/dropdown.png';
+import { useSelector } from 'react-redux';
 
 // tabs
 
@@ -143,6 +144,8 @@ const Dashboard = () => {
   const [isOpenMonthly1, setIsOpenMonthly1] = useState(false);
   const [isOpenMonthly2, setIsOpenMonthly2] = useState(false);
 
+  const userDetails = useSelector((state) => state.auth.userDetails);
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -166,7 +169,7 @@ const Dashboard = () => {
                 <div
                   className='w-[92px] h-[92px] rounded-[92%] bg-no-repeat bg-center bg-cover'
                   style={{
-                    backgroundImage: `url(${dashimg})`,
+                    backgroundImage: `url(${userDetails?.profileImage})`,
                   }}
                 ></div>
               </div>
@@ -174,10 +177,10 @@ const Dashboard = () => {
                 <div>
                   <img src={pro} alt='' />
                   <p className='text-[11px] text-primaryGray'>
-                    Contributor ID: ANS578347506
+                    Contributor ID: {userDetails?.userUniqueNo}
                   </p>
                   <p className='text-primaryBlack text-[18px] font-medium leading-[1.2]'>
-                    Azra Creations
+                    {/* Azra Creations */} {userDetails?.displayName}
                   </p>
                   <p className='text-[11px] text-primaryGray leading-[1.2] font-medium'>
                     Illustrator/Photographer
@@ -185,16 +188,17 @@ const Dashboard = () => {
                   <p className='text-[11px] text-primaryGray leading-[1.2]'>
                     Specialization in Illustration and Photography
                   </p>
-                  <p>
+                  <>
                     <img
                       className='inline-block'
                       src={location}
                       alt=''
                     />{' '}
                     <span className='text-[12px] text-primaryGray'>
-                      Pune, India
+                      {userDetails.shippingAddress.cityName},
+                      {userDetails.shippingAddress.countryName}
                     </span>
-                  </p>
+                  </>
                 </div>
                 <div>
                   <p className='text-[12px] font-medium text-primaryGray leading-[1] relative top-[3.6px]'>

@@ -25,6 +25,8 @@ import productImg from '../../../assets/images/static/products.svg';
 import wallpaperImg from '../../../assets/images/static/wallpaper.svg';
 import brandingImg from '../../../assets/images/static/Branding.svg';
 import movetoSet from '../../../assets/images/contributor/movetoSet.png';
+import Stars from '../../../assets/images/ComboPack/Stars.png';
+import like from '../../../assets/images/ComboPack/like.png';
 import Popup from 'reactjs-popup';
 import styled from 'styled-components';
 
@@ -84,6 +86,9 @@ import locatiomIcon from '../../../assets/images/art-details/Icon - Location Poi
 import faceBookIcon from '../../../assets/images/footer/FacebookIcon.png';
 import linkdinIcon from '../../../assets/images/footer/LinkedinIcon.png';
 import instaIcon from '../../../assets/images/footer/InstagramIcon.png';
+import custImg from '../../../assets/images/ComboPack/custImg.png';
+import custImg2 from '../../../assets/images/ComboPack/custImg2.png';
+import custImg3 from '../../../assets/images/ComboPack/custImg3.png';
 
 const StyledPopupp = styled(Popup)`
   // use your custom style for ".popup-overlay"
@@ -109,6 +114,21 @@ const styleDrop = [
   { a: 'ddsdd' },
   { a: 'ddsdd' },
   { a: 'ddsdd' },
+];
+
+const custReview = [
+  {
+    img: `${custImg}`,
+    name: 'ksgrafiks',
+    type: 'Abstract',
+    reviewCount: '5',
+    photo: '1',
+    months: '4 months',
+    desc: 'Very eye pleasing sculpture. Looks best in a bright room as the variation is colored glass. Leaves do not show in dimly lit area. Very eye pleasing sculpture. Looks best in a bright room as the variation is colored glass. Leaves do not show in dimly lit area.',
+    like: '24',
+    response: 'Thanks Azra - Glad we could help!',
+    responseMonth: '7 months',
+  },
 ];
 
 const keywordsArr = [
@@ -354,9 +374,14 @@ const ArtDetails = () => {
   const [checked, setChecked] = useState('icon7'); //Store ID temporary
   const [selectedSize, setSelectedSize] = useState('M');
 
+  const [isOpenSortBy, setIsOpenSortBy] = useState(false);
+  const [isOpenFilterBy, setIsOpenFilterBy] = useState(false);
+
   const navigate = useNavigate();
 
   const userId = useSelector((state) => state.auth.userId);
+
+  const userAuth = useSelector((state) => state.auth);
 
   const handleSizeClick = (size) => {
     setSelectedSize(size);
@@ -582,6 +607,8 @@ const ArtDetails = () => {
     }
   };
 
+  const [popupLogin, setpopupLogin] = useState(false);
+
   useEffect(() => {
     console.log(categories);
   }, [categories]);
@@ -635,251 +662,298 @@ const ArtDetails = () => {
                 <img src={roomViewImg} alt='' />
                 <img src={threeDImg} alt='' />
               </div>
-              <div className='flex gap-x-2.5 items-center'>
-                <StyledPopupp
-                  trigger={<img src={addIcon} alt='' />}
-                  modal
-                >
-                  {(close) => (
-                    <div className='flex flex-col gap-[21px]'>
-                      {/* {selectedAllFilesImages.length > 0 ? ( */}
-                      <div
-                        style={{
-                          backgroundImage: `url(${artDetails.image})`,
+              <div className='flex gap-x-2.5 items-center relative'>
+                {/* test */}
+                {popupLogin && (
+                  <div
+                    className={`z-999 right-[117px] bottom-[15px] bg-[#fff] rounded-[16px] w-[266px] absolute bottom-[38px] left-[-127px]`}
+                    style={{
+                      boxShadow: '0px 0px 18px rgba(0, 0, 0, 0.2)',
+                    }}
+                  >
+                    <div className='flex gap-[5px] flex-col p-[14px] leading-[1.3] text-center'>
+                      <p className='font-medium text-primaryBlack text-[15px]'>
+                        Create Account
+                      </p>
+                      <p className='text-primaryGray text-[11px]'>
+                        To create and add to a collection, you must be
+                        a logged-in member
+                      </p>
+                      <button
+                        onClick={(e) => {
+                          navigate('/join');
+                          e.stopPropagation();
                         }}
-                        className='w-[390px] h-[270px] bg-no-repeat bg-center bg-cover rounded-[16px]'
-                      ></div>
-
-                      <div>
-                        <div className='flex flex-col'>
-                          <p className='text-[15px] font-medium mb-[3px]'>
-                            Select Category
-                          </p>
-                          <div>
-                            <button
-                              onClick={() => {
-                                setIsCategoryOpen(!isCategoryOpen);
-                              }}
-                              className={`${
-                                isCategoryOpen === true
-                                  ? 'rounded-t-[20px] shadow-dropShadowButton border-b border-[#efefef]'
-                                  : 'rounded-[20px] border  border-[#d6d6d6]'
-                              } cursor-pointer w-[390px] h-[40px] bg-[#FFFFFF] text-primaryGray text-sm14 font-medium flex items-center justify-between px-[15px]`}
-                            >
-                              {category === '' ? (
-                                <span>Select Category</span>
-                              ) : (
-                                <span>{category}</span>
-                              )}
-
-                              <img
-                                className='inline-block'
-                                src={dropdown}
-                                alt=''
-                              />
-                            </button>
-
-                            {isCategoryOpen && (
-                              <ul className='shadow-dropShadow rounded-b-2xl z-50 cursor-pointer hover:overflow-hidden dropdown__menu absolute bg-[#ffffff] w-[390px] text-center text-[14px] text-primaryGray'>
-                                <li
-                                  onClick={() => {
-                                    setCategory('Art');
-                                    setIsCategoryOpen(
-                                      !isCategoryOpen
-                                    );
-                                    setFolderName(null);
-                                  }}
-                                  className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
-                                >
-                                  Art
-                                </li>
-                                <li
-                                  onClick={() => {
-                                    setCategory('Photos');
-                                    setIsCategoryOpen(
-                                      !isCategoryOpen
-                                    );
-                                    setFolderName(null);
-                                  }}
-                                  className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
-                                >
-                                  Photos
-                                </li>
-                                <li
-                                  onClick={() => {
-                                    setCategory('Footage');
-                                    setIsCategoryOpen(
-                                      !isCategoryOpen
-                                    );
-                                    setFolderName(null);
-                                  }}
-                                  className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
-                                >
-                                  Footage
-                                </li>
-                                <li
-                                  onClick={() => {
-                                    setCategory('Music');
-                                    setIsCategoryOpen(
-                                      !isCategoryOpen
-                                    );
-                                    setFolderName(null);
-                                  }}
-                                  className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
-                                >
-                                  Music
-                                </li>
-                                <li
-                                  onClick={() => {
-                                    setCategory('Templates');
-                                    setIsCategoryOpen(
-                                      !isCategoryOpen
-                                    );
-                                    setFolderName(null);
-                                  }}
-                                  className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
-                                >
-                                  Templates
-                                </li>
-                                <li
-                                  onClick={() => {
-                                    setCategory('Product');
-                                    setIsCategoryOpen(
-                                      !isCategoryOpen
-                                    );
-                                    setFolderName(null);
-                                  }}
-                                  className='py-1 px-3.5 hover:bg-[#F0F0F0]'
-                                >
-                                  Product
-                                </li>
-                              </ul>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                      <div>
-                        <div className='flex flex-col'>
-                          <p className='text-[15px] font-medium mb-[3px]'>
-                            Set Name
-                          </p>
-                          <div>
-                            <button
-                              onClick={() => {
-                                setIsNameOpen(!isNameOpen);
-                              }}
-                              // className={`flex items-center justify-between px-[15px] text-primaryGray text-sm14 font-medium cursor-pointer w-[390px] h-[40px] bg-[#FFFFFF] rounded-[20px] border border-[#d6d6d6]`}
-                              className={`${
-                                isNameOpen === true
-                                  ? 'rounded-t-[20px] shadow-dropShadowButton border-b border-[#efefef]'
-                                  : 'rounded-[20px] border  border-[#d6d6d6]'
-                              } cursor-pointer w-[390px] h-[40px] bg-[#FFFFFF] text-primaryGray text-sm14 font-medium flex items-center justify-between px-[15px]`}
-                            >
-                              {folderName === null ? (
-                                <span>Enter Set Name</span>
-                              ) : (
-                                <span>{folderName.title}</span>
-                              )}
-                              {}
-
-                              <img
-                                className='inline-block'
-                                src={dropdown}
-                                alt=''
-                              />
-                            </button>
-
-                            {category === 'Art' ? (
-                              <div>
-                                {isNameOpen && (
-                                  <ul className='cursor-pointer shadow-dropShadow rounded-b-2xl hover:overflow-hidden dropdown__menu absolute bg-[#ffffff] w-[390px] text-center text-[14px] text-primaryGray'>
-                                    {categories.art.map(
-                                      (items, index) => (
-                                        <li
-                                          onClick={() => {
-                                            setFolderName(items);
-                                            setIsNameOpen(
-                                              !isNameOpen
-                                            );
-                                          }}
-                                          className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
-                                        >
-                                          {items.title}
-                                        </li>
-                                      )
-                                    )}
-                                  </ul>
-                                )}
-                              </div>
-                            ) : category === 'Photos' ? (
-                              <div>
-                                {isNameOpen && (
-                                  <ul className='cursor-pointer shadow-dropShadow rounded-b-2xl hover:overflow-hidden dropdown__menu absolute bg-[#ffffff] w-[390px] text-center text-[14px] text-primaryGray'>
-                                    {categories.photo.map(
-                                      (items, index) => (
-                                        <li
-                                          onClick={() => {
-                                            setFolderName(items);
-                                            setIsNameOpen(
-                                              !isNameOpen
-                                            );
-                                          }}
-                                          className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
-                                        >
-                                          {items.title}
-                                        </li>
-                                      )
-                                    )}
-                                  </ul>
-                                )}
-                              </div>
-                            ) : (
-                              <div></div>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                      <div className='flex gap-[10px] justify-center pb-[30px]'>
-                        <button
-                          onClick={() => {
-                            addToFolder();
-                          }}
-                          className='blackBtn h-[40px] w-[88px]'
-                        >
-                          Save
-                        </button>
-                        <button
-                          onClick={close}
-                          className='h-[40px] px-6 py-2 rounded-3xl text-sm14 text-primaryBlack border-[2px] w-[88px]'
-                        >
-                          Cancel
-                        </button>
-                      </div>
+                        className='bg-[#8e8e8e] rounded-[14px] h-[28px] w-[108px] text-[12px] font-medium text-[white] mx-[auto]'
+                      >
+                        Create Account
+                      </button>
+                      <p
+                        onClick={(e) => {
+                          navigate('/login');
+                          e.stopPropagation();
+                        }}
+                        className='text-orangeColor text-[11px]'
+                      >
+                        Already a member? Sign in
+                      </p>
+                      <p className='text-pinkColor text-[11px]'>
+                        Note: Downloaded images will be saved in
+                        ‘Collections’ folder
+                      </p>
                     </div>
-                  )}
-                </StyledPopupp>
+                    <div className='absolute left-[47%] bottom-[-10px] w-[20px] h-[20px] bg-[white] rounded-br-[5px] transform rotate-45 shadow-inner'></div>
+                  </div>
+                )}
+                {/* test */}
+                {/* test */}
+                {userAuth.login === true ? (
+                  <StyledPopupp
+                    trigger={
+                      <img
+                        className='cursor-pointer'
+                        src={addIcon}
+                        alt=''
+                      />
+                    }
+                    modal
+                  >
+                    {(close) => (
+                      <div className='flex flex-col gap-[21px]'>
+                        {/* {selectedAllFilesImages.length > 0 ? ( */}
+                        <div
+                          style={{
+                            backgroundImage: `url(${artDetails.image})`,
+                          }}
+                          className='w-[390px] h-[270px] bg-no-repeat bg-center bg-cover rounded-[16px]'
+                        ></div>
+
+                        <div>
+                          <div className='flex flex-col'>
+                            <p className='text-[15px] font-medium mb-[3px]'>
+                              Select Category
+                            </p>
+                            <div>
+                              <button
+                                onClick={() => {
+                                  setIsCategoryOpen(!isCategoryOpen);
+                                }}
+                                className={`${
+                                  isCategoryOpen === true
+                                    ? 'rounded-t-[20px] shadow-dropShadowButton border-b border-[#efefef]'
+                                    : 'rounded-[20px] border  border-[#d6d6d6]'
+                                } cursor-pointer w-[390px] h-[40px] bg-[#FFFFFF] text-primaryGray text-sm14 font-medium flex items-center justify-between px-[15px]`}
+                              >
+                                {category === '' ? (
+                                  <span>Select Category</span>
+                                ) : (
+                                  <span>{category}</span>
+                                )}
+
+                                <img
+                                  className='inline-block'
+                                  src={dropdown}
+                                  alt=''
+                                />
+                              </button>
+
+                              {isCategoryOpen && (
+                                <ul className='shadow-dropShadow rounded-b-2xl z-50 cursor-pointer hover:overflow-hidden dropdown__menu absolute bg-[#ffffff] w-[390px] text-center text-[14px] text-primaryGray'>
+                                  <li
+                                    onClick={() => {
+                                      setCategory('Art');
+                                      setIsCategoryOpen(
+                                        !isCategoryOpen
+                                      );
+                                      setFolderName(null);
+                                    }}
+                                    className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
+                                  >
+                                    Art
+                                  </li>
+                                  <li
+                                    onClick={() => {
+                                      setCategory('Photos');
+                                      setIsCategoryOpen(
+                                        !isCategoryOpen
+                                      );
+                                      setFolderName(null);
+                                    }}
+                                    className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
+                                  >
+                                    Photos
+                                  </li>
+                                  <li
+                                    onClick={() => {
+                                      setCategory('Footage');
+                                      setIsCategoryOpen(
+                                        !isCategoryOpen
+                                      );
+                                      setFolderName(null);
+                                    }}
+                                    className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
+                                  >
+                                    Footage
+                                  </li>
+                                  <li
+                                    onClick={() => {
+                                      setCategory('Music');
+                                      setIsCategoryOpen(
+                                        !isCategoryOpen
+                                      );
+                                      setFolderName(null);
+                                    }}
+                                    className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
+                                  >
+                                    Music
+                                  </li>
+                                  <li
+                                    onClick={() => {
+                                      setCategory('Templates');
+                                      setIsCategoryOpen(
+                                        !isCategoryOpen
+                                      );
+                                      setFolderName(null);
+                                    }}
+                                    className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
+                                  >
+                                    Templates
+                                  </li>
+                                  <li
+                                    onClick={() => {
+                                      setCategory('Product');
+                                      setIsCategoryOpen(
+                                        !isCategoryOpen
+                                      );
+                                      setFolderName(null);
+                                    }}
+                                    className='py-1 px-3.5 hover:bg-[#F0F0F0]'
+                                  >
+                                    Product
+                                  </li>
+                                </ul>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                        <div>
+                          <div className='flex flex-col'>
+                            <p className='text-[15px] font-medium mb-[3px]'>
+                              Set Name
+                            </p>
+                            <div>
+                              <button
+                                onClick={() => {
+                                  setIsNameOpen(!isNameOpen);
+                                }}
+                                // className={`flex items-center justify-between px-[15px] text-primaryGray text-sm14 font-medium cursor-pointer w-[390px] h-[40px] bg-[#FFFFFF] rounded-[20px] border border-[#d6d6d6]`}
+                                className={`${
+                                  isNameOpen === true
+                                    ? 'rounded-t-[20px] shadow-dropShadowButton border-b border-[#efefef]'
+                                    : 'rounded-[20px] border  border-[#d6d6d6]'
+                                } cursor-pointer w-[390px] h-[40px] bg-[#FFFFFF] text-primaryGray text-sm14 font-medium flex items-center justify-between px-[15px]`}
+                              >
+                                {folderName === null ? (
+                                  <span>Enter Set Name</span>
+                                ) : (
+                                  <span>{folderName.title}</span>
+                                )}
+                                {}
+
+                                <img
+                                  className='inline-block'
+                                  src={dropdown}
+                                  alt=''
+                                />
+                              </button>
+
+                              {category === 'Art' ? (
+                                <div>
+                                  {isNameOpen && (
+                                    <ul className='cursor-pointer shadow-dropShadow rounded-b-2xl hover:overflow-hidden dropdown__menu absolute bg-[#ffffff] w-[390px] text-center text-[14px] text-primaryGray'>
+                                      {categories.art.map(
+                                        (items, index) => (
+                                          <li
+                                            onClick={() => {
+                                              setFolderName(items);
+                                              setIsNameOpen(
+                                                !isNameOpen
+                                              );
+                                            }}
+                                            className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
+                                          >
+                                            {items.title}
+                                          </li>
+                                        )
+                                      )}
+                                    </ul>
+                                  )}
+                                </div>
+                              ) : category === 'Photos' ? (
+                                <div>
+                                  {isNameOpen && (
+                                    <ul className='cursor-pointer shadow-dropShadow rounded-b-2xl hover:overflow-hidden dropdown__menu absolute bg-[#ffffff] w-[390px] text-center text-[14px] text-primaryGray'>
+                                      {categories.photo.map(
+                                        (items, index) => (
+                                          <li
+                                            onClick={() => {
+                                              setFolderName(items);
+                                              setIsNameOpen(
+                                                !isNameOpen
+                                              );
+                                            }}
+                                            className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
+                                          >
+                                            {items.title}
+                                          </li>
+                                        )
+                                      )}
+                                    </ul>
+                                  )}
+                                </div>
+                              ) : (
+                                <div></div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                        <div className='flex gap-[10px] justify-center pb-[30px]'>
+                          <button
+                            onClick={() => {
+                              addToFolder();
+                            }}
+                            className='blackBtn h-[40px] w-[88px]'
+                          >
+                            Save
+                          </button>
+                          <button
+                            onClick={close}
+                            className='h-[40px] px-6 py-2 rounded-3xl text-sm14 text-primaryBlack border-[2px] w-[88px]'
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </StyledPopupp>
+                ) : (
+                  <img
+                    className='cursor-pointer'
+                    onClick={() => {
+                      setpopupLogin(!popupLogin);
+                    }}
+                    src={addIcon}
+                    alt=''
+                  />
+                )}
+                {/* test */}
+
                 <Wishlist
                   id={artDetails.artId}
                   type='small'
                   prodType='art'
                 />
                 <img src={shareIcon} alt='' />
-                {/* test */}
-                {/* {selectedAllFilesImages.length > 0 ? ( */}
-
-                {/* ) : (
-                  <div className='flex-column max-w-[40px] text-center cursor-pointer'>
-                    <img
-                      src={movetoSet}
-                      alt=''
-                      className='w-[16px] h-[16px] mx-[auto] mb-[6px]'
-                    />
-                    <p className='text-primaryGray text-[11px]'>
-                      Move to Set
-                    </p>
-                  </div>
-                )} */}
-                {/* test */}
               </div>
             </div>
 
@@ -2702,7 +2776,14 @@ const ArtDetails = () => {
                   }
                 </p>
               </div>
-              <button className='bg-[#00F9C6] text-sm12 text-primaryBlack font-medium px-4 py-1.5 rounded-3xl '>
+              <button
+                onClick={() => {
+                  navigate('/view-my-store', {
+                    state: artDetails?.userMaster,
+                  });
+                }}
+                className='bg-[#00F9C6] text-sm12 text-primaryBlack font-medium px-4 py-1.5 rounded-3xl '
+              >
                 View Store
               </button>
             </div>
@@ -2862,11 +2943,135 @@ const ArtDetails = () => {
         </div>
       </div>
 
-      <div className='w-w1168 h-[726px] mt-[95px] rounded-2xl mx-auto shadow-dropShadow'></div>
+      {/* test */}
+      {/* buttons */}
+      <div className='w-w1168 mx-auto mb-3 mt-[50px] flex justify-between'>
+        <div className='flex gap-[10px]'>
+          <button className='blackBtn'>Write a Review</button>
+          <button className='blackBtn bg-[#FFFFFF] border border-[#333333] rounded-full text-[#333333]'>
+            See All Review
+          </button>
+        </div>
+        <div className='flex gap-[10px] items-center'>
+          <div>
+            <button
+              onClick={() => {
+                setIsOpenSortBy(!isOpenSortBy);
+              }}
+              className={`${
+                isOpenSortBy === true
+                  ? 'rounded-t-[15px] shadow-dropShadowButton border-b border-[#EFEFEF]'
+                  : 'rounded-[15px] border  border-[#D6D6D6]'
+              } cursor-pointer w-[120px] text-[12px] h-[30px] flex items-center justify-between p-[10px]`}
+              // className='cursor-pointer w-[120px] border border-[#D6D6D6] text-[12px] h-[30px] rounded-[15px] flex items-center justify-between p-[10px]'
+            >
+              <span className='text-[#BBBBBB]'>Sort by</span>
+              <img className='inline-block' src={dropdown} alt='' />
+            </button>
+            {isOpenSortBy && (
+              <ul className='shadow-dropShadow rounded-b-2xl hover:overflow-hidden dropdown__menu absolute z-50 bg-[#FFFFFF] w-[120px] text-center text-[14px] text-primaryGray'>
+                <li className='cursor-pointer hover:bg-[#F0F0F0] border-b border-[#EFEFEF] py-[5px]'>
+                  month
+                </li>
+                <li className='cursor-pointer hover:bg-[#F0F0F0] border-b border-[#EFEFEF] py-[5px]'>
+                  date
+                </li>
+                <li className='cursor-pointer hover:bg-[#F0F0F0] py-[5px]'>
+                  year
+                </li>
+              </ul>
+            )}
+          </div>
+          <div>
+            <button
+              onClick={() => {
+                setIsOpenFilterBy(!isOpenFilterBy);
+              }}
+              className={`${
+                isOpenFilterBy === true
+                  ? 'rounded-t-[15px] shadow-dropShadowButton border-b border-[#EFEFEF]'
+                  : 'rounded-[15px] border  border-[#D6D6D6]'
+              } cursor-pointer w-[120px] text-[12px] h-[30px] flex items-center justify-between p-[10px]`}
+              // className='cursor-pointer w-[120px] border border-[#D6D6D6] text-[12px] h-[30px] rounded-[15px] flex items-center justify-between p-[10px]'
+            >
+              <span className='text-[#BBBBBB]'>Filter by</span>
+              <img className='inline-block' src={dropdown} alt='' />
+            </button>
+            {isOpenFilterBy && (
+              <ul className='shadow-dropShadow rounded-b-2xl hover:overflow-hidden dropdown__menu absolute z-50 bg-[#FFFFFF] w-[120px] text-center text-[14px] text-primaryGray'>
+                <li className='cursor-pointer hover:bg-[#F0F0F0] border-b border-[#EFEFEF] py-[5px]'>
+                  month
+                </li>
+                <li className='cursor-pointer hover:bg-[#F0F0F0] border-b border-[#EFEFEF] py-[5px]'>
+                  date
+                </li>
+                <li className='cursor-pointer hover:bg-[#F0F0F0] py-[5px]'>
+                  year
+                </li>
+              </ul>
+            )}
+          </div>
+        </div>
+      </div>
+      {/* buttons */}
+
+      <div
+        className='w-w1168 rounded-2xl pt-[15px] mx-auto pl-4'
+        style={{
+          boxShadow: '#f0f0f0 0px 0px 4.3px 4px',
+        }}
+      >
+        {custReview.map((item) => {
+          return (
+            <div>
+              <div className='flex py-[15px] gap-3'>
+                <p>
+                  <img src={item.img} alt='' />
+                </p>
+                <div>
+                  <p className='text-[15px] text-[#333333] leading-[1.2]'>
+                    {item.name}
+                  </p>
+                  <p className='text-[12px] mt-1 mb-3 leading-[1.1] text-[#757575]'>
+                    <span className='text-[#f88331]'>
+                      {item.type}
+                    </span>{' '}
+                    {item.reviewCount} reviews . {item.photo} Photo
+                  </p>
+                  <p className='text-[12px] leading-[1.2] flex gap-3 text-[#757575]'>
+                    <img src={Stars} className='inline' alt='' />{' '}
+                    {item.months} ago
+                  </p>
+                  <p className='text-[13px] mt-3 mb-[19px] leading-[1.2] text-[#757575]'>
+                    {item.desc}
+                  </p>
+                  <p className='text-[13px] mb-3 leading-[1.2] text-[#757575] flex items-center'>
+                    <img src={like} className='inline' alt='' />
+                    <span className='pl-1'> {item.like}</span>
+                  </p>
+                  <div className='border-l-2 text-[12px] leading-[1.2] pl-3 text-[#757575] border-[#dcdcdc]'>
+                    <p>
+                      <span className='text-[#333333] text-[13px] font-medium'>
+                        Response from the owner
+                      </span>{' '}
+                      {item.responseMonth} ago
+                    </p>
+                    <p className='text-[13px] leading-[1.2]'>
+                      {item.response}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
       <p className='w-w1168 mx-auto flex justify-between text-[#F88331] text-[12px] mt-2 mb-10'>
         <span>Disclosures & Guidlines</span>
         <span>See all 126 reviews</span>
       </p>
+      {/* test */}
+
       <Footer />
     </>
   );

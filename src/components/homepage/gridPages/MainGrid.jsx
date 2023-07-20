@@ -44,7 +44,7 @@ const MainGrid = () => {
         artwork at fair costs, our choice of works of art will expand
         the possibilities for your visual initiatives.
       </p>
-      <div className=' grid grid-cols-4 gap-4 my-7'>
+      <div className='grid grid-cols-4 gap-4 my-7'>
         {/* Grid 1 */}
         <div
           onClick={() => {
@@ -64,7 +64,7 @@ const MainGrid = () => {
             style={{ height: 'inherit' }}
           >
             <div>
-              <p className='text-[#FFFFFF] text-heading '>
+              <p className='text-[#FFFFFF] text-heading'>
                 {gridList[0]?.subjectName}
               </p>
               <p className='text-[#FFFFFF] text-sm12 font-medium w-[13.125rem]'>
