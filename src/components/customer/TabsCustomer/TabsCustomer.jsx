@@ -247,7 +247,7 @@ const TabsCustomer = () => {
                       // onClick={() => {
                       //   dispatch(setpath2cust('/ Earning Summary'));
                       // }}
-                      label='Earning Summary'
+                      label='Referral Earnings Summary'
                       value='4.1'
                       sx={{
                         textTransform: 'none!important',
@@ -264,7 +264,7 @@ const TabsCustomer = () => {
                         paddingLeft: '12px!important',
                       }}
                     />
-                    <Tab
+                    {/* <Tab
                       onClick={() => {
                         dispatch(setpath2cust('/ Unpaid Earnings'));
                       }}
@@ -284,7 +284,7 @@ const TabsCustomer = () => {
                         paddingRight: '12px!important',
                         paddingLeft: '12px!important',
                       }}
-                    />
+                    /> */}
                     <Tab
                       onClick={() => {
                         dispatch(setpath2cust('/ Payment History'));
@@ -306,16 +306,41 @@ const TabsCustomer = () => {
                         paddingLeft: '12px!important',
                       }}
                     />
+                    <Tab
+                      onClick={() => {
+                        dispatch(setpath2cust('/ Tax'));
+                      }}
+                      label='Tax'
+                      value='4.4'
+                      sx={{
+                        textTransform: 'none!important',
+                        border: '2px solid #eaeaea',
+                        borderRadius: '25px',
+                        color: '#7e7e7e',
+                        fontSize: '12px',
+                        marginLeft: '2.5px',
+                        marginRight: '2.5px',
+                        height: '28px!important',
+                        minHeight: 0,
+                        minWidth: 'fit-content!important',
+                        paddingRight: '12px!important',
+                        paddingLeft: '12px!important',
+                      }}
+                    />
                   </TabList>
                 </Box>
                 <TabPanel value='4.1' sx={{ paddingTop: '0px' }}>
                   <EarningsSummary />
                 </TabPanel>
                 <TabPanel value='4.2' sx={{ paddingTop: '0px' }}>
-                  <UnpaidEarnings />
+                  {/* <UnpaidEarnings /> */}
                 </TabPanel>
                 <TabPanel value='4.3' sx={{ paddingTop: '0px' }}>
                   <PaymentHistory />
+                </TabPanel>
+                <TabPanel value='4.4' sx={{ paddingTop: '0px' }}>
+                  {/* <PaymentHistory /> */}
+                  Tax
                 </TabPanel>
               </TabContext>
             </TabPanel>

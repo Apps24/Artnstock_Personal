@@ -11,6 +11,7 @@ import { setSelectedImages } from '../../../store/imageSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { setNestedTabValueUpload } from '../../../store/nestedTabSlice';
 import { setpath2 } from '../../../store/contriPathSlice';
+import { httpClient } from '../../../axios';
 
 const Submit = () => {
   const selectedImages = useSelector(
@@ -20,15 +21,12 @@ const Submit = () => {
   const [images, setImages] = useState([]);
   const [button, setButton] = useState(false);
 
+  const userId = useSelector((state) => state.auth.userId);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(setpath2('/ To Submit'));
-  }, []);
-
-  useEffect(() => {
-    setImages(selectedImages);
-    dispatch(setSelectedImages([]));
   }, []);
 
   useEffect(() => {
@@ -42,6 +40,24 @@ const Submit = () => {
   const addDetails = () => {
     dispatch(setNestedTabValueUpload('2.3'));
   };
+
+  const getDraftSubmit = async () => {
+    try {
+      const res = await httpClient.get(
+        `/draft_master/getContributorWiseDraftMasterList/${userId}`
+      );
+      console.log(res.data[0].images);
+      setImages(res.data[0].images);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    // setImages(selectedImages);
+    // dispatch(setSelectedImages([]));
+    getDraftSubmit();
+  }, []);
 
   return (
     <>
@@ -181,7 +197,7 @@ const Submit = () => {
         <div className='w-w1170 justify-center flex-column gap-[10px]'>
           <div className='flex justify-start flex-wrap gap-[16px]'>
             {/* dynamic gray box */}
-            {images.map((card, index) => (
+            {images?.map((card, index) => (
               <GrayBoxForSubmit key={index} card={card} />
             ))}
           </div>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { httpClient } from '../../../axios';
 import addIcon from '../../../assets/images/Icons/addIcon.svg';
 import soppingIcon from '../../../assets/images/Icons/shoppingCart.svg';
-import artIcon from '../../../assets/images/Icons/artIcon.svg';
+import { ReactComponent as ArtIcon } from '../../../assets/images/Icons/artIcon.svg';
 import shareIcon from '../../../assets/images/Icons/shareIcon.svg';
 
 // prathamesh
@@ -145,7 +145,17 @@ const Combo = ({ logo, comboHeading }) => {
                       <img src={addIcon} alt='' />
                       <img src={soppingIcon} alt='' />
 
-                      <img
+                      <ArtIcon
+                        onClick={(e) => {
+                          setPopupOpen(!popupOpen);
+                          e.stopPropagation();
+                        }}
+                        style={{
+                          zIndex: '99',
+                          fill: '#888888',
+                        }}
+                      />
+                      {/* <img
                         className='z-[99]'
                         onClick={(e) => {
                           setPopupOpen(!popupOpen);
@@ -153,7 +163,7 @@ const Combo = ({ logo, comboHeading }) => {
                         }}
                         src={artIcon}
                         alt=''
-                      />
+                      /> */}
 
                       <img src={shareIcon} alt='' />
                     </div>

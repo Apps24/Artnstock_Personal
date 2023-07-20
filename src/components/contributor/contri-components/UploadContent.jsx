@@ -10,10 +10,18 @@ import { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setNestedTabValueUpload } from '../../../store/nestedTabSlice';
 import { setpath2 } from '../../../store/contriPathSlice';
+import { setSelectedImages } from '../../../store/imageSlice';
+import { httpClient } from '../../../axios';
 
 const UploadContent = () => {
   const add = addImage;
   const dispatch = useDispatch();
+
+  const selectedImages = useSelector(
+    (state) => state.images.selectedImages
+  );
+
+  const userId = useSelector((state) => state.auth.userId);
 
   const [cards, setCards] = useState([]);
   const [button, setButton] = useState(false);
@@ -24,6 +32,10 @@ const UploadContent = () => {
     const newCards = Array.from(files);
     setCards((prevCards) => [...prevCards, ...newCards]);
   };
+
+  useEffect(() => {
+    console.log(cards);
+  }, [cards]);
 
   // drag and drop
   const handleDragOver = (event) => {
@@ -41,24 +53,56 @@ const UploadContent = () => {
     fileInputRef.current.click();
   };
 
-  const selectedImages = useSelector(
-    (state) => state.images.selectedImages
-  );
-
   useEffect(() => {
-    if (selectedImages.length > 0) {
+    if (cards.length > 0) {
       setButton(true);
     } else {
       setButton(false);
     }
-  }, [selectedImages]);
+  }, [cards]);
 
   useEffect(() => {
     dispatch(setpath2('/ Upload Content'));
   }, []);
 
-  const next = () => {
-    dispatch(setNestedTabValueUpload('2.2'));
+  const next = async () => {
+    const tempImag = [];
+
+    try {
+      const uploadPromises = cards.map(async (card) => {
+        let formData = new FormData();
+        formData.append('file', card);
+        try {
+          const res = await httpClient.post(
+            '/CloudinaryImageUpload?parameter=false',
+            formData,
+            {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+            }
+          );
+          console.log('file uploaded successfully');
+
+          tempImag.push(res.data);
+        } catch (err) {
+          console.log(err);
+        }
+      });
+
+      await Promise.all(uploadPromises);
+
+      let obj = {
+        images: tempImag,
+        userMasterId: userId,
+      };
+
+      const res = await httpClient.post('/draft_master/create', obj);
+      console.log(res.data);
+      dispatch(setNestedTabValueUpload('2.2'));
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (

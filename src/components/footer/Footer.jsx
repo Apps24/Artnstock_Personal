@@ -11,11 +11,39 @@ import usflag from '../../assets/images/socials/usflag.jpg';
 import dropdown from '../../assets/images/socials/dropdown.png';
 import signuptext from '../../assets/images/Icons/signup.svg';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { useRef } from 'react';
+import { useDetectClickOutside } from 'react-detect-click-outside';
 
 const Footer = () => {
   const [isOpenLang, setIsOpenLang] = useState(false);
   const [isOpenCurr, setIsOpenCurr] = useState(false);
+
+  const userRole = useSelector((state) => state.auth.userRole);
+
+  const handleClickOutside = () => {
+    // Code to handle click outside
+    setIsOpenLang(false);
+  };
+  const handleClickOutsideCurr = () => {
+    // Code to handle click outside
+
+    setIsOpenCurr(false);
+  };
+
+  const CurrClickOutside = useDetectClickOutside({
+    onTriggered: handleClickOutsideCurr,
+  });
+
+  const langClickOutside = useDetectClickOutside({
+    onTriggered: handleClickOutside,
+  });
+
+  // useEffect(() => {
+  //   console.log(userRole);
+  // }, []);
+
   return (
     <div className='footer'>
       <div className='footer-top text-center text-14px bg-[#F5F5F5] h-[38px] flex justify-center items-center'>
@@ -74,7 +102,9 @@ const Footer = () => {
             <div className=''>
               <p className='footerHeadings'>SHOP</p>
 
-              <p className='footerLinks'>Art</p>
+              <p className='footerLinks'>
+                <Link to='/art-home'>Art</Link>
+              </p>
 
               <p className='footerLinks'>Images</p>
 
@@ -84,7 +114,9 @@ const Footer = () => {
 
               <p className='footerLinks'>Templates</p>
 
-              <p className='footerLinks'>Products</p>
+              <p className='footerLinks'>
+                <Link to='/product-home'>Products</Link>
+              </p>
             </div>
             {/* Column 3 */}
 
@@ -206,7 +238,7 @@ const Footer = () => {
           <div className='flex gap-[10px] flex-wrap'>
             {/* Column 6 */}
             <div className='flex-column'>
-              <div>
+              <div ref={langClickOutside}>
                 <button
                   onClick={() => {
                     setIsOpenLang(!isOpenLang);
@@ -230,7 +262,10 @@ const Footer = () => {
                   </div>
                 </button>
                 {isOpenLang && (
-                  <ul className='shadow-dropShadow rounded-b-[20px] hover:overflow-hidden absolute bg-[#ffffff] text-center text-[13px] text-primaryGray w-[220px]'>
+                  <ul
+                    onClick={handleClickOutside}
+                    className='shadow-dropShadow rounded-b-[20px] hover:overflow-hidden absolute bg-[#ffffff] text-center text-[13px] text-primaryGray w-[220px]'
+                  >
                     <li className='cursor-pointer h-[40px] flex items-center pl-[46px] hover:bg-[#f0f0f0] border-b border-[#EFEFEF]'>
                       English
                     </li>
@@ -276,7 +311,7 @@ const Footer = () => {
 
             {/* Column 7 */}
             {/* Column 7 */}
-            <div>
+            <div ref={CurrClickOutside}>
               <button
                 onClick={() => {
                   setIsOpenCurr(!isOpenCurr);
@@ -300,7 +335,10 @@ const Footer = () => {
                 </div>
               </button>
               {isOpenCurr && (
-                <ul className='shadow-dropShadow rounded-b-[20px] hover:overflow-hidden absolute bg-[#ffffff] text-center text-[13px] text-primaryGray w-[220px]'>
+                <ul
+                  onClick={handleClickOutsideCurr}
+                  className='shadow-dropShadow rounded-b-[20px] hover:overflow-hidden absolute bg-[#ffffff] text-center text-[13px] text-primaryGray w-[220px]'
+                >
                   <li className='cursor-pointer h-[40px] flex items-center pl-[46px] hover:bg-[#f0f0f0] border-b border-[#EFEFEF]'>
                     USD
                   </li>
@@ -333,7 +371,7 @@ const Footer = () => {
           </div>
           <div className='h-[220px] w-[225px] bg-[white] rounded-tr-[16px] rounded-br-[16px]'>
             <input
-              className='border border-[#D6D6D6] rounded-[20px] w-[195px] mt-[50px] ml-[15px] placeholder:text-[13px] h-[32px] pl-[12px]'
+              className='border border-[#D6D6D6] outline-none rounded-[20px] w-[195px] mt-[50px] ml-[15px] placeholder:text-[13px] h-[32px] pl-[12px]'
               type='text'
               placeholder='Enter Email Address'
             />

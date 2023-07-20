@@ -16,12 +16,12 @@ const GrayBoxForSubmit = ({ card, style }) => {
   //   console.log(selectedImages);
   // }, [selectedImages]);
 
-  const backgroundImageStyle = useMemo(
-    () => ({
-      backgroundImage: `url(${URL.createObjectURL(card)})`,
-    }),
-    [card]
-  );
+  // const backgroundImageStyle = useMemo(
+  //   () => ({
+  //     backgroundImage: `url(${URL.createObjectURL(card)})`,
+  //   }),
+  //   [card]
+  // );
 
   const handleButtonClick = () => {
     setIsChecked(!isChecked);
@@ -64,7 +64,9 @@ const GrayBoxForSubmit = ({ card, style }) => {
         className={`h-full w-full bg-no-repeat bg-center bg-cover filter rounded-[16px] brightness-100 absolute overflow-hidden inset-0 ${
           hovered ? 'brightness-[70%]' : ''
         }`}
-        style={backgroundImageStyle}
+        style={{
+          backgroundImage: `url(${card})`,
+        }}
       ></div>
       {selectedImages.find((item) => item === card) || hovered ? (
         <div className='absolute inset-0 flex items-center justify-center'>

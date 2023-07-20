@@ -1,16 +1,18 @@
-import { useState, useMemo, useEffect } from 'react';
-import { setSelectedImages } from '../../../store/imageSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import { useState, useMemo } from 'react';
+// import { setSelectedImages } from '../../../store/imageSlice';
+// import { useDispatch, useSelector } from 'react-redux';
 
 const GrayBox = ({ card, style }) => {
   const [hovered, setHovered] = useState(false);
-  const [isChecked, setIsChecked] = useState(false);
 
-  const dispatch = useDispatch();
+  // this is checked logic for upload context which was initial flow
+  // const [isChecked, setIsChecked] = useState(false);
 
-  const selectedImages = useSelector(
-    (state) => state.images.selectedImages
-  );
+  // const dispatch = useDispatch();
+
+  // const selectedImages = useSelector(
+  //   (state) => state.images.selectedImages
+  // );
 
   // useEffect(() => {
   //   console.log(selectedImages);
@@ -23,34 +25,35 @@ const GrayBox = ({ card, style }) => {
     [card]
   );
 
-  const handleButtonClick = () => {
-    setIsChecked(!isChecked);
-    const findImage = selectedImages.find((item) => item === card);
+  // this is checked logic for upload context which was initial flow
+  // const handleButtonClick = () => {
+  //   setIsChecked(!isChecked);
+  //   const findImage = selectedImages.find((item) => item === card);
 
-    if (!isChecked && !findImage) {
-      dispatch(setSelectedImages([...selectedImages, card]));
-    } else {
-      dispatch(
-        setSelectedImages(
-          selectedImages.filter((image) => image !== card)
-        )
-      );
-    }
-  };
+  //   if (!isChecked && !findImage) {
+  //     dispatch(setSelectedImages([...selectedImages, card]));
+  //   } else {
+  //     dispatch(
+  //       setSelectedImages(
+  //         selectedImages.filter((image) => image !== card)
+  //       )
+  //     );
+  //   }
+  // };
 
-  const handleCheckboxChange = () => {
-    setIsChecked(!isChecked);
-    // const findImage = selectedImages.find((item) => item === card);
-    if (!isChecked) {
-      dispatch(setSelectedImages([...selectedImages, card]));
-    } else {
-      dispatch(
-        setSelectedImages(
-          selectedImages.filter((image) => image !== card)
-        )
-      );
-    }
-  };
+  // const handleCheckboxChange = () => {
+  //   setIsChecked(!isChecked);
+  //   // const findImage = selectedImages.find((item) => item === card);
+  //   if (!isChecked) {
+  //     dispatch(setSelectedImages([...selectedImages, card]));
+  //   } else {
+  //     dispatch(
+  //       setSelectedImages(
+  //         selectedImages.filter((image) => image !== card)
+  //       )
+  //     );
+  //   }
+  // };
 
   return (
     <div
@@ -66,6 +69,10 @@ const GrayBox = ({ card, style }) => {
         }`}
         style={backgroundImageStyle}
       ></div>
+
+      {/* 
+      this is checked logic for upload context which was initial
+      flow
       {selectedImages.find((item) => item === card) || hovered ? (
         <div className='absolute inset-0 flex items-center justify-center'>
           <button
@@ -89,7 +96,7 @@ const GrayBox = ({ card, style }) => {
         </div>
       ) : (
         <div></div>
-      )}
+      )} */}
     </div>
   );
 };

@@ -91,7 +91,7 @@ const FileManager = () => {
   const getUserIdWiseArts = async () => {
     try {
       const response = await httpClient.get(
-        `/art_master/getUserIdWiseUserMaster/${userId}`
+        `/art_master/getUserIdWiseArtMasterList/${userId}`
       );
       setCategories((prevCategories) => ({
         ...prevCategories,
@@ -1433,3 +1433,64 @@ const FileManager = () => {
 };
 
 export default FileManager;
+
+{
+  /* <div className='flex justify-center z-[99] bg-[#fff]'>
+<div className='flex gap-[2px] h-[47px] '>
+  <p className='text-[48px] text-[#f140a9] relative bottom-[11px] font-thin'>
+    134
+  </p>
+  <p className='text-[11px] text-[#cfcfcf] pt-[6px] max-w-[70px] leading-3'>
+    Files Uploaded in Art
+  </p>
+</div>
+<div className='flex gap-[2px] h-[47px]'>
+  <div className='h-[38px] border-l-[1px] relative top-[5px] border-[#efefef]'>
+    <p className='text-[48px] text-[#f58b59]  pl-[7px] max-h-[100%] relative bottom-[15px] font-thin'>
+      450
+    </p>
+  </div>
+  <div>
+    <p className='text-[11px] text-[#cfcfcf] pt-[6px] max-w-[70px] leading-3'>
+      Files Uploaded in Photos
+    </p>
+  </div>
+</div>
+<div className='flex gap-[2px] h-[47px]'>
+  <div className='h-[38px] border-l-[1px] relative top-[5px] border-[#efefef]'>
+    <p className='text-[48px] text-[#a9d56f]  pl-[7px] relative bottom-[15px] font-thin'>
+      340
+    </p>
+  </div>
+  <div>
+    <p className='text-[11px] text-[#cfcfcf] pt-[6px] max-w-[70px] leading-3'>
+      Files Uploaded in Footage
+    </p>
+  </div>
+</div>
+<div className='flex gap-[2px] h-[47px]'>
+  <div className='h-[38px] border-l-[1px] relative top-[5px] border-[#efefef]'>
+    <p className='text-[48px] text-[#40c2f3] pl-[7px] relative bottom-[15px] font-thin'>
+      023
+    </p>
+  </div>
+  <div>
+    <p className='text-[11px] text-[#cfcfcf] pt-[6px] max-w-[70px] leading-3'>
+      Files Uploaded in Music
+    </p>
+  </div>
+</div>
+<div className='flex gap-[2px] h-[47px]'>
+  <div className='h-[38px] border-l-[1px] relative top-[5px] border-[#efefef]'>
+    <p className='text-[48px] text-[#407fbc] pl-[7px] relative bottom-[15px] font-thin'>
+      230
+    </p>
+  </div>
+  <div>
+    <p className='text-[11px] text-[#cfcfcf] pt-[6px] max-w-[70px] leading-3'>
+      Files Uploaded in Templates
+    </p>
+  </div>
+</div>
+</div> */
+}

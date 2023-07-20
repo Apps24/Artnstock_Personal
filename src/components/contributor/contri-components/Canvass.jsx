@@ -165,7 +165,12 @@ const Canvass = ({
         className='cursor-move'
         onMouseDown={handleMouseDown}
       />
-      <img ref={imageRef} alt='shirt' className='hidden' />
+      <img
+        ref={imageRef}
+        crossorigin='anonymous'
+        alt='shirt'
+        className='hidden'
+      />
     </>
   );
 };

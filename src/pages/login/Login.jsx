@@ -27,7 +27,7 @@ const Login = () => {
       httpClient
         .post('/user_master/userLogin', loginForm)
         .then((res) => {
-          // console.log(res.data);
+          console.log(res.data);
           if (res.data.responseCode === 200) {
             toast.success('Successfully Logged In');
             dispatch(authSliceAction.loginUser(true));

@@ -79,6 +79,7 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import ContributorViewMyStore from './components/ContributorViewMyStore/ContributorViewMyStore';
 import SearchList from './pages/search/SearchList';
+import ContactUsContri from './components/staticPages/ContactUsContri';
 
 function App() {
   const userAuth = useSelector((state) => state.auth);
@@ -344,6 +345,11 @@ function App() {
           exact
         />
         <Route path='/ContactUs' element={<ContactUs />} exact />
+        <Route
+          path='/ContactUsContri'
+          element={<ContactUsContri />}
+          exact
+        />
         <Route
           path='/ContributorReferralProgram'
           element={<ContributorReferralProgram />}

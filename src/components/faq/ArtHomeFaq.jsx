@@ -20,7 +20,7 @@ const ArtHomeFaq = ({ type }) => {
       </p>
       <div className='flex flex-col'>
         <ul>
-          {type.map((item, index) => (
+          {type?.map((item, index) => (
             <li
               key={index}
               onClick={() => {

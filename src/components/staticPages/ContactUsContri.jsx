@@ -4,8 +4,10 @@ import Footer from '../footer/Footer';
 import dropArrow from '../../assets/images/Icons/Down arrow.svg';
 import { useState } from 'react';
 
-const ContactUs = () => {
-  const [isOpenHelp, setisOpenHelp] = useState(false);
+const ContactUsContri = () => {
+  const [isOpenUser, setisOpenUser] = useState(false);
+  const [isOpenDepartment, setisOpenDepartment] = useState(false);
+  const [isOpenSubject, setisOpenSubject] = useState(false);
   return (
     <>
       <div className='wrapper pb-[66.313rem]'>
@@ -57,44 +59,17 @@ const ContactUs = () => {
                   htmlFor=''
                   className='flex justify-start text-[12px] text-[#757575]'
                 >
-                  Full Name
+                  Select User
                 </label>
-                <input
-                  type='text'
-                  className='regInput mt-[7px] placeholder:text-[14px] placeholder:text-[#bbbbbb] placeholder:font-medium'
-                  placeholder='Enter your full name'
-                />
-                <label
-                  htmlFor=''
-                  className='flex justify-start text-[12px] mt-[13px] text-[#757575]'
-                >
-                  Email Address
-                </label>
-                <input
-                  type='text'
-                  className='regInput mt-[7px] placeholder:text-[14px] placeholder:text-[#bbbbbb] placeholder:font-medium'
-                  placeholder='Enter your email address'
-                />
-                <label
-                  htmlFor=''
-                  className='flex justify-start text-[12px] mt-[13px] text-[#757575]'
-                >
-                  How can we help you?
-                </label>
-                {/* <input
-                  type='text'
-                  className='regInput mt-[7px]'
-                  placeholder='Select'
-                /> */}
                 <div>
                   <button
                     onClick={(e) => {
                       e.preventDefault();
-                      setisOpenHelp(!isOpenHelp);
+                      setisOpenUser(!isOpenUser);
                     }}
                     className={`w-[450px] h-[40px] px-[14px] 
                   ${
-                    isOpenHelp === true
+                    isOpenUser === true
                       ? 'rounded-t-[20px] shadow-dropShadowButton'
                       : 'rounded-[20px] border  border-[#d6d6d6]'
                   }
@@ -106,8 +81,93 @@ const ContactUs = () => {
                     </div>
                   </button>
 
-                  {isOpenHelp && (
+                  {isOpenUser && (
                     <ul className='shadow-dropShadow rounded-b-2xl hover:overflow-hidden dropdown__menu absolute z-50 bg-[#ffffff] p-[14px] w-[450px] text-[13px] leading-[1.2] text-primaryGray'>
+                      <li className='cursor-pointer hover:bg-[#F0F0F0] py-[5px]'>
+                        2022
+                      </li>
+                      <li className='cursor-pointer hover:bg-[#F0F0F0] py-[5px]'>
+                        2020
+                      </li>
+                      <li className='cursor-pointer hover:bg-[#F0F0F0] py-[5px]'>
+                        2021
+                      </li>
+                    </ul>
+                  )}
+                </div>
+                <label
+                  htmlFor=''
+                  className='flex justify-start text-[12px] mt-[13px] text-[#757575]'
+                >
+                  Select Department
+                </label>
+                <div>
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setisOpenDepartment(!isOpenDepartment);
+                    }}
+                    className={`w-[450px] h-[40px] px-[14px] 
+                  ${
+                    isOpenDepartment === true
+                      ? 'rounded-t-[20px] shadow-dropShadowButton'
+                      : 'rounded-[20px] border  border-[#d6d6d6]'
+                  }
+                    text-[14px] text-[#bbbbbb] flex justify-between items-center font-medium`}
+                  >
+                    <span>Select</span>
+                    <div>
+                      <img src={dropArrow} alt='' />
+                    </div>
+                  </button>
+
+                  {isOpenDepartment && (
+                    <ul className='shadow-dropShadow rounded-b-2xl hover:overflow-hidden dropdown__menu absolute z-40 bg-[#ffffff] p-[14px] w-[450px] text-[13px] leading-[1.2] text-primaryGray'>
+                      <li className='cursor-pointer hover:bg-[#F0F0F0] py-[5px]'>
+                        2022
+                      </li>
+                      <li className='cursor-pointer hover:bg-[#F0F0F0] py-[5px]'>
+                        2020
+                      </li>
+                      <li className='cursor-pointer hover:bg-[#F0F0F0] py-[5px]'>
+                        2021
+                      </li>
+                    </ul>
+                  )}
+                </div>
+                <label
+                  htmlFor=''
+                  className='flex justify-start text-[12px] mt-[13px] text-[#757575]'
+                >
+                  Select Subject
+                </label>
+                {/* <input
+                  type='text'
+                  className='regInput mt-[7px]'
+                  placeholder='Select'
+                /> */}
+                <div className='mainn relative z-30'>
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setisOpenSubject(!isOpenSubject);
+                    }}
+                    className={`w-[450px] h-[40px] px-[14px] 
+                  ${
+                    isOpenSubject === true
+                      ? 'rounded-t-[20px] shadow-dropShadowButton'
+                      : 'rounded-[20px] border  border-[#d6d6d6]'
+                  }
+                    text-[14px] text-[#bbbbbb] flex justify-between items-center font-medium`}
+                  >
+                    <span>Select</span>
+                    <div>
+                      <img src={dropArrow} alt='' />
+                    </div>
+                  </button>
+
+                  {isOpenSubject && (
+                    <ul className='shadow-dropShadow rounded-b-2xl hover:overflow-hidden dropdown__menu absolute z-30 bg-[#ffffff] p-[14px] w-[450px] text-[13px] leading-[1.2] text-primaryGray'>
                       <li className='cursor-pointer hover:bg-[#F0F0F0] py-[5px]'>
                         2022
                       </li>
@@ -125,7 +185,7 @@ const ContactUs = () => {
                   htmlFor=''
                   className='flex justify-start text-[12px] mt-[13px] text-[#757575]'
                 >
-                  Message
+                  Describe Issue
                 </label>
                 <textarea
                   name=''
@@ -157,4 +217,4 @@ const ContactUs = () => {
   );
 };
 
-export default ContactUs;
+export default ContactUsContri;
