@@ -6,6 +6,7 @@ const Canvass = ({
   sizeRangeValue,
   vertcalAlign,
   horzontalAlign,
+  sendDataToParent,
 }) => {
   // const [sizeRangeWidth, setSizeRangeWidth] = useState(0);
   // const [sizeRangeHeight, setSizeRangeHeight] = useState(0);
@@ -20,6 +21,20 @@ const Canvass = ({
   // const [imageVerticalPosition, setImageVerticalPosition] = useState({
   //   x: (154 - sizeRangeWidth) / 2,
   // });
+
+  useEffect(() => {
+    let obj = {
+      canvasX: imagePosition.x,
+      canvasY: imagePosition.y,
+    };
+    sendDataToParent(obj);
+  }, [imagePosition]);
+
+  // useEffect(() => {
+  //   console.log('x:', imagePosition.x);
+  //   console.log('y:', imagePosition.y);
+  //   console.log('size:', sizeRangeValue);
+  // }, [imagePosition || sizeRangeValue]);
 
   const canvasRef = useRef(null);
   const imageRef = useRef(null);

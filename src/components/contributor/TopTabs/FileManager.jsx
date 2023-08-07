@@ -63,6 +63,7 @@ const FileManager = () => {
   const [categoriesFocus, setCategoriesFocus] = useState('all');
   const [artTabFocus, setArtTabFocus] = useState(false);
   const [photosTabFocus, setPhotosTabFocus] = useState(false);
+  const [productTabFocus, setProductTabFocus] = useState(false);
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [isNameOpen, setIsNameOpen] = useState(false);
   const [category, setCategory] = useState('');
@@ -130,6 +131,11 @@ const FileManager = () => {
           setCategories((prevCategories) => ({
             ...prevCategories,
             photo: [...prevCategories.photo, obj],
+          }));
+        } else if (obj.category === 'product') {
+          setCategories((prevCategories) => ({
+            ...prevCategories,
+            product: [...prevCategories.product, obj],
           }));
         }
       });
@@ -259,6 +265,8 @@ const FileManager = () => {
     if (categoriesFocus === 'art' && create) {
       inputRef.current.focus();
     } else if (categoriesFocus === 'photos' && create) {
+      inputRef.current.focus();
+    } else if (categoriesFocus === 'product' && create) {
       inputRef.current.focus();
     }
   }, [categoriesFocus, create]);
@@ -1144,8 +1152,17 @@ const FileManager = () => {
               </div>
             </div>
             {/* test */}
+
             {/* test */}
-            <div className='flex h-[38px] gap-[8px] bg-[#ffffff] py-[5px] border-b border-[#efefef]'>
+            <div
+              onClick={() => {
+                setCategoriesFocus('product');
+                setProductTabFocus(!productTabFocus);
+              }}
+              className={`flex h-[38px] gap-[8px] bg-[${
+                categoriesFocus === 'product' ? '#f0f0f0' : '#ffffff'
+              }] py-[5px] border-b border-[#efefef] cursor-pointer`}
+            >
               <div className='my-[auto]'>
                 <img src={productFiles} alt='' />
               </div>
@@ -1160,10 +1177,74 @@ const FileManager = () => {
                   </p>
                 </div>
                 <div>
-                  <p className='text-[15px] font-medium'>+</p>
+                  {productTabFocus === true ? (
+                    <p className='text-[15px] font-medium'>-</p>
+                  ) : (
+                    <p className='text-[15px] font-medium'>+</p>
+                  )}
                 </div>
               </div>
             </div>
+            {/* test */}
+
+            {/* test */}
+            {productTabFocus === true &&
+              categories.product.map((obj) => (
+                <div
+                  onClick={() => {
+                    folderImages(obj);
+                  }}
+                  className={`flex h-[27px] gap-[8px] bg-[${
+                    categoriesFocus === 'folderImages' &&
+                    imagesFolderArray.collectionId ===
+                      obj.collectionId
+                      ? '#f0f0f0'
+                      : '#ffffff'
+                  }] py-[5px] border-b border-[#efefef] cursor-pointer`}
+                >
+                  <div className='my-[auto]'>
+                    <img src={folder} alt='' />
+                  </div>
+                  <div className='flex w-[184px] justify-between'>
+                    <div className='flex flex-col justify-center'>
+                      <p className='text-[12px] text-primaryGray font-medium leading-[1]'>
+                        {obj.title}
+                      </p>
+                    </div>
+                    <div>
+                      <p className='text-[12px]'>
+                        {obj.artMaster.length}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+
+            {/* test */}
+
+            {/* test */}
+            {categoriesFocus === 'product' && create === true ? (
+              <div className='flex h-[27px] gap-[8px] bg-[#ffffff] py-[5px] border-b border-[#efefef] cursor-pointer'>
+                <div className='my-[auto]'>
+                  <img src={folder} alt='' />
+                </div>
+                <div className='flex w-[184px] justify-between'>
+                  <div className='flex flex-col justify-center'>
+                    <input
+                      onChange={namee}
+                      onKeyDown={handleKeyDown}
+                      ref={inputRef}
+                      placeholder='Enter folder name'
+                      className='text-[12px] text-primaryGray font-medium leading-[1] outline-none'
+                      type='text'
+                    />
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div></div>
+            )}
+
             {/* test */}
           </div>
 
@@ -1433,64 +1514,3 @@ const FileManager = () => {
 };
 
 export default FileManager;
-
-{
-  /* <div className='flex justify-center z-[99] bg-[#fff]'>
-<div className='flex gap-[2px] h-[47px] '>
-  <p className='text-[48px] text-[#f140a9] relative bottom-[11px] font-thin'>
-    134
-  </p>
-  <p className='text-[11px] text-[#cfcfcf] pt-[6px] max-w-[70px] leading-3'>
-    Files Uploaded in Art
-  </p>
-</div>
-<div className='flex gap-[2px] h-[47px]'>
-  <div className='h-[38px] border-l-[1px] relative top-[5px] border-[#efefef]'>
-    <p className='text-[48px] text-[#f58b59]  pl-[7px] max-h-[100%] relative bottom-[15px] font-thin'>
-      450
-    </p>
-  </div>
-  <div>
-    <p className='text-[11px] text-[#cfcfcf] pt-[6px] max-w-[70px] leading-3'>
-      Files Uploaded in Photos
-    </p>
-  </div>
-</div>
-<div className='flex gap-[2px] h-[47px]'>
-  <div className='h-[38px] border-l-[1px] relative top-[5px] border-[#efefef]'>
-    <p className='text-[48px] text-[#a9d56f]  pl-[7px] relative bottom-[15px] font-thin'>
-      340
-    </p>
-  </div>
-  <div>
-    <p className='text-[11px] text-[#cfcfcf] pt-[6px] max-w-[70px] leading-3'>
-      Files Uploaded in Footage
-    </p>
-  </div>
-</div>
-<div className='flex gap-[2px] h-[47px]'>
-  <div className='h-[38px] border-l-[1px] relative top-[5px] border-[#efefef]'>
-    <p className='text-[48px] text-[#40c2f3] pl-[7px] relative bottom-[15px] font-thin'>
-      023
-    </p>
-  </div>
-  <div>
-    <p className='text-[11px] text-[#cfcfcf] pt-[6px] max-w-[70px] leading-3'>
-      Files Uploaded in Music
-    </p>
-  </div>
-</div>
-<div className='flex gap-[2px] h-[47px]'>
-  <div className='h-[38px] border-l-[1px] relative top-[5px] border-[#efefef]'>
-    <p className='text-[48px] text-[#407fbc] pl-[7px] relative bottom-[15px] font-thin'>
-      230
-    </p>
-  </div>
-  <div>
-    <p className='text-[11px] text-[#cfcfcf] pt-[6px] max-w-[70px] leading-3'>
-      Files Uploaded in Templates
-    </p>
-  </div>
-</div>
-</div> */
-}

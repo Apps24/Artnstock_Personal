@@ -87,6 +87,10 @@ const ProductList = () => {
   const [title, setTitle] = useState('');
   const [popup, setPopup] = useState(false);
 
+  // useEffect(() => {
+  //   console.log(artsList);
+  // }, [artsList]);
+
   useEffect(() => {
     getAllProductList();
   }, []);
@@ -145,7 +149,7 @@ const ProductList = () => {
   const imageLinkChange = (url) => {
     const str = url;
 
-    const updatedStr = str.replace(
+    const updatedStr = str?.replace(
       'upload/',
       'upload/c_scale,h_362,w_362/'
     );
@@ -692,7 +696,7 @@ const ProductList = () => {
                     >
                       <img
                         style={{ height: '100%', width: '100%' }}
-                        src={imageLinkChange(data?.image)}
+                        src={imageLinkChange(data?.images[0]?.image)}
                         alt=''
                       />
                       <div

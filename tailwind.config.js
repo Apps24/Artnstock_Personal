@@ -6,10 +6,11 @@ module.exports = {
   theme: {
     extend: {
       boxShadow: {
-        'matInset': '0px 0px 20px 0px rgba(0,0,0,0.3) inset',
+        matInset: '0px 0px 20px 0px rgba(0,0,0,0.3) inset',
         // LBTR
-        'BotMatInset': 'inset 7px 0 9px -7px rgba(0,0,0,0.1), inset 0 -7px 9px -7px rgba(0,0,0,0.1), inset 0 7px 9px -7px rgba(0,0,0,0.4), inset -7px 0 9px -7px rgba(0,0,0,0.4) ',
-      }
+        BotMatInset:
+          'inset 7px 0 9px -7px rgba(0,0,0,0.1), inset 0 -7px 9px -7px rgba(0,0,0,0.1), inset 0 7px 9px -7px rgba(0,0,0,0.4), inset -7px 0 9px -7px rgba(0,0,0,0.4) ',
+      },
     },
     colors: {
       primaryBlack: '#333333',

@@ -23,6 +23,17 @@ const LimitedEdition = ({ logo, type }) => {
       });
   };
 
+  const addLineBreakAfterWord = (text, word) => {
+    const parts = text?.split(word);
+    return parts?.reduce((result, part, index) => {
+      result.push(part);
+      if (index !== parts.length - 1) {
+        result.push(<br key={index} />);
+      }
+      return result;
+    }, []);
+  };
+
   return (
     <div className='w-w1440 mx-auto text-center'>
       <img src={logo} className='mx-auto' alt='' />
@@ -73,7 +84,7 @@ const LimitedEdition = ({ logo, type }) => {
       )}
 
       <p className='text-primaryGray text-sm11 mt-2.5'>
-        {limitedList?.bottomText}
+        {addLineBreakAfterWord(limitedList?.bottomText, '.')}
       </p>
     </div>
   );

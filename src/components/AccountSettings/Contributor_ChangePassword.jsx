@@ -35,6 +35,7 @@ const Contributor_ChangePassword = () => {
             className='regInput text-[#333333]'
             placeholder='**********'
             id=''
+            disabled
           />
           <p className='text-[11px] text-[#757575] mt-1'>
             Last Changed Nov 14 2019

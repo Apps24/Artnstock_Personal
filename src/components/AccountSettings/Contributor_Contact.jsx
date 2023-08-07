@@ -39,19 +39,6 @@ const Contributor_Contact = () => {
     console.log(userDetail);
   }, [userDetail]);
 
-  const updateUserMaster = async () => {
-    try {
-      const res = await httpClient.put(
-        '/user_master/update',
-        userDetail
-      );
-      toast.success('Successfully Updated User Details');
-      console.log(res.data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
   const [isChecked, setIsChecked] = useState(false);
 
   const changeCheckBox = (event) => {
@@ -84,6 +71,19 @@ const Contributor_Contact = () => {
           ['stateName']: '',
         },
       });
+    }
+  };
+
+  const updateUserMaster = async () => {
+    try {
+      const res = await httpClient.put(
+        '/user_master/update',
+        userDetail
+      );
+      toast.success('Successfully Updated User Details');
+      console.log(res.data);
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -418,7 +418,10 @@ const Contributor_Contact = () => {
         />
 
         <div className='flex gap-5 justify-center mt-[30px]'>
-          <button className='blackBtn text-[14px] text-medium'>
+          <button
+            onClick={updateUserMaster}
+            className='blackBtn text-[14px] text-medium'
+          >
             Save
           </button>
           <button className=' text-[14px] text-medium border border-[#333333] rounded-full px-4 py-2'>

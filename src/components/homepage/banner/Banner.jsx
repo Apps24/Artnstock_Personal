@@ -44,7 +44,7 @@ const Banner = ({ type }) => {
               style={{ width: '100%' }}
               src={data?.imagePath}
             />
-            <div className='absolute left-24 z-10 top-12'>
+            <div className='absolute left-24 z-10 top-[83px]'>
               <p className='text-[4.688rem] font-semibold leading-[110px] text-primaryBlack'>
                 {data?.bannerLeftTitle}
               </p>
@@ -58,7 +58,7 @@ const Banner = ({ type }) => {
                 {data?.copyRightText}
               </p>
             </div>
-            <div className='absolute right-24 z-10 top-14'>
+            <div className='absolute right-24 z-10 top-[93px]'>
               <img src={percentImg} alt='' />
               <p className='text-[15px] font-semibold leading-[22px] text-primaryBlack mt-1'>
                 {data?.offerText}

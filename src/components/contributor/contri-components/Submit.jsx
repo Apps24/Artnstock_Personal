@@ -46,8 +46,8 @@ const Submit = () => {
       const res = await httpClient.get(
         `/draft_master/getContributorWiseDraftMasterList/${userId}`
       );
-      console.log(res.data[0].images);
-      setImages(res.data[0].images);
+      console.log(res.data[0].imageMaster);
+      setImages(res.data[0].imageMaster);
     } catch (err) {
       console.error(err);
     }

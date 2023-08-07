@@ -74,7 +74,7 @@ const UploadContent = () => {
         formData.append('file', card);
         try {
           const res = await httpClient.post(
-            '/CloudinaryImageUpload?parameter=false',
+            '/CloudinaryImageUpload?parameter=true',
             formData,
             {
               headers: {
@@ -84,7 +84,7 @@ const UploadContent = () => {
           );
           console.log('file uploaded successfully');
 
-          tempImag.push(res.data);
+          tempImag.push(res.data.imageId);
         } catch (err) {
           console.log(err);
         }
@@ -93,10 +93,10 @@ const UploadContent = () => {
       await Promise.all(uploadPromises);
 
       let obj = {
-        images: tempImag,
+        imageId: tempImag,
         userMasterId: userId,
       };
-
+      // console.log(obj);
       const res = await httpClient.post('/draft_master/create', obj);
       console.log(res.data);
       dispatch(setNestedTabValueUpload('2.2'));

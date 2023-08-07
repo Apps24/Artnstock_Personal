@@ -56,9 +56,10 @@ const GrayBoxforDetails = ({
         className={`rounded-[10px] h-full w-full bg-no-repeat bg-center bg-cover filter brightness-100 absolute overflow-hidden inset-0 ${
           hovered ? 'brightness-[70%]' : ''
         }`}
-        style={{ backgroundImage: `url(${card})` }}
+        style={{ backgroundImage: `url(${card.secureUrl})` }}
       ></div>
-      {selectedImages.find((item) => item === card) || hovered ? (
+      {selectedImages.find((item) => item.imageId === card.imageId) ||
+      hovered ? (
         <div className='absolute inset-0 flex items-center justify-center'>
           <button
             className='w-[52px] h-[20px] bg-[#e8e8e8] text-[11px] opacity-[100%] cursor-pointer rounded-[20px]'
@@ -70,7 +71,8 @@ const GrayBoxforDetails = ({
       ) : (
         <div></div>
       )}
-      {selectedImages.find((item) => item === card) || hovered ? (
+      {selectedImages.find((item) => item.imageId === card.imageId) ||
+      hovered ? (
         <div>
           {' '}
           {isSelected ? (

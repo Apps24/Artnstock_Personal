@@ -25,14 +25,18 @@ const GrayBoxForSubmit = ({ card, style }) => {
 
   const handleButtonClick = () => {
     setIsChecked(!isChecked);
-    const findImage = selectedImages.find((item) => item === card);
+    const findImage = selectedImages.find(
+      (item) => item.imageId === card.imageId
+    );
 
     if (!isChecked && !findImage) {
       dispatch(setSelectedImages([...selectedImages, card]));
     } else {
       dispatch(
         setSelectedImages(
-          selectedImages.filter((image) => image !== card)
+          selectedImages.filter(
+            (image) => image.imageId !== card.imageId
+          )
         )
       );
     }
@@ -46,7 +50,9 @@ const GrayBoxForSubmit = ({ card, style }) => {
     } else {
       dispatch(
         setSelectedImages(
-          selectedImages.filter((image) => image !== card)
+          selectedImages.filter(
+            (image) => image.imageId !== card.imageId
+          )
         )
       );
     }
@@ -65,10 +71,11 @@ const GrayBoxForSubmit = ({ card, style }) => {
           hovered ? 'brightness-[70%]' : ''
         }`}
         style={{
-          backgroundImage: `url(${card})`,
+          backgroundImage: `url(${card.secureUrl})`,
         }}
       ></div>
-      {selectedImages.find((item) => item === card) || hovered ? (
+      {selectedImages.find((item) => item.imageId === card.imageId) ||
+      hovered ? (
         <div className='absolute inset-0 flex items-center justify-center'>
           <button
             className='w-[52px] h-[20px] bg-[#e8e8e8] text-[11px] opacity-[100%] cursor-pointer rounded-[10px]'
@@ -80,7 +87,8 @@ const GrayBoxForSubmit = ({ card, style }) => {
       ) : (
         <div></div>
       )}
-      {selectedImages.find((item) => item === card) || hovered ? (
+      {selectedImages.find((item) => item.imageId === card.imageId) ||
+      hovered ? (
         <div className='absolute top-0 right-0 p-2'>
           <input
             type='checkbox'

@@ -4,7 +4,7 @@ import mainLogo from '../../assets/images/header/mainLogo.svg';
 import { ReactComponent as NotficationIcon } from '../../assets/images/Icons/notificationIcon.svg';
 // import wishlistIcon from '../../assets/images/Icons/wishlistIcon.svg';
 import { ReactComponent as WishlistIcon } from '../../assets/images/Icons/wishlistIcon.svg';
-import {ReactComponent as CartIcon} from '../../assets/images/Icons/cartIcon.svg';
+import { ReactComponent as CartIcon } from '../../assets/images/Icons/cartIcon.svg';
 import dropArrow from '../../assets/images/Icons/Down arrow.svg';
 import searchIcon from '../../assets/images/Icons/searchDarkIcon.svg';
 import imageIcon from '../../assets/images/Icons/pictureIcon.svg';
@@ -60,9 +60,8 @@ import { searchSliceAction } from '../../store/searchSlice';
 import { styleSliceAction } from '../../store/styleSlice';
 import { setSubjectId } from '../../store/subjectidSlice';
 
-import { useDetectClickOutside } from "react-detect-click-outside";
+import { useDetectClickOutside } from 'react-detect-click-outside';
 import { cartSliceAction } from '../../store/cartSlice';
-
 
 const StyledPopup = styled(Popup)`
   // use your custom style for ".popup-overlay"
@@ -267,32 +266,36 @@ const Mainbar = () => {
     getAllActiveSubjects();
   }, []);
 
- 
-
   // Get Cart Count
   const cartCount = useSelector((state) => state.cart.cartCount);
 
-  const [cartQuantity, setCartQuantity] = useState(0)
-  
+  const [cartQuantity, setCartQuantity] = useState(0);
+
   useEffect(() => {
-    getCartQuantity()
+    getCartQuantity();
     // console.log(cartCount);
-  },[cartCount])
+  }, [cartCount]);
 
   const getCartQuantity = () => {
-    try{
-    httpClient.get(`/cart_master/UserWiseGetTotalCount/${userDetails?.userId}`).then((res) => {
-      // console.log(res);
-      setCartQuantity(res?.data?.totalCount)
-      dispatch(cartSliceAction.setCartCount(res?.data?.totalCount))
-      // dispatch(styleSliceAction.setStyle(val));
-    })
-  } catch(err) {
-    console.log(err);
-    setCartQuantity(0)
-      dispatch(cartSliceAction.setCartCount(0))
-  }
-  }
+    try {
+      httpClient
+        .get(
+          `/cart_master/UserWiseGetTotalCount/${userDetails?.userId}`
+        )
+        .then((res) => {
+          // console.log(res);
+          setCartQuantity(res?.data?.totalCount);
+          dispatch(
+            cartSliceAction.setCartCount(res?.data?.totalCount)
+          );
+          // dispatch(styleSliceAction.setStyle(val));
+        });
+    } catch (err) {
+      console.log(err);
+      setCartQuantity(0);
+      dispatch(cartSliceAction.setCartCount(0));
+    }
+  };
 
   useEffect(() => {
     location.pathname === '/' && setSelectItems(null);
@@ -454,11 +457,11 @@ const Mainbar = () => {
       />
 
       <Topbar />
-      <div className='px-6 py-3'>
+      <div className='px-6 pb-[10px] pt-[11px]'>
         <div className='flex items-center justify-between relative'>
           <div className='left flex items-center'>
             <img
-              className='mr-5 cursor-pointer'
+              className='mr-5 relative bottom-[3px] cursor-pointer'
               onClick={() => changeNavigation('home')}
               src={mainLogo}
               alt=''
@@ -861,8 +864,8 @@ const Mainbar = () => {
               {userAuth.login ? (
                 <li className='menu-link'>
                   <div className=''>
-                    <Menu as='div' className='relative '>
-                      <Menu.Button className='inline-flex w-full justify-center rounded-md bg-black bg-opacity-20 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'>
+                    <Menu as='div' className='relative top-[2px]'>
+                      <Menu.Button className='inline-flex w-full justify-center rounded-md bg-black bg-opacity-20 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'>
                         <img src={userIcon} alt='' />
                       </Menu.Button>
 
@@ -1113,8 +1116,8 @@ const Mainbar = () => {
               )}
               <li className='menu-link'>
                 <div className=''>
-                  <Menu as='div' className='relative '>
-                    <Menu.Button className='inline-flex w-full justify-center rounded-md bg-black bg-opacity-20 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'>
+                  <Menu as='div' className='relative top-[2px]'>
+                    <Menu.Button className='inline-flex w-full justify-center rounded-md bg-black bg-opacity-20 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'>
                       {/* <img src={notficationIcon} alt='' /> */}
                       <NotficationIcon
                         onMouseEnter={() => {
@@ -1199,17 +1202,30 @@ const Mainbar = () => {
                   }}
                   style={{
                     fill: WishIconHoverColor,
+                    marginTop: '2px',
+                    position: 'relative',
+                    top: '2px',
                   }}
                 />
               </li>
               <li className='menu-link m-0 '>
                 <div className='relative'>
-                <CartIcon onClick={() => {
-                    navigate('/shopping-cart');
-                  }} />
-             {(cartQuantity !== 0 || cartQuantity !== null || cartQuantity !== undefined) &&   <div className='absolute top-[0.2px] right-[-12px] bg-[#FF369F] text-[#ffffff] text-[11px] border border-[#ffffff] font-medium w-[20px] h-[14px] rounded-lg flex justify-center items-center  '>
-                  {cartQuantity}
-                </div>}
+                  <CartIcon
+                    onClick={() => {
+                      navigate('/shopping-cart');
+                    }}
+                    style={{
+                      position: 'relative',
+                      top: '1px',
+                    }}
+                  />
+                  {(cartQuantity !== 0 ||
+                    cartQuantity !== null ||
+                    cartQuantity !== undefined) && (
+                    <div className='absolute top-[0.2px] right-[-12px] bg-[#FF369F] text-[#ffffff] text-[11px] border border-[#ffffff] font-medium w-[20px] h-[14px] rounded-lg flex justify-center items-center  '>
+                      {cartQuantity}
+                    </div>
+                  )}
                 </div>
                 {/* <img
                   onClick={() => {
@@ -1222,7 +1238,7 @@ const Mainbar = () => {
             </ul>
           </div>
         </div>
-        <div className='mt-3.5 flex items-center '>
+        <div className='mt-[11px] flex items-center '>
           {/* Search Input */}
           <div
             className='group relative w-fit flex-1 bg-[#EEEEEE] rounded-tl-3xl rounded-bl-3xl'

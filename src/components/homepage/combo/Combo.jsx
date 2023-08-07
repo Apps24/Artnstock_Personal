@@ -81,8 +81,12 @@ const Combo = ({ logo, comboHeading }) => {
                     {data?.count}
                   </div>
                   <div
-                    className='group-hover:flex rounded-2xl hidden bg-blackRgba items-center justify-center absolute top-0 left-0 text-center'
-                    style={{ height: 'inherit', width: '100%' }}
+                    className='group-hover:flex rounded-2xl hidden items-center justify-center absolute top-0 left-0 text-center'
+                    style={{
+                      height: 'inherit',
+                      width: '100%',
+                      background: 'rgba(0, 0, 0, 0.20)',
+                    }}
                   >
                     {/* test */}
 
@@ -176,9 +180,9 @@ const Combo = ({ logo, comboHeading }) => {
                   <span className='font-medium'>Products: </span>
                   {data?.description}
                 </p>
-                <p className='text-primaryBlack text-[15px] leading-[18px] font-semibold mt-1.5'>
+                {/* <p className='text-primaryBlack text-[15px] leading-[18px] font-semibold mt-1.5'>
                   ${data?.price}
-                </p>
+                </p> */}
               </div>
             );
           }

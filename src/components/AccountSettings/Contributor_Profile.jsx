@@ -8,11 +8,15 @@ import { httpClient } from '../../axios';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { useRef } from 'react';
+import { useDispatch } from 'react-redux';
+import { authSliceAction } from '../../store/authSlice';
 
 const Contributor_Profile = () => {
   const userId = useSelector((state) => state.auth.userId);
 
   const [userDetail, setUserDetail] = useState({});
+
+  const dispatch = useDispatch();
 
   const getUserRecord = async () => {
     try {
@@ -29,7 +33,7 @@ const Contributor_Profile = () => {
   const fileInputRef = useRef(null);
 
   const handleButtonClick = () => {
-    console.log('abc');
+    // console.log('abc');
     fileInputRef.current.click();
   };
 
@@ -95,7 +99,12 @@ const Contributor_Profile = () => {
         '/user_master/update',
         userDetail
       );
-      toast.success('Successfully Updated User Details');
+
+      if (res.data) {
+        dispatch(authSliceAction.setUserDetails(userDetail));
+        toast.success('Successfully Updated User Details');
+      }
+
       console.log(res.data);
     } catch (err) {
       console.error(err);
@@ -184,7 +193,7 @@ const Contributor_Profile = () => {
           type='text'
           className='regInput my-0 bg-[#eeeeee] text-[#333333]'
           placeholder='ANS98765432'
-          value={userDetail?.userId || ''}
+          value={userDetail?.userUniqueNo || ''}
           disabled
         />
         <p className='text-[12px] text-[#757575] mt-3'>
@@ -245,6 +254,7 @@ const Contributor_Profile = () => {
         <textarea
           onChange={handleInputChange}
           name='useInfo'
+          x
           value={userDetail?.useInfo || ''}
           id=''
           cols=''

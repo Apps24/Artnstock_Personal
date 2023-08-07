@@ -27,7 +27,7 @@ const ProdList = ({ heading }) => {
   const imageLinkChange = (url) => {
     const str = url;
 
-    const updatedStr = str.replace(
+    const updatedStr = str?.replace(
       'upload/',
       'upload/c_scale,h_269,w_269/'
     );
