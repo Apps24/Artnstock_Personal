@@ -7,7 +7,7 @@ import orderSummary from "../../assets/images/ShoppingCart/orderSummary.png";
 import Paymentmethods from "../../assets/images/ShoppingCart/PaymentMethods.png";
 import Footer from "../footer/Footer";
 import msgBg from "../../assets/images/ShoppingCart/messageBG.png";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { httpClient } from "../../axios";
 import checkBtnBackImg from "../../assets/images/ShoppingCart/CompleteOrderBG.svg";
 
@@ -15,6 +15,9 @@ import useRazorpay from "react-razorpay";
 import logo from "../../assets/Favicon.svg";
 import { orderModel } from "../../models/allModel";
 import { toast } from "react-toastify";
+import dropArrow from "../../assets/images/Icons/Down arrow.svg";
+import { Menu } from "@headlessui/react";
+import { useDetectClickOutside } from "react-detect-click-outside";
 
 const Checkout = () => {
   const [cartData, setCartData] = useState();
@@ -26,6 +29,7 @@ const Checkout = () => {
 
   useEffect(() => {
     getUserIdWiseCart(location?.state?.userId);
+    getShiipingList();
   }, [location?.state?.userId]);
 
   const getUserIdWiseCart = (userId) => {
@@ -106,7 +110,7 @@ const Checkout = () => {
       orderModel.paymentInformation.razorpayPaymentId =
         paymentRes?.razorpay_payment_id;
       orderModel.paymentInformation.signature = paymentRes?.razorpay_signature;
-      orderModel.paymentInformation.status = "Success"
+      orderModel.paymentInformation.status = "Success";
       orderModel.userId = location?.state?.userId;
       let idArray = [];
       for (let i = 0; i < cartData?.cartArtFrameMaster.length; i++) {
@@ -114,14 +118,94 @@ const Checkout = () => {
       }
       orderModel.cartArtFrameId = idArray;
 
-      console.log(orderModel);
+      // console.log(orderModel);
       await httpClient.post("/order_master/create", orderModel).then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         toast.success("Order Successfull");
+
+        pathhcust("3");
       });
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const navigate = useNavigate();
+
+  const pathhcust = (val) => {
+    navigate("/customer-tabs", {
+      state: val,
+    });
+  };
+
+  // Gift and Promo code
+  const [applyPromo, setApplyPromo] = useState(false);
+  const [giftCode, setGiftCode] = useState("");
+  const [promoCode, setPromoCode] = useState("");
+
+  const addGiftCode = async () => {
+    try {
+      const promoObj = {
+        giftCode: String,
+        userMasterId: String,
+      };
+      promoObj.userMasterId = location?.state?.userId;
+      promoObj.giftCode = giftCode;
+      console.log(promoObj);
+      await httpClient
+        .post("/user_gift_code_master/create", promoObj)
+        .then((res) => {
+          // console.log(res.data);
+          toast.success("added Gift code");
+          getUserIdWiseCart();
+        });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const addPromoCode = async () => {
+    try {
+      const promoObj = {
+        promoCode: String,
+        userId: String,
+      };
+      promoObj.userId = location?.state?.userId;
+      promoObj.promoCode = promoCode;
+      console.log(promoObj);
+      await httpClient.post("/use_promo_code_master/create").then((res) => {
+        console.log(res.data);
+        toast.success("added promo code");
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  //  Dropdown
+
+  const [openDropdown, setOpenDropDown] = useState(false);
+  const [shipping, setShipping] = useState();
+  const [select, setSelect] = useState(null);
+
+  const dropdownEvent = () => {
+    setOpenDropDown(!openDropdown);
+  };
+
+  const getShiipingList = () => {
+    httpClient.get("/shipping_method").then((res) => {
+      setShipping(res?.data);
+    });
+  };
+
+  const outsideClickEvent = () => {
+    setOpenDropDown(false);
+  };
+  const ref1 = useDetectClickOutside({ onTriggered: outsideClickEvent });
+
+  const selectValue = (data) => {
+    setSelect(data);
+    setOpenDropDown(false);
   };
 
   return (
@@ -348,6 +432,7 @@ const Checkout = () => {
                     </label>
                     <input
                       type="text"
+                      disabled={true}
                       className="regInput mt-0 bg-[#eeeeee]"
                       placeholder={userData?.shippingAddress?.phoneNo}
                     />
@@ -356,11 +441,41 @@ const Checkout = () => {
                     <label className="text-[12px] text-[#757575] leading-[1]">
                       Shipping Method
                     </label>
-                    <input
-                      type="text"
-                      className="regInput mt-0"
-                      placeholder="Select Shipping Method"
-                    />
+                    <div
+                      className={`w-[100%]  mt-2.5 ${
+                        openDropdown
+                          ? "shadow-regCardShadow rounded-3xl overflow-hidden"
+                          : ""
+                      }`}
+                    >
+                      <div
+                        onClick={dropdownEvent}
+                        className={`flex justify-between  px-[0.938rem] py-[0.438rem] ${
+                          openDropdown
+                            ? "border-[#D6D6D6] border-b "
+                            : "border-[#D6D6D6] border rounded-3xl "
+                        }`}
+                      >
+                        <span className=" outline-none text-primaryGray  ">
+                          {select !== null
+                            ? select?.shippingMethodName
+                            : "Select Shipping Method"}
+                        </span>
+                        <img src={dropArrow} alt="" />
+                      </div>
+                      {openDropdown && (
+                        <ul className="bg-[#ffffff] ">
+                          {shipping?.map((item) => (
+                            <li
+                              onClick={() => selectValue(item)}
+                              className="px-[0.938rem] py-[0.438rem] text-[#757575] hover:bg-[#f0f0f0]"
+                            >
+                              {item?.shippingMethodName}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
                   </div>
                   <p className="text-[11px] text-[#757575] mt-[13px] mb-[26px] leading-[1.2]">
                     All products are manufactured on-demand and ship from the
@@ -450,6 +565,7 @@ const Checkout = () => {
                     </label>
                     <input
                       type="text"
+                      disabled={true}
                       className="regInput mt-0 bg-[#eeeeee]"
                       placeholder={userData?.residentialAddress?.phoneNo}
                     />
@@ -458,11 +574,52 @@ const Checkout = () => {
                     <label className="text-[12px] text-[#757575] leading-[1]">
                       Shipping Method
                     </label>
-                    <input
-                      type="text"
-                      className="regInput mt-0"
-                      placeholder="Select Shipping Method"
-                    />
+                    
+                      <Menu
+                        ref={ref1}
+                        as="div"
+                        className={`w-[100%] relative block mt-2.5 ${
+                          openDropdown
+                            ? "shadow-newDroShadow rounded-tl-3xl  rounded-tr-3xl"
+                            : ""
+                        }`}
+                      >
+                        <Menu.Button
+                          onClick={dropdownEvent}
+                          className={`flex justify-between items-center w-[100%] px-[0.938rem] py-[0.438rem] ${
+                            openDropdown
+                              ? "border-[#D6D6D6] border-b "
+                              : "border-[#D6D6D6] border rounded-3xl "
+                          }`}
+                        >
+                          <span className=" outline-none text-primaryGray  ">
+                            {select !== null
+                              ? select?.shippingMethodName
+                              : "Select Shipping Method"}
+                          </span>
+                          <img src={dropArrow} alt="" />
+                        </Menu.Button>
+                        <Menu.Items
+                          className={`absolute right-0 w-[100%] origin-top-right bg-[#ffffff]  focus:outline-none overflow-hidden ${
+                            openDropdown
+                              ? "shadow-newBotDroShadow rounded-bl-3xl  rounded-br-3xl"
+                              : ""
+                          }`}
+                        >
+                          <Menu.Item>
+                            <ul>
+                              {shipping?.map((item) => (
+                                <li
+                                  onClick={() => selectValue(item)}
+                                  className="px-[0.938rem] py-[0.438rem] text-[#757575] hover:bg-[#f0f0f0]"
+                                >
+                                  {item?.shippingMethodName}
+                                </li>
+                              ))}
+                            </ul>
+                          </Menu.Item>
+                        </Menu.Items>
+                      </Menu>
                   </div>
 
                   <div className="flex justify-end pr-[90px]">
@@ -568,7 +725,7 @@ const Checkout = () => {
 
               <div className="w-[242px] h-[40px]">
                 <div
-                  onClick={() => handlePayment(cartData?.estimateAmount)}
+                  onClick={() => handlePayment(cartData?.finalAmount)}
                   className="w-[100%] h-[100%] flex justify-center items-center cursor-pointer"
                   style={{
                     background: `url(${checkBtnBackImg})`,
@@ -576,7 +733,7 @@ const Checkout = () => {
                   }}
                 >
                   <p className="text-[18px] text-primaryBlack font-medium ">
-                    Complete order for ${addZeroes(cartData?.estimateAmount)}
+                    Complete order for ${addZeroes(cartData?.finalAmount)}
                   </p>
                 </div>
               </div>
@@ -732,7 +889,7 @@ const Checkout = () => {
                       <p>
                         ${" "}
                         <span className="text-[35px]">
-                          {addZeroes(cartData?.estimateAmount)}
+                          {addZeroes(cartData?.finalAmount)}
                         </span>
                       </p>
                       <p className="mt-0 pt-0 text-[#757575] text-[12px] tracking-tighter">
@@ -746,34 +903,40 @@ const Checkout = () => {
                 {/* Promocode */}
                 <div className="pt-[15px]">
                   <div className="flex gap-2 items-start mb-2">
-                    <input type="checkbox" />
+                    <input
+                      type="checkbox"
+                      checked={applyPromo}
+                      onChange={(e) => setApplyPromo(!applyPromo)}
+                    />
                     <p className="text-[12px] text-primaryGray">
                       Apply Promo codes and Gift Cards <br />
                       (One Promo code per order)
                     </p>
                   </div>
-                  <div className="mt-2.5">
-                    <div className="relative mb-2.5">
-                      <input
-                        type="text"
-                        className="regInput mt-0 placeholder:text-[13px]"
-                        placeholder="Enter Promo or Coupon code"
-                      />
-                      <button className="text-primaryBlack bg-[#EEEEEE] border border-[#E9E9E9] rounded-2xl py-[0.45rem] px-2 text-[10px] leading-[10px] font-medium absolute top-2 right-2">
-                        Add
-                      </button>
+                  {applyPromo && (
+                    <div className="mt-2.5">
+                      <div className="relative mb-2.5">
+                        <input
+                          type="text"
+                          className="regInput mt-0 placeholder:text-[13px]"
+                          placeholder="Enter Promo or Coupon code"
+                        />
+                        <button className="text-primaryBlack bg-[#EEEEEE] border border-[#E9E9E9] rounded-2xl py-[0.45rem] px-2 text-[10px] leading-[10px] font-medium absolute top-2 right-2">
+                          Add
+                        </button>
+                      </div>
+                      <div className="relative ">
+                        <input
+                          type="text"
+                          className="regInput mt-0 placeholder:text-[13px]"
+                          placeholder="Enter Gift Card code"
+                        />
+                        <button className="text-primaryBlack bg-[#EEEEEE] border border-[#E9E9E9] rounded-2xl py-[0.45rem] px-2 text-[10px] leading-[10px] font-medium absolute top-2 right-2">
+                          Add
+                        </button>
+                      </div>
                     </div>
-                    <div className="relative ">
-                      <input
-                        type="text"
-                        className="regInput mt-0 placeholder:text-[13px]"
-                        placeholder="Enter Gift Card code"
-                      />
-                      <button className="text-primaryBlack bg-[#EEEEEE] border border-[#E9E9E9] rounded-2xl py-[0.45rem] px-2 text-[10px] leading-[10px] font-medium absolute top-2 right-2">
-                        Add
-                      </button>
-                    </div>
-                  </div>
+                  )}
                 </div>
                 <button
                   onClick={() => setFinalCheckout(false)}

@@ -31,17 +31,17 @@ const ShoppingCart = () => {
     try {
       const promoObj = {
         giftCode: String,
-        userMasterId: String
+        userMasterId: String,
       };
-      promoObj.userId = userId;
+      promoObj.userMasterId = userId;
       promoObj.giftCode = giftCode;
       console.log(promoObj);
-    await  httpClient
-        .put("/cart_master/UpdateEstimateAmountUsingGiftCode")
-        .then((res) => {
-          console.log(res.data);
-          toast.success("added Gift code");
-        });
+      await httpClient.post("/user_gift_code_master/create", promoObj).then((res) => {
+        // console.log(res.data);
+        toast.success("added Gift code");
+    getUserIdWiseCart();
+
+      });
     } catch (err) {
       console.log(err);
     }
@@ -51,14 +51,13 @@ const ShoppingCart = () => {
     try {
       const promoObj = {
         promoCode: String,
-        totalAmount: 0,
-        userId: String
+        userId: String,
       };
       promoObj.userId = userId;
       promoObj.promoCode = promoCode;
       console.log(promoObj);
-    await  httpClient
-        .put("/cart_master/UpdateEstimateAmountUsingPromoCode")
+      await httpClient
+        .post("/use_promo_code_master/create")
         .then((res) => {
           console.log(res.data);
           toast.success("added promo code");
@@ -69,6 +68,7 @@ const ShoppingCart = () => {
   };
 
   useEffect(() => {
+
     getUserIdWiseCart();
   }, []);
 
@@ -78,19 +78,26 @@ const ShoppingCart = () => {
       .then((res) => {
         console.log(res.data);
         setCartData(res?.data);
+        setApplyPromo(res?.data?.codeType != null ? true : false)
+        if(res?.data?.codeType === "Promo Code") {
+          setPromoCode(res?.data?.promoCode)
+        } else if(res?.data?.codeType === "Promo Code") {
+          setGiftCode(res?.data?.giftCode)
+        }
       });
   };
 
   function addZeroes(num) {
     const dec = String(num).split(".")[1];
     const len = dec && dec.length > 1 ? dec.length : 2;
-    return Number(num).toFixed(len);
+    const apNum = Number(Number(num).toFixed(len));
+    return apNum;
   }
 
   const navigate = useNavigate();
 
   const gotoCheckout = () => {
-    navigate("/checkout", { state: { userId: userId } });
+    navigate("/checkout", { state: { userId: userId, applyPromo: applyPromo } });
   };
 
   const gotoCheckoutWithOne = async (cartArtFrameId) => {
@@ -109,26 +116,28 @@ const ShoppingCart = () => {
 
   const increaseCartQuantity = (cartArtFrameId) => {
     try {
-      httpClient.get(`/cart_art_frame_master/IncreaseCartQty/${cartArtFrameId}`)
-      .then((res) => {
-        console.log(res.data);
-        getUserIdWiseCart()
-      })
+      httpClient
+        .get(`/cart_art_frame_master/IncreaseCartQty/${cartArtFrameId}`)
+        .then((res) => {
+          console.log(res.data);
+          getUserIdWiseCart();
+        });
     } catch (error) {
       console.log(error);
     }
-  }
+  };
   const decreaseCartQuantity = (cartArtFrameId) => {
     try {
-      httpClient.get(`/cart_art_frame_master/DecreaseCartQty/${cartArtFrameId}`)
-      .then((res) => {
-        console.log(res.data);
-        getUserIdWiseCart()
-      })
+      httpClient
+        .get(`/cart_art_frame_master/DecreaseCartQty/${cartArtFrameId}`)
+        .then((res) => {
+          console.log(res.data);
+          getUserIdWiseCart();
+        });
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   // Remove Order
   const cartCount = useSelector((state) => state.cart.cartCount);
@@ -148,8 +157,6 @@ const ShoppingCart = () => {
       getUserIdWiseCart();
     }
   };
-
-  
 
   return (
     <>
@@ -224,7 +231,10 @@ const ShoppingCart = () => {
                     >
                       <button
                         className="bg-[#EEEEEE] py-2 px-2.5"
-                        onClick={() => cart?.quantity > 1 && decreaseCartQuantity(cart?.cartArtFrameId)}
+                        onClick={() =>
+                          cart?.quantity > 1 &&
+                          decreaseCartQuantity(cart?.cartArtFrameId)
+                        }
                       >
                         <img src={minusIcon} alt="" />
                       </button>
@@ -235,7 +245,9 @@ const ShoppingCart = () => {
                       />
                       <button
                         className="bg-[#EEEEEE] py-2 px-2.5"
-                        onClick={() => increaseCartQuantity(cart?.cartArtFrameId)}
+                        onClick={() =>
+                          increaseCartQuantity(cart?.cartArtFrameId)
+                        }
                       >
                         <img
                           className="w-[11px] h-[11px]"
@@ -350,7 +362,7 @@ const ShoppingCart = () => {
                   </div>
                   <div className="flex flex-col items-end">
                     <p className="text-[35px] text-orangeColor font-normal leading-[35px] tracking-tighter">
-                      ${addZeroes(cartData?.estimateAmount)}
+                      ${addZeroes(cartData?.finalAmount)}
                     </p>
                     <p className="text-[12px] cursor-pointer text-primaryGray leading-[12px]">
                       Show Price Details
@@ -379,10 +391,12 @@ const ShoppingCart = () => {
                           className="regInput mt-0 placeholder:text-[13px]"
                           placeholder="Enter Promo or Coupon code"
                           value={promoCode}
+                          disabled={giftCode.length > 0 ? true : false}
                           onChange={(e) => setPromoCode(e.target.value)}
                         />
                         <button
                           onClick={addPromoCode}
+                          disabled={giftCode.length > 0 ? true : false}
                           className="text-primaryBlack bg-[#EEEEEE] border border-[#E9E9E9] rounded-2xl py-[0.45rem] px-2 text-[10px] leading-[10px] font-medium absolute top-2 right-2"
                         >
                           Add
@@ -394,10 +408,12 @@ const ShoppingCart = () => {
                           className="regInput mt-0 placeholder:text-[13px]"
                           placeholder="Enter Gift Card code"
                           value={giftCode}
+                          disabled={promoCode.length > 0 ? true : false}
                           onChange={(e) => setGiftCode(e.target.value)}
                         />
                         <button
                           onClick={addGiftCode}
+                          disabled={promoCode.length > 0 ? true : false}
                           className="text-primaryBlack bg-[#EEEEEE] border border-[#E9E9E9] rounded-2xl py-[0.45rem] px-2 text-[10px] leading-[10px] font-medium absolute top-2 right-2"
                         >
                           Add

@@ -24,6 +24,8 @@
     right: 20px !important;
     top: 50% !important;
     z-index: 9;
+    width: 21px !important;
+    height: 42px !important;
 }
 
 .slick-prev {
@@ -31,6 +33,8 @@
     left: 20px !important;
     top: 50% !important; 
     z-index: 9;
+    width: 21px !important;
+    height: 42px !important;
 }
 
 
@@ -45,11 +49,14 @@
 
 .slick-dots li button {
   padding: 2.5px !important;
+
+
 }
 
 .slick-dots li button:before {
   font-size: 10px !important;
   color: #d1d1d1 !important;
+  opacity: 0.9 !important;
   /* border: 1px solid #757575; */
 }
 

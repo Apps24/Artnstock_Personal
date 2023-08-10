@@ -392,21 +392,20 @@ const UserDetails = () => {
               </Popup>
             </div>
             <button
-              onClick={() => setAlertToggle(true)}
               type='submit'
               className='blackBtn mt-[0.938rem]'
             >
               Next
             </button>
           </form>
-          <Alert
+          {/* <Alert
             type='success'
             message={'Appps'}
             title={'Error'}
             toggle={alertToggle}
             change={changeState}
             time={5000}
-          />
+          /> */}
         </div>
       </div>
     </div>

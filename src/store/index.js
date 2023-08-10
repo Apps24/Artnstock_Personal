@@ -35,7 +35,7 @@ const reducer = combineReducers({
   subjectId: subjectidSlice.reducer,
   searchText: searchSlice.reducer,
   style: styleSlice.reducer,
-  cart: cartSlice.reducer
+  cart: cartSlice.reducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducer);

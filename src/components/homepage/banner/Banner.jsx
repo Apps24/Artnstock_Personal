@@ -31,6 +31,7 @@ const Banner = ({ type }) => {
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
+    draggable: false,
     nextArrow: <img src={rightArrow} alt='left' />,
     prevArrow: <img src={leftArrow} alt='right' />,
   };

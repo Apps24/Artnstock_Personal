@@ -99,6 +99,39 @@ export const filteredMasterModel = {
   userFirstName: '',
 };
 
+export const frameModel = {
+  depth: String,
+  finish: String,
+  frameColor: String,
+  frameDrawingUrl: String,
+  frameId: String,
+  frameImageUrl: String,
+  frameMaterial: String,
+  frameName: String,
+  frameProductNo: String,
+  frameThumbnailUrl: String,
+  frameType: String,
+  glassType: String,
+  price: 0,
+  size: String,
+  status: String,
+  stockStatus: String,
+  style: String,
+  width: String
+}
+
+export class CartartClass {
+  constructor(artId, description, imgUrl, quantity, stockStatus, userId) {
+    this.artId = artId;
+    this.description = description;
+    this.imgUrl = imgUrl;
+    this.quantity = quantity;
+    this.stockStatus = stockStatus;
+    this.userId = userId
+  }
+
+}
+
 export const CartArtFrameModel = {
   artId: String,
   description: String,

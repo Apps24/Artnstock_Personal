@@ -44,7 +44,7 @@ const MainGrid = () => {
         artwork at fair costs, our choice of works of art will expand
         the possibilities for your visual initiatives.
       </p>
-      <div className='grid grid-cols-4 gap-4 my-7'>
+      <div className='grid grid-cols-4 gap-4 my-7 h-[682px]'>
         {/* Grid 1 */}
         <div
           onClick={() => {
@@ -56,7 +56,7 @@ const MainGrid = () => {
             backgroundImage: `url(${gridList[0]?.image})`,
             backgroundSize: '100% 100%',
             backgroundRepeat: 'no-repeat',
-            height: `386px`,
+            height: `100%`,
           }}
         >
           <div
@@ -92,7 +92,7 @@ const MainGrid = () => {
             backgroundImage: `url(${gridList[1]?.image})`,
             backgroundSize: '100% 100%',
             backgroundRepeat: 'no-repeat',
-            height: `185px`,
+            height: `100%`,
           }}
         >
           <div
@@ -128,7 +128,8 @@ const MainGrid = () => {
             backgroundImage: `url(${gridList[2]?.image})`,
             backgroundSize: '100% 100%',
             backgroundRepeat: 'no-repeat',
-            height: `280px`,
+            height: `100%`,
+
           }}
         >
           <div
@@ -164,7 +165,7 @@ const MainGrid = () => {
             backgroundImage: `url(${gridList[3]?.image})`,
             backgroundSize: '100% 100%',
             backgroundRepeat: 'no-repeat',
-            height: `185px`,
+            height: `100%`,
           }}
         >
           <div
@@ -200,7 +201,8 @@ const MainGrid = () => {
             backgroundImage: `url(${gridList[4]?.image})`,
             backgroundSize: '100% 100%',
             backgroundRepeat: 'no-repeat',
-            height: `280px`,
+            height: `100%`,
+
           }}
         >
           <div
@@ -236,7 +238,8 @@ const MainGrid = () => {
             backgroundImage: `url(${gridList[5]?.image})`,
             backgroundSize: '100% 100%',
             backgroundRepeat: 'no-repeat',
-            height: `280px`,
+            height: `100%`,
+
           }}
         >
           <div
@@ -272,7 +275,8 @@ const MainGrid = () => {
             backgroundImage: `url(${gridList[6]?.image})`,
             backgroundSize: '100% 100%',
             backgroundRepeat: 'no-repeat',
-            height: `386px`,
+            height: `100%`,
+
           }}
         >
           <div
@@ -308,7 +312,8 @@ const MainGrid = () => {
             backgroundImage: `url(${gridList[7]?.image})`,
             backgroundSize: '100% 100%',
             backgroundRepeat: 'no-repeat',
-            height: `280px`,
+            height: `100%`,
+
           }}
         >
           <div
@@ -344,7 +349,8 @@ const MainGrid = () => {
             backgroundImage: `url(${gridList[8]?.image})`,
             backgroundSize: '100% 100%',
             backgroundRepeat: 'no-repeat',
-            height: `185px`,
+            height: `100%`,
+
           }}
         >
           <div
@@ -380,7 +386,8 @@ const MainGrid = () => {
             backgroundImage: `url(${gridList[9]?.image})`,
             backgroundSize: '100% 100%',
             backgroundRepeat: 'no-repeat',
-            height: `185px`,
+            height: `100%`,
+
           }}
         >
           <div

@@ -65,6 +65,10 @@ module.exports = {
       dropShadow: '0px 10px 20px -10px rgba(0, 0, 0, 0.2)',
       dropShadowButton: '0px 4px 18px rgba(0, 0, 0, 0.2)',
       regCardShadow: '0px 0px 18px rgba(0, 0, 0, 0.2)',
+      newDroShadow: `-5px 0px 10px -5px rgba(0, 0, 0, 0.2),5px 0px 10px -5px rgba(0, 0, 0, 0.2)`,
+      // newBotDroShadow: `-5px 5px 10px -5px rgba(0, 0, 0, 0.2),5px 5px 10px -5px rgba(0, 0, 0, 0.2)`,
+      newBotDroShadow: `-5px 0px 10px -5px rgba(0, 0, 0, 0.2),5px 0px 10px -5px rgba(0, 0, 0, 0.2)`,
+    
     },
     width: {
       regCards: '43.125rem',

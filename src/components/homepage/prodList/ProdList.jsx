@@ -20,14 +20,14 @@ const ProdList = ({ heading }) => {
       .get('/art_product_master/getActiveArtProductMaster')
       .then((res) => {
         // console.log(res);
-        setProdList(res.data);
+        setProdList(res?.data);
       });
   };
 
   const imageLinkChange = (url) => {
     const str = url;
 
-    const updatedStr = str.replace(
+    const updatedStr = str?.replace(
       'upload/',
       'upload/c_scale,h_269,w_269/'
     );
@@ -46,7 +46,7 @@ const ProdList = ({ heading }) => {
     <div className='w-w1409 mx-auto text-center'>
       <p className='text-heading text-primaryBlack mb-7'>{heading}</p>
       <div className='grid grid-cols-5 gap-4'>
-        {prodList.map((data, i) => {
+        {prodList?.map((data, i) => {
           if (i <= 9) {
             return (
               <div key={data?.productId} className='w-[16.813rem]'>
@@ -68,7 +68,7 @@ const ProdList = ({ heading }) => {
                   >
                     <div>
                       <p className='text-heading text-[#ffffff] font-semibold'>
-                        {data?.productMaster.productName}
+                        {data?.productMaster?.productName}
                       </p>
                       <p className='text-sm12 text-[#ffffff] font-medium'>
                         An Affair with array of Artistically <br />
@@ -86,13 +86,13 @@ const ProdList = ({ heading }) => {
                   </div>
                 </div>
                 <p className='text-primaryBlack text-[15px] leading-[18px] font-semibold mt-1.5'>
-                  {data?.productMaster.productName}
+                  {data?.productMaster?.productName}
                 </p>
                 <p className='text-primaryGray text-sm12 leading-[15px]'>
-                  {data?.productMaster.description}
+                  {data?.productMaster?.description}
                 </p>
                 <p className='text-primaryBlack text-[15px] leading-[18px] font-semibold mt-1.5'>
-                  ${data?.sizeAndPrices[0].sellPrice}
+                  ${data?.sizeAndPrices[0]?.sellPrice}
                 </p>
               </div>
             );
