@@ -83,7 +83,6 @@ const UploadContent = () => {
             }
           );
           console.log('file uploaded successfully');
-
           tempImag.push(res.data.imageId);
         } catch (err) {
           console.log(err);

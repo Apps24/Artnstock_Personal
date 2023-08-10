@@ -204,6 +204,7 @@ const ProductDetails = () => {
     setProductCart((prevItem) => ({
       ...prevItem,
       image: item.image,
+      colorCode: item.colorCode,
       color: item.color,
     }));
     // setShirt(item.backgroundColor);
@@ -423,6 +424,9 @@ const ProductDetails = () => {
     setProductCart((prevItem) => ({
       ...prevItem,
       image: data?.images[0]?.image,
+      size: data?.productMaster.sizeAndPrices[0].size,
+      sizeName: data?.productMaster.sizeAndPrices[0].sizeName,
+      color: data?.images[0]?.color,
     }));
 
     setChecked(data?.images[0]);
@@ -450,39 +454,23 @@ const ProductDetails = () => {
 
   const [productCart, setProductCart] = useState({
     image: '',
+    colorCode: '',
     style: '',
-    size: 'M',
+    size: '',
+    sizeName: '',
     quantity: 1,
     totalPrice: 0,
     color: '',
   });
 
   useEffect(() => {
-    let abc = data?.sizeAndPrices?.filter(
-      (obj) => obj.size === 'M'
-    )[0]?.sellPrice;
+    let abc = data?.productMaster?.sizeAndPrices[0]?.sellPrice;
+    // let abc = data?.productMaster.sizeAndPrices?.filter(
+    //   (obj) => obj.size === 'M'
+    // )[0]?.sellPrice;
 
     setProductCart((prev) => ({ ...prev, totalPrice: abc }));
   }, []);
-
-  // useEffect(() => {
-  //   let abc =
-  //     data?.sizeAndPrices?.filter((obj) => obj.size === 'M')[0]
-  //       ?.sellPrice * productCart.quantity;
-
-  //   setProductCart((prev) => ({ ...prev, totalPrice: abc }));
-  // }, []);
-
-  // useEffect(() => {
-  //   const MSizePrice = data?.sizeAndPrices?.filter(
-  //     (obj) => obj.size === 'M'
-  //   );
-  //   // console.log(MSizePrice);
-  //   setProductCart((prev) => ({
-  //     ...prev,
-  //     totalPrice: MSizePrice[0]?.sellPrice,
-  //   }));
-  // }, []);
 
   useEffect(() => {}, [productCart.quantity]);
 
@@ -492,12 +480,12 @@ const ProductDetails = () => {
 
   const [categories, setCategories] = useState({
     all: [],
-    art: [],
+    // art: [],
     // photo: [],
     // footage: [],
     // music: [],
     // templates: [],
-    // product: [],
+    product: [],
   });
 
   const getFolders = async () => {
@@ -508,7 +496,7 @@ const ProductDetails = () => {
 
       const data = response.data;
 
-      console.log(data);
+      // console.log(data);
 
       setCategories((prevCategories) => ({
         ...prevCategories,
@@ -522,12 +510,6 @@ const ProductDetails = () => {
       }));
 
       data.forEach((obj) => {
-        // if (obj.category === 'art') {
-        //   setCategories((prevCategories) => ({
-        //     ...prevCategories,
-        //     art: [...prevCategories.art, obj],
-        //   }));
-        // }
         if (obj.category === 'product') {
           setCategories((prevCategories) => ({
             ...prevCategories,
@@ -585,6 +567,7 @@ const ProductDetails = () => {
   //     }
   //   });
   // };
+
   const [openBig, setOpenBig] = useState(false);
   const [popupLogin, setpopupLogin] = useState(false);
 
@@ -615,11 +598,12 @@ const ProductDetails = () => {
   });
 
   const setSizeAndAccordingPrice = (obj) => {
-    // console.log(obj);
+    console.log(obj);
     setProductCart((prev) => ({
       ...prev,
       size: obj.size,
       totalPrice: obj.sellPrice,
+      sizeName: obj.sizeName,
     }));
   };
 
@@ -643,9 +627,9 @@ const ProductDetails = () => {
     }
   };
 
-  useEffect(() => {
-    console.log('Updated quantity:', productCart.quantity);
-  }, [productCart.quantity]);
+  // useEffect(() => {
+  //   console.log('Updated quantity:', productCart.quantity);
+  // }, [productCart.quantity]);
 
   return (
     <>
@@ -1017,12 +1001,17 @@ const ProductDetails = () => {
                       <div className='w-[48px] h-[48px] rounded-[10px] border-[1px] border-[#d6d6d6] flex justify-center items-center'>
                         <div
                           style={{
-                            backgroundColor: `${checked.color}`,
+                            backgroundColor: `${checked.colorCode}`,
                           }}
                           className='w-[32px] h-[32px] rounded-[50%]'
                         ></div>
                       </div>
-                      <p className='text-center'>Dark Blue Color</p>
+                      <p className='text-center'>
+                        {productCart.color.replace(/\b\w/g, (char) =>
+                          char.toUpperCase()
+                        )}{' '}
+                        Color
+                      </p>
                     </div>
                   </div>
                   <div className='flex-col'>
@@ -1032,7 +1021,9 @@ const ProductDetails = () => {
                           {productCart.size}
                         </p>
                       </div>
-                      <p className='text-center'>Medium Size</p>
+                      <p className='text-center'>
+                        {productCart.sizeName}
+                      </p>
                     </div>
                   </div>
                   <div className='flex-col'>
@@ -1125,10 +1116,12 @@ const ProductDetails = () => {
                         : 'border rounded-[20px] border-[#d6d6d6]'
                     } flex items-center justify-between px-[15px] text-primaryGray text-sm14 font-medium cursor-pointer w-[272px] h-[40px] bg-[#FFFFFF]`}
                   >
-                    {/* {
-                      
-                    } */}
-                    <span>Select Style</span>
+                    {productCart?.style !== '' ? (
+                      <span>{productCart.style}</span>
+                    ) : (
+                      <span>Select Style</span>
+                    )}
+
                     <img
                       className='inline-block'
                       src={dropdown}
@@ -1171,18 +1164,20 @@ const ProductDetails = () => {
                     className={`w-[32px] h-[32px] rounded-full border flex justify-center items-center cursor-pointer`}
                     style={{
                       color: `${
-                        item.color === '#ffffff'
+                        item.colorCode === '#ffffff'
                           ? '#000000'
                           : '#ffffff'
                       }`,
-                      backgroundColor: `${item.color}`,
+                      backgroundColor: `${item.colorCode}`,
                       borderColor: `${
-                        item.color === '#ffffff' ? '#000000' : ''
+                        item.colorCode === '#ffffff' ? '#000000' : ''
                       }`,
                     }}
                     onClick={() => check(item)}
                   >
-                    {item.color == checked.color && <CheckIcon />}
+                    {item.colorCode == checked.colorCode && (
+                      <CheckIcon />
+                    )}
                   </div>
                 ))}
                 {/* {circle.map((item) => (
@@ -1192,7 +1187,7 @@ const ProductDetails = () => {
                     style={{
                       color: `${item.textColor}`,
                       backgroundColor: `${item.backgroundColor}`,
-                    }}
+                    }}  
                     onClick={() => check(item)}
                   >
                     {item.id == checked && (
@@ -1206,7 +1201,7 @@ const ProductDetails = () => {
             <div className='flex flex-col pt-[17px]'>
               <p className='text-[15px] font-medium'>Select Size</p>
               <div className='flex gap-[10px] p-[3px] text-[15px] font-medium'>
-                {data?.sizeAndPrices?.map((obj) => (
+                {data?.productMaster.sizeAndPrices?.map((obj) => (
                   <div
                     // style={{
                     //   backgroundColor: `${

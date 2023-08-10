@@ -42,6 +42,8 @@ import trial from '../../../assets/images/combo/trial.png';
 import html2canvas from 'html2canvas';
 
 import CheckIcon from '@mui/icons-material/Check';
+import ProductDetails from '../../../pages/product/productDetails/ProductDetails';
+import { object } from 'yup';
 
 // const images = [
 //   {
@@ -192,6 +194,7 @@ const ActivateProducts = () => {
                 // let images = []
                 const mergedObj = {
                   color: item.color,
+                  colorCode: item.hexCode,
                   image: res.data,
                 };
 
@@ -224,9 +227,9 @@ const ActivateProducts = () => {
   const [productData, setproductData] = useState(null);
   const [productImage, setProductImage] = useState('');
 
-  useEffect(() => {
-    console.log(checked);
-  }, [checked]);
+  // useEffect(() => {
+  //   console.log(checked);
+  // }, [checked]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -285,18 +288,6 @@ const ActivateProducts = () => {
     }
     setAlignVerticalFocus(false);
   };
-
-  // api calls
-  const [styleList, setStyleList] = useState([]);
-
-  useEffect(() => {
-    const getStyleList = async () => {
-      const response = await httpClient.get('/style_master');
-      setStyleList(response.data);
-      // console.log(response.data);
-    };
-    getStyleList();
-  }, []);
 
   // state to hide dotted line around canvas
   const [dottedLine, setDottedLine] = useState(false);
@@ -365,6 +356,7 @@ const ActivateProducts = () => {
 
     setproductData(a);
     setProductImage(a.productDetails[0].frontImage);
+
     console.log(a);
   };
 
@@ -380,6 +372,10 @@ const ActivateProducts = () => {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    console.log(checked);
+  }, [checked]);
 
   const [nestedLifeStyle, setNestedLifeStyle] = useState('1');
 
@@ -1160,9 +1156,24 @@ const ActivateProducts = () => {
                           <p className='w-[80px] font-medium'>
                             Colours:
                           </p>
-                          <p>All Colours</p>
+                          <p>
+                            {checked?.map((color, index) => (
+                              <>
+                                <span>{color.color} </span>
+                                <span
+                                  className={`${
+                                    index === checked.length - 1
+                                      ? 'hidden'
+                                      : ''
+                                  }`}
+                                >
+                                  ,
+                                </span>
+                              </>
+                            ))}
+                          </p>
                         </div>
-                        <div className='flex '>
+                        <div className='flex'>
                           <p className='w-[80px] font-medium'>
                             PrintSize:
                           </p>
@@ -1189,7 +1200,7 @@ const ActivateProducts = () => {
                           }}
                           className='flex items-center justify-between px-[15px] text-primaryGray text-sm14 font-medium cursor-pointer w-[272px] h-[40px] bg-[#FFFFFF] rounded-[20px] border border-[#d6d6d6]'
                         >
-                          <span>All Styles</span>
+                          <span>All Style</span>
                           <img
                             className='inline-block'
                             src={dropdown}
@@ -1205,9 +1216,9 @@ const ActivateProducts = () => {
                             //     ' rgba(149, 157, 165, 0.2) 0px 8px 24px',
                             // }}
                           >
-                            {styleList.map((style) => (
+                            {productData?.style?.map((style) => (
                               <li className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'>
-                                {style.name}
+                                {style}
                               </li>
                             ))}
                           </ul>
@@ -1251,13 +1262,13 @@ const ActivateProducts = () => {
                               className={`w-[32px] h-[32px] rounded-full border flex justify-center items-center cursor-pointer`}
                               style={{
                                 color: `${
-                                  item.color === '#ffffff'
+                                  item.hexCode === '#ffffff'
                                     ? '#000000'
                                     : '#ffffff'
                                 }`,
-                                backgroundColor: `${item.color}`,
+                                backgroundColor: `${item.hexCode}`,
                                 borderColor: `${
-                                  item.color === '#ffffff'
+                                  item.hexCode === '#ffffff'
                                     ? '#000000'
                                     : ''
                                 }`,
@@ -1319,141 +1330,45 @@ const ActivateProducts = () => {
                               Sell Price
                             </th>
                           </tr>
-
-                          <tr className='text-start text-[13px]'>
-                            <td className='bg-[#F7F7F7] px-2 py-[0.1rem] border-l border-r border-b border-[#d6d6d6]'>
-                              XS
-                            </td>
-                            <td className='bg-[#F7F7F7] px-2 py-[0.1rem] border-r border-b border-[#d6d6d6]'>
-                              18.00
-                            </td>
-                            <td className='px-2 py-[0.1rem] border-r border-b border-[#d6d6d6] text-center'>
-                              <input
-                                type='text'
-                                placeholder='10%'
-                                className='rounded-xl border border-[#d6d6d6] px-5 w-[111.99px]'
-                              />
-                            </td>
-                            <td className='px-2 py-[0.1rem] border-r border-b border-[#d6d6d6]'>
-                              19.80
-                            </td>
-                          </tr>
-                          <tr className='text-start text-[13px]'>
-                            <td className='bg-[#F7F7F7] px-2 py-[0.1rem] border-l border-r border-b border-[#d6d6d6]'>
-                              S
-                            </td>
-                            <td className='bg-[#F7F7F7] px-2 py-[0.1rem] border-r border-b border-[#d6d6d6]'>
-                              18.00
-                            </td>
-                            <td className='px-2 py-[0.1rem] border-r border-b border-[#d6d6d6] text-center'>
-                              <input
-                                type='text'
-                                placeholder='10%'
-                                className='rounded-xl border border-[#d6d6d6] px-5 w-[111.99px]'
-                              />
-                            </td>
-                            <td className='px-2 py-[0.1rem] border-r border-b border-[#d6d6d6]'>
-                              19.80
-                            </td>
-                          </tr>
-                          <tr className='text-start text-[13px]'>
-                            <td className='px-2 py-[0.1rem] bg-[#F7F7F7] border-l border-r border-b border-[#d6d6d6]'>
-                              M
-                            </td>
-                            <td className='px-2 py-[0.1rem] bg-[#F7F7F7] border-r border-b border-[#d6d6d6]'>
-                              18.00
-                            </td>
-                            <td className='px-2 py-[0.1rem] border-r border-b border-[#d6d6d6] text-center'>
-                              <input
-                                type='text'
-                                placeholder='10%'
-                                className='rounded-xl border px-5 border-[#d6d6d6] w-[111.99px]'
-                              />
-                            </td>
-
-                            <td className=' px-2 py-[0.1rem] border-r border-b border-[#d6d6d6]'>
-                              19.80
-                            </td>
-                          </tr>
-
-                          {/* added */}
-                          <tr className='text-start text-[13px]'>
-                            <td className='px-2 py-[0.1rem] bg-[#F7F7F7] border-l border-r border-b border-[#d6d6d6]'>
-                              L
-                            </td>
-                            <td className='px-2 py-[0.1rem] bg-[#F7F7F7] border-r border-b border-[#d6d6d6]'>
-                              18.00
-                            </td>
-                            <td className='px-2 py-[0.1rem] border-r border-b border-[#d6d6d6] text-center'>
-                              <input
-                                type='text'
-                                placeholder='10%'
-                                className='rounded-xl border px-5 border-[#d6d6d6] w-[111.99px]'
-                              />
-                            </td>
-
-                            <td className=' px-2 py-[0.1rem] border-r border-b border-[#d6d6d6]'>
-                              19.80
-                            </td>
-                          </tr>
-                          <tr className='text-start text-[13px]'>
-                            <td className='px-2 py-[0.1rem] bg-[#F7F7F7] border-l border-r border-b border-[#d6d6d6]'>
-                              XL
-                            </td>
-                            <td className='px-2 py-[0.1rem] bg-[#F7F7F7] border-r border-b border-[#d6d6d6]'>
-                              18.00
-                            </td>
-                            <td className='px-2 py-[0.1rem] border-r border-b border-[#d6d6d6] text-center'>
-                              <input
-                                type='text'
-                                placeholder='10%'
-                                className='rounded-xl border px-5 border-[#d6d6d6] w-[111.99px]'
-                              />
-                            </td>
-
-                            <td className=' px-2 py-[0.1rem] border-r border-b border-[#d6d6d6]'>
-                              19.80
-                            </td>
-                          </tr>
-
-                          {/* added */}
-
-                          <tr className='text-start text-[13px]'>
-                            <td className=' px-2 py-[0.1rem] bg-[#F7F7F7] border-l border-r border-b border-[#d6d6d6]'>
-                              2XL
-                            </td>
-                            <td className=' px-2 py-[0.1rem] bg-[#F7F7F7] border-r border-b border-[#d6d6d6]'>
-                              21.00
-                            </td>
-                            <td className=' px-2 py-[0.1rem] border-r border-b border-[#d6d6d6] text-center'>
-                              <input
-                                type='text'
-                                placeholder='10%'
-                                className='rounded-xl border px-5 border-[#d6d6d6] w-[111.99px]'
-                              />
-                            </td>
-                            <td className=' px-2 py-[0.2rem] border-r border-b border-[#d6d6d6]'>
-                              23.10
-                            </td>
-                          </tr>
-                          <tr className='text-start text-[13px]'>
-                            <td className=' pl-2 py-[0.1rem] bg-[#F7F7F7] border-l border-r border-b border-[#d6d6d6] rounded-bl-[10px]'>
-                              3XL
-                            </td>
-                            <td className=' px-2 py-[0.1rem] bg-[#F7F7F7] border-r border-b border-[#d6d6d6]'>
-                              23.00
-                            </td>
-                            <td className=' px-2 py-[0.1rem] border-r border-b border-[#d6d6d6] text-center'>
-                              <input
-                                type='text'
-                                placeholder='10%'
-                                className='rounded-xl border px-5 border-[#d6d6d6] w-[111.99px]'
-                              />
-                            </td>
-                            <td className=' px-2 py-[0.1rem] border-r border-b border-[#d6d6d6] rounded-br-[10px]'>
-                              25.30
-                            </td>
-                          </tr>
+                          {productData.sizeAndPrices.map(
+                            (obj, index) => (
+                              <tr className='text-start text-[13px]'>
+                                <td
+                                  className={`pl-2 py-[0.1rem] bg-[#F7F7F7] border-l border-r border-b border-[#d6d6d6] ${
+                                    index ===
+                                    productData.sizeAndPrices.length -
+                                      1
+                                      ? 'rounded-bl-[10px]'
+                                      : ''
+                                  } `}
+                                >
+                                  {obj.size}
+                                </td>
+                                <td className=' px-2 py-[0.1rem] bg-[#F7F7F7] border-r border-b border-[#d6d6d6]'>
+                                  {obj.basePrice}
+                                </td>
+                                <td className=' px-2 py-[0.1rem] border-r border-b border-[#d6d6d6] text-center'>
+                                  <input
+                                    type='text'
+                                    placeholder='10%'
+                                    className='rounded-xl border px-5 border-[#d6d6d6] w-[111.99px] outline-none '
+                                    disabled
+                                  />
+                                </td>
+                                <td
+                                  className={`px-2 py-[0.1rem] border-r border-b border-[#d6d6d6] ${
+                                    index ===
+                                    productData.sizeAndPrices.length -
+                                      1
+                                      ? 'rounded-br-[10px]'
+                                      : ''
+                                  } `}
+                                >
+                                  {obj.sellPrice}
+                                </td>
+                              </tr>
+                            )
+                          )}
                         </table>
                       </div>
                       {/* table */}
