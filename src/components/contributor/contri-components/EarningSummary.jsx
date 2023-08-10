@@ -3,11 +3,15 @@ import download from '../../../assets/images/contributor/download.png';
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { setpath2 } from '../../../store/contriPathSlice';
+import { useSelector } from 'react-redux';
+import { httpClient } from '../../../axios';
 
 const EarningSummary = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [isOpenSortByYear, setIsOpenSortByYear] = useState(false);
   const [isOpenSortByMonth, setIsOpenSortByMonth] = useState(false);
+
+  const userId = useSelector((state) => state.auth.userId);
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -525,6 +529,28 @@ const EarningSummary = () => {
     }
   };
 
+  const [month, setMonth] = useState('');
+  const [data, setData] = useState({});
+
+  const getEarningsData = async () => {
+    try {
+      const res = await httpClient.get(
+        `/contributorearning/get/${userId}`
+      );
+      setData(res.data);
+      setMonth(
+        res.data.contributorEarningMonthResponseDtoList[0]?.month
+      );
+      console.log(res.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getEarningsData();
+  }, []);
+
   return (
     <>
       {' '}
@@ -622,20 +648,36 @@ const EarningSummary = () => {
                 } cursor-pointer w-[105px] text-[12px] h-[30px] flex items-center justify-between p-[10px]`}
                 // className='cursor-pointer w-[120px] border border-[#d6d6d6] text-[12px] h-[30px] rounded-[15px] flex items-center justify-between p-[10px]'
               >
-                <span className='text-[#bbbbbb]'>August</span>
+                {month !== '' ? (
+                  <span className='text-[#bbbbbb]'>
+                    {month
+                      .toLowerCase()
+                      .replace(/(?:^|\s)\S/g, (char) =>
+                        char.toUpperCase()
+                      )}
+                  </span>
+                ) : (
+                  <span className='text-[#bbbbbb]'></span>
+                )}
+
                 <img className='inline-block' src={dropdown} alt='' />
               </button>
               {isOpenSortByMonth && (
                 <ul className='shadow-dropShadow rounded-b-2xl hover:overflow-hidden dropdown__menu absolute z-50 bg-[#ffffff] w-[105px] text-center text-[14px] text-primaryGray'>
-                  <li className='cursor-pointer hover:bg-[#F0F0F0] border-b border-[#EFEFEF] py-[5px]'>
-                    September
-                  </li>
-                  <li className='cursor-pointer hover:bg-[#F0F0F0] border-b border-[#EFEFEF] py-[5px]'>
-                    June
-                  </li>
-                  <li className='cursor-pointer hover:bg-[#F0F0F0] py-[5px]'>
-                    August
-                  </li>
+                  {data?.contributorEarningMonthResponseDtoList?.map(
+                    (obj) => (
+                      <li
+                        onClick={() => setMonth(obj.month)}
+                        className='cursor-pointer hover:bg-[#F0F0F0] border-b border-[#EFEFEF] py-[5px]'
+                      >
+                        {obj.month
+                          .toLowerCase()
+                          .replace(/(?:^|\s)\S/g, (char) =>
+                            char.toUpperCase()
+                          )}
+                      </li>
+                    )
+                  )}
                 </ul>
               )}
             </div>
@@ -773,43 +815,27 @@ const EarningSummary = () => {
                 All-Time
               </td>
               <td className='border-r border-b border-[#dddddd] bg-[#f9e9e9] font-medium text-primaryBlack text-center'>
-                123.2
+                {data?.itemSold}
               </td>
               <td className='border-r border-b border-[#dddddd] bg-[#f9e9e9] font-medium text-primaryBlack text-center'>
-                123.2
+                {data?.earning}
               </td>
               <td className='border-r border-b border-[#dddddd] bg-[#feeeee] font-medium text-primaryBlack text-center'>
-                123.2
+                {data?.artPrint}
               </td>
               <td className='border-r border-b border-[#dddddd] bg-[#feeeee] font-medium text-primaryBlack text-center'>
-                123.2
+                {data?.productsPrice}
               </td>
-              <td className='border-r border-b border-[#dddddd] bg-[#feeeee] font-medium text-primaryBlack text-center'>
-                123.2
-              </td>
-              <td className='border-r border-b border-[#dddddd] bg-[#feeeee] font-medium text-primaryBlack text-center'>
-                123.2
-              </td>
-              <td className='border-r border-b border-[#dddddd] bg-[#feeeee] font-medium text-primaryBlack text-center'>
-                123.2
-              </td>
-              <td className='border-r border-b border-[#dddddd] bg-[#feeeee] font-medium text-primaryBlack text-center'>
-                123.2
-              </td>
-              <td className='border-r border-b border-[#dddddd] bg-[#feeeee] font-medium text-primaryBlack text-center'>
-                123.2
-              </td>
-              <td className='border-r border-b border-[#dddddd] bg-[#feeeee] font-medium text-primaryBlack text-center'>
-                123.2
-              </td>
-              <td className='border-r border-b border-[#dddddd] bg-[#feeeee] font-medium text-primaryBlack text-center'>
-                123.2
-              </td>
-              <td className='border-r border-b border-[#dddddd] bg-[#feeeee] font-medium text-primaryBlack text-center'>
-                123.2
-              </td>
+              <td className='border-r border-b border-[#dddddd] bg-[#feeeee] font-medium text-primaryBlack text-center'></td>
+              <td className='border-r border-b border-[#dddddd] bg-[#feeeee] font-medium text-primaryBlack text-center'></td>
+              <td className='border-r border-b border-[#dddddd] bg-[#feeeee] font-medium text-primaryBlack text-center'></td>
+              <td className='border-r border-b border-[#dddddd] bg-[#feeeee] font-medium text-primaryBlack text-center'></td>
+              <td className='border-r border-b border-[#dddddd] bg-[#feeeee] font-medium text-primaryBlack text-center'></td>
+              <td className='border-r border-b border-[#dddddd] bg-[#feeeee] font-medium text-primaryBlack text-center'></td>
+              <td className='border-r border-b border-[#dddddd] bg-[#feeeee] font-medium text-primaryBlack text-center'></td>
+              <td className='border-r border-b border-[#dddddd] bg-[#feeeee] font-medium text-primaryBlack text-center'></td>
               <td className='border-r border-b border-[#dddddd] bg-[#feeeee] font-medium text-primaryBlack pl-[10px]'>
-                Paid
+                {data?.paymentStatus}
               </td>
             </tr>
             {/* test */}

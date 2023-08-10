@@ -50,15 +50,11 @@ const UploadBtn = ({
     }
 
     httpClient
-      .post(
-        '/CloudinaryImageUpload',
-        formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        }
-      )
+      .post('/CloudinaryImageUpload?parameter=false', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
       // .post("/bucket/push", formData, {
       //   headers: {
       //     "Content-Type": "multipart/form-data",

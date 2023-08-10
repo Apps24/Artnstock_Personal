@@ -46,7 +46,7 @@ const Wishlist = ({ id, type, prodType }) => {
 
   const wishlistDelete = async (id) => {
     wishlist?.forEach(async (obj) => {
-      if (obj.artMaster.artId === id) {
+      if (obj.artMaster?.artId === id) {
         try {
           const res = await httpClient.delete(
             `/wishlist_master/delete/${obj.wishListId}`

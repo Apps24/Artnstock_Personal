@@ -21,6 +21,7 @@ import { useDispatch } from 'react-redux';
 import view from '../../../assets/images/contributor/view.png';
 import edit from '../../../assets/images/contributor/edit.png';
 import deletee from '../../../assets/images/contributor/delete.png';
+import { useDetectClickOutside } from 'react-detect-click-outside';
 
 const releaseCards = [
   { id: '1', name: 'jn jencj jbnejne eudnedn' },
@@ -79,6 +80,10 @@ const AddDetails = () => {
     getStyleList();
   }, []);
 
+  useEffect(() => {
+    console.log(formData);
+  }, [formData]);
+
   const submitForm = async (event) => {
     event.preventDefault();
 
@@ -108,7 +113,7 @@ const AddDetails = () => {
       let formData = new FormData();
       formData.append('file', cards);
       httpClient
-        .post('/CloudinaryImageUpload', formData, {
+        .post('/CloudinaryImageUpload?parameter=false', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -118,10 +123,7 @@ const AddDetails = () => {
           // console.log(res);
           setFormData((prevFormData) => ({
             ...prevFormData,
-            referenceFile: [
-              ...prevFormData.referenceFile,
-              res.data.secureUrl,
-            ],
+            referenceFile: [...prevFormData.referenceFile, res.data],
           }));
         })
         .catch((err) => {
@@ -278,7 +280,7 @@ const AddDetails = () => {
 
       setFormData((prevFormData) => ({
         ...prevFormData,
-        image: firstImg,
+        imageId: firstImg.imageId,
       }));
 
       const url = firstImg;
@@ -316,7 +318,7 @@ const AddDetails = () => {
         })
         .then((res) => {
           console.log('file uploaded successfully');
-          // console.log(res);
+          console.log(res);
           const dataa = res.data;
 
           settempRelese((prevImages) => [
@@ -350,6 +352,48 @@ const AddDetails = () => {
       }));
     }
   };
+
+  const scrollbarStyle = `
+  ::-webkit-scrollbar {
+    background: white;
+    width: 7px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: lightgray;
+    border-radius: 5px;
+  }
+    /* Add any other scrollbar styles here */
+  `;
+
+  // handle outside click
+
+  const handleClickOutsideSubject = () => {
+    // Code to handle click outside
+    setIsOpenSubject(false);
+  };
+
+  const subjectClickOutside = useDetectClickOutside({
+    onTriggered: handleClickOutsideSubject,
+  });
+
+  const handleClickOutsideStyle = () => {
+    // Code to handle click outside
+    setIsOpenStyle(false);
+  };
+
+  const styleClickOutside = useDetectClickOutside({
+    onTriggered: handleClickOutsideStyle,
+  });
+
+  const handleClickOutsideMedium = () => {
+    // Code to handle click outside
+    setIsOpenMedium(false);
+  };
+
+  const mediumClickOutside = useDetectClickOutside({
+    onTriggered: handleClickOutsideMedium,
+  });
 
   return (
     <>
@@ -506,7 +550,7 @@ const AddDetails = () => {
           className='flex flex-col justify-center w-w690 h-[27.813rem] mx-[auto] bg-[#f7f7f7] rounded-[36px] h-full w-full bg-no-repeat bg-center bg-cover'
           style={{
             backgroundImage: selectedCard
-              ? `url(${thumbnail})`
+              ? `url(${thumbnail.secureUrl})`
               : undefined,
           }}
         >
@@ -558,7 +602,7 @@ const AddDetails = () => {
               <input
                 type='text'
                 placeholder='Enter Title'
-                className='w-[100%] h-[40px] rounded-[20px] border-[1px] border-[#d6d6d6] pl-[15px]'
+                className='w-[100%] h-[40px] rounded-[20px] border-[1px] border-[#d6d6d6] pl-[15px] outline-none'
                 onChange={handleInputChange}
                 name='artName'
               />
@@ -574,7 +618,13 @@ const AddDetails = () => {
                   onClick={() => {
                     setIsOpenSubject(!isOpenSubject);
                   }}
+                  ref={subjectClickOutside}
                 >
+                  <style
+                    dangerouslySetInnerHTML={{
+                      __html: scrollbarStyle,
+                    }}
+                  />
                   <button className='w-[220px] h-[40px] rounded-[20px] border-[1px] border-[#d6d6d6] pl-[15px] text-[14px] text-primaryGray text-start'>
                     {subjectMenu ? (
                       <span>{subjectMenu.subjectName}</span>
@@ -612,6 +662,7 @@ const AddDetails = () => {
                   onClick={() => {
                     setIsOpenStyle(!isOpenStyle);
                   }}
+                  ref={styleClickOutside}
                 >
                   <button className='w-[220px] h-[40px] rounded-[20px] border-[1px] border-[#d6d6d6] pl-[15px] text-[14px] text-primaryGray text-start'>
                     {styleMenu ? (
@@ -657,6 +708,7 @@ const AddDetails = () => {
                   onClick={() => {
                     setIsOpenMedium(!isOpenMedium);
                   }}
+                  ref={mediumClickOutside}
                 >
                   <button className='w-[220px] h-[40px] rounded-[20px] border-[1px] border-[#d6d6d6] pl-[15px] text-[14px] text-primaryGray text-start'>
                     {mediumMenu ? (
@@ -853,7 +905,7 @@ const AddDetails = () => {
               <textarea
                 name='description'
                 type='text'
-                className='border border-[#d6d6d6] h-[112px] w-[455px] rounded-[16px] pb-[70px] pl-[10px]'
+                className='border border-[#d6d6d6] h-[112px] w-[455px] rounded-[16px] pb-[70px] pl-[10px] outline-none'
                 value={description}
                 onChange={handleDescriptionChange}
               />
@@ -936,7 +988,7 @@ const AddDetails = () => {
             <div className='pt-[10px]'>
               <input
                 type='text'
-                className='w-[220px] h-[38px] border border-[#d6d6d6] rounded-[19px] pl-[15px]'
+                className='w-[220px] h-[38px] border border-[#d6d6d6] rounded-[19px] pl-[15px] outline-none'
                 placeholder='Enter Keywords'
                 onChange={keywordText}
                 value={textWord}

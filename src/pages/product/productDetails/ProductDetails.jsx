@@ -19,6 +19,7 @@ import threeDImg from '../../../assets/images/Icons/Icon - 3D View.svg';
 import addIcon from '../../../assets/images/Icons/addIcon.svg';
 
 import wishlistIcon from '../../../assets/images/Icons/wishlistIcon.svg';
+import CheckIcon from '@mui/icons-material/Check';
 import { ReactComponent as WishlistIcon } from '../../../assets/images/Icons/wishlistIcon.svg';
 
 import shareIcon from '../../../assets/images/Icons/shareIcon.svg';
@@ -52,6 +53,8 @@ import cards from '../../../assets/images/lifestyle/cards.png';
 import certificate from '../../../assets/images/lifestyle/Certificate.png';
 import artwithframe from '../../../assets/images/products/artwithframe.png';
 import { useSelector } from 'react-redux';
+
+import { useNavigate } from 'react-router-dom';
 
 // pratiksha
 import profile from '../../../assets/images/Menubar/Profile.png';
@@ -88,6 +91,46 @@ import Quantity from '../../../assets/images/lifestyle/Quantity.png';
 import Colour from '../../../assets/images/lifestyle/Colour.png';
 import DescriptionPic from '../../../assets/images/lifestyle/Description.png';
 import Wishlist from '../../../utils/wishlist';
+import styled from 'styled-components';
+import Popup from 'reactjs-popup';
+import { useDetectClickOutside } from 'react-detect-click-outside';
+import { object } from 'yup';
+// import { zIndex } from 'html2canvas/dist/types/css/property-descriptors/z-index';
+// import html2canvas from 'html2canvas';
+
+const StyledPopupp = styled(Popup)`
+  // use your custom style for ".popup-overlay"
+  /* &-overlay {
+ ...;
+} */
+  // use your custom style for ".popup-content"
+  &-content {
+    background-color: #ffffff;
+    color: #333333;
+    border-radius: 30px;
+    padding: 50px;
+    width: 490px;
+    height: 585px;
+  }
+`;
+
+const StyledPopup = styled(Popup)`
+  // use your custom style for ".popup-overlay"
+  /* &-overlay {
+    ...;
+  } */
+  // use your custom style for ".popup-content"
+  &-content {
+    background-color: #ffffff;
+    color: #333333;
+    border-radius: 30px;
+    padding: 0;
+    width: 88.063rem;
+    height: 56.188rem;
+    overflow: hidden;
+    border: none;
+  }
+`;
 
 const ProductDetails = () => {
   const [isOpenSortBy, setIsOpenSortBy] = useState(false);
@@ -144,7 +187,7 @@ const ProductDetails = () => {
       textColor: 'black',
     },
   ]);
-  const [checked, setChecked] = useState('icon7'); //Store ID temporary
+  const [checked, setChecked] = useState(''); //Store ID temporary
 
   const styleDrop = [
     { a: 'ddsdd' },
@@ -157,7 +200,13 @@ const ProductDetails = () => {
   ];
 
   const check = (item) => {
-    setChecked(item.id);
+    setChecked(item);
+    setProductCart((prevItem) => ({
+      ...prevItem,
+      image: item.image,
+      colorCode: item.colorCode,
+      color: item.color,
+    }));
     // setShirt(item.backgroundColor);
   };
 
@@ -349,9 +398,22 @@ const ProductDetails = () => {
     `${azra1}`,
   ];
 
+  const [isCategoryOpen, setIsCategoryOpen] = useState(false);
+  const [category, setCategory] = useState('');
+  const [folderName, setFolderName] = useState(null);
+  const [isNameOpen, setIsNameOpen] = useState(false);
+
   const location = useLocation();
+  const userAuth = useSelector((state) => state.auth);
 
   const data = location.state.data;
+
+  const backgroundImageURL = () => {
+    const matchedImage = data?.images?.find(
+      (img) => img.color === checked
+    );
+    return matchedImage ? matchedImage.image : null;
+  };
 
   const userId = useSelector((state) => state.auth.userId);
 
@@ -359,11 +421,23 @@ const ProductDetails = () => {
   const [wishlist, setwishlist] = useState();
 
   useEffect(() => {
+    setProductCart((prevItem) => ({
+      ...prevItem,
+      image: data?.images[0]?.image,
+      size: data?.productMaster.sizeAndPrices[0].size,
+      sizeName: data?.productMaster.sizeAndPrices[0].sizeName,
+      color: data?.images[0]?.color,
+    }));
+
+    setChecked(data?.images[0]);
+
     getAllWishlistByUserId();
   }, []);
-  // useEffect(() => {
-  //   console.log(data);
-  // }, []);
+
+  useEffect(() => {
+    console.log(data);
+    getFolders();
+  }, []);
 
   const getAllWishlistByUserId = async () => {
     try {
@@ -377,6 +451,76 @@ const ProductDetails = () => {
     }
   };
   // above code is for valdating if artProductId already exists in wishlist
+
+  const [productCart, setProductCart] = useState({
+    image: '',
+    colorCode: '',
+    style: '',
+    size: '',
+    sizeName: '',
+    quantity: 1,
+    totalPrice: 0,
+    color: '',
+  });
+
+  useEffect(() => {
+    let abc = data?.productMaster?.sizeAndPrices[0]?.sellPrice;
+    // let abc = data?.productMaster.sizeAndPrices?.filter(
+    //   (obj) => obj.size === 'M'
+    // )[0]?.sellPrice;
+
+    setProductCart((prev) => ({ ...prev, totalPrice: abc }));
+  }, []);
+
+  useEffect(() => {}, [productCart.quantity]);
+
+  useEffect(() => {
+    console.log(productCart);
+  }, [productCart]);
+
+  const [categories, setCategories] = useState({
+    all: [],
+    // art: [],
+    // photo: [],
+    // footage: [],
+    // music: [],
+    // templates: [],
+    product: [],
+  });
+
+  const getFolders = async () => {
+    try {
+      const response = await httpClient.get(
+        `/collection_master/getUserIdWiseCollectionMasterList/${userId}`
+      );
+
+      const data = response.data;
+
+      // console.log(data);
+
+      setCategories((prevCategories) => ({
+        ...prevCategories,
+        all: [],
+        // art: [],
+        // photo: [],
+        // footage: [],
+        // music: [],
+        // templates: [],
+        product: [],
+      }));
+
+      data.forEach((obj) => {
+        if (obj.category === 'product') {
+          setCategories((prevCategories) => ({
+            ...prevCategories,
+            product: [...prevCategories.product, obj],
+          }));
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   // productArt wishlist function
 
@@ -424,6 +568,69 @@ const ProductDetails = () => {
   //   });
   // };
 
+  const [openBig, setOpenBig] = useState(false);
+  const [popupLogin, setpopupLogin] = useState(false);
+
+  const navigate = useNavigate();
+
+  const addToFolder = () => {
+    const object = {
+      artProductId: data?.artProductId,
+      collectionId: folderName.collectionId,
+    };
+    httpClient
+      .post('/collection_master/CollectionIdWiseAddArt', object)
+      .then((res) => {
+        console.log(res.data);
+
+        // getUserIdWiseArts();
+        getFolders();
+      });
+  };
+
+  const handleClickOutside = () => {
+    // Code to handle click outside
+    setIsAllStyleOpen(false);
+  };
+
+  const styleClickOutside = useDetectClickOutside({
+    onTriggered: handleClickOutside,
+  });
+
+  const setSizeAndAccordingPrice = (obj) => {
+    console.log(obj);
+    setProductCart((prev) => ({
+      ...prev,
+      size: obj.size,
+      totalPrice: obj.sellPrice,
+      sizeName: obj.sizeName,
+    }));
+  };
+
+  const increaseQuantity = () => {
+    // console.log('Before update:', productCart.quantity);
+
+    setProductCart((prev) => ({
+      ...prev,
+      quantity: prev.quantity + 1,
+    }));
+
+    // console.log('After update:', productCart.quantity);
+  };
+
+  const decreaseQuantity = () => {
+    if (productCart.quantity > 1) {
+      setProductCart((prev) => ({
+        ...prev,
+        quantity: prev.quantity - 1,
+      }));
+    }
+  };
+
+  // useEffect(() => {
+  //   console.log('Updated quantity:', productCart.quantity);
+  // }, [productCart.quantity]);
+
   return (
     <>
       <div className='w-[100%] flex justify-center'></div>
@@ -437,19 +644,36 @@ const ProductDetails = () => {
           <div className='w-[50%]'>
             <div
               style={{
-                backgroundImage: `url(${data?.image})`,
+                backgroundImage: `url(${productCart.image})`,
               }}
-              //earlier
+              //earlier4
               // style={{
               //   backgroundImage: `url(${tshirtphoto})`,
               // }}
               className='relative w-[540px] h-[540px] rounded-[16.01px] bg-[#f5f5f7] flex flex-col justify-center bg-contain bg-no-repeat items-center'
             >
               <img
+                onClick={() => setOpenBig(true)}
                 src={viewIcon}
                 className='absolute bottom-[15px] right-[15px]'
                 alt=''
               />
+
+              <StyledPopup
+                open={openBig}
+                closeOnDocumentClick={true}
+                position={'top center'}
+                onClose={() => setOpenBig(false)}
+              >
+                <img
+                  src={
+                    data?.artMaster?.imageMaster.imageOrientation
+                      .horizontalUrl
+                  }
+                  className='w-[100%]'
+                  alt=''
+                />
+              </StyledPopup>
             </div>
             <div className='flex justify-between mt-2.5 mb-5'>
               <div className='flex gap-x-2.5'>
@@ -459,7 +683,268 @@ const ProductDetails = () => {
                 <img src={threeDImg} alt='' />
               </div>
               <div className='flex items-center gap-x-2.5'>
-                <img src={addIcon} alt='' />
+                {popupLogin && (
+                  <div
+                    className={`z-999 right-[117px] bottom-[15px] bg-[#fff] rounded-[16px] w-[266px] absolute bottom-[38px] left-[-127px]`}
+                    style={{
+                      boxShadow: '0px 0px 18px rgba(0, 0, 0, 0.2)',
+                    }}
+                  >
+                    <div className='flex gap-[5px] flex-col p-[14px] leading-[1.3] text-center'>
+                      <p className='font-medium text-primaryBlack text-[15px]'>
+                        Create Account
+                      </p>
+                      <p className='text-primaryGray text-[11px]'>
+                        To create and add to a collection, you must be
+                        a logged-in member
+                      </p>
+                      <button
+                        onClick={(e) => {
+                          navigate('/join');
+                          e.stopPropagation();
+                        }}
+                        className='bg-[#8e8e8e] rounded-[14px] h-[28px] w-[108px] text-[12px] font-medium text-[white] mx-[auto]'
+                      >
+                        Create Account
+                      </button>
+                      <p
+                        onClick={(e) => {
+                          navigate('/login');
+                          e.stopPropagation();
+                        }}
+                        className='text-orangeColor text-[11px]'
+                      >
+                        Already a member? Sign in
+                      </p>
+                      <p className='text-pinkColor text-[11px]'>
+                        Note: Downloaded images will be saved in
+                        ‘Collections’ folder
+                      </p>
+                    </div>
+                    <div className='absolute left-[47%] bottom-[-10px] w-[20px] h-[20px] bg-[white] rounded-br-[5px] transform rotate-45 shadow-inner'></div>
+                  </div>
+                )}
+
+                {/* test */}
+                {userAuth.login === true ? (
+                  <StyledPopupp
+                    trigger={
+                      <img
+                        className='cursor-pointer'
+                        src={addIcon}
+                        alt=''
+                      />
+                    }
+                    modal
+                  >
+                    {(close) => (
+                      <div className='flex flex-col gap-[21px]'>
+                        {/* {selectedAllFilesImages.length > 0 ? ( */}
+                        <div
+                          style={{
+                            backgroundImage: `url(${productCart.image})`,
+                          }}
+                          className='w-[390px] h-[270px] bg-no-repeat bg-center bg-cover rounded-[16px]'
+                        ></div>
+
+                        <div>
+                          <div className='flex flex-col'>
+                            <p className='text-[15px] font-medium mb-[3px]'>
+                              Select Category
+                            </p>
+                            <div>
+                              <button
+                                onClick={() => {
+                                  setIsCategoryOpen(!isCategoryOpen);
+                                }}
+                                className={`${
+                                  isCategoryOpen === true
+                                    ? 'rounded-t-[20px] shadow-dropShadowButton border-b border-[#efefef]'
+                                    : 'rounded-[20px] border  border-[#d6d6d6]'
+                                } cursor-pointer w-[390px] h-[40px] bg-[#FFFFFF] text-primaryGray text-sm14 font-medium flex items-center justify-between px-[15px]`}
+                              >
+                                {category === '' ? (
+                                  <span>Select Category</span>
+                                ) : (
+                                  <span>{category}</span>
+                                )}
+
+                                <img
+                                  className='inline-block'
+                                  src={dropdown}
+                                  alt=''
+                                />
+                              </button>
+
+                              {isCategoryOpen && (
+                                <ul className='shadow-dropShadow rounded-b-2xl z-50 cursor-pointer hover:overflow-hidden dropdown__menu absolute bg-[#ffffff] w-[390px] text-center text-[14px] text-primaryGray'>
+                                  <li
+                                    onClick={() => {
+                                      setCategory('Art');
+                                      setIsCategoryOpen(
+                                        !isCategoryOpen
+                                      );
+                                      setFolderName(null);
+                                    }}
+                                    className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
+                                  >
+                                    Art
+                                  </li>
+                                  <li
+                                    onClick={() => {
+                                      setCategory('Photos');
+                                      setIsCategoryOpen(
+                                        !isCategoryOpen
+                                      );
+                                      setFolderName(null);
+                                    }}
+                                    className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
+                                  >
+                                    Photos
+                                  </li>
+                                  <li
+                                    onClick={() => {
+                                      setCategory('Footage');
+                                      setIsCategoryOpen(
+                                        !isCategoryOpen
+                                      );
+                                      setFolderName(null);
+                                    }}
+                                    className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
+                                  >
+                                    Footage
+                                  </li>
+                                  <li
+                                    onClick={() => {
+                                      setCategory('Music');
+                                      setIsCategoryOpen(
+                                        !isCategoryOpen
+                                      );
+                                      setFolderName(null);
+                                    }}
+                                    className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
+                                  >
+                                    Music
+                                  </li>
+                                  <li
+                                    onClick={() => {
+                                      setCategory('Templates');
+                                      setIsCategoryOpen(
+                                        !isCategoryOpen
+                                      );
+                                      setFolderName(null);
+                                    }}
+                                    className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
+                                  >
+                                    Templates
+                                  </li>
+                                  <li
+                                    onClick={() => {
+                                      setCategory('Product');
+                                      setIsCategoryOpen(
+                                        !isCategoryOpen
+                                      );
+                                      setFolderName(null);
+                                    }}
+                                    className='py-1 px-3.5 hover:bg-[#F0F0F0]'
+                                  >
+                                    Product
+                                  </li>
+                                </ul>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                        <div>
+                          <div className='flex flex-col'>
+                            <p className='text-[15px] font-medium mb-[3px]'>
+                              Set Name
+                            </p>
+                            <div>
+                              <button
+                                onClick={() => {
+                                  setIsNameOpen(!isNameOpen);
+                                }}
+                                // className={`flex items-center justify-between px-[15px] text-primaryGray text-sm14 font-medium cursor-pointer w-[390px] h-[40px] bg-[#FFFFFF] rounded-[20px] border border-[#d6d6d6]`}
+                                className={`${
+                                  isNameOpen === true
+                                    ? 'rounded-t-[20px] shadow-dropShadowButton border-b border-[#efefef]'
+                                    : 'rounded-[20px] border  border-[#d6d6d6]'
+                                } cursor-pointer w-[390px] h-[40px] bg-[#FFFFFF] text-primaryGray text-sm14 font-medium flex items-center justify-between px-[15px]`}
+                              >
+                                {folderName === null ? (
+                                  <span>Enter Set Name</span>
+                                ) : (
+                                  <span>{folderName.title}</span>
+                                )}
+                                {}
+
+                                <img
+                                  className='inline-block'
+                                  src={dropdown}
+                                  alt=''
+                                />
+                              </button>
+
+                              {category === 'Product' ? (
+                                <div>
+                                  {isNameOpen && (
+                                    <ul className='cursor-pointer shadow-dropShadow rounded-b-2xl hover:overflow-hidden dropdown__menu absolute bg-[#ffffff] w-[390px] text-center text-[14px] text-primaryGray'>
+                                      {categories.product.map(
+                                        (items, index) => (
+                                          <li
+                                            onClick={() => {
+                                              setFolderName(items);
+                                              setIsNameOpen(
+                                                !isNameOpen
+                                              );
+                                            }}
+                                            className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
+                                          >
+                                            {items.title}
+                                          </li>
+                                        )
+                                      )}
+                                    </ul>
+                                  )}
+                                </div>
+                              ) : (
+                                <div></div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                        <div className='flex gap-[10px] justify-center pb-[30px]'>
+                          <button
+                            onClick={() => {
+                              addToFolder();
+                              close();
+                            }}
+                            className='blackBtn h-[40px] w-[88px]'
+                          >
+                            Save
+                          </button>
+                          <button
+                            onClick={close}
+                            className='h-[40px] px-6 py-2 rounded-3xl text-sm14 text-primaryBlack border-[2px] w-[88px]'
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </StyledPopupp>
+                ) : (
+                  <img
+                    className='cursor-pointer'
+                    onClick={() => {
+                      setpopupLogin(!popupLogin);
+                    }}
+                    src={addIcon}
+                    alt=''
+                  />
+                )}
+                {/* test */}
 
                 <Wishlist
                   id={data?.artProductId}
@@ -513,14 +998,32 @@ const ProductDetails = () => {
                   </div>
                   <div className='flex-col'>
                     <div className='w-[48px]'>
-                      <img src={Colour} alt='' />
-                      <p className='text-center'>Dark Blue Color</p>
+                      <div className='w-[48px] h-[48px] rounded-[10px] border-[1px] border-[#d6d6d6] flex justify-center items-center'>
+                        <div
+                          style={{
+                            backgroundColor: `${checked.colorCode}`,
+                          }}
+                          className='w-[32px] h-[32px] rounded-[50%]'
+                        ></div>
+                      </div>
+                      <p className='text-center'>
+                        {productCart.color.replace(/\b\w/g, (char) =>
+                          char.toUpperCase()
+                        )}{' '}
+                        Color
+                      </p>
                     </div>
                   </div>
                   <div className='flex-col'>
                     <div className='w-[48px]'>
-                      <img src={Size} alt='' />
-                      <p className='text-center'>Medium Size</p>
+                      <div className='w-[48px] h-[48px] rounded-[10px] border-[1px] border-[#d6d6d6] flex justify-center items-center'>
+                        <p className='text-[15px] font-medium text-primaryGray'>
+                          {productCart.size}
+                        </p>
+                      </div>
+                      <p className='text-center'>
+                        {productCart.sizeName}
+                      </p>
                     </div>
                   </div>
                   <div className='flex-col'>
@@ -540,7 +1043,7 @@ const ProductDetails = () => {
                 <div className='text-[11px]'>
                   <div className='flex border-b border-[#efefef] mt-[10px]'>
                     <p className='w-[80px] font-medium'>Style:</p>
-                    <p>All Styles</p>
+                    <p>{productCart.style}</p>
                   </div>
                   <div className='flex border-b border-[#efefef]'>
                     <p className='w-[80px] font-medium'>
@@ -550,7 +1053,7 @@ const ProductDetails = () => {
                   </div>
                   <div className='flex border-b border-[#efefef]'>
                     <p className='w-[80px] font-medium'>Colours:</p>
-                    <p>All Colours</p>
+                    <p>{productCart.color}</p>
                   </div>
                   <div className='flex '>
                     <p className='w-[80px] font-medium'>PrintSize:</p>
@@ -578,7 +1081,7 @@ const ProductDetails = () => {
 
             <div className='flex border-b border-t border-t-[2px] border-[#efefef] text-primaryGray text-[12px] mt-[10px]'>
               <p className='w-[100px] font-medium'>Product ID:</p>
-              <p>{data?.productMaster.productId}</p>
+              <p>{data?.artProductUniqueNo}</p>
               {/* <p>ANSHVB4R44</p> */}
             </div>
 
@@ -598,6 +1101,7 @@ const ProductDetails = () => {
               {/* test */}
               <div className='relative h-[40px]'>
                 <div
+                  ref={styleClickOutside}
                   className={`${
                     isAllStyleOpen === true ? 'shadow-dropShadow' : ''
                   } absolute rounded-[20px] w-[272px] max-h-[260px]`}
@@ -612,7 +1116,12 @@ const ProductDetails = () => {
                         : 'border rounded-[20px] border-[#d6d6d6]'
                     } flex items-center justify-between px-[15px] text-primaryGray text-sm14 font-medium cursor-pointer w-[272px] h-[40px] bg-[#FFFFFF]`}
                   >
-                    <span>Men's Style</span>
+                    {productCart?.style !== '' ? (
+                      <span>{productCart.style}</span>
+                    ) : (
+                      <span>Select Style</span>
+                    )}
+
                     <img
                       className='inline-block'
                       src={dropdown}
@@ -622,9 +1131,20 @@ const ProductDetails = () => {
 
                   {isAllStyleOpen && (
                     <ul className='cursor-pointer rounded-b-2xl bg-[#ffffff] overflow w-[272px] text-center text-[14px] text-primaryGray max-h-[220px] overflow-y-auto'>
-                      {styleDrop.map((obj) => (
-                        <li className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'>
-                          {obj.a}
+                      <li></li>
+                      {data?.productMaster.style.map((obj) => (
+                        <li
+                          onClick={() => {
+                            setProductCart((prev) => ({
+                              ...prev,
+                              style: obj,
+                            }));
+
+                            setIsAllStyleOpen(false);
+                          }}
+                          className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
+                        >
+                          {obj}
                         </li>
                       ))}
                     </ul>
@@ -638,87 +1158,146 @@ const ProductDetails = () => {
                 Select Colours
               </p>
               <div className='flex gap-[8px] pt-[3px]'>
-                {circle.map((item) => (
+                {data?.images?.map((item, index) => (
+                  <div
+                    key={index}
+                    className={`w-[32px] h-[32px] rounded-full border flex justify-center items-center cursor-pointer`}
+                    style={{
+                      color: `${
+                        item.colorCode === '#ffffff'
+                          ? '#000000'
+                          : '#ffffff'
+                      }`,
+                      backgroundColor: `${item.colorCode}`,
+                      borderColor: `${
+                        item.colorCode === '#ffffff' ? '#000000' : ''
+                      }`,
+                    }}
+                    onClick={() => check(item)}
+                  >
+                    {item.colorCode == checked.colorCode && (
+                      <CheckIcon />
+                    )}
+                  </div>
+                ))}
+                {/* {circle.map((item) => (
                   <div
                     key={item.id}
                     className={`w-[32px] h-[32px] rounded-full border border-${item.borderColor} flex justify-center items-center cursor-pointer`}
                     style={{
                       color: `${item.textColor}`,
                       backgroundColor: `${item.backgroundColor}`,
-                    }}
+                    }}  
                     onClick={() => check(item)}
                   >
                     {item.id == checked && (
                       <i className={`bi bi-check-lg`}></i>
                     )}
                   </div>
-                ))}
+                ))} */}
               </div>
             </div>
 
             <div className='flex flex-col pt-[17px]'>
               <p className='text-[15px] font-medium'>Select Size</p>
               <div className='flex gap-[10px] p-[3px] text-[15px] font-medium'>
-                <div
-                  className={`cursor-pointer w-[48px] h-[48px] border border-[#D6D6D6] rounded-[10px] flex justify-center items-center ${
-                    selectedSize === 'XS'
-                      ? 'bg-[#bbbbbb] border-[#bbbbbb]'
-                      : 'border-[#D6D6D6] text-primaryGray'
-                  }`}
-                  onClick={() => handleSizeClick('XS')}
-                >
-                  XS
-                </div>
-                <div
+                {data?.productMaster.sizeAndPrices?.map((obj) => (
+                  <div
+                    // style={{
+                    //   backgroundColor: `${
+                    //     productCart.size === obj.size ? '#bbbbbb' : ''
+                    //   }`,
+                    //   borderColor: `${
+                    //     productCart.size === obj.size
+                    //       ? '#bbbbbb'
+                    //       : '#D6D6D6'
+                    //   }`,
+                    // }}
+                    className={`cursor-pointer w-[48px] h-[48px] border border-[#D6D6D6] rounded-[10px] flex justify-center items-center ${
+                      productCart.size === obj.size
+                        ? 'bg-[#bbbbbb] border-[#bbbbbb]'
+                        : 'border-[#D6D6D6] text-primaryGray'
+                    }`}
+                    onClick={() => setSizeAndAccordingPrice(obj)}
+                  >
+                    {obj.size}
+                  </div>
+                ))}
+                {/* <div
                   className={`cursor-pointer w-[48px] h-[48px] border rounded-[10px] flex justify-center items-center ${
-                    selectedSize === 'S'
+                    productCart.size === 'S'
                       ? 'bg-[#bbbbbb] border-[#bbbbbb]'
                       : 'border-[#D6D6D6] text-primaryGray'
                   }`}
-                  onClick={() => handleSizeClick('S')}
+                  onClick={() =>
+                    setProductCart((prev) => ({
+                      ...prev,
+                      size: 'S',
+                    }))
+                  }
                 >
                   S
                 </div>
                 <div
                   className={`cursor-pointer w-[48px] h-[48px] border rounded-[10px] flex justify-center items-center ${
-                    selectedSize === 'M'
+                    productCart.size === 'M'
                       ? 'bg-[#bbbbbb] border-[#bbbbbb]'
                       : 'border-[#D6D6D6] text-primaryGray'
                   }`}
-                  onClick={() => handleSizeClick('M')}
+                  onClick={() =>
+                    setProductCart((prev) => ({
+                      ...prev,
+                      size: 'M',
+                    }))
+                  }
                 >
                   M
                 </div>
                 <div
                   className={`cursor-pointer w-[48px] h-[48px] border rounded-[10px] flex justify-center items-center ${
-                    selectedSize === 'L'
+                    productCart.size === 'L'
                       ? 'bg-[#bbbbbb] border-[#bbbbbb]'
                       : 'border-[#D6D6D6] text-primaryGray'
                   }`}
-                  onClick={() => handleSizeClick('L')}
+                  onClick={() =>
+                    setProductCart((prev) => ({
+                      ...prev,
+                      size: 'L',
+                    }))
+                  }
                 >
                   L
                 </div>
                 <div
                   className={`cursor-pointer w-[48px] h-[48px] border rounded-[10px] flex justify-center items-center ${
-                    selectedSize === 'XL'
+                    productCart.size === 'XL'
                       ? 'bg-[#bbbbbb] border-[#bbbbbb]'
                       : 'border-[#D6D6D6] text-primaryGray'
                   }`}
-                  onClick={() => handleSizeClick('XL')}
+                  onClick={() =>
+                    setProductCart((prev) => ({
+                      ...prev,
+                      size: 'XL',
+                    }))
+                  }
                 >
                   XL
                 </div>
                 <div
                   className={`cursor-pointer w-[48px] h-[48px] border rounded-[10px] flex justify-center items-center ${
-                    selectedSize === '2XL'
+                    productCart.size === '2XL'
                       ? 'bg-[#bbbbbb] border-[#bbbbbb]'
                       : 'border-[#D6D6D6] text-primaryGray'
                   }`}
-                  onClick={() => handleSizeClick('2XL')}
+                  onClick={() =>
+                    setProductCart((prev) => ({
+                      ...prev,
+                      size: '2XL',
+                    }))
+                  }
                 >
                   2XL
-                </div>
+                </div> */}
               </div>
               <p className='text-[11px] text-orangeColor'>
                 Size Guide
@@ -747,15 +1326,21 @@ const ProductDetails = () => {
                   className='flex border-2 border-[#EEEEEE] rounded-3xl overflow-hidden'
                   style={{ width: 'fit-content' }}
                 >
-                  <button className='bg-[#EEEEEE] py-3 px-3'>
+                  <button
+                    onClick={decreaseQuantity}
+                    className='bg-[#EEEEEE] py-3 px-3'
+                  >
                     <img src={minusIcon} alt='' />
                   </button>
                   <input
                     className='w-[30px] text-[13px] leading-[15px] font-normal text-primaryGray text-center outline-none'
                     type='text'
-                    value={1}
+                    value={productCart.quantity}
                   />
-                  <button className='bg-[#EEEEEE] py-3 px-3'>
+                  <button
+                    onClick={increaseQuantity}
+                    className='bg-[#EEEEEE] py-3 px-3'
+                  >
                     <img
                       className='w-[11px] h-[11px]'
                       src={plusIcon}
@@ -769,7 +1354,9 @@ const ProductDetails = () => {
                     $
                   </p>
                   <p className='text-orangeColor text-[38px] font-normal leading-[55px]'>
-                    {data?.sizeAndPrices[0].sellPrice}
+                    {(
+                      productCart.totalPrice * productCart.quantity
+                    ).toFixed(2)}
                   </p>
                 </div>
                 <p className='text-sm12 font-normal text-primaryGray'>
@@ -1053,6 +1640,7 @@ const ProductDetails = () => {
                             <div className='flex-col'>
                               <div className='w-[48px]'>
                                 <img src={darkBlueColor} alt='' />
+
                                 <p className='text-center'>
                                   Dark Blue Color
                                 </p>

@@ -30,7 +30,7 @@ const Wishlist2 = () => {
         `/wishlist_master/getByUserIdList/${userId}`
       );
       setwishlist(res.data);
-      // console.log(res.data);
+      console.log(res.data);
     } catch (error) {
       console.error(error);
     }

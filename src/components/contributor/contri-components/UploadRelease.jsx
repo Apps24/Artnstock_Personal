@@ -98,7 +98,7 @@ const UploadRelease = () => {
       let formData = new FormData();
       formData.append('file', cards);
       httpClient
-        .post('/CloudinaryImageUpload', formData, {
+        .post('/CloudinaryImageUpload?parameter=false', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -106,7 +106,7 @@ const UploadRelease = () => {
         .then((res) => {
           console.log('file uploaded successfully');
           // console.log(res);
-          const dataa = res.data.secureUrl;
+          const dataa = res.data;
           setData((prevImages) => ({
             ...prevImages,
             attachContent: [...prevImages.attachContent, dataa],

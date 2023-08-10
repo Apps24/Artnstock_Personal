@@ -42,42 +42,44 @@ import trial from '../../../assets/images/combo/trial.png';
 import html2canvas from 'html2canvas';
 
 import CheckIcon from '@mui/icons-material/Check';
+import ProductDetails from '../../../pages/product/productDetails/ProductDetails';
+import { object } from 'yup';
 
-const images = [
-  {
-    id: '1',
-    image:
-      'https://images.pexels.com/photos/2245436/pexels-photo-2245436.png?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-  },
-  {
-    id: '2',
-    image:
-      'https://images.pexels.com/photos/6791741/pexels-photo-6791741.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-  },
-  {
-    id: '3',
-    image:
-      'https://images.pexels.com/photos/2132126/pexels-photo-2132126.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-  },
-  {
-    id: '4',
-    image:
-      'https://images.pexels.com/photos/2827374/pexels-photo-2827374.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-  },
-  {
-    id: '5',
-    image:
-      'https://images.pexels.com/photos/2622179/pexels-photo-2622179.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-  },
-  {
-    id: '6',
-    image: frree,
-  },
-  {
-    id: '7',
-    image: trial,
-  },
-];
+// const images = [
+//   {
+//     id: '1',
+//     image:
+//       'https://images.pexels.com/photos/2245436/pexels-photo-2245436.png?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+//   },
+//   {
+//     id: '2',
+//     image:
+//       'https://images.pexels.com/photos/6791741/pexels-photo-6791741.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+//   },
+//   {
+//     id: '3',
+//     image:
+//       'https://images.pexels.com/photos/2132126/pexels-photo-2132126.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+//   },
+//   {
+//     id: '4',
+//     image:
+//       'https://images.pexels.com/photos/2827374/pexels-photo-2827374.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+//   },
+//   {
+//     id: '5',
+//     image:
+//       'https://images.pexels.com/photos/2622179/pexels-photo-2622179.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+//   },
+//   {
+//     id: '6',
+//     image: frree,
+//   },
+//   {
+//     id: '7',
+//     image: trial,
+//   },
+// ];
 
 const ActivateProducts = () => {
   const [hoveredId, setHoveredId] = useState(null);
@@ -145,60 +147,89 @@ const ActivateProducts = () => {
   }, []);
 
   const check = async (item) => {
-    // const abc = handleDownloadClick();
-    setShirt(item.backgroundColor);
-    // test
-    const element = document.querySelector('.myDiv'); // Replace '.myDiv' with the appropriate selector for your div element
-    const button = element.querySelector('.greenBlueButton'); // Replace '.greenBlueButton' with the appropriate selector for your button element
-    setDottedLine(true); //hide dotted line
-    button.style.display = 'none'; // Hide the button before taking the screenshot
+    // this is old
+    // setShirt(item.backgroundColor);
 
-    // Delay the screenshot function until the next tick of the event loop
-    setTimeout(() => {
-      html2canvas(element, { useCORS: true }).then(async (canvas) => {
-        button.style.display = 'block'; // Show the button again after the download link is clicked
-        setDottedLine(false); // Show the dotted line again after the download link is clicked
-        const dataUrl = canvas.toDataURL('image/png');
+    const find = checked?.find((obj) => obj.color === item.color);
 
-        let formData = new FormData();
-        formData.append('file', dataURItoBlob(dataUrl));
+    if (!find) {
+      // test
+      const element = document.querySelector('.myDiv'); // Replace '.myDiv' with the appropriate selector for your div element
+      const button = element.querySelector('.greenBlueButton'); // Replace '.greenBlueButton' with the appropriate selector for your button element
+      setDottedLine(true); //hide dotted line
+      button.style.display = 'none'; // Hide the button before taking the screenshot
+      setProductImage(item.frontImage);
+      // Delay the screenshot function until the next tick of the event loop
+      setTimeout(() => {
+        html2canvas(element, { useCORS: true }).then(
+          async (canvas) => {
+            button.style.display = 'block'; // Show the button again after the download link is clicked
+            setDottedLine(false); // Show the dotted line again after the download link is clicked
+            setProductImage(
+              productData?.productDetails[0]?.frontImage // set the default product image again after screenshot of canvas
+            );
+            const dataUrl = canvas.toDataURL('image/png');
 
-        const res = await httpClient.post(
-          '/CloudinaryImageUpload?parameter=false',
-          formData,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
+            let formData = new FormData();
+            formData.append('file', dataURItoBlob(dataUrl));
+
+            const res = await httpClient.post(
+              '/CloudinaryImageUpload?parameter=false',
+              formData,
+              {
+                headers: {
+                  'Content-Type': 'multipart/form-data',
+                },
+              }
+            );
+
+            const find = checked?.find(
+              (obj) => obj.color === item.color
+            );
+
+            if (find === undefined) {
+              try {
+                // const mergedObj = { ...item, image: res.data };
+
+                // let images = []
+                const mergedObj = {
+                  color: item.color,
+                  colorCode: item.hexCode,
+                  image: res.data,
+                };
+
+                setChecked((prev) => [...prev, mergedObj]);
+              } catch (error) {
+                console.error(
+                  'Error occurred during download:',
+                  error
+                );
+              }
+            } else if (find !== undefined) {
+              setChecked(
+                checked.filter((obj) => obj.color !== item.color)
+              );
+            }
+            // old code
+            // setShirt('#ffffff');!
           }
         );
-
-        const find = checked?.find((obj) => obj.id === item.id);
-
-        if (find === undefined) {
-          try {
-            const mergedObj = { ...item, image: res.data };
-
-            setChecked((prev) => [...prev, mergedObj]);
-          } catch (error) {
-            console.error('Error occurred during download:', error);
-          }
-        } else if (find !== undefined) {
-          setChecked(checked.filter((obj) => obj.id !== item.id));
-        }
-
-        setShirt('#ffffff');
-      });
-    }, 0);
-    // test
+      }, 0);
+      // test
+    } else if (find) {
+      setChecked(checked.filter((obj) => obj.color !== item.color));
+    }
 
     // setChecked(item);
     // setShirt(item.backgroundColor);
   };
 
-  useEffect(() => {
-    console.log(checked);
-  }, [checked]);
+  const [productData, setproductData] = useState(null);
+  const [productImage, setProductImage] = useState('');
+
+  // useEffect(() => {
+  //   console.log(checked);
+  // }, [checked]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -238,6 +269,7 @@ const ActivateProducts = () => {
 
   // this code is just for triggering align buttons
   const [vertcalAlign, setVerticalAlign] = useState(null);
+
   const verticalAlign = () => {
     if (vertcalAlign === null) {
       setVerticalAlign(true);
@@ -257,76 +289,43 @@ const ActivateProducts = () => {
     setAlignVerticalFocus(false);
   };
 
-  // api calls
-  const [styleList, setStyleList] = useState([]);
-
-  useEffect(() => {
-    const getStyleList = async () => {
-      const response = await httpClient.get('/style_master');
-      setStyleList(response.data);
-      // console.log(response.data);
-    };
-    getStyleList();
-  }, []);
-
   // state to hide dotted line around canvas
   const [dottedLine, setDottedLine] = useState(false);
-  const [productImage, setproductImage] = useState(null);
 
-  function handleDownloadClick() {
-    const element = document.querySelector('.myDiv'); // Replace '.myDiv' with the appropriate selector for your div element
-    const button = element.querySelector('.greenBlueButton'); // Replace '.greenBlueButton' with the appropriate selector for your button element
-    setDottedLine(true); //hide dotted line
-    button.style.display = 'none'; // Hide the button before taking the screenshot
+  const [XYCanvas, setXYCanvas] = useState({});
 
-    // Delay the screenshot function until the next tick of the event loop
-    setTimeout(() => {
-      html2canvas(element, { useCORS: true }).then(async (canvas) => {
-        button.style.display = 'block'; // Show the button again after the download link is clicked
-        setDottedLine(false); // Show the dotted line again after the download link is clicked
-        const dataUrl = canvas.toDataURL('image/png');
+  const handleDataFromChild = (data) => {
+    setXYCanvas(data);
+  };
 
-        // const downloadLink = document.createElement('a');
-        // downloadLink.href = dataUrl;
-        // console.log(downloadLink.href);
+  // useEffect(() => {
+  //   console.log(XYCanvas);
+  // }, [XYCanvas]);
 
-        // downloadLink.download = 'myDivImage.png';
-        // downloadLink.click();
+  const onSave = async () => {
+    try {
+      let artProduct = {
+        artId: checkedId,
+        artProductName: artName,
+        canvasSize: sizeRangeValue,
+        canvasX: XYCanvas.canvasX,
+        canvasY: XYCanvas.canvasY,
+        images: checked,
+        productId: productData.productId,
+        productSubCategoryId:
+          productData.productSubCategoryMaster.productSubCategoryId,
+        userId: userId,
+      };
 
-        let formData = new FormData();
-        formData.append('file', dataURItoBlob(dataUrl));
-
-        const res = await httpClient.post(
-          '/CloudinaryImageUpload?parameter=false',
-          formData,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          }
-        );
-        console.log(res.data);
-        return res.data;
-
-        // let object = {
-        //   artId: checkedId,
-        //   artProductName: artName,
-        //   image: res.data.secureUrl,
-        //   productId: productImage.productId,
-        //   productSubCategoryId:
-        //     productImage.productSubCategoryMaster
-        //       .productSubCategoryId,
-        //   userId: userId,
-        // };
-
-        // const response = await httpClient.post(
-        //   '/art_product_master/create',
-        //   object
-        // );
-        // console.log(response.data);
-      });
-    }, 0);
-  }
+      const res = await httpClient.post(
+        '/art_product_master/create',
+        artProduct
+      );
+      console.log(res.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   // Helper function to convert data URI to Blob
   function dataURItoBlob(dataURI) {
@@ -355,8 +354,10 @@ const ActivateProducts = () => {
       product.productName === 'shirt' ? (a = product) : ''
     );
 
-    setproductImage(a);
-    // console.log(a);
+    setproductData(a);
+    setProductImage(a.productDetails[0].frontImage);
+
+    console.log(a);
   };
 
   const [artList, setartList] = useState(null);
@@ -367,11 +368,18 @@ const ActivateProducts = () => {
         `/art_master/getUserIdAndStatusWiseUserMaster/${userId}/Approved`
       );
       setartList(res.data);
-      // console.log(res.data);
     } catch (error) {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    console.log(checked);
+  }, [checked]);
+
+  const [nestedLifeStyle, setNestedLifeStyle] = useState('1');
+
+  const [MarkUpIButton, setMarkUpIButton] = useState(false);
 
   useEffect(() => {
     getUserIdWiseArts();
@@ -514,6 +522,7 @@ const ActivateProducts = () => {
           </div>
         </div>
       </div>
+
       <div className='w-[100%] flex justify-center pt-[12px] pb-[28px]'>
         <div className='w-w1170 justify-center flex-column gap-[10px]'>
           <div className='flex justify-start flex-wrap gap-[10px]'>
@@ -688,15 +697,22 @@ const ActivateProducts = () => {
           value='2.2'
           sx={{ paddingTop: '0px', fontFamily: 'Heebo!important' }}
         >
+          {/* nested Lifestyle Products */}
           <div className='w-[100%] flex justify-center'>
             <div className='w-w456 flex gap-[10px] border-t border-b border-[#efefef] pt-[5px]'>
-              <div className='flex-col w-[40px]'>
+              <div
+                onClick={() => setNestedLifeStyle('1')}
+                className='flex-col w-[40px] cursor-pointer'
+              >
                 <img className='mx-auto' src={artcolor} alt='' />
                 <p className='text-primaryGray text-[11px] text-center'>
                   Art
                 </p>
               </div>
-              <div className='flex-col w-[40px]'>
+              <div
+                onClick={() => setNestedLifeStyle('2')}
+                className='flex-col w-[40px] cursor-pointer'
+              >
                 <img className='mx-auto' src={shirtcolor} alt='' />
                 <p className='text-primaryGray text-[11px] text-center'>
                   T-Shirt
@@ -752,497 +768,707 @@ const ActivateProducts = () => {
               </div>
             </div>
           </div>
-          <div className='w-full flex justify-center pt-[30px]'>
-            <div
-              className='w-w1170 flex p-[30px] rounded-[30px] gap-[30px]'
-              style={{
-                boxShadow: '#f0f0f0 0px 0px 4.3px 4px',
-              }}
-            >
-              <div className='w-[50%]'>
-                <div className='myDiv w-[540px] h-[540px] rounded-[16.01px] bg-[#f5f5f7] flex flex-col justify-center  items-center'>
-                  <Shirt fill={`${shirt}`} />
-                  {/* <img
-                    src={productImage?.productDetails[0]?.frontImage}
-                    alt=''
-                  /> */}
-                  <div
-                    className={`${
-                      dottedLine
-                        ? ''
-                        : 'border border-dashed border-[#d6d6d6]'
-                    } absolute `}
-                  >
-                    <div>
-                      <Canvass
-                        photo={photo}
-                        sizeRangeValue={sizeRangeValue}
-                        vertcalAlign={vertcalAlign}
-                        horzontalAlign={horzontalAlign}
-                      />
-                    </div>
-                  </div>
 
-                  <div className='w-full flex justify-center mt-[22px]'>
-                    <button className='greenBlueButton absolute'>
-                      Replace Image
-                    </button>
-                  </div>
-                </div>
-                <div>
-                  <div className='w-full flex justify-center'>
-                    <div>
-                      <Slider
-                        onChange={sizeRange}
-                        sx={{
-                          width: '203px',
-                          height: '8px',
-                          padding: '0',
-                          '& .MuiSlider-rail': {
-                            opacity: '1',
-                            background:
-                              'linear-gradient(to right, #fd4b9e, #9794d0, #46d59a, #beed10)',
-                          },
-                          '& .MuiSlider-track': {
-                            opacity: '0',
-                          },
-                          '& .MuiSlider-thumb': {
-                            width: '11px',
-                            height: '13px',
-                            borderStyle: 'solid',
-                            borderRadius: '1px',
-                            borderBottomLeftRadius: '21px',
-                            borderBottomRightRadius: '21px',
-                            backgroundColor: '#888888',
-                          },
-                        }}
-                        defaultValue={50}
-                        aria-label='Disabled slider'
-                      />
+          {nestedLifeStyle === '1' ? (
+            <>
+              <div className='w-full flex justify-center pt-[30px]'>
+                <div
+                  className='w-w1170 flex p-[30px] rounded-[30px] gap-[30px]'
+                  style={{
+                    boxShadow: '#f0f0f0 0px 0px 4.3px 4px',
+                  }}
+                >
+                  <div className='w-[50%]'>
+                    <div className='myDiv w-[540px] h-[540px] rounded-[16.01px] bg-[#f5f5f7] flex flex-col justify-center  items-center'>
+                      <div
+                        className={`${
+                          dottedLine
+                            ? ''
+                            : 'border border-dashed border-[#d6d6d6]'
+                        } absolute `}
+                      >
+                        <div></div>
+                      </div>
+                    </div>
 
-                      <img
-                        className='relative bottom-[6px]'
-                        src={scale}
-                        alt=''
-                      />
+                    <div>
+                      <p className='text-[15px] text-primaryBlack font-medium'>
+                        You have selected
+                      </p>
+                      <div className='text-primaryGray text-[12px] w-[540px] border rounded-[16px] border-[#d6d6d6] p-[12px]'>
+                        <div className='flex border-b border-[#efefef]'>
+                          <p className='w-[80px] font-medium'>
+                            Style:
+                          </p>
+                          <p>All Styles</p>
+                        </div>
+                        <div className='flex border-b border-[#efefef]'>
+                          <p className='w-[80px] font-medium'>
+                            Front/Back:
+                          </p>
+                          <p>Front</p>
+                        </div>
+                        <div className='flex border-b border-[#efefef]'>
+                          <p className='w-[80px] font-medium'>
+                            Colours:
+                          </p>
+                          <p>All Colours</p>
+                        </div>
+                        <div className='flex '>
+                          <p className='w-[80px] font-medium'>
+                            PrintSize:
+                          </p>
+                          <p>2400 x 3200px</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className='w-full flex gap-[5px] justify-center pt-[5px]'>
-                  {alignVerticalFocus == true ? (
-                    <button
-                      onClick={verticalAlign}
-                      className='w-[105px] h-[28px] bg-[#bbbbbb] text-[12px] rounded-[14px]'
-                    >
-                      Align Vertically
-                    </button>
-                  ) : (
-                    <button
-                      onClick={verticalAlign}
-                      className='w-[105px] h-[28px] bg-[#ffffff] text-[#878787] text-[12px] rounded-[14px] border border-[#eaeaea]'
-                    >
-                      Align Vertically
-                    </button>
-                  )}
-                  {alignVerticalFocus == true ? (
-                    <button
-                      onClick={horizontalAlign}
-                      className='w-[105px] h-[28px] bg-[#ffffff] text-[#878787] text-[12px] rounded-[14px] border border-[#eaeaea]'
-                    >
-                      Align Horizontally
-                    </button>
-                  ) : (
-                    <button className='w-[105px] h-[28px] bg-[#bbbbbb] text-[12px] rounded-[14px]'>
-                      Align Horizontally
-                    </button>
-                  )}
-                </div>
-                <div>
-                  <p className='text-[15px] text-primaryBlack font-medium'>
-                    You have selected
-                  </p>
-                  <div className='text-primaryGray text-[12px] w-[540px] border rounded-[16px] border-[#d6d6d6] p-[12px]'>
-                    <div className='flex border-b border-[#efefef]'>
-                      <p className='w-[80px] font-medium'>Style:</p>
-                      <p>All Styles</p>
-                    </div>
-                    <div className='flex border-b border-[#efefef]'>
-                      <p className='w-[80px] font-medium'>
-                        Front/Back:
+                  <div className='w-[50%]'>
+                    <p className='text-[25px] text-primaryBlack font-medium leading-[1]'>
+                      Art
+                    </p>
+                    <div className='flex flex-col mt-[15px]'>
+                      <p className='text-[15px] font-medium mb-[3px]'>
+                        Select Style
                       </p>
-                      <p>Front</p>
+
+                      {/* test */}
                     </div>
-                    <div className='flex border-b border-[#efefef]'>
-                      <p className='w-[80px] font-medium'>Colours:</p>
-                      <p>All Colours</p>
-                    </div>
-                    <div className='flex '>
-                      <p className='w-[80px] font-medium'>
-                        PrintSize:
+
+                    <div className='flex flex-col pt-[15px] gap-[7px]'>
+                      <div className='flex gap-[5px] items-center '>
+                        <p className='text-[15px] font-medium'>
+                          Select Markup
+                        </p>
+                        <div
+                          onMouseEnter={() => setMarkUpIButton(true)}
+                          onMouseLeave={() => setMarkUpIButton(false)}
+                          className='max-h-full flex items-center'
+                        >
+                          <img src={info} className='my-[auto]' />
+                        </div>
+
+                        {MarkUpIButton && (
+                          <p className='text-[12px] text-primaryGray '>
+                            Need help?
+                          </p>
+                        )}
+                      </div>
+                      <p className='text-[13px] text-primaryGray leading-[1.3]'>
+                        Please enter your mark-up below. Your markup
+                        gets added to the base price to arrive at the
+                        final sell price. Mark-up is 10% fixed for all
+                        prints on products.
                       </p>
-                      <p>2400 x 3200px</p>
+                      {/* table */}
+                      <div className='wrapper mt-[5px]'>
+                        <table className='w-[520px] border-separate border-spacing-0'>
+                          <tr className='overflow-hidden text-[15px] text-left'>
+                            <th className='bg-[#ECECEC] rounded-tl-[10px] py-[0.4rem] px-2 border border-[#d6d6d6]'>
+                              Size
+                            </th>
+                            <th className='bg-[#ECECEC] rounded-tr-[10px] py-[0.4rem] px-2 border-r border-b border-t border-[#d6d6d6]'>
+                              Base Price
+                            </th>
+                          </tr>
+
+                          <tr className='text-start text-[13px]'>
+                            <td className='bg-[#F7F7F7] px-2 py-[0.1rem] border-l border-r border-b border-[#d6d6d6]'>
+                              XS
+                            </td>
+                            <td className='bg-[#F7F7F7] px-2 py-[0.1rem] border-r border-b border-[#d6d6d6]'>
+                              18.00
+                            </td>
+                          </tr>
+                          <tr className='text-start text-[13px]'>
+                            <td className='bg-[#F7F7F7] px-2 py-[0.1rem] border-l border-r border-b border-[#d6d6d6]'>
+                              S
+                            </td>
+                            <td className='bg-[#F7F7F7] px-2 py-[0.1rem] border-r border-b border-[#d6d6d6]'>
+                              18.00
+                            </td>
+                          </tr>
+                          <tr className='text-start text-[13px]'>
+                            <td className='px-2 py-[0.1rem] bg-[#F7F7F7] border-l border-r border-b border-[#d6d6d6]'>
+                              M
+                            </td>
+                            <td className='px-2 py-[0.1rem] bg-[#F7F7F7] border-r border-b border-[#d6d6d6]'>
+                              18.00
+                            </td>
+                          </tr>
+
+                          {/* added */}
+                          <tr className='text-start text-[13px]'>
+                            <td className='px-2 py-[0.1rem] bg-[#F7F7F7] border-l border-r border-b border-[#d6d6d6]'>
+                              L
+                            </td>
+                            <td className='px-2 py-[0.1rem] bg-[#F7F7F7] border-r border-b border-[#d6d6d6]'>
+                              18.00
+                            </td>
+                          </tr>
+                          <tr className='text-start text-[13px]'>
+                            <td className='px-2 py-[0.1rem] bg-[#F7F7F7] border-l border-r border-b border-[#d6d6d6]'>
+                              XL
+                            </td>
+                            <td className='px-2 py-[0.1rem] bg-[#F7F7F7] border-r border-b border-[#d6d6d6]'>
+                              18.00
+                            </td>
+                          </tr>
+
+                          {/* added */}
+
+                          <tr className='text-start text-[13px]'>
+                            <td className=' px-2 py-[0.1rem] bg-[#F7F7F7] border-l border-r border-b border-[#d6d6d6]'>
+                              2XL
+                            </td>
+                            <td className=' px-2 py-[0.1rem] bg-[#F7F7F7] border-r border-b border-[#d6d6d6]'>
+                              21.00
+                            </td>
+                          </tr>
+                          <tr className='text-start text-[13px]'>
+                            <td className=' pl-2 py-[0.1rem] bg-[#F7F7F7] border-l border-r border-b border-[#d6d6d6] rounded-bl-[10px]'>
+                              3XL
+                            </td>
+                            <td className=' px-2 py-[0.1rem] rounded-br-[10px] bg-[#F7F7F7] border-r border-b border-[#d6d6d6]'>
+                              23.00
+                            </td>
+                          </tr>
+                        </table>
+                      </div>
+                      {/* table */}
+                    </div>
+                    <div className='pt-[20px]'>
+                      <button
+                        onClick={onSave}
+                        // onClick={handleDownloadClick}
+                        className='blackBtn w-[90px] h-[40px]'
+                      >
+                        Save
+                      </button>
                     </div>
                   </div>
                 </div>
               </div>
-              <div className='w-[50%]'>
-                <p className='text-[25px] text-primaryBlack font-medium leading-[1]'>
-                  T-Shirt
+              <div className='w-full pt-[45px]'>
+                <p className='text-[15px] text-primaryBlack text-center font-medium'>
+                  Artist Agreement for “Printable Wall Art Home Decor”
                 </p>
-                <div className='flex flex-col mt-[15px]'>
-                  <p className='text-[15px] font-medium mb-[3px]'>
-                    Select Style
+                <div className='w-[930px] mx-[auto] text-[11px] text-primaryGray flex flex-col gap-[12px] pt-[12px]'>
+                  <p>
+                    Any violation of Artnstock's{' '}
+                    <span className='text-orangeColor'>
+                      Terms of Service or Copyright & Trademark Policy
+                    </span>{' '}
+                    may result in your artwork being taken down, your
+                    account being suspended or terminated, and/or any
+                    other remedies or penalties under applicable law.
+                    In addition, you will not receive any Artist Share
+                    amounts related to such artwork.
                   </p>
-
-                  {/* test */}
-
-                  <div>
-                    <button
-                      onClick={() => {
-                        setIsAllStyleOpen(!isAllStyleOpen);
-                      }}
-                      className='flex items-center justify-between px-[15px] text-primaryGray text-sm14 font-medium cursor-pointer w-[272px] h-[40px] bg-[#FFFFFF] rounded-[20px] border border-[#d6d6d6]'
-                    >
-                      <span>All Styles</span>
-                      <img
-                        className='inline-block'
-                        src={dropdown}
-                        alt=''
-                      />
-                    </button>
-
-                    {isAllStyleOpen && (
-                      <ul
-                        className='shadow-dropShadow rounded-b-2xl hover:overflow-hidden dropdown__menu absolute z-50 bg-[#ffffff] w-[272px] text-center text-[14px] text-primaryGray'
-                        // style={{
-                        //   boxShadow:
-                        //     ' rgba(149, 157, 165, 0.2) 0px 8px 24px',
-                        // }}
-                      >
-                        {styleList.map((style) => (
-                          <li className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'>
-                            {style.name}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                </div>
-
-                <div className='flex flex-col pt-[17px]'>
-                  <p className='text-[15px] font-medium'>
-                    Select Front or Back
-                  </p>
-                  <div className='flex gap-[10px] p-[3px]'>
-                    <div className='flex flex-col text-center'>
-                      <div className='border border-[#bbbbbb] rounded-[4px] p-[7px] '>
-                        <img src={shirtfront} />
-                      </div>
-                      <p className='text-[#bbbbbb] text-[11px]'>
-                        front
-                      </p>
-                    </div>
-                    <div className='flex flex-col text-center'>
-                      <div className='border border-[#bbbbbb] rounded-[4px] p-[7px] '>
-                        <img src={shirtback} />
-                      </div>
-                      <p className='text-[#bbbbbb] text-[11px]'>
-                        back
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className='pt-[14px]'>
-                  <p className='text-[15px] font-medium'>
-                    Select Colours
-                  </p>
-                  <div className='flex gap-[8px] pt-[3px]'>
-                    {circle?.map((item) => (
-                      <div
-                        key={item.id}
-                        className={`w-[32px] h-[32px] rounded-full border border-${item.borderColor} flex justify-center items-center cursor-pointer`}
-                        style={{
-                          color: `${item.textColor}`,
-                          backgroundColor: `${item.backgroundColor}`,
-                        }}
-                        onClick={() => check(item)}
-                      >
-                        {checked?.find(
-                          (obj) => obj.id === item.id
-                        ) && (
-                          // <i
-                          //   className={`bi bi-check-lg`}
-                          // ></i>
-                          <CheckIcon />
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className='flex flex-col pt-[15px] gap-[7px]'>
                   <div className='flex gap-[5px]'>
-                    <p className='text-[15px] font-medium'>
-                      Select Markup
+                    <input type='checkbox' />
+                    <p className='text-primaryBlack'>
+                      I represent and warrant that I have the right to
+                      upload and use this artwork and it does not
+                      violate Artnstock's Terms of Service or
+                      Copyright & Trademark Policy, including:
                     </p>
-                    <div className='max-h-full flex items-center'>
-                      <img src={info} className='my-[auto]' />
+                  </div>
+                  <div>
+                    <ul>
+                      <ol>
+                        • I created and own this original artwork.
+                      </ol>
+                      <ol>
+                        • I did not copy someone else’s artwork,
+                        photograph or design.
+                      </ol>
+                      <ol>
+                        • I have the right to display any person,
+                        character, name, logo, image or quote
+                        contained in this artwork.
+                      </ol>
+                    </ul>
+                  </div>
+                  <div>
+                    <p className='text-primaryBlack'>
+                      Does this artwork contain mature content?
+                    </p>
+                    <div>
+                      <input
+                        type='radio'
+                        name='option'
+                        value='option1'
+                        className='relative top-[2px]'
+                      />{' '}
+                      <span className='ml-[3px]'>Yes</span>
+                      <input
+                        type='radio'
+                        name='option'
+                        value='option2'
+                        className='relative top-[2px] ml-[10px]'
+                      />
+                      <span className='ml-[4px]'>No</span>
                     </div>
                   </div>
-                  <p className='text-[13px] text-primaryGray leading-[1.3]'>
-                    Please enter your mark-up below. Your markup gets
-                    added to the base price to arrive at the final
-                    sell price. Mark-up is 10% fixed for all prints on
-                    products.
+                  <p>
+                    Mature content is generally anything that contains
+                    sexual, graphic, or violent imagery or language.
+                    To learn more visit our{' '}
+                    <span className='text-orangeColor'>
+                      Community Guideline.
+                    </span>
                   </p>
-                  {/* table */}
-                  <div className='wrapper mt-[5px]'>
-                    <table className='w-[520px] border-separate border-spacing-0'>
-                      <tr className='overflow-hidden text-[15px] text-left'>
-                        <th className='bg-[#ECECEC] rounded-tl-[10px] py-[0.4rem] px-2 border border-[#d6d6d6]'>
-                          Size
-                        </th>
-                        <th className='bg-[#ECECEC] py-[0.4rem] px-2 border-r border-b border-t border-[#d6d6d6]'>
-                          Base Price
-                        </th>
-                        <th className='bg-[#ECECEC] py-[0.4rem] px-2 border-r border-b border-t border-[#d6d6d6]'>
-                          Your Markup
-                        </th>
-                        <th className='bg-[#ECECEC] py-[0.4rem] px-2 border-r border-b border-t border-[#d6d6d6] rounded-tr-[10px]'>
-                          Sell Price
-                        </th>
-                      </tr>
-
-                      <tr className='text-start text-[13px]'>
-                        <td className='bg-[#F7F7F7] px-2 py-[0.1rem] border-l border-r border-b border-[#d6d6d6]'>
-                          XS
-                        </td>
-                        <td className='bg-[#F7F7F7] px-2 py-[0.1rem] border-r border-b border-[#d6d6d6]'>
-                          18.00
-                        </td>
-                        <td className='px-2 py-[0.1rem] border-r border-b border-[#d6d6d6] text-center'>
-                          <input
-                            type='text'
-                            placeholder='10%'
-                            className='rounded-xl border border-[#d6d6d6] px-5 w-[111.99px]'
-                          />
-                        </td>
-                        <td className='px-2 py-[0.1rem] border-r border-b border-[#d6d6d6]'>
-                          19.80
-                        </td>
-                      </tr>
-                      <tr className='text-start text-[13px]'>
-                        <td className='bg-[#F7F7F7] px-2 py-[0.1rem] border-l border-r border-b border-[#d6d6d6]'>
-                          S
-                        </td>
-                        <td className='bg-[#F7F7F7] px-2 py-[0.1rem] border-r border-b border-[#d6d6d6]'>
-                          18.00
-                        </td>
-                        <td className='px-2 py-[0.1rem] border-r border-b border-[#d6d6d6] text-center'>
-                          <input
-                            type='text'
-                            placeholder='10%'
-                            className='rounded-xl border border-[#d6d6d6] px-5 w-[111.99px]'
-                          />
-                        </td>
-                        <td className='px-2 py-[0.1rem] border-r border-b border-[#d6d6d6]'>
-                          19.80
-                        </td>
-                      </tr>
-                      <tr className='text-start text-[13px]'>
-                        <td className='px-2 py-[0.1rem] bg-[#F7F7F7] border-l border-r border-b border-[#d6d6d6]'>
-                          M
-                        </td>
-                        <td className='px-2 py-[0.1rem] bg-[#F7F7F7] border-r border-b border-[#d6d6d6]'>
-                          18.00
-                        </td>
-                        <td className='px-2 py-[0.1rem] border-r border-b border-[#d6d6d6] text-center'>
-                          <input
-                            type='text'
-                            placeholder='10%'
-                            className='rounded-xl border px-5 border-[#d6d6d6] w-[111.99px]'
-                          />
-                        </td>
-
-                        <td className=' px-2 py-[0.1rem] border-r border-b border-[#d6d6d6]'>
-                          19.80
-                        </td>
-                      </tr>
-
-                      {/* added */}
-                      <tr className='text-start text-[13px]'>
-                        <td className='px-2 py-[0.1rem] bg-[#F7F7F7] border-l border-r border-b border-[#d6d6d6]'>
-                          L
-                        </td>
-                        <td className='px-2 py-[0.1rem] bg-[#F7F7F7] border-r border-b border-[#d6d6d6]'>
-                          18.00
-                        </td>
-                        <td className='px-2 py-[0.1rem] border-r border-b border-[#d6d6d6] text-center'>
-                          <input
-                            type='text'
-                            placeholder='10%'
-                            className='rounded-xl border px-5 border-[#d6d6d6] w-[111.99px]'
-                          />
-                        </td>
-
-                        <td className=' px-2 py-[0.1rem] border-r border-b border-[#d6d6d6]'>
-                          19.80
-                        </td>
-                      </tr>
-                      <tr className='text-start text-[13px]'>
-                        <td className='px-2 py-[0.1rem] bg-[#F7F7F7] border-l border-r border-b border-[#d6d6d6]'>
-                          XL
-                        </td>
-                        <td className='px-2 py-[0.1rem] bg-[#F7F7F7] border-r border-b border-[#d6d6d6]'>
-                          18.00
-                        </td>
-                        <td className='px-2 py-[0.1rem] border-r border-b border-[#d6d6d6] text-center'>
-                          <input
-                            type='text'
-                            placeholder='10%'
-                            className='rounded-xl border px-5 border-[#d6d6d6] w-[111.99px]'
-                          />
-                        </td>
-
-                        <td className=' px-2 py-[0.1rem] border-r border-b border-[#d6d6d6]'>
-                          19.80
-                        </td>
-                      </tr>
-
-                      {/* added */}
-
-                      <tr className='text-start text-[13px]'>
-                        <td className=' px-2 py-[0.1rem] bg-[#F7F7F7] border-l border-r border-b border-[#d6d6d6]'>
-                          2XL
-                        </td>
-                        <td className=' px-2 py-[0.1rem] bg-[#F7F7F7] border-r border-b border-[#d6d6d6]'>
-                          21.00
-                        </td>
-                        <td className=' px-2 py-[0.1rem] border-r border-b border-[#d6d6d6] text-center'>
-                          <input
-                            type='text'
-                            placeholder='10%'
-                            className='rounded-xl border px-5 border-[#d6d6d6] w-[111.99px]'
-                          />
-                        </td>
-                        <td className=' px-2 py-[0.2rem] border-r border-b border-[#d6d6d6]'>
-                          23.10
-                        </td>
-                      </tr>
-                      <tr className='text-start text-[13px]'>
-                        <td className=' pl-2 py-[0.1rem] bg-[#F7F7F7] border-l border-r border-b border-[#d6d6d6] rounded-bl-[10px]'>
-                          3XL
-                        </td>
-                        <td className=' px-2 py-[0.1rem] bg-[#F7F7F7] border-r border-b border-[#d6d6d6]'>
-                          23.00
-                        </td>
-                        <td className=' px-2 py-[0.1rem] border-r border-b border-[#d6d6d6] text-center'>
-                          <input
-                            type='text'
-                            placeholder='10%'
-                            className='rounded-xl border px-5 border-[#d6d6d6] w-[111.99px]'
-                          />
-                        </td>
-                        <td className=' px-2 py-[0.1rem] border-r border-b border-[#d6d6d6] rounded-br-[10px]'>
-                          25.30
-                        </td>
-                      </tr>
-                    </table>
-                  </div>
-                  {/* table */}
                 </div>
-                <div className='pt-[20px]'>
-                  <button
-                    // onClick={save}
-                    onClick={handleDownloadClick}
-                    className='blackBtn w-[90px] h-[40px]'
-                  >
-                    Save
+                <div className='flex gap-[15px] justify-center mt-[35px] pb-[30px]'>
+                  <button className='blackBtn h-[40px]'>
+                    Set Store Markup
+                  </button>
+                  <button className='h-[40px] px-6 py-2 rounded-3xl text-sm14 text-primaryBlack border-[2px]'>
+                    Cancel
                   </button>
                 </div>
               </div>
-            </div>
-          </div>
+            </>
+          ) : nestedLifeStyle === '2' ? (
+            <>
+              <div className='w-full flex justify-center pt-[30px]'>
+                <div
+                  className='w-w1170 flex p-[30px] rounded-[30px] gap-[30px]'
+                  style={{
+                    boxShadow: '#f0f0f0 0px 0px 4.3px 4px',
+                  }}
+                >
+                  <div className='w-[50%]'>
+                    <div className='myDiv w-[540px] h-[540px] rounded-[16.01px] bg-[#f5f5f7] flex flex-col justify-center  items-center'>
+                      {/* <Shirt fill={`${shirt}`} /> */}
+                      <img src={productImage} alt='' />
+                      <div
+                        className={`${
+                          dottedLine
+                            ? ''
+                            : 'border border-dashed border-[#d6d6d6]'
+                        } absolute `}
+                      >
+                        <div>
+                          <Canvass
+                            sendDataToParent={handleDataFromChild}
+                            photo={photo}
+                            sizeRangeValue={sizeRangeValue}
+                            vertcalAlign={vertcalAlign}
+                            horzontalAlign={horzontalAlign}
+                          />
+                        </div>
+                      </div>
 
-          <div className='w-full pt-[45px]'>
-            <p className='text-[15px] text-primaryBlack text-center font-medium'>
-              Artist Agreement for “Printable Wall Art Home Decor”
-            </p>
-            <div className='w-[930px] mx-[auto] text-[11px] text-primaryGray flex flex-col gap-[12px] pt-[12px]'>
-              <p>
-                Any violation of Artnstock's{' '}
-                <span className='text-orangeColor'>
-                  Terms of Service or Copyright & Trademark Policy
-                </span>{' '}
-                may result in your artwork being taken down, your
-                account being suspended or terminated, and/or any
-                other remedies or penalties under applicable law. In
-                addition, you will not receive any Artist Share
-                amounts related to such artwork.
-              </p>
-              <div className='flex gap-[5px]'>
-                <input type='checkbox' />
-                <p className='text-primaryBlack'>
-                  I represent and warrant that I have the right to
-                  upload and use this artwork and it does not violate
-                  Artnstock's Terms of Service or Copyright &
-                  Trademark Policy, including:
-                </p>
-              </div>
-              <div>
-                <ul>
-                  <ol>• I created and own this original artwork.</ol>
-                  <ol>
-                    • I did not copy someone else’s artwork,
-                    photograph or design.
-                  </ol>
-                  <ol>
-                    • I have the right to display any person,
-                    character, name, logo, image or quote contained in
-                    this artwork.
-                  </ol>
-                </ul>
-              </div>
-              <div>
-                <p className='text-primaryBlack'>
-                  Does this artwork contain mature content?
-                </p>
-                <div>
-                  <input
-                    type='radio'
-                    name='option'
-                    value='option1'
-                    className='relative top-[2px]'
-                  />{' '}
-                  <span className='ml-[3px]'>Yes</span>
-                  <input
-                    type='radio'
-                    name='option'
-                    value='option2'
-                    className='relative top-[2px] ml-[10px]'
-                  />
-                  <span className='ml-[4px]'>No</span>
+                      <div className='w-full flex justify-center mt-[22px]'>
+                        <button className='greenBlueButton absolute'>
+                          Replace Image
+                        </button>
+                      </div>
+                    </div>
+                    <div>
+                      <div className='w-full flex justify-center'>
+                        <div>
+                          <Slider
+                            onChange={sizeRange}
+                            sx={{
+                              width: '203px',
+                              height: '8px',
+                              padding: '0',
+                              '& .MuiSlider-rail': {
+                                opacity: '1',
+                                background:
+                                  'linear-gradient(to right, #fd4b9e, #9794d0, #46d59a, #beed10)',
+                              },
+                              '& .MuiSlider-track': {
+                                opacity: '0',
+                              },
+                              '& .MuiSlider-thumb': {
+                                width: '11px',
+                                height: '13px',
+                                borderStyle: 'solid',
+                                borderRadius: '1px',
+                                borderBottomLeftRadius: '21px',
+                                borderBottomRightRadius: '21px',
+                                backgroundColor: '#888888',
+                              },
+                            }}
+                            defaultValue={50}
+                            aria-label='Disabled slider'
+                          />
+
+                          <img
+                            className='relative bottom-[6px]'
+                            src={scale}
+                            alt=''
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className='w-full flex gap-[5px] justify-center pt-[5px]'>
+                      {alignVerticalFocus == true ? (
+                        <button
+                          onClick={verticalAlign}
+                          className='w-[105px] h-[28px] bg-[#bbbbbb] text-[12px] rounded-[14px]'
+                        >
+                          Align Vertically
+                        </button>
+                      ) : (
+                        <button
+                          onClick={verticalAlign}
+                          className='w-[105px] h-[28px] bg-[#ffffff] text-[#878787] text-[12px] rounded-[14px] border border-[#eaeaea]'
+                        >
+                          Align Vertically
+                        </button>
+                      )}
+                      {alignVerticalFocus == true ? (
+                        <button
+                          onClick={horizontalAlign}
+                          className='w-[105px] h-[28px] bg-[#ffffff] text-[#878787] text-[12px] rounded-[14px] border border-[#eaeaea]'
+                        >
+                          Align Horizontally
+                        </button>
+                      ) : (
+                        <button className='w-[105px] h-[28px] bg-[#bbbbbb] text-[12px] rounded-[14px]'>
+                          Align Horizontally
+                        </button>
+                      )}
+                    </div>
+                    <div>
+                      <p className='text-[15px] text-primaryBlack font-medium'>
+                        You have selected
+                      </p>
+                      <div className='text-primaryGray text-[12px] w-[540px] border rounded-[16px] border-[#d6d6d6] p-[12px]'>
+                        <div className='flex border-b border-[#efefef]'>
+                          <p className='w-[80px] font-medium'>
+                            Style:
+                          </p>
+                          <p>All Styles</p>
+                        </div>
+                        <div className='flex border-b border-[#efefef]'>
+                          <p className='w-[80px] font-medium'>
+                            Front/Back:
+                          </p>
+                          <p>Front</p>
+                        </div>
+                        <div className='flex border-b border-[#efefef]'>
+                          <p className='w-[80px] font-medium'>
+                            Colours:
+                          </p>
+                          <p>
+                            {checked?.map((color, index) => (
+                              <>
+                                <span>{color.color} </span>
+                                <span
+                                  className={`${
+                                    index === checked.length - 1
+                                      ? 'hidden'
+                                      : ''
+                                  }`}
+                                >
+                                  ,
+                                </span>
+                              </>
+                            ))}
+                          </p>
+                        </div>
+                        <div className='flex'>
+                          <p className='w-[80px] font-medium'>
+                            PrintSize:
+                          </p>
+                          <p>2400 x 3200px</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className='w-[50%]'>
+                    <p className='text-[25px] text-primaryBlack font-medium leading-[1]'>
+                      T-Shirt
+                    </p>
+                    <div className='flex flex-col mt-[15px]'>
+                      <p className='text-[15px] font-medium mb-[3px]'>
+                        Select Style
+                      </p>
+
+                      {/* test */}
+
+                      <div>
+                        <button
+                          onClick={() => {
+                            setIsAllStyleOpen(!isAllStyleOpen);
+                          }}
+                          className='flex items-center justify-between px-[15px] text-primaryGray text-sm14 font-medium cursor-pointer w-[272px] h-[40px] bg-[#FFFFFF] rounded-[20px] border border-[#d6d6d6]'
+                        >
+                          <span>All Style</span>
+                          <img
+                            className='inline-block'
+                            src={dropdown}
+                            alt=''
+                          />
+                        </button>
+
+                        {isAllStyleOpen && (
+                          <ul
+                            className='shadow-dropShadow rounded-b-2xl hover:overflow-hidden dropdown__menu absolute z-50 bg-[#ffffff] w-[272px] text-center text-[14px] text-primaryGray'
+                            // style={{
+                            //   boxShadow:
+                            //     ' rgba(149, 157, 165, 0.2) 0px 8px 24px',
+                            // }}
+                          >
+                            {productData?.style?.map((style) => (
+                              <li className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'>
+                                {style}
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className='flex flex-col pt-[17px]'>
+                      <p className='text-[15px] font-medium'>
+                        Select Front or Back
+                      </p>
+                      <div className='flex gap-[10px] p-[3px]'>
+                        <div className='flex flex-col text-center'>
+                          <div className='border border-[#bbbbbb] rounded-[4px] p-[7px] '>
+                            <img src={shirtfront} />
+                          </div>
+                          <p className='text-[#bbbbbb] text-[11px]'>
+                            front
+                          </p>
+                        </div>
+                        <div className='flex flex-col text-center'>
+                          <div className='border border-[#bbbbbb] rounded-[4px] p-[7px] '>
+                            <img src={shirtback} />
+                          </div>
+                          <p className='text-[#bbbbbb] text-[11px]'>
+                            back
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className='pt-[14px]'>
+                      <p className='text-[15px] font-medium'>
+                        Select Colours
+                      </p>
+                      <div className='flex gap-[8px] pt-[3px]'>
+                        {productData?.productDetails?.map(
+                          (item, index) => (
+                            <div
+                              key={index}
+                              className={`w-[32px] h-[32px] rounded-full border flex justify-center items-center cursor-pointer`}
+                              style={{
+                                color: `${
+                                  item.hexCode === '#ffffff'
+                                    ? '#000000'
+                                    : '#ffffff'
+                                }`,
+                                backgroundColor: `${item.hexCode}`,
+                                borderColor: `${
+                                  item.hexCode === '#ffffff'
+                                    ? '#000000'
+                                    : ''
+                                }`,
+                              }}
+                              onClick={() => check(item)}
+                            >
+                              {checked?.find(
+                                (obj) => obj.color === item.color
+                              ) && (
+                                // <i
+                                //   className={`bi bi-check-lg`}
+                                // ></i>
+                                <CheckIcon />
+                              )}
+                            </div>
+                          )
+                        )}
+                      </div>
+                    </div>
+
+                    <div className='flex flex-col pt-[15px] gap-[7px]'>
+                      <div className='flex gap-[5px] items-center'>
+                        <p className='text-[15px] font-medium'>
+                          Select Markup
+                        </p>
+                        <div
+                          onMouseEnter={() => setMarkUpIButton(true)}
+                          onMouseLeave={() => setMarkUpIButton(false)}
+                          className='max-h-full flex items-center cursor-pointer'
+                        >
+                          <img src={info} className='my-[auto]' />
+                        </div>
+                        {MarkUpIButton && (
+                          <p className='text-[12px] text-primaryGray '>
+                            Need help?
+                          </p>
+                        )}
+                      </div>
+                      <p className='text-[13px] text-primaryGray leading-[1.3]'>
+                        Please enter your mark-up below. Your markup
+                        gets added to the base price to arrive at the
+                        final sell price. Mark-up is 10% fixed for all
+                        prints on products.
+                      </p>
+                      {/* table */}
+                      <div className='wrapper mt-[5px]'>
+                        <table className='w-[520px] border-separate border-spacing-0'>
+                          <tr className='overflow-hidden text-[15px] text-left'>
+                            <th className='bg-[#ECECEC] rounded-tl-[10px] py-[0.4rem] px-2 border border-[#d6d6d6]'>
+                              Size
+                            </th>
+                            <th className='bg-[#ECECEC] py-[0.4rem] px-2 border-r border-b border-t border-[#d6d6d6]'>
+                              Base Price
+                            </th>
+                            <th className='bg-[#ECECEC] py-[0.4rem] px-2 border-r border-b border-t border-[#d6d6d6]'>
+                              Your Markup
+                            </th>
+                            <th className='bg-[#ECECEC] py-[0.4rem] px-2 border-r border-b border-t border-[#d6d6d6] rounded-tr-[10px]'>
+                              Sell Price
+                            </th>
+                          </tr>
+                          {productData.sizeAndPrices.map(
+                            (obj, index) => (
+                              <tr className='text-start text-[13px]'>
+                                <td
+                                  className={`pl-2 py-[0.1rem] bg-[#F7F7F7] border-l border-r border-b border-[#d6d6d6] ${
+                                    index ===
+                                    productData.sizeAndPrices.length -
+                                      1
+                                      ? 'rounded-bl-[10px]'
+                                      : ''
+                                  } `}
+                                >
+                                  {obj.size}
+                                </td>
+                                <td className=' px-2 py-[0.1rem] bg-[#F7F7F7] border-r border-b border-[#d6d6d6]'>
+                                  {obj.basePrice}
+                                </td>
+                                <td className=' px-2 py-[0.1rem] border-r border-b border-[#d6d6d6] text-center'>
+                                  <input
+                                    type='text'
+                                    placeholder='10%'
+                                    className='rounded-xl border px-5 border-[#d6d6d6] w-[111.99px] outline-none '
+                                    disabled
+                                  />
+                                </td>
+                                <td
+                                  className={`px-2 py-[0.1rem] border-r border-b border-[#d6d6d6] ${
+                                    index ===
+                                    productData.sizeAndPrices.length -
+                                      1
+                                      ? 'rounded-br-[10px]'
+                                      : ''
+                                  } `}
+                                >
+                                  {obj.sellPrice}
+                                </td>
+                              </tr>
+                            )
+                          )}
+                        </table>
+                      </div>
+                      {/* table */}
+                    </div>
+                    <div className='pt-[20px]'>
+                      <button
+                        onClick={onSave}
+                        // onClick={handleDownloadClick}
+                        className='blackBtn w-[90px] h-[40px]'
+                      >
+                        Save
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <p>
-                Mature content is generally anything that contains
-                sexual, graphic, or violent imagery or language. To
-                learn more visit our{' '}
-                <span className='text-orangeColor'>
-                  Community Guideline.
-                </span>
-              </p>
-            </div>
-            <div className='flex gap-[15px] justify-center mt-[35px] pb-[30px]'>
-              <button className='blackBtn h-[40px]'>
-                Set Store Markup
-              </button>
-              <button className='h-[40px] px-6 py-2 rounded-3xl text-sm14 text-primaryBlack border-[2px]'>
-                Cancel
-              </button>
-            </div>
-          </div>
+              <div className='w-full pt-[45px]'>
+                <p className='text-[15px] text-primaryBlack text-center font-medium'>
+                  Artist Agreement for “Printable Wall Art Home Decor”
+                </p>
+                <div className='w-[930px] mx-[auto] text-[11px] text-primaryGray flex flex-col gap-[12px] pt-[12px]'>
+                  <p>
+                    Any violation of Artnstock's{' '}
+                    <span className='text-orangeColor'>
+                      Terms of Service or Copyright & Trademark Policy
+                    </span>{' '}
+                    may result in your artwork being taken down, your
+                    account being suspended or terminated, and/or any
+                    other remedies or penalties under applicable law.
+                    In addition, you will not receive any Artist Share
+                    amounts related to such artwork.
+                  </p>
+                  <div className='flex gap-[5px]'>
+                    <input type='checkbox' />
+                    <p className='text-primaryBlack'>
+                      I represent and warrant that I have the right to
+                      upload and use this artwork and it does not
+                      violate Artnstock's Terms of Service or
+                      Copyright & Trademark Policy, including:
+                    </p>
+                  </div>
+                  <div>
+                    <ul>
+                      <ol>
+                        • I created and own this original artwork.
+                      </ol>
+                      <ol>
+                        • I did not copy someone else’s artwork,
+                        photograph or design.
+                      </ol>
+                      <ol>
+                        • I have the right to display any person,
+                        character, name, logo, image or quote
+                        contained in this artwork.
+                      </ol>
+                    </ul>
+                  </div>
+                  <div>
+                    <p className='text-primaryBlack'>
+                      Does this artwork contain mature content?
+                    </p>
+                    <div>
+                      <input
+                        type='radio'
+                        name='option'
+                        value='option1'
+                        className='relative top-[2px]'
+                      />{' '}
+                      <span className='ml-[3px]'>Yes</span>
+                      <input
+                        type='radio'
+                        name='option'
+                        value='option2'
+                        className='relative top-[2px] ml-[10px]'
+                      />
+                      <span className='ml-[4px]'>No</span>
+                    </div>
+                  </div>
+                  <p>
+                    Mature content is generally anything that contains
+                    sexual, graphic, or violent imagery or language.
+                    To learn more visit our{' '}
+                    <span className='text-orangeColor'>
+                      Community Guideline.
+                    </span>
+                  </p>
+                </div>
+                <div className='flex gap-[15px] justify-center mt-[35px] pb-[30px]'>
+                  <button className='blackBtn h-[40px]'>
+                    Set Store Markup
+                  </button>
+                  <button className='h-[40px] px-6 py-2 rounded-3xl text-sm14 text-primaryBlack border-[2px]'>
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </>
+          ) : (
+            <div></div>
+          )}
         </TabPanel>
         <TabPanel value='2.3' sx={{ paddingTop: '0px' }}>
           nested 3
