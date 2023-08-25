@@ -146,10 +146,10 @@ const AllHistory = () => {
                   <p className="mt-3 mb-1">
                     <button className="bg-[#333333] text-[#ffffff] text-[12px] py-[5px] px-[12px] rounded-2xl">Buy it Again</button>
                   </p>
-                  <p className="text-[11px] font-normal flex gap-3 mb-2">
-                    <span className="text-[#757575]">Edit Order</span>
+                  {item?.status !== "Delivered" && <p className="text-[11px] font-normal flex gap-3 mb-2">
+                    {/* <span className="text-[#757575]">Edit Order</span> */}
                     <span className="text-[#f88331]">Cancel Order</span>
-                  </p>
+                  </p>}
                   <p className="text-[11px] font-normal text-[#757575] leading-[1.2]">
                     GST, Branding, Logistics and Customized Packaging charges
                     included. Read our{" "}

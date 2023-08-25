@@ -85,17 +85,12 @@ import linkdinIcon from "../../../assets/images/footer/LinkedinIcon.png";
 import instaIcon from "../../../assets/images/footer/InstagramIcon.png";
 import custImg from "../../../assets/images/ComboPack/custImg.png";
 import { useDetectClickOutside } from "react-detect-click-outside";
-import {
-  CartartClass,
-  CartArtFrameModel,
-} from "../../../models/allModel";
+import { CartartClass, CartArtFrameModel } from "../../../models/allModel";
 
 import { useCallback, useRef } from "react";
 import { toJpeg } from "html-to-image";
 import { toast } from "react-toastify";
 import { cartSliceAction } from "../../../store/cartSlice";
-
-
 
 const custReview = [
   {
@@ -330,12 +325,28 @@ const StyledPopupp = styled(Popup)`
   }
 `;
 
+const AddtoCartPopupp = styled(Popup)`
+  // use your custom style for ".popup-overlay"
+  /* &-overlay {
+ ...;
+} */
+  // use your custom style for ".popup-content"
+  &-content {
+    background-color: #ffffff;
+    color: #333333;
+    border-radius: 30px;
+    padding: 40px 20px 0px;
+    width: 477px;
+    height: 512px;
+  }
+`;
+
 const ArtDetails = () => {
   const location = useLocation();
 
   const [artDetails, setArtDetails] = useState({});
 
-  const [orientationBtn, setOrientationBtn] = useState('');
+  const [orientationBtn, setOrientationBtn] = useState("");
   const [includeFrame, setIncludeFrame] = useState(true);
   const [includeTopMat, setIncludeTopMat] = useState(false);
   const [includeBottomMat, setIncludeBottomMat] = useState(false);
@@ -344,51 +355,44 @@ const ArtDetails = () => {
   const includeTopMatRef = useRef();
   const includeBotMatRef = useRef();
 
-
-
-
-
   const [isOpenSortBy, setIsOpenSortBy] = useState(false);
   const [isOpenFilterBy, setIsOpenFilterBy] = useState(false);
-
   const navigate = useNavigate();
-
   const userId = useSelector((state) => state.auth.userId);
-
   const userAuth = useSelector((state) => state.auth);
-
-
-
   const dispatch = useDispatch();
-
-
 
   const [verticalImg, setVerticalImg] = useState();
   const [horizontalImg, setHorizontalImg] = useState();
   const [squareImg, setSquareImg] = useState();
-  const mutableVariable = useRef('');
+  const mutableVariable = useRef("");
   const mutableColor = useRef({});
   let cartModel = new CartartClass();
+
+  const totalAmount = useRef();
+  const [totalAmt, setTotalAmt] = useState(0);
+
+  const [openAddtocart, setOpenAddtocart] = useState(false);
 
   useEffect(() => {
     httpClient
       .get(`/art_master/editArtMaster/${location?.state?.id}`)
       .then((res) => {
         console.log(res.data);
+        totalAmount.current = res.data?.price;
+        setTotalAmt(totalAmount.current);
         setRecentlyViewed(res.data?.artId);
         cartModel.artId = res.data?.artId;
         setArtDetails(res.data);
-        mutableVariable.current = res?.data['imageMaster']?.type;
-        setOrientationBtn(res?.data['imageMaster']?.type);
+        mutableVariable.current = res?.data["imageMaster"]?.type;
+        setOrientationBtn(res?.data["imageMaster"]?.type);
         setVerticalImg(
-          res?.data['imageMaster']['imageOrientation']?.verticalUrl
+          res?.data["imageMaster"]["imageOrientation"]?.verticalUrl
         );
         setHorizontalImg(
-          res?.data['imageMaster']['imageOrientation']?.horizontalUrl
+          res?.data["imageMaster"]["imageOrientation"]?.horizontalUrl
         );
-        setSquareImg(
-          res?.data['imageMaster']['imageOrientation']?.squareUrl
-        );
+        setSquareImg(res?.data["imageMaster"]["imageOrientation"]?.squareUrl);
       });
   }, [location]);
 
@@ -409,10 +413,6 @@ const ArtDetails = () => {
     }
   };
 
-
- 
-
-
   const [openBig, setOpenBig] = useState(false);
   const [showPrice, setShowPrice] = useState(false);
   const [returnAndExchange, setReturnAndExchange] = useState(false);
@@ -420,41 +420,32 @@ const ArtDetails = () => {
 
   const quantityRef = useRef(1);
 
-
   useEffect(() => {
     getActivePaperMasterList();
     getHoriOriList();
     getMatList();
     getAllFrames();
     getFolders();
+    getDesignsByUser();
   }, []);
-
-  // // redux slice
-  // const selectedAllFilesImages = useSelector(
-  //   (state) => state.fileimages.selectedAllFilesImages
-  // );
 
   const [activePaperMasterList, setActivePaperMasterList] = useState(null);
   const [checking, setChecking] = useState();
   const [materialCheck, setMaterialCheck] = useState();
   const mutablePrint = useRef({});
-  // // redux slice
-  // const selectedAllFilesImages = useSelector(
-  //   (state) => state.fileimages.selectedAllFilesImages
-  // );
-
-  // const [activePaperMasterList, setActivePaperMasterList] =
-  //   useState(null);
-
+  const printAmt = useRef();
 
   const getActivePaperMasterList = async () => {
     try {
       const res = await httpClient.get(
-        '/printing_material_master/getActivePrintingMaterialMasterList'
+        "/printing_material_master/getActivePrintingMaterialMasterList"
       );
       // console.log(res.data);
       setActivePaperMasterList(res?.data);
       setChecking(res?.data[0].printingMaterialId);
+      printAmt.current = Number(res?.data[0]?.printingMaterialPrice);
+      setTotalAmt(totalAmount.current);
+
       setMaterialCheck(res?.data[0]);
       mutablePrint.current = res?.data[0];
       // console.log(testList);
@@ -464,6 +455,8 @@ const ArtDetails = () => {
   };
 
   const getCheckValue = (e) => {
+    // console.log(e);
+    printAmt.current = Number(e.printingMaterialPrice);
     setMaterialCheck(e);
     setChecking(e.printingMaterialId);
   };
@@ -479,39 +472,38 @@ const ArtDetails = () => {
   const vertiSelectRef = useRef();
   const horiSelectRef = useRef();
   const squareSelectRef = useRef();
+  const orientationAmt = useRef();
 
   const getHoriOriList = async () => {
     try {
       // horizontal
       const resh = await httpClient.get(
-        `shape_master/getShapeWiseList/Horizontal`
+        `/art_master/getArtIdAndShapeWiseContributorArtMarkup/${location?.state?.id}/Horizontal`
       );
-
-      setHoriOriList(resh.data);
-      setHoriSelect(resh.data[0]);
-      horiSelectRef.current = resh.data[0];
+console.log(resh.data);
+      setHoriOriList(resh.data[0]?.orientationMasters);
+      setHoriSelect(resh.data[0]?.orientationMasters[0]);
+      horiSelectRef.current = resh.data[0]?.orientationMasters[0];
     } catch (err) {
       console.log(err);
     }
     try {
       // vertical
       const resv = await httpClient.get(
-        `shape_master/getShapeWiseList/Vertical`
+        `/art_master/getArtIdAndShapeWiseContributorArtMarkup/${location?.state?.id}/Vertical`
       );
-      setVertOriList(resv.data);
-      setVertiSelect(resv.data[0]);
-      vertiSelectRef.current = resv.data[0];
+      setVertOriList(resv.data[0]?.orientationMasters);
+      setVertiSelect(resv.data[0]?.orientationMasters[0]);
+      vertiSelectRef.current = resv.data[0]?.orientationMasters[0];
     } catch (err) {
       console.log(err);
     }
     try {
       // square
-      const ress = await httpClient.get(
-        `shape_master/getShapeWiseList/Square`
-      );
-      setSquaOriList(ress.data);
-      setSquareSelect(ress.data[0]);
-      squareSelectRef.current = ress.data[0];
+      const ress = await httpClient.get(`/art_master/getArtIdAndShapeWiseContributorArtMarkup/${location?.state?.id}/Square`);
+      setSquaOriList(ress.data[0]?.orientationMasters);
+      setSquareSelect(ress.data[0]?.orientationMasters[0]);
+      squareSelectRef.current = ress.data[0]?.orientationMasters[0];
     } catch (err) {
       console.log(err);
     }
@@ -548,13 +540,13 @@ const ArtDetails = () => {
           setSelectedFrame(res.data[0]);
           localStorage.setItem("selectFrameData", JSON.stringify(res.data[0]));
         });
-
     } catch (err) {
       console.log(err);
     }
   };
 
   const getFrameCheck = (e) => {
+    // console.log(e);
     setSelectedFrame(e);
     setFrameColor(e.frameColor[0]);
     localStorage.setItem("selectFrameData", JSON.stringify(e));
@@ -605,12 +597,10 @@ const ArtDetails = () => {
 
   const getMatList = async () => {
     try {
-      const rest = await httpClient.get(
-        '/mat_master/getTypeWiseList/top'
-      );
+      const rest = await httpClient.get("/mat_master/getTypeWiseList/top");
       // console.log(rest.data);
-    topMatColorRef.current = rest.data.frameColor[0]
-includeTopMatRef.current = false
+      topMatColorRef.current = rest.data.frameColor[0];
+      includeTopMatRef.current = false;
       setTopMatColor(rest.data.frameColor[0]);
       setTopMatWidth(rest.data);
       localStorage.setItem("topMat", JSON.stringify(rest.data));
@@ -620,8 +610,8 @@ includeTopMatRef.current = false
     try {
       // console.log(rest.data);
       const resb = await httpClient.get("/mat_master/getTypeWiseList/bottom");
-    botMatColorRef.current = resb.data.frameColor[0]
-    includeBotMatRef.current = false
+      botMatColorRef.current = resb.data.frameColor[0];
+      includeBotMatRef.current = false;
 
       setBottomMatColor(resb.data.frameColor[0]);
       // console.log(bottomMatColor);
@@ -647,7 +637,7 @@ includeTopMatRef.current = false
   const selectNewTopMatColor = () => {
     // console.log(topMatColor);
     setTopMatColor(topMatColor);
-    topMatColorRef.current = topMatColor
+    topMatColorRef.current = topMatColor;
     topMatColordropdown();
   };
 
@@ -688,7 +678,7 @@ includeTopMatRef.current = false
   const selectNewBottomMatColor = () => {
     // console.log(bottomMatColor);
     setBottomMatColor(bottomMatColor);
-    botMatColorRef.current = bottomMatColor
+    botMatColorRef.current = bottomMatColor;
     bottomMatColordropdown();
   };
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
@@ -735,7 +725,6 @@ includeTopMatRef.current = false
             art: [...prevCategories.art, obj],
           }));
         }
-
       });
     } catch (error) {
       console.error(error);
@@ -781,10 +770,28 @@ includeTopMatRef.current = false
 
   const cartCount = useSelector((state) => state.cart.cartCount);
 
+  const [cartResData, setCartResData] = useState();
+
   const addToCart = async () => {
     CartArtFrameModel.userId = userId;
     CartArtFrameModel.quantity = quantityRef.current;
     CartArtFrameModel.artId = cartModel.artId;
+
+    CartArtFrameModel.totalAmount =
+      (Number(artDetails?.price) +
+        Number(selectedFrame?.price) +
+        Number(frameColor?.price) +
+        Number(
+          `${
+            orientationBtn === "Horizontal"
+              ? horiSelect?.sellPrice
+              : orientationBtn === "Vertical"
+              ? vertiSelect?.sellPrice
+              : squareSelect?.sellPrice
+          }`
+        ) +
+        Number(materialCheck?.printingMaterialPrice)) *
+      quantity;
     const ap = JSON.parse(localStorage.getItem("selectFrameData"));
     delete ap?.frameColor;
     if (ap !== null) {
@@ -812,14 +819,16 @@ includeTopMatRef.current = false
       CartArtFrameModel["matMasterTop"].matType = topMat.matType;
       CartArtFrameModel["matMasterTop"].price = topMat.price;
       CartArtFrameModel["matMasterTop"].matWidth = topMatSelectRef.current;
-      CartArtFrameModel["matMasterTop"].color = topMatColorRef.current?.colorCode;
+      CartArtFrameModel["matMasterTop"].color =
+        topMatColorRef.current?.colorCode;
     }
     if (includeBotMatRef.current) {
       CartArtFrameModel["matMasterBottom"].matId = botMat.matId;
       CartArtFrameModel["matMasterBottom"].matType = botMat.matType;
       CartArtFrameModel["matMasterBottom"].price = botMat.price;
       CartArtFrameModel["matMasterBottom"].matWidth = botMatSelectRef.current;
-      CartArtFrameModel["matMasterBottom"].color = botMatColorRef.current?.colorCode;
+      CartArtFrameModel["matMasterBottom"].color =
+        botMatColorRef.current?.colorCode;
     }
 
     console.log(CartArtFrameModel);
@@ -828,11 +837,13 @@ includeTopMatRef.current = false
       CartArtFrameModel
     );
 
-    if (res.data) {
-      toast.success("Successfully Added to Cart");
+    if (res.data?.flag) {
+      console.log(res.data);
+      // toast.success("Successfully Added to Cart");
+      setCartResData(res.data?.cartArtFrameMaster);
       dispatch(cartSliceAction.setCartCount(cartCount + 1));
-
-      navigate("/shopping-cart");
+      setOpenAddtocart(true);
+      // navigate("/shopping-cart");
     }
   };
 
@@ -843,6 +854,40 @@ includeTopMatRef.current = false
 
   const checkoutPage = () => {
     navigate("/checkout");
+  };
+
+  const increaseCartQuantity = (cartArtFrameId) => {
+    try {
+      httpClient
+        .get(`/cart_art_frame_master/IncreaseCartQty/${cartArtFrameId}`)
+        .then((res) => {
+          console.log(res.data);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const decreaseCartQuantity = (cartArtFrameId) => {
+    try {
+      httpClient
+        .get(`/cart_art_frame_master/DecreaseCartQty/${cartArtFrameId}`)
+        .then((res) => {
+          console.log(res.data);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // Products
+  const [userDesigns, setUserDesigns] = useState();
+
+  const getDesignsByUser = () => {
+    httpClient
+      .get(`/art_master/getUserIdWiseArtMasterList/${userId}`)
+      .then((res) => {
+        setUserDesigns(res?.data);
+      });
   };
 
   return (
@@ -867,64 +912,48 @@ includeTopMatRef.current = false
                     includeFrame
                       ? frameColor !== null
                         ? `${frameColor?.colorCode}`
-                        : '#333333'
-                      : 'transparent'
+                        : "#333333"
+                      : "transparent"
                   }`,
                   width: `${
-                    orientationBtn === 'Vertical'
-                      ? 30.625 * 0.7
-                      : 30.625
+                    orientationBtn === "Vertical" ? 30.625 * 0.7 : 30.625
                   }rem`,
                   height: `${
-                    orientationBtn === 'Horizontal'
-                      ? 30.625 * 0.7
-                      : 30.625
+                    orientationBtn === "Horizontal" ? 30.625 * 0.7 : 30.625
                   }rem`,
                 }}
               >
                 <div
                   className={`mat absolute shadow-matInset w-[${
-                    !includeFrame && '100%'
-                  }] h-[${!includeFrame && '100%'}]`}
+                    !includeFrame && "100%"
+                  }] h-[${!includeFrame && "100%"}]`}
                   style={{
-                    top: `${
-                      includeFrame ? selectedFrame?.width * 5 : 0
-                    }px `,
-                    bottom: `${
-                      includeFrame ? selectedFrame?.width * 5 : 0
-                    }px `,
-                    left: `${
-                      includeFrame ? selectedFrame?.width * 5 : 0
-                    }px`,
-                    right: `${
-                      includeFrame ? selectedFrame?.width * 5 : 0
-                    }px`,
+                    top: `${includeFrame ? selectedFrame?.width * 5 : 0}px `,
+                    bottom: `${includeFrame ? selectedFrame?.width * 5 : 0}px `,
+                    left: `${includeFrame ? selectedFrame?.width * 5 : 0}px`,
+                    right: `${includeFrame ? selectedFrame?.width * 5 : 0}px`,
                     backgroundColor: `${
                       topMatColor && includeTopMat
                         ? topMatColor?.colorCode
-                        : '#f2f2f2'
+                        : "#f2f2f2"
                     }`,
                   }}
                 >
                   <div
                     className={`bottom mat absolute  shadow-matInset`}
                     style={{
-                      top: `${
-                        includeTopMat ? Number(topMatSelect) * 5 : 0
-                      }px`,
+                      top: `${includeTopMat ? Number(topMatSelect) * 5 : 0}px`,
                       bottom: `${
                         includeTopMat ? Number(topMatSelect) * 5 : 0
                       }px`,
-                      left: `${
-                        includeTopMat ? Number(topMatSelect) * 5 : 0
-                      }px`,
+                      left: `${includeTopMat ? Number(topMatSelect) * 5 : 0}px`,
                       right: `${
                         includeTopMat ? Number(topMatSelect) * 5 : 0
                       }px`,
                       backgroundColor: `${
                         bottomMatColor && includeBottomMat
                           ? bottomMatColor?.colorCode
-                          : '#f2f2f2'
+                          : "#f2f2f2"
                       }`,
                     }}
                   >
@@ -932,39 +961,31 @@ includeTopMatRef.current = false
                       className={`art z-10 absolute  after:content after:block after:absolute after:top-0 after:w-[100%] after:h-[100%] after:shadow-matInset `}
                       style={{
                         top: `${
-                          includeBottomMat
-                            ? Number(bottomMatSelect) * 5
-                            : 0
+                          includeBottomMat ? Number(bottomMatSelect) * 5 : 0
                         }px`,
                         bottom: `${
-                          includeBottomMat
-                            ? Number(bottomMatSelect) * 5
-                            : 0
+                          includeBottomMat ? Number(bottomMatSelect) * 5 : 0
                         }px`,
                         left: `${
-                          includeBottomMat
-                            ? Number(bottomMatSelect) * 5
-                            : 0
+                          includeBottomMat ? Number(bottomMatSelect) * 5 : 0
                         }px`,
                         right: `${
-                          includeBottomMat
-                            ? Number(bottomMatSelect) * 5
-                            : 0
+                          includeBottomMat ? Number(bottomMatSelect) * 5 : 0
                         }px`,
                       }}
                     >
                       <img
                         src={`${
-                          orientationBtn === 'Vertical'
+                          orientationBtn === "Vertical"
                             ? verticalImg
-                            : orientationBtn === 'Horizontal'
+                            : orientationBtn === "Horizontal"
                             ? horizontalImg
-                            : orientationBtn === 'Square'
+                            : orientationBtn === "Square"
                             ? squareImg
                             : artDetails.image
                         }`}
-                        alt=''
-                        className='w-[100%] h-[100%] '
+                        alt=""
+                        className="w-[100%] h-[100%] "
                       />
                     </div>
                   </div>
@@ -973,31 +994,27 @@ includeTopMatRef.current = false
 
               <img
                 src={viewIcon}
-                className='absolute bottom-[15px] right-[15px] cursor-pointer'
-                alt=''
+                className="absolute bottom-[15px] right-[15px] cursor-pointer"
+                alt=""
                 onClick={() => setOpenBig(true)}
               />
 
               <StyledPopup
                 open={openBig}
                 closeOnDocumentClick={true}
-                position={'top center'}
+                position={"top center"}
                 onClose={() => setOpenBig(false)}
               >
-                <img
-                  src={horizontalImg}
-                  className='w-[100%]'
-                  alt=''
-                />
+                <img src={horizontalImg} className="w-[100%]" alt="" />
               </StyledPopup>
             </div>
 
-            <div className='flex justify-between mt-2.5 mb-5'>
-              <div className='flex gap-x-2.5'>
-                <img src={colorCicleImg} alt='' />
-                <img src={blackCircleImg} alt='' />
-                <img src={roomViewImg} alt='' />
-                <img src={threeDImg} alt='' />
+            <div className="flex justify-between mt-2.5 mb-5">
+              <div className="flex gap-x-2.5">
+                <img src={colorCicleImg} alt="" />
+                <img src={blackCircleImg} alt="" />
+                <img src={roomViewImg} alt="" />
+                <img src={threeDImg} alt="" />
               </div>
               <div className="flex gap-x-2.5 items-center">
                 {popupLogin && (
@@ -1177,7 +1194,6 @@ includeTopMatRef.current = false
                                 ) : (
                                   <span>{folderName.title}</span>
                                 )}
-                                {}
 
                                 <img
                                   className="inline-block"
@@ -1258,65 +1274,57 @@ includeTopMatRef.current = false
                     alt=""
                   />
                 )}
-                <Wishlist
-                  id={artDetails.artId}
-                  type='small'
-                  prodType='art'
-                />
-                <img src={shareIcon} alt='' />
+                <Wishlist id={artDetails.artId} type="small" prodType="art" />
+                <img src={shareIcon} alt="" />
               </div>
             </div>
 
-            <p className='text-primaryBlack text-[15px] font-medium leading-5 mb-1'>
+            <p className="text-primaryBlack text-[15px] font-medium leading-5 mb-1">
               You have selected
             </p>
-            <div className='h-[220px] w-full rounded-2xl bg-gradient-to-r from-[#DC4C9A] via-[#9593CD] via-[#84D49C] via-[#CCEC3B] to-[#F7941D] p-[1px]'>
-              <div className=' h-[100%] w-[100%] bg-[#ffffff] rounded-2xl py-2.5 px-2.5'>
-                <div className='flex gap-2.5'>
+            <div className="h-[220px] w-full rounded-2xl bg-gradient-to-r from-[#DC4C9A] via-[#9593CD] via-[#84D49C] via-[#CCEC3B] to-[#F7941D] p-[1px]">
+              <div className=" h-[100%] w-[100%] bg-[#ffffff] rounded-2xl py-2.5 px-2.5">
+                <div className="flex gap-2.5">
                   {/* Orientation */}
-                  {orientationBtn === 'Square' ? (
-                    <div className='text-center'>
+                  {orientationBtn === "Square" ? (
+                    <div className="text-center">
                       <svg
-                        width='48'
-                        height='48'
-                        viewBox='0 0 48 48'
-                        fill='none'
-                        xmlns='http://www.w3.org/2000/svg'
+                        width="48"
+                        height="48"
+                        viewBox="0 0 48 48"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          fill-rule='evenodd'
-                          clip-rule='evenodd'
-                          d='M4 1H44C45.6569 1 47 2.34315 47 4V44C47 45.6569 45.6569 47 44 47H4C2.34315 47 1 45.6569 1 44V4C1 2.34315 2.34315 1 4 1ZM44 0H4C1.79086 0 0 1.79086 0 4V44C0 46.2091 1.79086 48 4 48H44C46.2091 48 48 46.2091 48 44V4C48 1.79086 46.2091 0 44 0ZM13 10H35C36.6569 10 38 11.3431 38 13V35C38 36.6569 36.6569 38 35 38H13C11.3431 38 10 36.6569 10 35V13C10 11.3431 11.3431 10 13 10Z'
-                          fill='#BBBBBB'
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M4 1H44C45.6569 1 47 2.34315 47 4V44C47 45.6569 45.6569 47 44 47H4C2.34315 47 1 45.6569 1 44V4C1 2.34315 2.34315 1 4 1ZM44 0H4C1.79086 0 0 1.79086 0 4V44C0 46.2091 1.79086 48 4 48H44C46.2091 48 48 46.2091 48 44V4C48 1.79086 46.2091 0 44 0ZM13 10H35C36.6569 10 38 11.3431 38 13V35C38 36.6569 36.6569 38 35 38H13C11.3431 38 10 36.6569 10 35V13C10 11.3431 11.3431 10 13 10Z"
+                          fill="#BBBBBB"
                         />
                       </svg>
 
-                      <p
-                        className={`text-sm11 ${'text-primaryGray'} mt-0.5`}
-                      >
+                      <p className={`text-sm11 ${"text-primaryGray"} mt-0.5`}>
                         Square <br />
                         Orientation
                       </p>
                     </div>
-                  ) : orientationBtn === 'Horizontal' ? (
+                  ) : orientationBtn === "Horizontal" ? (
                     <div>
                       <svg
-                        width='48'
-                        height='48'
-                        viewBox='0 0 48 48'
-                        fill='none'
-                        xmlns='http://www.w3.org/2000/svg'
+                        width="48"
+                        height="48"
+                        viewBox="0 0 48 48"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          fill-rule='evenodd'
-                          clip-rule='evenodd'
-                          d='M4 1H44C45.6569 1 47 2.34315 47 4V44C47 45.6569 45.6569 47 44 47H4C2.34315 47 1 45.6569 1 44V4C1 2.34315 2.34315 1 4 1ZM44 0H4C1.79086 0 0 1.79086 0 4V44C0 46.2091 1.79086 48 4 48H44C46.2091 48 48 46.2091 48 44V4C48 1.79086 46.2091 0 44 0ZM13 14H35C36.6569 14 38 15.3431 38 17V31C38 32.6569 36.6569 34 35 34H13C11.3431 34 10 32.6569 10 31V17C10 15.3431 11.3431 14 13 14Z'
-                          fill='#BBBBBB'
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M4 1H44C45.6569 1 47 2.34315 47 4V44C47 45.6569 45.6569 47 44 47H4C2.34315 47 1 45.6569 1 44V4C1 2.34315 2.34315 1 4 1ZM44 0H4C1.79086 0 0 1.79086 0 4V44C0 46.2091 1.79086 48 4 48H44C46.2091 48 48 46.2091 48 44V4C48 1.79086 46.2091 0 44 0ZM13 14H35C36.6569 14 38 15.3431 38 17V31C38 32.6569 36.6569 34 35 34H13C11.3431 34 10 32.6569 10 31V17C10 15.3431 11.3431 14 13 14Z"
+                          fill="#BBBBBB"
                         />
                       </svg>
-                      <p
-                        className={`text-sm11 ${'text-primaryGray'} mt-0.5`}
-                      >
+                      <p className={`text-sm11 ${"text-primaryGray"} mt-0.5`}>
                         Horizontal <br />
                         Orientation
                       </p>
@@ -1324,22 +1332,20 @@ includeTopMatRef.current = false
                   ) : (
                     <div>
                       <svg
-                        width='48'
-                        height='48'
-                        viewBox='0 0 48 48'
-                        fill='none'
-                        xmlns='http://www.w3.org/2000/svg'
+                        width="48"
+                        height="48"
+                        viewBox="0 0 48 48"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          fill-rule='evenodd'
-                          clip-rule='evenodd'
-                          d='M4 1H44C45.6569 1 47 2.34315 47 4V44C47 45.6569 45.6569 47 44 47H4C2.34315 47 1 45.6569 1 44V4C1 2.34315 2.34315 1 4 1ZM44 0H4C1.79086 0 0 1.79086 0 4V44C0 46.2091 1.79086 48 4 48H44C46.2091 48 48 46.2091 48 44V4C48 1.79086 46.2091 0 44 0ZM17 10H31C32.6569 10 34 11.3431 34 13V35C34 36.6569 32.6569 38 31 38H17C15.3431 38 14 36.6569 14 35V13C14 11.3431 15.3431 10 17 10Z'
-                          fill='#BBBBBB'
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M4 1H44C45.6569 1 47 2.34315 47 4V44C47 45.6569 45.6569 47 44 47H4C2.34315 47 1 45.6569 1 44V4C1 2.34315 2.34315 1 4 1ZM44 0H4C1.79086 0 0 1.79086 0 4V44C0 46.2091 1.79086 48 4 48H44C46.2091 48 48 46.2091 48 44V4C48 1.79086 46.2091 0 44 0ZM17 10H31C32.6569 10 34 11.3431 34 13V35C34 36.6569 32.6569 38 31 38H17C15.3431 38 14 36.6569 14 35V13C14 11.3431 15.3431 10 17 10Z"
+                          fill="#BBBBBB"
                         />
                       </svg>
-                      <p
-                        className={`text-sm11 ${'text-primaryGray'} mt-0.5`}
-                      >
+                      <p className={`text-sm11 ${"text-primaryGray"} mt-0.5`}>
                         Vertical <br />
                         Orientation
                       </p>
@@ -1348,91 +1354,84 @@ includeTopMatRef.current = false
 
                   {/* Frame */}
                   {includeFrame ? (
-                    <div className='text-center'>
+                    <div className="text-center">
                       <svg
-                        width='48'
-                        height='48'
-                        viewBox='0 0 48 48'
-                        fill='none'
-                        xmlns='http://www.w3.org/2000/svg'
+                        width="48"
+                        height="48"
+                        viewBox="0 0 48 48"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          fillRule='evenodd'
-                          clipRule='evenodd'
-                          d='M4 0C1.79086 0 0 1.79086 0 4V44C0 46.2091 1.79086 48 4 48H44C46.2091 48 48 46.2091 48 44V4C48 1.79086 46.2091 0 44 0H4ZM5 3C3.89543 3 3 3.89543 3 5V43C3 44.1046 3.89543 45 5 45H43C44.1046 45 45 44.1046 45 43V5C45 3.89543 44.1046 3 43 3H5Z'
-                          className={`${'fill-[#BBBBBB]'}`}
+                          fillRule="evenodd"
+                          clipRule="evenodd"
+                          d="M4 0C1.79086 0 0 1.79086 0 4V44C0 46.2091 1.79086 48 4 48H44C46.2091 48 48 46.2091 48 44V4C48 1.79086 46.2091 0 44 0H4ZM5 3C3.89543 3 3 3.89543 3 5V43C3 44.1046 3.89543 45 5 45H43C44.1046 45 45 44.1046 45 43V5C45 3.89543 44.1046 3 43 3H5Z"
+                          className={`${"fill-[#BBBBBB]"}`}
                         />
                         <rect
-                          x='10'
-                          y='10'
-                          width='28'
-                          height='28'
-                          rx='2'
-                          fill='#EEEEEE'
+                          x="10"
+                          y="10"
+                          width="28"
+                          height="28"
+                          rx="2"
+                          fill="#EEEEEE"
                         />
                       </svg>
 
-                      <p
-                        className={`text-sm11 ${'text-primaryGray'} mt-0.5`}
-                      >
+                      <p className={`text-sm11 ${"text-primaryGray"} mt-0.5`}>
                         Frame <br /> Included
                       </p>
                     </div>
                   ) : (
-                    <div className='text-center'>
+                    <div className="text-center">
                       <svg
-                        width='48'
-                        height='48'
-                        viewBox='0 0 48 48'
-                        fill='none'
-                        xmlns='http://www.w3.org/2000/svg'
+                        width="48"
+                        height="48"
+                        viewBox="0 0 48 48"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          fillRule='evenodd'
-                          clipRule='evenodd'
-                          d='M4 0C1.79086 0 0 1.79086 0 4V44C0 46.2091 1.79086 48 4 48H44C46.2091 48 48 46.2091 48 44V4C48 1.79086 46.2091 0 44 0H4ZM5 3C3.89543 3 3 3.89543 3 5V43C3 44.1046 3.89543 45 5 45H43C44.1046 45 45 44.1046 45 43V5C45 3.89543 44.1046 3 43 3H5Z'
-                          className={`${'fill-[#BBBBBB]'}`}
+                          fillRule="evenodd"
+                          clipRule="evenodd"
+                          d="M4 0C1.79086 0 0 1.79086 0 4V44C0 46.2091 1.79086 48 4 48H44C46.2091 48 48 46.2091 48 44V4C48 1.79086 46.2091 0 44 0H4ZM5 3C3.89543 3 3 3.89543 3 5V43C3 44.1046 3.89543 45 5 45H43C44.1046 45 45 44.1046 45 43V5C45 3.89543 44.1046 3 43 3H5Z"
+                          className={`${"fill-[#BBBBBB]"}`}
                         />
                         <rect
-                          x='10'
-                          y='10'
-                          width='28'
-                          height='28'
-                          rx='2'
-                          fill='#EEEEEE'
+                          x="10"
+                          y="10"
+                          width="28"
+                          height="28"
+                          rx="2"
+                          fill="#EEEEEE"
                         />
                         <rect
-                          width='58.2986'
-                          height='1.0096'
-                          rx='0.5'
-                          transform='matrix(0.706047 0.708165 -0.706047 0.708165 3.83838 3)'
-                          fill='#BBBBBB'
+                          width="58.2986"
+                          height="1.0096"
+                          rx="0.5"
+                          transform="matrix(0.706047 0.708165 -0.706047 0.708165 3.83838 3)"
+                          fill="#BBBBBB"
                         />
                         <rect
-                          width='58.2986'
-                          height='1.0096'
-                          rx='0.5'
-                          transform='matrix(-0.706047 0.708165 0.706047 0.708165 44.1616 3)'
-                          fill='#BBBBBB'
+                          width="58.2986"
+                          height="1.0096"
+                          rx="0.5"
+                          transform="matrix(-0.706047 0.708165 0.706047 0.708165 44.1616 3)"
+                          fill="#BBBBBB"
                         />
                       </svg>
 
-                      <p
-                        className={`text-sm11 ${'text-primaryGray'} mt-0.5`}
-                      >
+                      <p className={`text-sm11 ${"text-primaryGray"} mt-0.5`}>
                         Frame <br /> Excluded
                       </p>
                     </div>
                   )}
                   {includeFrame && (
-                    <div className='border rounded-[10px] w-[48px] h-[48px] border-[#EFEFEF] text-center'>
-                      <img
-                        src={selectedFrame?.frameThumbnailUrl}
-                        alt=''
-                      />
+                    <div className="border rounded-[10px] w-[48px] h-[48px] border-[#EFEFEF] text-center">
+                      <img src={selectedFrame?.frameThumbnailUrl} alt="" />
                       <p
-                        className={`text-sm11 mt-0.5 ${'text-primaryGray'}`}
-                        style={{ whiteSpace: 'nowrap' }}
+                        className={`text-sm11 mt-0.5 ${"text-primaryGray"}`}
+                        style={{ whiteSpace: "nowrap" }}
                       >
                         {/* {selectedFrame?.frameName} */}
                         Chelsea <br />
@@ -1443,28 +1442,26 @@ includeTopMatRef.current = false
 
                   {/* TopMat */}
                   {includeTopMat && (
-                    <div className='text-center'>
+                    <div className="text-center">
                       <svg
-                        width='48'
-                        height='48'
-                        viewBox='0 0 48 48'
-                        fill='none'
-                        xmlns='http://www.w3.org/2000/svg'
+                        width="48"
+                        height="48"
+                        viewBox="0 0 48 48"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          d='M4 0.5H44C45.933 0.5 47.5 2.067 47.5 4V44C47.5 45.933 45.933 47.5 44 47.5H4C2.067 47.5 0.5 45.933 0.5 44V4C0.5 2.067 2.067 0.5 4 0.5Z'
-                          className={`${'fill-[#EEEEEE]'}`}
-                          stroke='#D6D6D6'
+                          d="M4 0.5H44C45.933 0.5 47.5 2.067 47.5 4V44C47.5 45.933 45.933 47.5 44 47.5H4C2.067 47.5 0.5 45.933 0.5 44V4C0.5 2.067 2.067 0.5 4 0.5Z"
+                          className={`${"fill-[#EEEEEE]"}`}
+                          stroke="#D6D6D6"
                         />
                         <path
-                          d='M36 9H12C10.3431 9 9 10.3431 9 12V36C9 37.6569 10.3431 39 12 39H36C37.6569 39 39 37.6569 39 36V12C39 10.3431 37.6569 9 36 9Z'
-                          fill='white'
+                          d="M36 9H12C10.3431 9 9 10.3431 9 12V36C9 37.6569 10.3431 39 12 39H36C37.6569 39 39 37.6569 39 36V12C39 10.3431 37.6569 9 36 9Z"
+                          fill="white"
                         />
                       </svg>
 
-                      <p
-                        className={`text-sm11 ${'text-primaryGray'} mt-0.5`}
-                      >
+                      <p className={`text-sm11 ${"text-primaryGray"} mt-0.5`}>
                         Top Mat
                       </p>
                     </div>
@@ -1472,80 +1469,78 @@ includeTopMatRef.current = false
 
                   {/* Bottom mat */}
                   {includeBottomMat && (
-                    <div className='text-center'>
+                    <div className="text-center">
                       <svg
-                        width='48'
-                        height='48'
-                        viewBox='0 0 48 48'
-                        fill='none'
-                        xmlns='http://www.w3.org/2000/svg'
+                        width="48"
+                        height="48"
+                        viewBox="0 0 48 48"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          d='M4 0.5H44C45.933 0.5 47.5 2.067 47.5 4V44C47.5 45.933 45.933 47.5 44 47.5H4C2.067 47.5 0.5 45.933 0.5 44V4C0.5 2.067 2.067 0.5 4 0.5Z'
-                          stroke='#D6D6D6'
+                          d="M4 0.5H44C45.933 0.5 47.5 2.067 47.5 4V44C47.5 45.933 45.933 47.5 44 47.5H4C2.067 47.5 0.5 45.933 0.5 44V4C0.5 2.067 2.067 0.5 4 0.5Z"
+                          stroke="#D6D6D6"
                         />
                         <path
-                          d='M36 8H12C9.79086 8 8 9.79086 8 12V36C8 38.2091 9.79086 40 12 40H36C38.2091 40 40 38.2091 40 36V12C40 9.79086 38.2091 8 36 8Z'
-                          className={`${'fill-[#EEEEEE]'}`}
+                          d="M36 8H12C9.79086 8 8 9.79086 8 12V36C8 38.2091 9.79086 40 12 40H36C38.2091 40 40 38.2091 40 36V12C40 9.79086 38.2091 8 36 8Z"
+                          className={`${"fill-[#EEEEEE]"}`}
                         />
                         <path
-                          d='M30 15H18C16.3431 15 15 16.3431 15 18V30C15 31.6569 16.3431 33 18 33H30C31.6569 33 33 31.6569 33 30V18C33 16.3431 31.6569 15 30 15Z'
-                          fill='white'
+                          d="M30 15H18C16.3431 15 15 16.3431 15 18V30C15 31.6569 16.3431 33 18 33H30C31.6569 33 33 31.6569 33 30V18C33 16.3431 31.6569 15 30 15Z"
+                          fill="white"
                         />
                       </svg>
 
-                      <p
-                        className={`text-sm11 ${'text-primaryGray'} mt-0.5`}
-                      >
+                      <p className={`text-sm11 ${"text-primaryGray"} mt-0.5`}>
                         Bottom Mat
                       </p>
                     </div>
                   )}
                 </div>
-                <div className='mt-5 border-t border-b border-[#EFEFEF] w-[100%]'>
-                  <table className='w-[100%]'>
-                    <tr className='border-b border-[#EFEFEF]'>
-                      <td className='text-primaryGray text-sm12 font-medium leading-4 w-[120px]'>
+                <div className="mt-5 border-t border-b border-[#EFEFEF] w-[100%]">
+                  <table className="w-[100%]">
+                    <tr className="border-b border-[#EFEFEF]">
+                      <td className="text-primaryGray text-sm12 font-medium leading-4 w-[120px]">
                         Image Size:
                       </td>
-                      <td className='text-primaryGray text-sm12 font-normal leading-4 '>
-                        {orientationBtn === 'Horizontal'
+                      <td className="text-primaryGray text-sm12 font-normal leading-4 ">
+                        {orientationBtn === "Horizontal"
                           ? `${horiSelect?.width}cm x ${horiSelect?.height}cm`
-                          : orientationBtn === 'Vertical'
+                          : orientationBtn === "Vertical"
                           ? `${vertiSelect?.width}cm x ${vertiSelect?.height}cm`
                           : `${squareSelect?.width}cm x ${squareSelect?.height}cm`}
                       </td>
                     </tr>
-                    <tr className='border-b border-[#EFEFEF]'>
-                      <td className='text-primaryGray text-sm12 font-medium leading-4 '>
+                    <tr className="border-b border-[#EFEFEF]">
+                      <td className="text-primaryGray text-sm12 font-medium leading-4 ">
                         Top Mat Width:
                       </td>
-                      <td className='text-primaryGray text-sm12 font-normal leading-4 '>
+                      <td className="text-primaryGray text-sm12 font-normal leading-4 ">
                         {topMatSelect}cm
                       </td>
                     </tr>
-                    <tr className='border-b border-[#EFEFEF]'>
-                      <td className='text-primaryGray text-sm12 font-medium leading-4 '>
+                    <tr className="border-b border-[#EFEFEF]">
+                      <td className="text-primaryGray text-sm12 font-medium leading-4 ">
                         Bottom Mat Width:
                       </td>
-                      <td className='text-primaryGray text-sm12 font-normal leading-4 '>
+                      <td className="text-primaryGray text-sm12 font-normal leading-4 ">
                         {bottomMatSelect}cm
                       </td>
                     </tr>
-                    <tr className='border-b border-[#EFEFEF]'>
-                      <td className='text-primaryGray text-sm12 font-medium leading-4 '>
+                    <tr className="border-b border-[#EFEFEF]">
+                      <td className="text-primaryGray text-sm12 font-medium leading-4 ">
                         Frame Width:
                       </td>
-                      <td className='text-primaryGray text-sm12 font-normal leading-4 '>
+                      <td className="text-primaryGray text-sm12 font-normal leading-4 ">
                         {includeFrame ? selectedFrame?.width : 0}cm
                       </td>
                     </tr>
-                    <tr className=''>
-                      <td className='text-primaryGray text-sm12 font-medium leading-4 '>
+                    <tr className="">
+                      <td className="text-primaryGray text-sm12 font-medium leading-4 ">
                         Overall Size:
                       </td>
-                      <td className='text-primaryGray text-sm12 font-normal leading-4 '>
-                        {orientationBtn === 'Horizontal'
+                      <td className="text-primaryGray text-sm12 font-normal leading-4 ">
+                        {orientationBtn === "Horizontal"
                           ? `${
                               Number(horiSelect?.width) +
                               (includeFrame
@@ -1569,7 +1564,7 @@ includeTopMatRef.current = false
                                 ? Number(bottomMatSelect)
                                 : 0)
                             }cm`
-                          : orientationBtn === 'Vertical'
+                          : orientationBtn === "Vertical"
                           ? `${
                               Number(vertiSelect?.width) +
                               (includeFrame
@@ -1627,7 +1622,6 @@ includeTopMatRef.current = false
 
           <div className="right pl-7">
             <p className="text-[1.563rem] font-medium leading-7 text-primaryBlack mb-0.5">
-
               {artDetails?.artName}
             </p>
             {/* <img src={conHead} alt='' /> */}
@@ -1639,8 +1633,8 @@ includeTopMatRef.current = false
                   }}
                 />
               ) : (
-               <div
-                  className='w-[32px] h-[32px] bg-cover bg-center rounded-[50%]'
+                <div
+                  className="w-[32px] h-[32px] bg-cover bg-center rounded-[50%]"
                   style={{
                     backgroundImage: `url(${artDetails?.userMaster?.coverImage})`,
                   }}
@@ -1746,7 +1740,7 @@ includeTopMatRef.current = false
                     <div className="text-center">
                       <svg
                         onClick={() => {
-                          changeOrientation('Horizontal');
+                          changeOrientation("Horizontal");
                         }}
                         width="40"
                         height="40"
@@ -1761,26 +1755,26 @@ includeTopMatRef.current = false
                           height="39"
                           rx="3.5"
                           className={`${
-                            orientationBtn === 'Horizontal'
-                              ? 'stroke-[#333333] '
-                              : 'stroke-[#d9d9d9]'
+                            orientationBtn === "Horizontal"
+                              ? "stroke-[#333333] "
+                              : "stroke-[#d9d9d9]"
                           }`}
                         />
                         <path
                           d="M8 14C8 12.8954 8.89543 12 10 12H30C31.1046 12 32 12.8954 32 14V26C32 27.1046 31.1046 28 30 28H10C8.89543 28 8 27.1046 8 26V14Z"
                           className={`${
-                            orientationBtn === 'Horizontal'
-                              ? 'fill-[#333333]'
-                              : 'fill-[#BBBBBB]'
+                            orientationBtn === "Horizontal"
+                              ? "fill-[#333333]"
+                              : "fill-[#BBBBBB]"
                           }`}
                           fill="#BBBBBB"
                         />
                       </svg>
                       <p
                         className={`text-sm11 ${
-                          orientationBtn === 'Horizontal'
-                            ? 'text-[#333333] '
-                            : 'text-primaryGray'
+                          orientationBtn === "Horizontal"
+                            ? "text-[#333333] "
+                            : "text-primaryGray"
                         }`}
                       >
                         Horizontal
@@ -1788,16 +1782,16 @@ includeTopMatRef.current = false
                     </div>
 
                     {/* Verticle */}
-                    <div className='text-center'>
+                    <div className="text-center">
                       <svg
                         onClick={() => {
-                          changeOrientation('Vertical');
+                          changeOrientation("Vertical");
                         }}
-                        width='40'
-                        height='40'
-                        viewBox='0 0 40 40'
-                        fill='none'
-                        xmlns='http://www.w3.org/2000/svg'
+                        width="40"
+                        height="40"
+                        viewBox="0 0 40 40"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
                       >
                         <rect
                           x="0.5"
@@ -1806,26 +1800,26 @@ includeTopMatRef.current = false
                           height="39"
                           rx="3.5"
                           className={`${
-                            orientationBtn === 'Vertical'
-                              ? 'stroke-[#333333] '
-                              : 'stroke-[#d9d9d9]'
+                            orientationBtn === "Vertical"
+                              ? "stroke-[#333333] "
+                              : "stroke-[#d9d9d9]"
                           }`}
                         />
                         <path
                           d="M12 10C12 8.89543 12.8954 8 14 8H26C27.1046 8 28 8.89543 28 10V30C28 31.1046 27.1046 32 26 32H14C12.8954 32 12 31.1046 12 30V10Z"
                           className={`${
-                            orientationBtn === 'Vertical'
-                              ? 'fill-[#333333]'
-                              : 'fill-[#BBBBBB]'
+                            orientationBtn === "Vertical"
+                              ? "fill-[#333333]"
+                              : "fill-[#BBBBBB]"
                           }`}
                           fill="#BBBBBB"
                         />
                       </svg>
                       <p
                         className={`text-sm11 ${
-                          orientationBtn === 'Vertical'
-                            ? 'text-[#333333] '
-                            : 'text-primaryGray'
+                          orientationBtn === "Vertical"
+                            ? "text-[#333333] "
+                            : "text-primaryGray"
                         }`}
                       >
                         Vertical
@@ -1833,14 +1827,14 @@ includeTopMatRef.current = false
                     </div>
 
                     {/* Square */}
-                    <div className='text-center'>
+                    <div className="text-center">
                       <svg
-                        onClick={() => changeOrientation('Square')}
-                        width='40'
-                        height='40'
-                        viewBox='0 0 40 40'
-                        fill='none'
-                        xmlns='http://www.w3.org/2000/svg'
+                        onClick={() => changeOrientation("Square")}
+                        width="40"
+                        height="40"
+                        viewBox="0 0 40 40"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
                       >
                         <rect
                           x="0.5"
@@ -1849,26 +1843,26 @@ includeTopMatRef.current = false
                           height="39"
                           rx="3.5"
                           className={`${
-                            orientationBtn === 'Square'
-                              ? 'stroke-[#333333] '
-                              : 'stroke-[#d9d9d9]'
+                            orientationBtn === "Square"
+                              ? "stroke-[#333333] "
+                              : "stroke-[#d9d9d9]"
                           }`}
                         />
                         <path
                           d="M8 10C8 8.89543 8.89543 8 10 8H30C31.1046 8 32 8.89543 32 10V30C32 31.1046 31.1046 32 30 32H10C8.89543 32 8 31.1046 8 30V10Z"
                           className={`${
-                            orientationBtn === 'Square'
-                              ? 'fill-[#333333]'
-                              : 'fill-[#BBBBBB]'
+                            orientationBtn === "Square"
+                              ? "fill-[#333333]"
+                              : "fill-[#BBBBBB]"
                           }`}
                           fill="#BBBBBB"
                         />
                       </svg>
                       <p
                         className={`text-sm11 ${
-                          orientationBtn === 'Square'
-                            ? 'text-[#333333] '
-                            : 'text-primaryGray'
+                          orientationBtn === "Square"
+                            ? "text-[#333333] "
+                            : "text-primaryGray"
                         }`}
                       >
                         Square
@@ -1876,17 +1870,17 @@ includeTopMatRef.current = false
                     </div>
                   </div>
 
-                  {orientationBtn === 'Horizontal' ? (
+                  {orientationBtn === "Horizontal" ? (
                     <div>
                       <p className="text-primaryBlack text-[15px] font-medium leading-5 mb-1">
                         Select <span className="capitalize">Horizontal</span>{" "}
                         Orientation
                       </p>
 
-                      <div className='flex gap-5 flex-wrap mb-2.5'>
+                      <div className="flex gap-5 flex-wrap mb-2.5">
                         {horiOriList.length > 0 &&
                           horiOriList?.map((obj) => (
-                            <div className='flex items-center'>
+                            <div className="flex items-center">
                               <input
                                 checked={
                                   horiSelect?.orientationId ===
@@ -1899,7 +1893,7 @@ includeTopMatRef.current = false
                                 className=" mr-1"
                                 type="checkbox"
                               />
-                              <p className='text-[13px] text-primaryGray'>
+                              <p className="text-[13px] text-primaryGray">
                                 {obj.width}cm x {obj.height}cm
                               </p>
                             </div>
@@ -1913,10 +1907,10 @@ includeTopMatRef.current = false
                         Orientation
                       </p>
 
-                      <div className='flex gap-5 flex-wrap mb-2.5'>
+                      <div className="flex gap-5 flex-wrap mb-2.5">
                         {vertOriList.length > 0 &&
                           vertOriList?.map((obj) => (
-                            <div className='flex items-center'>
+                            <div className="flex items-center">
                               <input
                                 checked={
                                   vertiSelect?.orientationId ===
@@ -1929,7 +1923,7 @@ includeTopMatRef.current = false
                                 className=" mr-1"
                                 type="checkbox"
                               />
-                              <p className='text-[13px] text-primaryGray'>
+                              <p className="text-[13px] text-primaryGray">
                                 {obj.width}cm x {obj.height}cm
                               </p>
                             </div>
@@ -1943,10 +1937,10 @@ includeTopMatRef.current = false
                         Orientation
                       </p>
 
-                      <div className='flex gap-5 flex-wrap mb-2.5'>
+                      <div className="flex gap-5 flex-wrap mb-2.5">
                         {squaOriList.length > 0 &&
                           squaOriList?.map((obj) => (
-                            <div className='flex items-center'>
+                            <div className="flex items-center">
                               <input
                                 checked={
                                   squareSelect?.orientationId ===
@@ -1959,7 +1953,7 @@ includeTopMatRef.current = false
                                 className=" mr-1"
                                 type="checkbox"
                               />
-                              <p className='text-[13px] text-primaryGray '>
+                              <p className="text-[13px] text-primaryGray ">
                                 {obj.width}cm x {obj.height}cm
                               </p>
                             </div>
@@ -2089,7 +2083,7 @@ includeTopMatRef.current = false
                               of the frame
                             </p>
 
-                            <div className='w-[100%] flex flex-wrap'>
+                            <div className="w-[100%] flex flex-wrap">
                               {frameColorr?.map((color, i) => (
                                 <div
                                   key={i}
@@ -2108,7 +2102,7 @@ includeTopMatRef.current = false
                                       backgroundColor: `${color?.colorCode}`,
                                     }}
                                   ></div>
-                                  <p className='text-primaryGray text-[11px] leading-[1.1] mt-[3px]'>
+                                  <p className="text-primaryGray text-[11px] leading-[1.1] mt-[3px]">
                                     {color?.colorName}
                                   </p>
                                 </div>
@@ -2118,8 +2112,8 @@ includeTopMatRef.current = false
                               onClick={setNewFrameColor}
                               className={`z-[999] ${
                                 colorFrameFocus !== null
-                                  ? 'bg-[#333333]'
-                                  : 'bg-[#8e8e8e]'
+                                  ? "bg-[#333333]"
+                                  : "bg-[#8e8e8e]"
                               } rounded-[14px] h-[28px] w-[108px] text-[12px] font-medium text-[white] mx-[auto]`}
                             >
                               Select Colour
@@ -2144,10 +2138,10 @@ includeTopMatRef.current = false
                           xmlns="http://www.w3.org/2000/svg"
                         >
                           <path
-                            fillRule='evenodd'
-                            clipRule='evenodd'
-                            d='M4 0H16V3H10.5H5C3.89539 3 3 3.89542 3 5V16H0V4C0 1.79086 1.79089 0 4 0Z'
-                            fill='#A6CF4F'
+                            fillRule="evenodd"
+                            clipRule="evenodd"
+                            d="M4 0H16V3H10.5H5C3.89539 3 3 3.89542 3 5V16H0V4C0 1.79086 1.79089 0 4 0Z"
+                            fill="#A6CF4F"
                           />
                           <rect
                             x="16"
@@ -2157,22 +2151,22 @@ includeTopMatRef.current = false
                             fill="#283897"
                           />
                           <path
-                            fillRule='evenodd'
-                            clipRule='evenodd'
-                            d='M44 0H32V3H37.5H43C44.1046 3 45 3.89542 45 5V16H48V4C48 1.79086 46.2091 0 44 0Z'
-                            fill='#FFAC14'
+                            fillRule="evenodd"
+                            clipRule="evenodd"
+                            d="M44 0H32V3H37.5H43C44.1046 3 45 3.89542 45 5V16H48V4C48 1.79086 46.2091 0 44 0Z"
+                            fill="#FFAC14"
                           />
                           <path
-                            fillRule='evenodd'
-                            clipRule='evenodd'
-                            d='M44 48H32V45H37.5H43C44.1046 45 45 44.1046 45 43V32H48V44C48 46.2091 46.2091 48 44 48Z'
-                            fill='#BB0271'
+                            fillRule="evenodd"
+                            clipRule="evenodd"
+                            d="M44 48H32V45H37.5H43C44.1046 45 45 44.1046 45 43V32H48V44C48 46.2091 46.2091 48 44 48Z"
+                            fill="#BB0271"
                           />
                           <path
-                            fillRule='evenodd'
-                            clipRule='evenodd'
-                            d='M4 48H16V45H10.5H5C3.89539 45 3 44.1046 3 43V32H0V44C0 46.2091 1.79089 48 4 48Z'
-                            fill='#02A2B8'
+                            fillRule="evenodd"
+                            clipRule="evenodd"
+                            d="M4 48H16V45H10.5H5C3.89539 45 3 44.1046 3 43V32H0V44C0 46.2091 1.79089 48 4 48Z"
+                            fill="#02A2B8"
                           />
                           <rect
                             x="45"
@@ -2201,23 +2195,23 @@ includeTopMatRef.current = false
                   <p className="text-primaryBlack text-[15px] font-medium leading-5 mb-1">
                     Select Frame Type
                   </p>
-                  <div className='flex gap-2.5 flex-wrap mb-0.5'>
+                  <div className="flex gap-2.5 flex-wrap mb-0.5">
                     {frameList?.map((frame) => (
                       <div
                         key={frame.frameId}
                         onClick={() => getFrameCheck(frame)}
                         className={`border rounded-[10px] ${
                           frame.frameId === frameChecked
-                            ? 'border-[#333333]'
-                            : 'border-[#EFEFEF]'
+                            ? "border-[#333333]"
+                            : "border-[#EFEFEF]"
                         } `}
                       >
-                        <img src={frame?.frameThumbnailUrl} alt='' />
+                        <img src={frame?.frameThumbnailUrl} alt="" />
                       </div>
                     ))}
                   </div>
                   <p
-                    className='text-orangeColor text-sm12 font-normal cursor-pointer'
+                    className="text-orangeColor text-sm12 font-normal cursor-pointer"
                     onClick={() => setSeeAllOpen(true)}
                   >
                     See all frames
@@ -2225,16 +2219,14 @@ includeTopMatRef.current = false
                   <SeeAllFramesPopup
                     open={seeAllopen}
                     closeOnDocumentClick={true}
-                    position={'top center'}
+                    position={"top center"}
                     onClose={() => setSeeAllOpen(false)}
                   >
-                    <p className='text-heading text-center mb-5'>
-                      Art Frames
-                    </p>
-                    <p className='text-sm11 text-primaryGray mb-1'>
+                    <p className="text-heading text-center mb-5">Art Frames</p>
+                    <p className="text-sm11 text-primaryGray mb-1">
                       Select frame to view details
                     </p>
-                    <div className='bg-[#f9f9f9] h-[10.75rem] rounded-[15px] p-2.5 flex gap-2.5 flex-wrap overflow-y-scroll mb-[32px]'>
+                    <div className="bg-[#f9f9f9] h-[10.75rem] rounded-[15px] p-2.5 flex gap-2.5 flex-wrap overflow-y-scroll mb-[32px]">
                       {frameList?.map((data) => {
                         return (
                           <div
@@ -2242,114 +2234,105 @@ includeTopMatRef.current = false
                             key={data.frameId}
                             className={`relative ${
                               data.frameId === frameChecked
-                                ? 'bg-[#b0b0b0]'
-                                : 'bg-[#dcdcdc]'
+                                ? "bg-[#b0b0b0]"
+                                : "bg-[#dcdcdc]"
                             } rounded-[10px] w-[70px] h-[70px] group group-hover:bg-[#b0b0b0]`}
                           >
                             <input
                               checked={data.frameId === frameChecked}
-                              type='checkbox'
+                              type="checkbox"
                               className={`absolute top-[5px] right-[5px] ${
                                 data.frameId === frameChecked
-                                  ? 'block'
-                                  : 'hidden'
+                                  ? "block"
+                                  : "hidden"
                               } group-hover:block `}
                             />
                             <img
                               src={data?.frameThumbnailUrl}
-                              className='w-[100%]'
-                              alt=''
+                              className="w-[100%]"
+                              alt=""
                             />
                           </div>
                         );
                       })}
                     </div>
-                    <div className='flex gap-[30px]'>
-                      <div className='bg-[#f7f7f7] rounded-[20px] flex-1 '>
-                        <img
-                          src={selectedFrame?.frameImageUrl}
-                          alt=''
-                        />
+                    <div className="flex gap-[30px]">
+                      <div className="bg-[#f7f7f7] rounded-[20px] flex-1 ">
+                        <img src={selectedFrame?.frameImageUrl} alt="" />
                       </div>
-                      <div className='flex-1'>
-                        <p className='text-[25px] text-primaryBlack font-medium leading-[28px]  '>
+                      <div className="flex-1">
+                        <p className="text-[25px] text-primaryBlack font-medium leading-[28px]  ">
                           {selectedFrame?.frameName}
                         </p>
-                        <p className='text-sm11 text-primaryGray leading-[15px] mb-[15px]'>
+                        <p className="text-sm11 text-primaryGray leading-[15px] mb-[15px]">
                           Frame ID : {selectedFrame?.frameProductNo}
                         </p>
-                        <p className='text-sm11 text-primaryBlack leading-[13px] mb-[15px]'>
+                        <p className="text-sm11 text-primaryBlack leading-[13px] mb-[15px]">
                           {selectedFrame?.frameDescription}
                         </p>
-                        <p className='text-[13px] text-primaryBlack leading-[17px] font-semibold'>
+                        <p className="text-[13px] text-primaryBlack leading-[17px] font-semibold">
                           Specifications
                         </p>
-                        <div className='mt-[5px] mb-3 border-t border-b border-[#EFEFEF]'>
-                          <table className='w-[100%]'>
-                            <tr className='border-b border-[#EFEFEF]'>
-                              <td className='text-primaryGray text-sm12 font-medium leading-4 w-[100px]'>
+                        <div className="mt-[5px] mb-3 border-t border-b border-[#EFEFEF]">
+                          <table className="w-[100%]">
+                            <tr className="border-b border-[#EFEFEF]">
+                              <td className="text-primaryGray text-sm12 font-medium leading-4 w-[100px]">
                                 Colour
                               </td>
-                              <td className='text-primaryGray text-sm12 font-normal leading-4 '>
-                                {
-                                  selectedFrame?.frameColor[0]
-                                    ?.colorName
-                                }
+                              <td className="text-primaryGray text-sm12 font-normal leading-4 ">
+                                {selectedFrame?.frameColor[0]?.colorName}
                               </td>
                             </tr>
-                            <tr className='border-b border-[#EFEFEF]'>
-                              <td className='text-primaryGray text-sm12 font-medium leading-4 '>
+                            <tr className="border-b border-[#EFEFEF]">
+                              <td className="text-primaryGray text-sm12 font-medium leading-4 ">
                                 Width
                               </td>
-                              <td className='text-primaryGray text-sm12 font-normal leading-4 '>
+                              <td className="text-primaryGray text-sm12 font-normal leading-4 ">
                                 {selectedFrame?.width}cm
                               </td>
                             </tr>
-                            <tr className='border-b border-[#EFEFEF]'>
-                              <td className='text-primaryGray text-sm12 font-medium leading-4 '>
+                            <tr className="border-b border-[#EFEFEF]">
+                              <td className="text-primaryGray text-sm12 font-medium leading-4 ">
                                 Depth
                               </td>
-                              <td className='text-primaryGray text-sm12 font-normal leading-4 '>
+                              <td className="text-primaryGray text-sm12 font-normal leading-4 ">
                                 {selectedFrame?.depth}cm
                               </td>
                             </tr>
-                            <tr className='border-b border-[#EFEFEF]'>
-                              <td className='text-primaryGray text-sm12 font-medium leading-4 '>
+                            <tr className="border-b border-[#EFEFEF]">
+                              <td className="text-primaryGray text-sm12 font-medium leading-4 ">
                                 Material
                               </td>
-                              <td className='text-primaryGray text-sm12 font-normal leading-4 '>
+                              <td className="text-primaryGray text-sm12 font-normal leading-4 ">
                                 {selectedFrame?.material}
                               </td>
                             </tr>
-                            <tr className='border-b border-[#EFEFEF]'>
-                              <td className='text-primaryGray text-sm12 font-medium leading-4 '>
+                            <tr className="border-b border-[#EFEFEF]">
+                              <td className="text-primaryGray text-sm12 font-medium leading-4 ">
                                 Finish
                               </td>
-                              <td className='text-primaryGray text-sm12 font-normal leading-4 '>
+                              <td className="text-primaryGray text-sm12 font-normal leading-4 ">
                                 {selectedFrame?.finish}
                               </td>
                             </tr>
-                            <tr className=''>
-                              <td className='text-primaryGray text-sm12 font-medium leading-4 '>
+                            <tr className="">
+                              <td className="text-primaryGray text-sm12 font-medium leading-4 ">
                                 Style
                               </td>
-                              <td className='text-primaryGray text-sm12 font-normal leading-4 '>
+                              <td className="text-primaryGray text-sm12 font-normal leading-4 ">
                                 {selectedFrame?.style}
                               </td>
                             </tr>
                           </table>
                         </div>
-                        <img
-                          src={selectedFrame?.frameDrawingUrl}
-                          alt=''
-                        />
+                        <img src={selectedFrame?.frameDrawingUrl} alt="" />
                       </div>
                     </div>
-                    <div className='mt-[20px] flex justify-center gap-2.5'>
-                      <button className='blackBtn'>Select</button>
+                    <div className="mt-[20px] flex justify-center gap-2.5">
+                      <button className="blackBtn">Select</button>
                       <button
                         onClick={() => setSeeAllOpen(false)}
-                        className='outlineBtn'
+                        className="outlineBtn"
                       >
                         Cancel
                       </button>
@@ -2365,45 +2348,43 @@ includeTopMatRef.current = false
                         </p>
                         <img
                           src={questionIcon}
-                          className='cursor-pointer'
+                          className="cursor-pointer"
                           onClick={() => setOpenWhatIsMat(true)}
-                          alt=''
+                          alt=""
                         />
                         <WhatIsMatPopup
                           open={openWhatIsMat}
                           closeOnDocumentClick={true}
-                          position={'top center'}
+                          position={"top center"}
                           onClose={() => setOpenWhatIsMat(false)}
                         >
-                          <p className='text-heading mb-[15px] text-center font-medium'>
+                          <p className="text-heading mb-[15px] text-center font-medium">
                             What is Mat (Picture Framing)
                           </p>
-                          <div className='flex gap-[30px] mb-9 justify-center'>
+                          <div className="flex gap-[30px] mb-9 justify-center">
                             <img
-                              src='https://res.cloudinary.com/artnstockimg/image/upload/v1689330381/artnstock/dv3iwhtzs0airtimunsz.png'
-                              alt=''
+                              src="https://res.cloudinary.com/artnstockimg/image/upload/v1689330381/artnstock/dv3iwhtzs0airtimunsz.png"
+                              alt=""
                             />
                             <img
-                              src='https://res.cloudinary.com/artnstockimg/image/upload/v1689330309/artnstock/bjsymefotcgexk1qcrjo.png'
-                              alt=''
+                              src="https://res.cloudinary.com/artnstockimg/image/upload/v1689330309/artnstock/bjsymefotcgexk1qcrjo.png"
+                              alt=""
                             />
                           </div>
-                          <p className='text-center text-[13px] text-primaryGray leading-4'>
-                            In the picture framing industry, a mat (or
-                            matte, or mount in British English) is a
-                            thin, flat piece of paper-based material
-                            included within a picture frame, which
-                            serves as additional decoration and to
-                            perform several other, more practical
-                            functions, such as separating the art from
-                            the glass
+                          <p className="text-center text-[13px] text-primaryGray leading-4">
+                            In the picture framing industry, a mat (or matte, or
+                            mount in British English) is a thin, flat piece of
+                            paper-based material included within a picture
+                            frame, which serves as additional decoration and to
+                            perform several other, more practical functions,
+                            such as separating the art from the glass
                           </p>
                         </WhatIsMatPopup>
                       </div>
 
-                      <div className='flex gap-2.5 mb-5'>
+                      <div className="flex gap-2.5 mb-5">
                         {/* Include Mat */}
-                        <div className='text-center'>
+                        <div className="text-center">
                           <svg
                             onClick={() => {
                               setIncludeTopMat(true);
@@ -2416,32 +2397,32 @@ includeTopMatRef.current = false
                             xmlns="http://www.w3.org/2000/svg"
                           >
                             <path
-                              d='M4 0.5H44C45.933 0.5 47.5 2.067 47.5 4V44C47.5 45.933 45.933 47.5 44 47.5H4C2.067 47.5 0.5 45.933 0.5 44V4C0.5 2.067 2.067 0.5 4 0.5Z'
+                              d="M4 0.5H44C45.933 0.5 47.5 2.067 47.5 4V44C47.5 45.933 45.933 47.5 44 47.5H4C2.067 47.5 0.5 45.933 0.5 44V4C0.5 2.067 2.067 0.5 4 0.5Z"
                               className={`${
                                 includeTopMat
-                                  ? 'fill-primaryBlack'
-                                  : 'fill-[#EEEEEE]'
+                                  ? "fill-primaryBlack"
+                                  : "fill-[#EEEEEE]"
                               }`}
-                              stroke='#D6D6D6'
+                              stroke="#D6D6D6"
                             />
                             <path
-                              d='M36 9H12C10.3431 9 9 10.3431 9 12V36C9 37.6569 10.3431 39 12 39H36C37.6569 39 39 37.6569 39 36V12C39 10.3431 37.6569 9 36 9Z'
-                              fill='white'
+                              d="M36 9H12C10.3431 9 9 10.3431 9 12V36C9 37.6569 10.3431 39 12 39H36C37.6569 39 39 37.6569 39 36V12C39 10.3431 37.6569 9 36 9Z"
+                              fill="white"
                             />
                           </svg>
 
                           <p
                             className={`text-sm11 ${
                               includeTopMat
-                                ? 'text-[#333333] '
-                                : 'text-primaryGray'
+                                ? "text-[#333333] "
+                                : "text-primaryGray"
                             }`}
                           >
                             Include <br /> Top Mat
                           </p>
                         </div>
                         {/* Exclude Mat */}
-                        <div className='text-center'>
+                        <div className="text-center">
                           <svg
                             width="48"
                             height="48"
@@ -2454,109 +2435,106 @@ includeTopMatRef.current = false
                             }}
                           >
                             <path
-                              fillRule='evenodd'
-                              clipRule='evenodd'
-                              d='M4 0C1.79086 0 0 1.79086 0 4V44C0 46.2091 1.79086 48 4 48H44C46.2091 48 48 46.2091 48 44V4C48 1.79086 46.2091 0 44 0H4ZM5 3C3.89543 3 3 3.89543 3 5V43C3 44.1046 3.89543 45 5 45H43C44.1046 45 45 44.1046 45 43V5C45 3.89543 44.1046 3 43 3H5Z'
+                              fillRule="evenodd"
+                              clipRule="evenodd"
+                              d="M4 0C1.79086 0 0 1.79086 0 4V44C0 46.2091 1.79086 48 4 48H44C46.2091 48 48 46.2091 48 44V4C48 1.79086 46.2091 0 44 0H4ZM5 3C3.89543 3 3 3.89543 3 5V43C3 44.1046 3.89543 45 5 45H43C44.1046 45 45 44.1046 45 43V5C45 3.89543 44.1046 3 43 3H5Z"
                               className={`${
                                 !includeTopMat
-                                  ? 'fill-[#333333]'
-                                  : 'fill-[#BBBBBB]'
+                                  ? "fill-[#333333]"
+                                  : "fill-[#BBBBBB]"
                               }`}
                             />
                             <rect
-                              x='10'
-                              y='10'
-                              width='28'
-                              height='28'
-                              rx='2'
-                              fill='#EEEEEE'
+                              x="10"
+                              y="10"
+                              width="28"
+                              height="28"
+                              rx="2"
+                              fill="#EEEEEE"
                             />
                             <rect
-                              width='58.2986'
-                              height='1.0096'
-                              rx='0.5'
-                              transform='matrix(0.706047 0.708165 -0.706047 0.708165 3.83838 3)'
-                              fill='#BBBBBB'
+                              width="58.2986"
+                              height="1.0096"
+                              rx="0.5"
+                              transform="matrix(0.706047 0.708165 -0.706047 0.708165 3.83838 3)"
+                              fill="#BBBBBB"
                             />
                             <rect
-                              width='58.2986'
-                              height='1.0096'
-                              rx='0.5'
-                              transform='matrix(-0.706047 0.708165 0.706047 0.708165 44.1616 3)'
-                              fill='#BBBBBB'
+                              width="58.2986"
+                              height="1.0096"
+                              rx="0.5"
+                              transform="matrix(-0.706047 0.708165 0.706047 0.708165 44.1616 3)"
+                              fill="#BBBBBB"
                             />
                           </svg>
 
                           <p
                             className={`text-sm11 ${
                               !includeTopMat
-                                ? 'text-[#333333] '
-                                : 'text-primaryGray'
+                                ? "text-[#333333] "
+                                : "text-primaryGray"
                             }`}
                           >
                             Exclude <br /> Top Mat
                           </p>
                         </div>
                         {/*  Mat color */}
-                        <div className='relative' ref={ref3}>
+                        <div className="relative" ref={ref3}>
                           {/* test */}
                           {topColorDrop && (
                             <div
                               className={`z-999 bg-[#fff] rounded-[16px] w-[350px] h-[180px] absolute bottom-[90px] left-[-130px]`}
                               style={{
-                                boxShadow:
-                                  '0px 0px 18px rgba(0, 0, 0, 0.2)',
+                                boxShadow: "0px 0px 18px rgba(0, 0, 0, 0.2)",
                               }}
                             >
-                              <div className='flex gap-[5px] flex-col p-[14px] leading-[1.3] text-center'>
-                                <p className='font-medium text-primaryBlack text-[15px]'>
+                              <div className="flex gap-[5px] flex-col p-[14px] leading-[1.3] text-center">
+                                <p className="font-medium text-primaryBlack text-[15px]">
                                   Select Top Mat Colour
                                 </p>
-                                <p className='text-primaryGray text-[11px]'>
-                                  Click the colour icon to select the
-                                  colour <br />
+                                <p className="text-primaryGray text-[11px]">
+                                  Click the colour icon to select the colour{" "}
+                                  <br />
                                   of the Top Mat
                                 </p>
 
-                                <div className='w-[100%] flex flex-wrap'>
-                                  {topMatWidth?.frameColor?.map(
-                                    (color, i) => (
+                                <div className="w-[100%] flex flex-wrap">
+                                  {topMatWidth?.frameColor?.map((color, i) => (
+                                    <div
+                                      key={i}
+                                      onClick={() => {
+                                        setTopMatColor(color);
+                                      }}
+                                      className={`h-[67px] cursor-pointer  rounded-[8px] ${
+                                        topMatColor === color
+                                          ? "bg-[#f5f5f7]"
+                                          : ""
+                                      } flex flex-col p-[4px]`}
+                                    >
                                       <div
-                                        key={i}
-                                        onClick={() => {
-                                          setTopMatColor(color);
+                                        className="h-[32px] w-[32px] rounded-[50%]"
+                                        style={{
+                                          backgroundColor: `${color?.colorCode}`,
                                         }}
-                                        className={`h-[67px] cursor-pointer  rounded-[8px] ${
-                                          topMatColor === color
-                                            ? 'bg-[#f5f5f7]'
-                                            : ''
-                                        } flex flex-col p-[4px]`}
-                                      >
-                                        <div
-                                          className='h-[32px] w-[32px] rounded-[50%]'
-                                          style={{
-                                            backgroundColor: `${color?.colorCode}`,
-                                          }}
-                                        ></div>
-                                        <p className='text-primaryGray text-[11px] leading-[1.1] mt-[3px]'>
-                                          {color?.colorName}
-                                        </p>
-                                      </div>
-                                    )
-                                  )}
+                                      ></div>
+                                      <p className="text-primaryGray text-[11px] leading-[1.1] mt-[3px]">
+                                        {color?.colorName}
+                                      </p>
+                                    </div>
+                                  ))}
                                 </div>
                                 <button
                                   onClick={selectNewTopMatColor}
                                   className={`z-[999] ${
                                     topMatColor !== null
-                                      ? 'bg-[#333333]'
-                                      : 'bg-[#8e8e8e]'
+                                      ? "bg-[#333333]"
+                                      : "bg-[#8e8e8e]"
                                   } rounded-[14px] h-[28px] px-2 text-[12px] font-medium text-[white] mx-[auto]`}
                                 >
                                   Select Mat Colour
                                 </button>
                               </div>
-                              <div className='absolute left-[47%] bottom-[-10px] w-[20px] h-[20px] bg-[white] rounded-br-[5px] transform rotate-45 shadow-inner'></div>
+                              <div className="absolute left-[47%] bottom-[-10px] w-[20px] h-[20px] bg-[white] rounded-br-[5px] transform rotate-45 shadow-inner"></div>
                             </div>
                           )}
 
@@ -2565,78 +2543,76 @@ includeTopMatRef.current = false
                             onClick={() => {
                               setTopColorDrop(!topColorDrop);
                             }}
-                            className='text-center ml-5 cursor-pointer '
+                            className="text-center ml-5 cursor-pointer "
                           >
                             <svg
-                              width='48'
-                              height='48'
-                              viewBox='0 0 48 48'
-                              fill='none'
-                              xmlns='http://www.w3.org/2000/svg'
+                              width="48"
+                              height="48"
+                              viewBox="0 0 48 48"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
                             >
                               <path
-                                fillRule='evenodd'
-                                clipRule='evenodd'
-                                d='M4 0H16V3H10.5H5C3.89539 3 3 3.89542 3 5V16H0V4C0 1.79086 1.79089 0 4 0Z'
-                                fill='#A6CF4F'
+                                fillRule="evenodd"
+                                clipRule="evenodd"
+                                d="M4 0H16V3H10.5H5C3.89539 3 3 3.89542 3 5V16H0V4C0 1.79086 1.79089 0 4 0Z"
+                                fill="#A6CF4F"
                               />
                               <rect
-                                x='16'
-                                width='16'
-                                height='3'
-                                fill='#FED303'
+                                x="16"
+                                width="16"
+                                height="3"
+                                fill="#FED303"
                               />
                               <rect
-                                x='16'
-                                y='45'
-                                width='16'
-                                height='3'
-                                fill='#283897'
+                                x="16"
+                                y="45"
+                                width="16"
+                                height="3"
+                                fill="#283897"
                               />
                               <path
-                                fillRule='evenodd'
-                                clipRule='evenodd'
-                                d='M44 0H32V3H37.5H43C44.1046 3 45 3.89542 45 5V16H48V4C48 1.79086 46.2091 0 44 0Z'
-                                fill='#FFAC14'
+                                fillRule="evenodd"
+                                clipRule="evenodd"
+                                d="M44 0H32V3H37.5H43C44.1046 3 45 3.89542 45 5V16H48V4C48 1.79086 46.2091 0 44 0Z"
+                                fill="#FFAC14"
                               />
                               <path
-                                fillRule='evenodd'
-                                clipRule='evenodd'
-                                d='M44 48H32V45H37.5H43C44.1046 45 45 44.1046 45 43V32H48V44C48 46.2091 46.2091 48 44 48Z'
-                                fill='#BB0271'
+                                fillRule="evenodd"
+                                clipRule="evenodd"
+                                d="M44 48H32V45H37.5H43C44.1046 45 45 44.1046 45 43V32H48V44C48 46.2091 46.2091 48 44 48Z"
+                                fill="#BB0271"
                               />
                               <path
-                                fillRule='evenodd'
-                                clipRule='evenodd'
-                                d='M4 48H16V45H10.5H5C3.89539 45 3 44.1046 3 43V32H0V44C0 46.2091 1.79089 48 4 48Z'
-                                fill='#02A2B8'
+                                fillRule="evenodd"
+                                clipRule="evenodd"
+                                d="M4 48H16V45H10.5H5C3.89539 45 3 44.1046 3 43V32H0V44C0 46.2091 1.79089 48 4 48Z"
+                                fill="#02A2B8"
                               />
                               <rect
-                                x='45'
-                                y='16'
-                                width='3'
-                                height='16'
-                                fill='#F25721'
+                                x="45"
+                                y="16"
+                                width="3"
+                                height="16"
+                                fill="#F25721"
                               />
                               <rect
-                                y='16'
-                                width='3'
-                                height='16'
-                                fill='#01A566'
+                                y="16"
+                                width="3"
+                                height="16"
+                                fill="#01A566"
                               />
                               <rect
-                                x='10'
-                                y='10'
-                                width='28'
-                                height='28'
-                                rx='2'
-                                fill='#EEEEEE'
+                                x="10"
+                                y="10"
+                                width="28"
+                                height="28"
+                                rx="2"
+                                fill="#EEEEEE"
                               />
                             </svg>
 
-                            <p
-                              className={`text-sm11  text-primaryGray `}
-                            >
+                            <p className={`text-sm11  text-primaryGray `}>
                               Select <br /> Mat Color
                             </p>
                           </div>
@@ -2644,21 +2620,21 @@ includeTopMatRef.current = false
                       </div>
                     </div>
                     <div>
-                      <div className='flex items-center mb-1'>
-                        <p className='text-primaryBlack text-[15px] font-medium leading-5 mr-1'>
+                      <div className="flex items-center mb-1">
+                        <p className="text-primaryBlack text-[15px] font-medium leading-5 mr-1">
                           Select Bottom Mat
                         </p>
                         <img
                           src={questionIcon}
                           onClick={() => setOpenWhatIsMat(true)}
-                          alt=''
-                          className='cursor-pointer'
+                          alt=""
+                          className="cursor-pointer"
                         />
                       </div>
 
-                      <div className='flex gap-2.5 mb-5'>
+                      <div className="flex gap-2.5 mb-5">
                         {/* Include Mat */}
-                        <div className='text-center'>
+                        <div className="text-center">
                           <svg
                             onClick={() => {
                               setIncludeBottomMat(true);
@@ -2671,35 +2647,35 @@ includeTopMatRef.current = false
                             xmlns="http://www.w3.org/2000/svg"
                           >
                             <path
-                              d='M4 0.5H44C45.933 0.5 47.5 2.067 47.5 4V44C47.5 45.933 45.933 47.5 44 47.5H4C2.067 47.5 0.5 45.933 0.5 44V4C0.5 2.067 2.067 0.5 4 0.5Z'
-                              stroke='#D6D6D6'
+                              d="M4 0.5H44C45.933 0.5 47.5 2.067 47.5 4V44C47.5 45.933 45.933 47.5 44 47.5H4C2.067 47.5 0.5 45.933 0.5 44V4C0.5 2.067 2.067 0.5 4 0.5Z"
+                              stroke="#D6D6D6"
                             />
                             <path
-                              d='M36 8H12C9.79086 8 8 9.79086 8 12V36C8 38.2091 9.79086 40 12 40H36C38.2091 40 40 38.2091 40 36V12C40 9.79086 38.2091 8 36 8Z'
+                              d="M36 8H12C9.79086 8 8 9.79086 8 12V36C8 38.2091 9.79086 40 12 40H36C38.2091 40 40 38.2091 40 36V12C40 9.79086 38.2091 8 36 8Z"
                               className={`${
                                 includeBottomMat
-                                  ? 'fill-primaryBlack'
-                                  : 'fill-[#EEEEEE]'
+                                  ? "fill-primaryBlack"
+                                  : "fill-[#EEEEEE]"
                               }`}
                             />
                             <path
-                              d='M30 15H18C16.3431 15 15 16.3431 15 18V30C15 31.6569 16.3431 33 18 33H30C31.6569 33 33 31.6569 33 30V18C33 16.3431 31.6569 15 30 15Z'
-                              fill='white'
+                              d="M30 15H18C16.3431 15 15 16.3431 15 18V30C15 31.6569 16.3431 33 18 33H30C31.6569 33 33 31.6569 33 30V18C33 16.3431 31.6569 15 30 15Z"
+                              fill="white"
                             />
                           </svg>
 
                           <p
                             className={`text-sm11 ${
                               includeBottomMat
-                                ? 'text-[#333333] '
-                                : 'text-primaryGray'
+                                ? "text-[#333333] "
+                                : "text-primaryGray"
                             }`}
                           >
                             Include <br /> Bottom Mat
                           </p>
                         </div>
                         {/* Exclude Mat */}
-                        <div className='text-center'>
+                        <div className="text-center">
                           <svg
                             width="48"
                             height="48"
@@ -2712,29 +2688,29 @@ includeTopMatRef.current = false
                             }}
                           >
                             <path
-                              fillRule='evenodd'
-                              clipRule='evenodd'
-                              d='M4 0C1.79086 0 0 1.79086 0 4V44C0 46.2091 1.79086 48 4 48H44C46.2091 48 48 46.2091 48 44V4C48 1.79086 46.2091 0 44 0H4ZM5 3C3.89543 3 3 3.89543 3 5V43C3 44.1046 3.89543 45 5 45H43C44.1046 45 45 44.1046 45 43V5C45 3.89543 44.1046 3 43 3H5Z'
+                              fillRule="evenodd"
+                              clipRule="evenodd"
+                              d="M4 0C1.79086 0 0 1.79086 0 4V44C0 46.2091 1.79086 48 4 48H44C46.2091 48 48 46.2091 48 44V4C48 1.79086 46.2091 0 44 0H4ZM5 3C3.89543 3 3 3.89543 3 5V43C3 44.1046 3.89543 45 5 45H43C44.1046 45 45 44.1046 45 43V5C45 3.89543 44.1046 3 43 3H5Z"
                               className={`${
                                 !includeBottomMat
-                                  ? 'fill-[#333333]'
-                                  : 'fill-[#BBBBBB]'
+                                  ? "fill-[#333333]"
+                                  : "fill-[#BBBBBB]"
                               }`}
                             />
                             <rect
-                              x='10'
-                              y='10'
-                              width='28'
-                              height='28'
-                              rx='2'
-                              fill='#EEEEEE'
+                              x="10"
+                              y="10"
+                              width="28"
+                              height="28"
+                              rx="2"
+                              fill="#EEEEEE"
                             />
                             <rect
-                              width='58.2986'
-                              height='1.0096'
-                              rx='0.5'
-                              transform='matrix(0.706047 0.708165 -0.706047 0.708165 3.83838 3)'
-                              fill='#BBBBBB'
+                              width="58.2986"
+                              height="1.0096"
+                              rx="0.5"
+                              transform="matrix(0.706047 0.708165 -0.706047 0.708165 3.83838 3)"
+                              fill="#BBBBBB"
                             />
                             <rect
                               width="58.2986"
@@ -2748,35 +2724,34 @@ includeTopMatRef.current = false
                           <p
                             className={`text-sm11 ${
                               !includeBottomMat
-                                ? 'text-[#333333] '
-                                : 'text-primaryGray'
+                                ? "text-[#333333] "
+                                : "text-primaryGray"
                             }`}
                           >
                             Exclude <br /> Bottom Mat
                           </p>
                         </div>
                         {/*  Mat color */}
-                        <div className='relative' ref={ref5}>
+                        <div className="relative" ref={ref5}>
                           {/* test */}
                           {bottomColorDrop && (
                             <div
                               className={`z-999 bg-[#fff] rounded-[16px] w-[350px] h-[180px] absolute bottom-[90px] left-[-130px]`}
                               style={{
-                                boxShadow:
-                                  '0px 0px 18px rgba(0, 0, 0, 0.2)',
+                                boxShadow: "0px 0px 18px rgba(0, 0, 0, 0.2)",
                               }}
                             >
-                              <div className='flex gap-[5px] flex-col p-[14px] leading-[1.3] text-center'>
-                                <p className='font-medium text-primaryBlack text-[15px]'>
+                              <div className="flex gap-[5px] flex-col p-[14px] leading-[1.3] text-center">
+                                <p className="font-medium text-primaryBlack text-[15px]">
                                   Select Bottom Mat Colour
                                 </p>
-                                <p className='text-primaryGray text-[11px]'>
-                                  Click the colour icon to select the
-                                  colour <br />
+                                <p className="text-primaryGray text-[11px]">
+                                  Click the colour icon to select the colour{" "}
+                                  <br />
                                   of the Bottom Mat
                                 </p>
 
-                                <div className='w-[100%] flex flex-wrap'>
+                                <div className="w-[100%] flex flex-wrap">
                                   {bottomMatWidth?.frameColor?.map(
                                     (color, i) => (
                                       <div
@@ -2786,17 +2761,17 @@ includeTopMatRef.current = false
                                         }}
                                         className={`h-[67px] cursor-pointer  rounded-[8px] ${
                                           bottomMatColor === color
-                                            ? 'bg-[#f5f5f7]'
-                                            : ''
+                                            ? "bg-[#f5f5f7]"
+                                            : ""
                                         } flex flex-col p-[4px]`}
                                       >
                                         <div
-                                          className='h-[32px] w-[32px] rounded-[50%]'
+                                          className="h-[32px] w-[32px] rounded-[50%]"
                                           style={{
                                             backgroundColor: `${color?.colorCode}`,
                                           }}
                                         ></div>
-                                        <p className='text-primaryGray text-[11px] leading-[1.1] mt-[3px]'>
+                                        <p className="text-primaryGray text-[11px] leading-[1.1] mt-[3px]">
                                           {color?.colorName}
                                         </p>
                                       </div>
@@ -2807,14 +2782,14 @@ includeTopMatRef.current = false
                                   onClick={selectNewBottomMatColor}
                                   className={`z-[999] ${
                                     bottomMatColor !== null
-                                      ? 'bg-[#333333]'
-                                      : 'bg-[#8e8e8e]'
+                                      ? "bg-[#333333]"
+                                      : "bg-[#8e8e8e]"
                                   } rounded-[14px] h-[28px] px-2 text-[12px] font-medium text-[white] mx-[auto]`}
                                 >
                                   Select Mat Colour
                                 </button>
                               </div>
-                              <div className='absolute left-[47%] bottom-[-10px] w-[20px] h-[20px] bg-[white] rounded-br-[5px] transform rotate-45 shadow-inner'></div>
+                              <div className="absolute left-[47%] bottom-[-10px] w-[20px] h-[20px] bg-[white] rounded-br-[5px] transform rotate-45 shadow-inner"></div>
                             </div>
                           )}
 
@@ -2823,78 +2798,76 @@ includeTopMatRef.current = false
                             onClick={() => {
                               setBottomColorDrop(!bottomColorDrop);
                             }}
-                            className='text-center ml-5 cursor-pointer '
+                            className="text-center ml-5 cursor-pointer "
                           >
                             <svg
-                              width='48'
-                              height='48'
-                              viewBox='0 0 48 48'
-                              fill='none'
-                              xmlns='http://www.w3.org/2000/svg'
+                              width="48"
+                              height="48"
+                              viewBox="0 0 48 48"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
                             >
                               <path
-                                fillRule='evenodd'
-                                clipRule='evenodd'
-                                d='M4 0H16V3H10.5H5C3.89539 3 3 3.89542 3 5V16H0V4C0 1.79086 1.79089 0 4 0Z'
-                                fill='#A6CF4F'
+                                fillRule="evenodd"
+                                clipRule="evenodd"
+                                d="M4 0H16V3H10.5H5C3.89539 3 3 3.89542 3 5V16H0V4C0 1.79086 1.79089 0 4 0Z"
+                                fill="#A6CF4F"
                               />
                               <rect
-                                x='16'
-                                width='16'
-                                height='3'
-                                fill='#FED303'
+                                x="16"
+                                width="16"
+                                height="3"
+                                fill="#FED303"
                               />
                               <rect
-                                x='16'
-                                y='45'
-                                width='16'
-                                height='3'
-                                fill='#283897'
+                                x="16"
+                                y="45"
+                                width="16"
+                                height="3"
+                                fill="#283897"
                               />
                               <path
-                                fillRule='evenodd'
-                                clipRule='evenodd'
-                                d='M44 0H32V3H37.5H43C44.1046 3 45 3.89542 45 5V16H48V4C48 1.79086 46.2091 0 44 0Z'
-                                fill='#FFAC14'
+                                fillRule="evenodd"
+                                clipRule="evenodd"
+                                d="M44 0H32V3H37.5H43C44.1046 3 45 3.89542 45 5V16H48V4C48 1.79086 46.2091 0 44 0Z"
+                                fill="#FFAC14"
                               />
                               <path
-                                fillRule='evenodd'
-                                clipRule='evenodd'
-                                d='M44 48H32V45H37.5H43C44.1046 45 45 44.1046 45 43V32H48V44C48 46.2091 46.2091 48 44 48Z'
-                                fill='#BB0271'
+                                fillRule="evenodd"
+                                clipRule="evenodd"
+                                d="M44 48H32V45H37.5H43C44.1046 45 45 44.1046 45 43V32H48V44C48 46.2091 46.2091 48 44 48Z"
+                                fill="#BB0271"
                               />
                               <path
-                                fillRule='evenodd'
-                                clipRule='evenodd'
-                                d='M4 48H16V45H10.5H5C3.89539 45 3 44.1046 3 43V32H0V44C0 46.2091 1.79089 48 4 48Z'
-                                fill='#02A2B8'
+                                fillRule="evenodd"
+                                clipRule="evenodd"
+                                d="M4 48H16V45H10.5H5C3.89539 45 3 44.1046 3 43V32H0V44C0 46.2091 1.79089 48 4 48Z"
+                                fill="#02A2B8"
                               />
                               <rect
-                                x='45'
-                                y='16'
-                                width='3'
-                                height='16'
-                                fill='#F25721'
+                                x="45"
+                                y="16"
+                                width="3"
+                                height="16"
+                                fill="#F25721"
                               />
                               <rect
-                                y='16'
-                                width='3'
-                                height='16'
-                                fill='#01A566'
+                                y="16"
+                                width="3"
+                                height="16"
+                                fill="#01A566"
                               />
                               <rect
-                                x='10'
-                                y='10'
-                                width='28'
-                                height='28'
-                                rx='2'
-                                fill='#EEEEEE'
+                                x="10"
+                                y="10"
+                                width="28"
+                                height="28"
+                                rx="2"
+                                fill="#EEEEEE"
                               />
                             </svg>
 
-                            <p
-                              className={`text-sm11  text-primaryGray `}
-                            >
+                            <p className={`text-sm11  text-primaryGray `}>
                               Select <br /> Mat Color
                             </p>
                           </div>
@@ -2902,13 +2875,11 @@ includeTopMatRef.current = false
                       </div>
                     </div>
                   </div>
-                  <div className='w-[100%] flex gap-[30px] mb-[30px]'>
-                    <div className='relative h-[40px]' ref={ref2}>
+                  <div className="w-[100%] flex gap-[30px] mb-[30px]">
+                    <div className="relative h-[40px]" ref={ref2}>
                       <div
                         className={`${
-                          isTopMatWidthOpen === true
-                            ? 'shadow-dropShadow'
-                            : ''
+                          isTopMatWidthOpen === true ? "shadow-dropShadow" : ""
                         } rounded-[20px] w-[164px] max-h-[260px]`}
                       >
                         <button
@@ -2919,8 +2890,8 @@ includeTopMatRef.current = false
                           }}
                           className={`${
                             isTopMatWidthOpen === true
-                              ? 'rounded-t-[20px] border-b border-[#EFEFEF]'
-                              : 'border rounded-[20px] border-[#d6d6d6]'
+                              ? "rounded-t-[20px] border-b border-[#EFEFEF]"
+                              : "border rounded-[20px] border-[#d6d6d6]"
                           } flex items-center justify-between px-[15px] text-primaryGray text-sm14 font-medium cursor-pointer w-[164px] h-[40px] bg-[#FFFFFF]`}
                         >
                           <span>
@@ -2930,17 +2901,13 @@ includeTopMatRef.current = false
                               ? `Top Mat Width`
                               : `${topMatSelect}cm`}
                           </span>
-                          <img
-                            className='inline-block'
-                            src={dropdown}
-                            alt=''
-                          />
+                          <img className="inline-block" src={dropdown} alt="" />
                         </button>
 
                         {isTopMatWidthOpen && (
-                          <ul className='cursor-pointer rounded-b-2xl bg-[#ffffff] overflow w-[164px]  text-[14px] text-primaryGray max-h-[220px] overflow-y-auto'>
+                          <ul className="cursor-pointer rounded-b-2xl bg-[#ffffff] overflow w-[164px]  text-[14px] text-primaryGray max-h-[220px] overflow-y-auto">
                             <li
-                              className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
+                              className="py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]"
                               onClick={() => setTopMatValue(null)}
                             >
                               Top Mat Width
@@ -2949,7 +2916,7 @@ includeTopMatRef.current = false
                               return (
                                 <li
                                   key={obj}
-                                  className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
+                                  className="py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]"
                                   onClick={() => setTopMatValue(obj)}
                                 >
                                   {obj}cm
@@ -2960,25 +2927,24 @@ includeTopMatRef.current = false
                         )}
                       </div>
                     </div>
-                    <div className='relative h-[40px]' ref={ref4}>
+                    <div className="relative h-[40px]" ref={ref4}>
                       <div
                         className={`${
                           isBottomMatWidthOpen === true
-                            ? 'shadow-dropShadow'
-                            : ''
+                            ? "shadow-dropShadow"
+                            : ""
                         } rounded-[20px] w-[164px] max-h-[260px]`}
                       >
                         <button
                           onClick={() => {
                             setIsBottomMatWidthOpen(
-                              includeBottomMat &&
-                                !isBottomMatWidthOpen
+                              includeBottomMat && !isBottomMatWidthOpen
                             );
                           }}
                           className={`${
                             isBottomMatWidthOpen === true
-                              ? 'rounded-t-[20px] border-b border-[#EFEFEF]'
-                              : 'border rounded-[20px] border-[#d6d6d6]'
+                              ? "rounded-t-[20px] border-b border-[#EFEFEF]"
+                              : "border rounded-[20px] border-[#d6d6d6]"
                           } flex items-center justify-between px-[15px] text-primaryGray text-sm14 font-medium cursor-pointer w-[164px] h-[40px] bg-[#FFFFFF]`}
                         >
                           <span>
@@ -2988,17 +2954,13 @@ includeTopMatRef.current = false
                               ? `Bottom Mat Width`
                               : `${bottomMatSelect}cm`}
                           </span>
-                          <img
-                            className='inline-block'
-                            src={dropdown}
-                            alt=''
-                          />
+                          <img className="inline-block" src={dropdown} alt="" />
                         </button>
 
                         {isBottomMatWidthOpen && (
-                          <ul className='cursor-pointer rounded-b-2xl bg-[#ffffff] overflow w-[164px] text-[14px] text-primaryGray max-h-[220px] overflow-y-auto'>
+                          <ul className="cursor-pointer rounded-b-2xl bg-[#ffffff] overflow w-[164px] text-[14px] text-primaryGray max-h-[220px] overflow-y-auto">
                             <li
-                              className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
+                              className="py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]"
                               onClick={() => setBottomMatValue(null)}
                             >
                               Bottom Mat Width
@@ -3006,7 +2968,7 @@ includeTopMatRef.current = false
                             {bottomMatWidth?.matWidth?.map((obj) => (
                               <li
                                 key={obj}
-                                className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
+                                className="py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]"
                                 onClick={() => setBottomMatValue(obj)}
                               >
                                 {obj}cm
@@ -3022,33 +2984,29 @@ includeTopMatRef.current = false
                   <p className="text-primaryBlack text-[15px] font-medium leading-5 mb-1">
                     Select Material
                   </p>
-                  <div className='flex gap-x-7 flex-wrap w-[308px]'>
+                  <div className="flex gap-x-7 flex-wrap w-[308px]">
                     {activePaperMasterList?.map((obj, i) => (
                       <div
                         key={obj?.printingMaterialId}
-                        className='flex items-center'
+                        className="flex items-center"
                       >
                         <input
-                          className=' mr-1'
-                          type='checkbox'
-                          checked={
-                            obj?.printingMaterialId === checking
-                          }
+                          className=" mr-1"
+                          type="checkbox"
+                          checked={obj?.printingMaterialId === checking}
                           onChange={() => getCheckValue(obj)}
                         />
-                        <p className='text-[13px] text-primaryGray capitalize'>
+                        <p className="text-[13px] text-primaryGray capitalize">
                           {obj?.printingMaterialName}
                         </p>
                       </div>
                     ))}
                   </div>
-                  <p className='text-[11px] text-primaryGray mt-[10px] mb-[30px] leading-[1.2]'>
-                    Art can mimic nature, by seeking to visually
-                    replicate objects as they actually appear in real{' '}
-                    <br />
-                    life. But abstract paintings can also take their
-                    visual cue from actual forms in nature, such as{' '}
-                    <br />
+                  <p className="text-[11px] text-primaryGray mt-[10px] mb-[30px] leading-[1.2]">
+                    Art can mimic nature, by seeking to visually replicate
+                    objects as they actually appear in real <br />
+                    life. But abstract paintings can also take their visual cue
+                    from actual forms in nature, such as <br />
                     the painting below.
                   </p>
                 </Tab.Panel>
@@ -3066,11 +3024,11 @@ includeTopMatRef.current = false
                   quantityRef.current = quantityRef.current - 1;
                 }}
               >
-                <img src={minusIcon} alt='' />
+                <img src={minusIcon} alt="" />
               </button>
               <input
-                className='w-[30px] text-[13px] leading-[15px] font-normal text-primaryGray text-center outline-none'
-                type='text'
+                className="w-[30px] text-[13px] leading-[15px] font-normal text-primaryGray text-center outline-none"
+                type="text"
                 value={quantity}
               />
               <button
@@ -3080,11 +3038,7 @@ includeTopMatRef.current = false
                   quantityRef.current = quantityRef.current + 1;
                 }}
               >
-                <img
-                  className='w-[11px] h-[11px]'
-                  src={plusIcon}
-                  alt=''
-                />
+                <img className="w-[11px] h-[11px]" src={plusIcon} alt="" />
               </button>
             </div>
 
@@ -3093,144 +3047,155 @@ includeTopMatRef.current = false
                 $
               </p>
               <p className="text-orangeColor text-[38px] font-normal leading-[55px]">
-                {artDetails?.price * quantity}
+                {(Number(artDetails?.price) +
+                  Number(selectedFrame?.price) +
+                  Number(frameColor?.price) +
+                  Number(
+                    `${
+                      orientationBtn === "Horizontal"
+                        ? horiSelect?.sellPrice
+                        : orientationBtn === "Vertical"
+                        ? vertiSelect?.sellPrice
+                        : squareSelect?.sellPrice
+                    }`
+                  ) +
+                  Number(materialCheck?.printingMaterialPrice)) *
+                  quantity}
               </p>
             </div>
             <p
               onClick={() => setShowPrice(true)}
-              className='text-sm12 font-normal text-primaryGray cursor-pointer'
+              className="text-sm12 font-normal text-primaryGray cursor-pointer"
             >
               Show Price Details
             </p>
             <PriceDetailsPopup
               open={showPrice}
               closeOnDocumentClick={true}
-              position={'top center'}
+              position={"top center"}
               onClose={() => setShowPrice(false)}
             >
-              <p className='text-heading mb-5 text-center font-medium'>
+              <p className="text-heading mb-5 text-center font-medium">
                 Price Details
               </p>
-              <div className='mt-5 mb-8 border-t-2 border-b-2 border-[#EFEFEF]'>
-                <table className='w-[100%]'>
-                  <tr className='border-b border-[#EFEFEF] '>
-                    <td className='text-primaryGray text-sm12 font-medium leading-4 w-[150px] py-1'>
+              <div className="mt-5 mb-8 border-t-2 border-b-2 border-[#EFEFEF]">
+                <table className="w-[100%]">
+                  <tr className="border-b border-[#EFEFEF] ">
+                    <td className="text-primaryGray text-sm12 font-medium leading-4 w-[150px] py-1">
                       Digital Art Print
                     </td>
-                    <td className='text-primaryGray text-sm12 font-normal leading-4'>
+                    <td className="text-primaryGray text-sm12 font-normal leading-4">
                       2 Quantity, Print Size: 20cm x 20cm, Colour
                     </td>
-                    <td className='text-primaryGray text-sm12 font-normal leading-4 '>
+                    <td className="text-primaryGray text-sm12 font-normal leading-4 ">
                       $150.00
                     </td>
                   </tr>
-                  <tr className='border-b border-[#EFEFEF] '>
-                    <td className='text-primaryGray text-sm12 font-medium leading-4 w-[150px] py-1'>
+                  <tr className="border-b border-[#EFEFEF] ">
+                    <td className="text-primaryGray text-sm12 font-medium leading-4 w-[150px] py-1">
                       Digital Art Print Material
                     </td>
-                    <td className='text-primaryGray text-sm12 font-normal leading-4'>
+                    <td className="text-primaryGray text-sm12 font-normal leading-4">
                       Glossy Photo Paper
                     </td>
-                    <td className='text-primaryGray text-sm12 font-normal leading-4 '></td>
+                    <td className="text-primaryGray text-sm12 font-normal leading-4 "></td>
                   </tr>
-                  <tr className='border-b border-[#EFEFEF] '>
-                    <td className='text-primaryGray text-sm12 font-medium leading-4 w-[150px] py-1'>
+                  <tr className="border-b border-[#EFEFEF] ">
+                    <td className="text-primaryGray text-sm12 font-medium leading-4 w-[150px] py-1">
                       Mat
                     </td>
-                    <td className='text-primaryGray text-sm12 font-normal leading-4'>
+                    <td className="text-primaryGray text-sm12 font-normal leading-4">
                       Double Mat
                     </td>
-                    <td className='text-primaryGray text-sm12 font-normal leading-4 '></td>
+                    <td className="text-primaryGray text-sm12 font-normal leading-4 "></td>
                   </tr>
-                  <tr className='border-b border-[#EFEFEF] '>
-                    <td className='text-primaryGray text-sm12 font-medium leading-4 w-[150px] py-1'>
+                  <tr className="border-b border-[#EFEFEF] ">
+                    <td className="text-primaryGray text-sm12 font-medium leading-4 w-[150px] py-1">
                       Frame
                     </td>
-                    <td className='text-primaryGray text-sm12 font-normal leading-4'>
+                    <td className="text-primaryGray text-sm12 font-normal leading-4">
                       <tr>
-                        <td className='w-[80px]'>Frame Type:</td>
+                        <td className="w-[80px]">Frame Type:</td>
                         <td>Chelsea Black</td>
                       </tr>
                       <tr>
-                        <td className='w-[80px]'>Frame ID:</td>
+                        <td className="w-[80px]">Frame ID:</td>
                         <td>ANSFR4567</td>
                       </tr>
                       <tr>
-                        <td className='w-[80px]'>Colour:</td>
+                        <td className="w-[80px]">Colour:</td>
                         <td>Black</td>
                       </tr>
                       <tr>
-                        <td className='w-[80px]'>Width:</td>
+                        <td className="w-[80px]">Width:</td>
                         <td>0.75”</td>
                       </tr>
                       <tr>
-                        <td className='w-[80px]'>Depth:</td>
+                        <td className="w-[80px]">Depth:</td>
                         <td>1.13”</td>
                       </tr>
                       <tr>
-                        <td className='w-[80px]'>Material:</td>
+                        <td className="w-[80px]">Material:</td>
                         <td>Wood</td>
                       </tr>
                       <tr>
-                        <td className='w-[80px]'>Finish:</td>
+                        <td className="w-[80px]">Finish:</td>
                         <td>Gesso</td>
                       </tr>
                       <tr>
-                        <td className='w-[80px]'>Style:</td>
+                        <td className="w-[80px]">Style:</td>
                         <td>Contemporary</td>
                       </tr>
-                      <p className='w-[100%] mt-5'>
-                        Slim and tall, this contemporary Chelsea{' '}
-                        <br />
-                        wood frame has a matte black finish and is
-                        well <br />
+                      <p className="w-[100%] mt-5">
+                        Slim and tall, this contemporary Chelsea <br />
+                        wood frame has a matte black finish and is well <br />
                         suited for all art types.
                       </p>
                     </td>
-                    <td className='text-primaryGray text-sm12 font-normal leading-4 '></td>
+                    <td className="text-primaryGray text-sm12 font-normal leading-4 "></td>
                   </tr>
-                  <tr className='border-b border-[#EFEFEF] '>
-                    <td className='text-primaryGray text-sm12 font-medium leading-4 w-[150px] py-1'>
+                  <tr className="border-b border-[#EFEFEF] ">
+                    <td className="text-primaryGray text-sm12 font-medium leading-4 w-[150px] py-1">
                       Glass
                     </td>
-                    <td className='text-primaryGray text-sm12 font-normal leading-4'>
+                    <td className="text-primaryGray text-sm12 font-normal leading-4">
                       Plain Clear Glass
                     </td>
-                    <td className='text-primaryGray text-sm12 font-normal leading-4 '></td>
+                    <td className="text-primaryGray text-sm12 font-normal leading-4 "></td>
                   </tr>
-                  <tr className='border-b border-[#EFEFEF] '>
-                    <td className='text-primaryGray text-sm12 font-medium leading-4 w-[150px] py-1'>
+                  <tr className="border-b border-[#EFEFEF] ">
+                    <td className="text-primaryGray text-sm12 font-medium leading-4 w-[150px] py-1">
                       Assembly
                     </td>
-                    <td className='text-primaryGray text-sm12 font-normal leading-4'>
+                    <td className="text-primaryGray text-sm12 font-normal leading-4">
                       Assembly Charge
                     </td>
-                    <td className='text-primaryGray text-sm12 font-normal leading-4 '></td>
+                    <td className="text-primaryGray text-sm12 font-normal leading-4 "></td>
                   </tr>
-                  <tr className='border-b border-[#EFEFEF] '>
-                    <td className='text-primaryGray text-sm12 font-medium leading-4 w-[150px] py-1'>
+                  <tr className="border-b border-[#EFEFEF] ">
+                    <td className="text-primaryGray text-sm12 font-medium leading-4 w-[150px] py-1">
                       Packaging
                     </td>
-                    <td className='text-primaryGray text-sm12 font-normal leading-4'>
+                    <td className="text-primaryGray text-sm12 font-normal leading-4">
                       Hard Cardboard
                     </td>
-                    <td className='text-primaryGray text-sm12 font-normal leading-4 '></td>
+                    <td className="text-primaryGray text-sm12 font-normal leading-4 "></td>
                   </tr>
-                  <tr className='border-b border-[#EFEFEF] '>
-                    <td className='text-primaryGray text-sm12 font-medium leading-4 w-[150px] py-1'>
+                  <tr className="border-b border-[#EFEFEF] ">
+                    <td className="text-primaryGray text-sm12 font-medium leading-4 w-[150px] py-1">
                       Courier
                     </td>
-                    <td className='text-primaryGray text-sm12 font-normal leading-4'>
+                    <td className="text-primaryGray text-sm12 font-normal leading-4">
                       Courier charges
                     </td>
-                    <td className='text-primaryGray text-sm12 font-normal leading-4 '></td>
+                    <td className="text-primaryGray text-sm12 font-normal leading-4 "></td>
                   </tr>
-                  <tr className='border-b border-[#EFEFEF] '>
-                    <td className='text-primaryGray text-sm12 font-medium leading-4 w-[150px] py-1'>
+                  <tr className="border-b border-[#EFEFEF] ">
+                    <td className="text-primaryGray text-sm12 font-medium leading-4 w-[150px] py-1">
                       Total
                     </td>
-                    <td className='text-primaryGray text-sm12 font-normal leading-4'></td>
-                    <td className='text-primaryGray text-[25px] font-normal '>
+                    <td className="text-primaryGray text-sm12 font-normal leading-4"></td>
+                    <td className="text-primaryGray text-[25px] font-normal ">
                       $339.00
                     </td>
                   </tr>
@@ -3247,17 +3212,119 @@ includeTopMatRef.current = false
               >
                 Add to Cart
               </button>
+              <AddtoCartPopupp
+                open={openAddtocart}
+                closeOnDocumentClick={true}
+                position={"top center"}
+                onClose={() => setOpenAddtocart(false)}
+              >
+                <p className="text-center text-sm12 text-pinkColor font-medium mb-3">
+                  1 Product added to cart
+                </p>
+                <div className="flex">
+                  <div className="">
+                    <div className="w-[209px] h-[209px]">
+                      <div
+                        style={{
+                          margin: `${
+                            cartResData?.["orientationMaster"]?.shape ===
+                              "Vertical" && "0 auto"
+                          }`,
+                          width: `${
+                            cartResData?.["orientationMaster"]?.shape ===
+                            "Vertical"
+                              ? 209 * 0.7
+                              : 209
+                          }px`,
+                          height: `${
+                            cartResData?.["orientationMaster"]?.shape ===
+                            "Horizontal"
+                              ? 209 * 0.7
+                              : 209
+                          }px`,
+                        }}
+                      >
+                        <img
+                          src={cartResData?.imgUrl}
+                          className="w-[100%] h-[100%]"
+                          alt=""
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex-1 pl-[15px]">
+                    <p className="text-[18px] text-primaryBlack font-medium leading-[20px]">
+                      {cartResData?.artMaster?.artName}
+                    </p>
+                    <p className="text-sm11 text-primaryBlack font-medium mt-1.5">
+                      by{" "}
+                      <span className="text-orangeColor">
+                        {cartResData?.userMaster?.displayName}
+                      </span>
+                    </p>
+                    <div className="mt-2 mb-2.5 border-t-2 border-b-2 border-[#EFEFEF]">
+                      <table className="w-[100%]">
+                        <tr className="border-b border-[#EFEFEF] ">
+                          <td className="text-primaryGray text-sm12 font-medium leading-4 w-[150px] py-0.5">
+                            Combo ID:
+                          </td>
+                          <td className="text-primaryGray text-sm12 font-normal leading-4">
+                            {cartResData?.cartArtFrameUniqueNo}
+                          </td>
+                        </tr>
+                        <tr className="border-b border-[#EFEFEF] ">
+                          <td className="text-primaryGray text-sm12 font-medium leading-4 w-[150px] py-0.5">
+                            Availability:
+                          </td>
+                          <td className="text-primaryGray text-sm12 font-normal leading-4">
+                            In Stock
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                    <p className="text-[15px] text-primaryBlack font-medium">
+                      Description
+                    </p>
+                    <p className="text-primaryGray text-sm12 font-medium mt-2 mb-3">
+                      {cartResData?.artMaster?.description}
+                    </p>
+                  </div>
+                </div>
+                <div className="w-[100%] bg-[#D9D9D9] h-[1px] mx-auto my-[20px]"></div>
+                <p className="text-sm12 text-primaryGray text-center">
+                  Subtotal
+                </p>
+                <div className="flex items-baseline justify-center">
+                  <p className="text-orangeColor text-[22px] font-normal ">$</p>
+                  <p className="text-orangeColor text-[38px] font-normal ">
+                    {cartResData?.totalAmount}
+                  </p>
+                </div>
+                <button className="blackBtn block mx-auto mb-2">
+                  Checkout
+                </button>
+                <p className="text-primaryGray text-sm11 font-medium text-center">
+                  By placing your order, you agree to the{" "}
+                  <span className="text-orangeColor">Delivery Terms</span>.
+                </p>
+                <p className="text-center text-sm12 text-pinkColor font-medium mb-0.5 mt-2.5">
+                  {cartCount} Items in your cart
+                </p>
+                <button className="bg-primaryGray px-3 py-1.5 rounded-3xl text-sm12 text-[#FFFFFF] block mx-auto ">
+                  View Cart
+                </button>
+              </AddtoCartPopupp>
               <button onClick={checkoutPage} className="blackBtn">
                 Shop Now
               </button>
             </div>
 
-            <p className='text-primaryGray text-sm11 font-normal'>
-              *GST, Branding, Logistics and Customized Packaging
-              charges additional as applicable. <br />
-              Returns and exchange.{' '}
+            <p className="text-primaryGray text-sm11 font-normal">
+              *GST, Branding, Logistics and Customized Packaging charges
+              additional as applicable. <br />
+              Returns and exchange.{" "}
               <span
-                className='text-orangeColor cursor-pointer'
+                className="text-orangeColor cursor-pointer"
                 onClick={() => setReturnAndExchange(true)}
               >
                 Know more
@@ -3266,28 +3333,28 @@ includeTopMatRef.current = false
             <ReturnAndExchangePopup
               open={returnAndExchange}
               closeOnDocumentClick={true}
-              position={'top top'}
+              position={"top top"}
               onClose={() => setReturnAndExchange(false)}
             >
-              <p className='text-heading mb-2.5 font-medium text-center'>
+              <p className="text-heading mb-2.5 font-medium text-center">
                 Returns & Exchanges
               </p>
-              <p className='text-primaryGray text-sm11 font-normal mb-3.5 text-center'>
+              <p className="text-primaryGray text-sm11 font-normal mb-3.5 text-center">
                 Shipping dispatched in 1-2 working days.
               </p>
-              <p className='text-primaryGray text-sm11 font-normal text-center'>
+              <p className="text-primaryGray text-sm11 font-normal text-center">
                 Returnable within 7 days of delivery. <br />
-                For details, please refer our{' '}
-                <span className='text-orangeColor cursor-pointer'>
+                For details, please refer our{" "}
+                <span className="text-orangeColor cursor-pointer">
                   Return Policy
                 </span>
                 .
               </p>
             </ReturnAndExchangePopup>
 
-            <div className='flex gap-x-2.5 my-7'>
-              <img src={certificateImg} alt='' />
-              <img src={festiveImg} alt='' />
+            <div className="flex gap-x-2.5 my-7">
+              <img src={certificateImg} alt="" />
+              <img src={festiveImg} alt="" />
             </div>
             <p className="text-primaryBlack text-[15px] font-medium leading-5 mb-1">
               Delivery options
@@ -3311,7 +3378,6 @@ includeTopMatRef.current = false
           </div>
         </div>
         {/* <div className="hrLine"></div> */}
-     
       </div>
 
       <div className="hrLine"></div>
@@ -3360,7 +3426,17 @@ includeTopMatRef.current = false
           <p className="text-[15px] text-primaryBlack font-medium leading-4 mb-1.5">
             Colour Palette
           </p>
-          <img src={colorPaletimg} alt="" />
+          <div
+            style={{ width: "fit-content" }}
+            className="flex rounded-lg overflow-hidden"
+          >
+            {artDetails?.imageMaster?.color?.map((item) => (
+              <div
+                className="h-[40px] w-[15px]"
+                style={{ backgroundColor: `${item?.color}` }}
+              ></div>
+            ))}
+          </div>
         </div>
         <div className="right flex-1  pl-7">
           <p className="text-sm11 text-primaryGray ">Artist Info</p>
@@ -3378,7 +3454,7 @@ includeTopMatRef.current = false
                 {artDetails?.userMaster?.displayName}
               </p>
               <p className="text-sm11 text-primaryGray font-normal leading-[16px]">
-                Freelance Illustrator/Photographer
+                {artDetails?.userMaster?.userDesignation}
               </p>
               <div className="flex items-center mb-3">
                 <img className="mr-0.5" src={locatiomIcon} alt="" />
@@ -3418,41 +3494,62 @@ includeTopMatRef.current = false
             </li>
           </ul>
           <div className="flex gap-4">
-            <a href="http://" target="_blank" rel="noopener noreferrer">
-              {" "}
+            <a
+              href={artDetails?.userMaster?.socialMedia?.facebookLink}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <img src={faceBookIcon} alt="" />
             </a>
-            <img src={linkdinIcon} alt="" />
-            <img src={instaIcon} alt="" />
+            <a
+              href={artDetails?.userMaster?.socialMedia?.linkedinLink}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img src={linkdinIcon} alt="" />
+            </a>
+            <a
+              href={artDetails?.userMaster?.socialMedia?.pinterestLink}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img src={instaIcon} alt="" />
+            </a>
           </div>
         </div>
       </div>
       <div className="hrLine"></div>
 
       {/* userDetails */}
-      <div className="w-w1409 flex justify-center mx-auto">
+      <div className="w-w1409 flex justify-center mx-auto mb-7">
         <div>
           <p className="text-[38px] font-medium text-center text-[#333333]">
-            Designs by Azra
+            Designs by {artDetails?.userMaster?.displayName}
           </p>
-          <div className="flex gap-3 text-center mt-4 mb-7">
-            {azraDesign.map((item) => {
-              return (
-                <>
-                  <div>
-                    <img src={item.img} alt="" />
-                    <p className="text-[15px] text-[#333333]">{item.title}</p>
-                    <p className="text-[12px] text-[#757575]">
-                      {item.description}
-                    </p>
-                  </div>
-                </>
-              );
+          <div className="flex gap-3 text-center mt-4 ">
+            {userDesigns?.map((item, i) => {
+              if (i <= 4) {
+                return (
+                  <>
+                    <div className="text-center w-[269px] ">
+                      <img
+                        className="h-[269px] w-[100%] rounded-2xl"
+                        src={item?.imageMaster?.imageOrientation?.squareUrl}
+                        alt=""
+                      />
+                      <p className="text-[15px] text-[#333333] font-medium">
+                        {item?.artName}
+                      </p>
+                      <p className="text-[12px] text-[#757575]">
+                        {item?.description.substr(0, 10)}
+                      </p>
+                    </div>
+                  </>
+                );
+              }
             })}
           </div>
-          <p className=" flex justify-center">
-            <button className="blackBtn">Discover more</button>
-          </p>
+          <button className="blackBtn block mx-auto mt-8">Discover more</button>
         </div>
       </div>
 

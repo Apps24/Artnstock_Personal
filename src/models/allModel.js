@@ -190,6 +190,7 @@ export const CartArtFrameModel = {
   },
   quantity: 0,
   stockStatus: String,
+  totalAmount: 0,
   userId: String
 }
 
