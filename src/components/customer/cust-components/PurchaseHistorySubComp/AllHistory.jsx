@@ -202,14 +202,26 @@ const AllHistory = () => {
                   <p className='text-[15px] font-medium text-[#333333]'>
                     Shipped to:
                   </p>
-                  <p className='text-[11px] text-[#757575] font-normal mb-3'>
-                    {item?.userFirstName} {item?.userLastName} <br />
-                    {item?.shippingAddress?.addressLine1} <br />
-                    {item?.shippingAddress?.addressLine2},{' '}
-                    {item?.shippingAddress?.cityName}{' '}
-                    {item?.shippingAddress?.zipCode} <br />
-                    {item?.shippingAddress?.stateName},{' '}
-                    {item?.shippingAddress?.countryName}
+                  <p className='mt-3 mb-1'>
+                    <button className='bg-[#333333] text-[#ffffff] text-[12px] py-[5px] px-[12px] rounded-2xl'>
+                      Buy it Again
+                    </button>
+                  </p>
+                  {item?.status !== 'Delivered' && (
+                    <p className='text-[11px] font-normal flex gap-3 mb-2'>
+                      {/* <span className="text-[#757575]">Edit Order</span> */}
+                      <span className='text-[#f88331]'>
+                        Cancel Order
+                      </span>
+                    </p>
+                  )}
+                  <p className='text-[11px] font-normal text-[#757575] leading-[1.2]'>
+                    GST, Branding, Logistics and Customized Packaging
+                    charges included. Read our{' '}
+                    <span className='text-[#f88331]'>
+                      Return and exchange
+                    </span>{' '}
+                    policy.
                   </p>
                   {item?.status !== 'Delivered' ? (
                     <div className='flex gap-[5px] font-medium w-[260px]'>

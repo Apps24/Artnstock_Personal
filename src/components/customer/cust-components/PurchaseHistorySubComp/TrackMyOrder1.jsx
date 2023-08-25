@@ -89,7 +89,62 @@ const TrackMyOrder1 = () => {
                   way. <br />
                   (Updated 0 minute(s) ago)
                 </p>
-                <img src={Tracker} className="my-[30px]" alt="" />
+                <div className="h-[94px] w-[100%] bg-[#f9f9f9] py-[22px] rounded-[13px] my-[30px] px-3.5 flex justify-between relative">
+                  <div className="flex gap-x-[30px] relative">
+                    <div className="text-center relative">
+                      <div
+                        className={`h-[20px] w-[20px] rounded-[100%] mx-auto after:h-[8px] after:absolute after:w-[150%] ${
+                          orderData?.status === "Shipping Soon"
+                            ? "after:bg-[#d6d6d6] bg-[#d6d6d6]"
+                            : "after:bg-[#888888] bg-[#888888] "
+                        } after:top-1.5 ${
+                          orderData?.status === "Shipping Soon"
+                            ?"after:left-[40px]" 
+                            : "after:left-[20px]"
+                        }   `}
+                      ></div>
+                      <p
+                        className={`mt-1.5 text-sm11 ${
+                          orderData?.status === "Shipping Soon"
+                            ? "text-[#bbbbbb]"
+                            : "text-[#228B22]"
+                        } font-medium`}
+                      >
+                        { orderData?.status === "Shipping Soon" ?  "Shipping Soon" : "Confirmed" }
+                      </p>
+                    </div>
+                    <div className="text-center relative">
+                      <div
+                        className={` h-[20px] w-[20px] rounded-[100%] mx-auto  ${
+                          orderData?.status === "Shipping Soon" ? "after:bg-[#d6d6d6] bg-[#d6d6d6]" : " bg-[#888888] "
+                        } `}
+                      ></div>
+                      <p
+                        className={`mt-1.5 text-sm11 ${
+                          orderData?.status === "Shipping Soon"
+                            ? "text-[#bbbbbb]" : "text-primaryBlack"
+                        } font-medium`}
+                      >
+                        Shipped
+                      </p>
+                    </div>
+                    <div className={`absolute h-[8px] w-[270%] ${orderData?.status === "Out for delivery" || orderData?.status === "Delivered" ? "bg-[#888888]" : "bg-[#d6d6d6]"} top-1.5 left-[90%]`}></div>
+                  </div>
+                  <div className="flex gap-x-[30px]">
+                    <div className="text-center relative">
+                      <div className={`h-[20px] w-[20px] rounded-[100%] mx-auto after:h-[8px] after:absolute after:w-[100%] ${orderData?.status === "Out for delivery"  ? "after:bg-[#d6d6d6] " : "after:bg-[#888888]  "} ${orderData?.status === "Out for delivery" || orderData?.status === "Delivered" ? "bg-[#888888]" : "bg-[#d6d6d6]"} after:top-1.5 after:left-[47px]`}></div>
+                      <p className="mt-1.5 text-sm11 text-primaryBlack">
+                        Out for delivery
+                      </p>
+                    </div>
+                    <div className="text-center relative">
+                      <div className={`${orderData?.status === "Delivered" ? "bg-[#888888]" : "bg-[#d6d6d6]"} h-[20px] w-[20px] rounded-[100%] mx-auto `}></div>
+                      <p className={`mt-1.5 text-sm11 ${orderData?.status === "Delivered" ? "text-[#228B22]" : "text-[#BBBBBB]"}`}>
+                        Delivered
+                      </p>
+                    </div>
+                  </div>
+                </div>
                 <p className="text-[15px] text-[#333333] font-medium">
                   Tracking Details
                 </p>

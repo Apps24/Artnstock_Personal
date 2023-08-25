@@ -342,6 +342,22 @@ const StyledPopupp = styled(Popup)`
   }
 `;
 
+const AddtoCartPopupp = styled(Popup)`
+  // use your custom style for ".popup-overlay"
+  /* &-overlay {
+ ...;
+} */
+  // use your custom style for ".popup-content"
+  &-content {
+    background-color: #ffffff;
+    color: #333333;
+    border-radius: 30px;
+    padding: 40px 20px 0px;
+    width: 477px;
+    height: 512px;
+  }
+`;
+
 const ArtDetails = () => {
   const location = useLocation();
 
@@ -359,11 +375,8 @@ const ArtDetails = () => {
 
   const [isOpenSortBy, setIsOpenSortBy] = useState(false);
   const [isOpenFilterBy, setIsOpenFilterBy] = useState(false);
-
   const navigate = useNavigate();
-
   const userId = useSelector((state) => state.auth.userId);
-
   const userAuth = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
@@ -375,11 +388,18 @@ const ArtDetails = () => {
   const mutableColor = useRef({});
   let cartModel = new CartartClass();
 
+  const totalAmount = useRef();
+  const [totalAmt, setTotalAmt] = useState(0);
+
+  const [openAddtocart, setOpenAddtocart] = useState(false);
+
   useEffect(() => {
     httpClient
       .get(`/art_master/editArtMaster/${location?.state?.id}`)
       .then((res) => {
         console.log(res.data);
+        totalAmount.current = res.data?.price;
+        setTotalAmt(totalAmount.current);
         setRecentlyViewed(res.data?.artId);
         cartModel.artId = res.data?.artId;
         setArtDetails(res.data);
@@ -439,6 +459,7 @@ const ArtDetails = () => {
     getAllFrames();
     getFolders();
     getReviewList();
+    getDesignsByUser();
     // setPostReviewData({ ...postReviewData, artId: artDetails.artId });
   }, []);
 
@@ -452,6 +473,7 @@ const ArtDetails = () => {
   const [checking, setChecking] = useState();
   const [materialCheck, setMaterialCheck] = useState();
   const mutablePrint = useRef({});
+  const printAmt = useRef();
   // // redux slice
   // const selectedAllFilesImages = useSelector(
   //   (state) => state.fileimages.selectedAllFilesImages
@@ -468,6 +490,9 @@ const ArtDetails = () => {
       // console.log(res.data);
       setActivePaperMasterList(res?.data);
       setChecking(res?.data[0].printingMaterialId);
+      printAmt.current = Number(res?.data[0]?.printingMaterialPrice);
+      setTotalAmt(totalAmount.current);
+
       setMaterialCheck(res?.data[0]);
       mutablePrint.current = res?.data[0];
       // console.log(testList);
@@ -477,6 +502,8 @@ const ArtDetails = () => {
   };
 
   const getCheckValue = (e) => {
+    // console.log(e);
+    printAmt.current = Number(e.printingMaterialPrice);
     setMaterialCheck(e);
     setChecking(e.printingMaterialId);
   };
@@ -492,39 +519,40 @@ const ArtDetails = () => {
   const vertiSelectRef = useRef();
   const horiSelectRef = useRef();
   const squareSelectRef = useRef();
+  const orientationAmt = useRef();
 
   const getHoriOriList = async () => {
     try {
       // horizontal
       const resh = await httpClient.get(
-        `shape_master/getShapeWiseList/Horizontal`
+        `/art_master/getArtIdAndShapeWiseContributorArtMarkup/${location?.state?.id}/Horizontal`
       );
-
-      setHoriOriList(resh.data);
-      setHoriSelect(resh.data[0]);
-      horiSelectRef.current = resh.data[0];
+      console.log(resh.data);
+      setHoriOriList(resh.data[0]?.orientationMasters);
+      setHoriSelect(resh.data[0]?.orientationMasters[0]);
+      horiSelectRef.current = resh.data[0]?.orientationMasters[0];
     } catch (err) {
       console.log(err);
     }
     try {
       // vertical
       const resv = await httpClient.get(
-        `shape_master/getShapeWiseList/Vertical`
+        `/art_master/getArtIdAndShapeWiseContributorArtMarkup/${location?.state?.id}/Vertical`
       );
-      setVertOriList(resv.data);
-      setVertiSelect(resv.data[0]);
-      vertiSelectRef.current = resv.data[0];
+      setVertOriList(resv.data[0]?.orientationMasters);
+      setVertiSelect(resv.data[0]?.orientationMasters[0]);
+      vertiSelectRef.current = resv.data[0]?.orientationMasters[0];
     } catch (err) {
       console.log(err);
     }
     try {
       // square
       const ress = await httpClient.get(
-        `shape_master/getShapeWiseList/Square`
+        `/art_master/getArtIdAndShapeWiseContributorArtMarkup/${location?.state?.id}/Square`
       );
-      setSquaOriList(ress.data);
-      setSquareSelect(ress.data[0]);
-      squareSelectRef.current = ress.data[0];
+      setSquaOriList(ress.data[0]?.orientationMasters);
+      setSquareSelect(ress.data[0]?.orientationMasters[0]);
+      squareSelectRef.current = ress.data[0]?.orientationMasters[0];
     } catch (err) {
       console.log(err);
     }
@@ -572,6 +600,7 @@ const ArtDetails = () => {
   };
 
   const getFrameCheck = (e) => {
+    // console.log(e);
     setSelectedFrame(e);
     setFrameColor(e.frameColor[0]);
     localStorage.setItem('selectFrameData', JSON.stringify(e));
@@ -802,10 +831,28 @@ const ArtDetails = () => {
 
   const cartCount = useSelector((state) => state.cart.cartCount);
 
+  const [cartResData, setCartResData] = useState();
+
   const addToCart = async () => {
     CartArtFrameModel.userId = userId;
     CartArtFrameModel.quantity = quantityRef.current;
     CartArtFrameModel.artId = cartModel.artId;
+
+    CartArtFrameModel.totalAmount =
+      (Number(artDetails?.price) +
+        Number(selectedFrame?.price) +
+        Number(frameColor?.price) +
+        Number(
+          `${
+            orientationBtn === 'Horizontal'
+              ? horiSelect?.sellPrice
+              : orientationBtn === 'Vertical'
+              ? vertiSelect?.sellPrice
+              : squareSelect?.sellPrice
+          }`
+        ) +
+        Number(materialCheck?.printingMaterialPrice)) *
+      quantity;
     const ap = JSON.parse(localStorage.getItem('selectFrameData'));
     delete ap?.frameColor;
     if (ap !== null) {
@@ -856,11 +903,13 @@ const ArtDetails = () => {
       CartArtFrameModel
     );
 
-    if (res.data) {
-      toast.success('Successfully Added to Cart');
+    if (res.data?.flag) {
+      console.log(res.data);
+      // toast.success("Successfully Added to Cart");
+      setCartResData(res.data?.cartArtFrameMaster);
       dispatch(cartSliceAction.setCartCount(cartCount + 1));
-
-      navigate('/shopping-cart');
+      setOpenAddtocart(true);
+      // navigate("/shopping-cart");
     }
   };
 
@@ -982,6 +1031,44 @@ const ArtDetails = () => {
   //     responseMonth: '7 months',
   //   },
   // ];
+
+  const increaseCartQuantity = (cartArtFrameId) => {
+    try {
+      httpClient
+        .get(
+          `/cart_art_frame_master/IncreaseCartQty/${cartArtFrameId}`
+        )
+        .then((res) => {
+          console.log(res.data);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const decreaseCartQuantity = (cartArtFrameId) => {
+    try {
+      httpClient
+        .get(
+          `/cart_art_frame_master/DecreaseCartQty/${cartArtFrameId}`
+        )
+        .then((res) => {
+          console.log(res.data);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // Products
+  const [userDesigns, setUserDesigns] = useState();
+
+  const getDesignsByUser = () => {
+    httpClient
+      .get(`/art_master/getUserIdWiseArtMasterList/${userId}`)
+      .then((res) => {
+        setUserDesigns(res?.data);
+      });
+  };
 
   return (
     <>
@@ -1331,7 +1418,6 @@ const ArtDetails = () => {
                                 ) : (
                                   <span>{folderName.title}</span>
                                 )}
-                                {}
 
                                 <img
                                   className='inline-block'
@@ -3277,7 +3363,20 @@ const ArtDetails = () => {
                 $
               </p>
               <p className='text-orangeColor text-[38px] font-normal leading-[55px]'>
-                {artDetails?.price * quantity}
+                {(Number(artDetails?.price) +
+                  Number(selectedFrame?.price) +
+                  Number(frameColor?.price) +
+                  Number(
+                    `${
+                      orientationBtn === 'Horizontal'
+                        ? horiSelect?.sellPrice
+                        : orientationBtn === 'Vertical'
+                        ? vertiSelect?.sellPrice
+                        : squareSelect?.sellPrice
+                    }`
+                  ) +
+                  Number(materialCheck?.printingMaterialPrice)) *
+                  quantity}
               </p>
             </div>
             <p
@@ -3431,6 +3530,114 @@ const ArtDetails = () => {
               >
                 Add to Cart
               </button>
+              {/* <button onClick={checkoutPage} className='blackBtn'> */}
+              <AddtoCartPopupp
+                open={openAddtocart}
+                closeOnDocumentClick={true}
+                position={'top center'}
+                onClose={() => setOpenAddtocart(false)}
+              >
+                <p className='text-center text-sm12 text-pinkColor font-medium mb-3'>
+                  1 Product added to cart
+                </p>
+                <div className='flex'>
+                  <div className=''>
+                    <div className='w-[209px] h-[209px]'>
+                      <div
+                        style={{
+                          margin: `${
+                            cartResData?.['orientationMaster']
+                              ?.shape === 'Vertical' && '0 auto'
+                          }`,
+                          width: `${
+                            cartResData?.['orientationMaster']
+                              ?.shape === 'Vertical'
+                              ? 209 * 0.7
+                              : 209
+                          }px`,
+                          height: `${
+                            cartResData?.['orientationMaster']
+                              ?.shape === 'Horizontal'
+                              ? 209 * 0.7
+                              : 209
+                          }px`,
+                        }}
+                      >
+                        <img
+                          src={cartResData?.imgUrl}
+                          className='w-[100%] h-[100%]'
+                          alt=''
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className='flex-1 pl-[15px]'>
+                    <p className='text-[18px] text-primaryBlack font-medium leading-[20px]'>
+                      {cartResData?.artMaster?.artName}
+                    </p>
+                    <p className='text-sm11 text-primaryBlack font-medium mt-1.5'>
+                      by{' '}
+                      <span className='text-orangeColor'>
+                        {cartResData?.userMaster?.displayName}
+                      </span>
+                    </p>
+                    <div className='mt-2 mb-2.5 border-t-2 border-b-2 border-[#EFEFEF]'>
+                      <table className='w-[100%]'>
+                        <tr className='border-b border-[#EFEFEF] '>
+                          <td className='text-primaryGray text-sm12 font-medium leading-4 w-[150px] py-0.5'>
+                            Combo ID:
+                          </td>
+                          <td className='text-primaryGray text-sm12 font-normal leading-4'>
+                            {cartResData?.cartArtFrameUniqueNo}
+                          </td>
+                        </tr>
+                        <tr className='border-b border-[#EFEFEF] '>
+                          <td className='text-primaryGray text-sm12 font-medium leading-4 w-[150px] py-0.5'>
+                            Availability:
+                          </td>
+                          <td className='text-primaryGray text-sm12 font-normal leading-4'>
+                            In Stock
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                    <p className='text-[15px] text-primaryBlack font-medium'>
+                      Description
+                    </p>
+                    <p className='text-primaryGray text-sm12 font-medium mt-2 mb-3'>
+                      {cartResData?.artMaster?.description}
+                    </p>
+                  </div>
+                </div>
+                <div className='w-[100%] bg-[#D9D9D9] h-[1px] mx-auto my-[20px]'></div>
+                <p className='text-sm12 text-primaryGray text-center'>
+                  Subtotal
+                </p>
+                <div className='flex items-baseline justify-center'>
+                  <p className='text-orangeColor text-[22px] font-normal '>
+                    $
+                  </p>
+                  <p className='text-orangeColor text-[38px] font-normal '>
+                    {cartResData?.totalAmount}
+                  </p>
+                </div>
+                <button className='blackBtn block mx-auto mb-2'>
+                  Checkout
+                </button>
+                <p className='text-primaryGray text-sm11 font-medium text-center'>
+                  By placing your order, you agree to the{' '}
+                  <span className='text-orangeColor'>
+                    Delivery Terms
+                  </span>
+                  .
+                </p>
+                <p className='text-center text-sm12 text-pinkColor font-medium mb-0.5 mt-2.5'>
+                  {cartCount} Items in your cart
+                </p>
+                <button className='bg-primaryGray px-3 py-1.5 rounded-3xl text-sm12 text-[#FFFFFF] block mx-auto '>
+                  View Cart
+                </button>
+              </AddtoCartPopupp>
               <button onClick={checkoutPage} className='blackBtn'>
                 Shop Now
               </button>
@@ -3546,7 +3753,18 @@ const ArtDetails = () => {
           <p className='text-[15px] text-primaryBlack font-medium leading-4 mb-1.5'>
             Colour Palette
           </p>
-          <img src={colorPaletimg} alt='' />
+          {/* <img src={colorPaletimg} alt='' /> */}
+          <div
+            style={{ width: 'fit-content' }}
+            className='flex rounded-lg overflow-hidden'
+          >
+            {artDetails?.imageMaster?.color?.map((item) => (
+              <div
+                className='h-[40px] w-[15px]'
+                style={{ backgroundColor: `${item?.color}` }}
+              ></div>
+            ))}
+          </div>
         </div>
         <div className='right flex-1  pl-7'>
           <p className='text-sm11 text-primaryGray '>Artist Info</p>
@@ -3564,7 +3782,7 @@ const ArtDetails = () => {
                 {artDetails?.userMaster?.displayName}
               </p>
               <p className='text-sm11 text-primaryGray font-normal leading-[16px]'>
-                Freelance Illustrator/Photographer
+                {artDetails?.userMaster?.userDesignation}
               </p>
               <div className='flex items-center mb-3'>
                 <img className='mr-0.5' src={locatiomIcon} alt='' />
@@ -3613,46 +3831,68 @@ const ArtDetails = () => {
           </ul>
           <div className='flex gap-4'>
             <a
-              href='http://'
+              href={artDetails?.userMaster?.socialMedia?.facebookLink}
               target='_blank'
               rel='noopener noreferrer'
             >
-              {' '}
               <img src={faceBookIcon} alt='' />
             </a>
-            <img src={linkdinIcon} alt='' />
-            <img src={instaIcon} alt='' />
+            <a
+              href={artDetails?.userMaster?.socialMedia?.linkedinLink}
+              target='_blank'
+              rel='noopener noreferrer'
+            >
+              <img src={linkdinIcon} alt='' />
+            </a>
+            <a
+              href={
+                artDetails?.userMaster?.socialMedia?.pinterestLink
+              }
+              target='_blank'
+              rel='noopener noreferrer'
+            >
+              <img src={instaIcon} alt='' />
+            </a>
           </div>
         </div>
       </div>
       <div className='hrLine'></div>
 
       {/* userDetails */}
-      <div className='w-w1409 flex justify-center mx-auto'>
+      <div className='w-w1409 flex justify-center mx-auto mb-7'>
         <div>
           <p className='text-[38px] font-medium text-center text-[#333333]'>
-            Designs by Azra
+            Designs by {artDetails?.userMaster?.displayName}
           </p>
-          <div className='flex gap-3 text-center mt-4 mb-7'>
-            {azraDesign.map((item) => {
-              return (
-                <>
-                  <div>
-                    <img src={item.img} alt='' />
-                    <p className='text-[15px] text-[#333333]'>
-                      {item.title}
-                    </p>
-                    <p className='text-[12px] text-[#757575]'>
-                      {item.description}
-                    </p>
-                  </div>
-                </>
-              );
+          <div className='flex gap-3 text-center mt-4 '>
+            {userDesigns?.map((item, i) => {
+              if (i <= 4) {
+                return (
+                  <>
+                    <div className='text-center w-[269px] '>
+                      <img
+                        className='h-[269px] w-[100%] rounded-2xl'
+                        src={
+                          item?.imageMaster?.imageOrientation
+                            ?.squareUrl
+                        }
+                        alt=''
+                      />
+                      <p className='text-[15px] text-[#333333] font-medium'>
+                        {item?.artName}
+                      </p>
+                      <p className='text-[12px] text-[#757575]'>
+                        {item?.description.substr(0, 10)}
+                      </p>
+                    </div>
+                  </>
+                );
+              }
             })}
           </div>
-          <p className=' flex justify-center'>
-            <button className='blackBtn'>Discover more</button>
-          </p>
+          <button className='blackBtn block mx-auto mt-8'>
+            Discover more
+          </button>
         </div>
       </div>
 

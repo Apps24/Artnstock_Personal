@@ -18,12 +18,17 @@ import { toast } from "react-toastify";
 import dropArrow from "../../assets/images/Icons/Down arrow.svg";
 import { Menu } from "@headlessui/react";
 import { useDetectClickOutside } from "react-detect-click-outside";
+import { useDispatch, useSelector } from "react-redux";
+import { cartSliceAction } from "../../store/cartSlice";
+import { useRef } from "react";
 
 const Checkout = () => {
   const [cartData, setCartData] = useState();
   const [userData, setUserData] = useState();
   const [paymentCheck, setPaymentCheck] = useState("card");
   const [finalCheckout, setFinalCheckout] = useState("false");
+
+  const shippingRef = useRef()
 
   let location = useLocation();
 
@@ -37,8 +42,16 @@ const Checkout = () => {
       .get(`/cart_master/getUserIdWiseCartData/${userId}`)
       .then((res) => {
         console.log(res.data);
+        setSelect(res?.data?.shippingMethod)
+        shippingRef.current = res?.data?.shippingMethod
         setUserData(res?.data["userMaster"]);
         setCartData(res?.data);
+        setApplyPromo(res?.data?.codeType != null ? true : false)
+        if(res?.data?.codeType === "Promo Code") {
+          setPromoCode(res?.data?.promoCode)
+        } else if(res?.data?.codeType === "Promo Code") {
+          setGiftCode(res?.data?.giftCode)
+        }
       });
   };
 
@@ -206,7 +219,70 @@ const Checkout = () => {
   const selectValue = (data) => {
     setSelect(data);
     setOpenDropDown(false);
+    if(shippingRef.current?.shippingMethodId === data?.shippingMethodId) {
+      // console.log("No");
+    } else {
+      // console.log("Yes");
+      updateShippingMethod(data)
+    }
+
   };
+
+  // Remove Order
+  const cartCount = useSelector((state) => state.cart.cartCount);
+  const dispatch = useDispatch();
+
+
+  const removeOrder = async (cartArtFrameId) => {
+    try {
+      await httpClient
+        .delete(`/cart_art_frame_master/deleteCart/${cartArtFrameId}`)
+        .then((res) => {
+          // console.log(res.data);
+          getUserIdWiseCart(location?.state?.userId);
+          dispatch(cartSliceAction.setCartCount(cartCount - 1));
+          return res.data;
+        });
+    } catch (err) {
+      console.log(err);
+      getUserIdWiseCart(location?.state?.userId);
+    }
+  };
+
+  // update shipping method
+
+  const updateShippingMethod = (shippingData) => {
+    try {
+    const shippingModel = {
+      cartId: String,
+      shippingMethod: {
+        dayToReceive: String,
+        shippingMethodId: String,
+        shippingMethodName: String,
+        shippingMethodPrice: 0
+      }
+    }
+    shippingModel.cartId = cartData?.cartId
+    shippingModel.shippingMethod = shippingData
+    // console.log(shippingModel)
+    httpClient.put("/cart_master/updateCartShippingMethod", shippingModel)
+    .then((res) => {
+      if(res.data) {
+      getUserIdWiseCart(location?.state?.userId);
+        
+      }
+    })
+  } catch(err) {
+    getUserIdWiseCart(location?.state?.userId);
+    console.log(err);
+  }
+  }
+
+  // Edit Art
+
+  const editArt = () => {
+    
+  }
 
   return (
     <>
@@ -335,7 +411,7 @@ const Checkout = () => {
                     <input
                       type="text"
                       className="regInput mt-0"
-                      placeholder={userData?.userFirstName}
+                      value={userData?.userFirstName}
                     />
                   </div>
                   <div className="mt-[13px] mb-0">
@@ -345,7 +421,7 @@ const Checkout = () => {
                     <input
                       type="text"
                       className="regInput mt-0"
-                      placeholder={userData?.userLastName}
+                      value={userData?.userLastName}
                     />
                   </div>
                   <div className="mt-[13px] mb-0">
@@ -355,7 +431,7 @@ const Checkout = () => {
                     <input
                       type="text"
                       className="regInput mt-0"
-                      placeholder={userData?.emailAddress}
+                      value={userData?.emailAddress}
                     />
                   </div>
                 </div>
@@ -371,7 +447,7 @@ const Checkout = () => {
                     <input
                       type="text"
                       className="regInput mt-0"
-                      placeholder={userData?.shippingAddress?.countryName}
+                      value={userData?.shippingAddress?.countryName}
                     />
                   </div>
                   <div className="mt-[13px] mb-0">
@@ -381,7 +457,7 @@ const Checkout = () => {
                     <input
                       type="text"
                       className="regInput mt-0"
-                      placeholder={userData?.shippingAddress?.addressLine1}
+                      value={userData?.shippingAddress?.addressLine1}
                     />
                   </div>
                   <div className="mt-[13px] mb-0">
@@ -391,7 +467,7 @@ const Checkout = () => {
                     <input
                       type="text"
                       className="regInput mt-0"
-                      placeholder={userData?.shippingAddress?.addressLine2}
+                      value={userData?.shippingAddress?.addressLine2}
                     />
                   </div>
                   <div className="mt-[13px] mb-0">
@@ -401,7 +477,7 @@ const Checkout = () => {
                     <input
                       type="text"
                       className="regInput mt-0"
-                      placeholder={userData?.shippingAddress?.cityName}
+                      value={userData?.shippingAddress?.cityName}
                     />
                   </div>
                   <div className="flex gap-[14px]">
@@ -412,7 +488,7 @@ const Checkout = () => {
                       <input
                         type="text"
                         className="regInput mt-0"
-                        placeholder={userData?.shippingAddress?.zipCode}
+                        value={userData?.shippingAddress?.zipCode}
                       />
                     </div>
                     <div className="mt-[13px] mb-0">
@@ -422,7 +498,7 @@ const Checkout = () => {
                       <input
                         type="text"
                         className="regInput mt-0"
-                        placeholder={userData?.shippingAddress?.stateName}
+                        value={userData?.shippingAddress?.stateName}
                       />
                     </div>
                   </div>
@@ -434,48 +510,59 @@ const Checkout = () => {
                       type="text"
                       disabled={true}
                       className="regInput mt-0 bg-[#eeeeee]"
-                      placeholder={userData?.shippingAddress?.phoneNo}
+                      value={userData?.shippingAddress?.phoneNo}
                     />
                   </div>
                   <div className="mt-[13px] mb-0">
                     <label className="text-[12px] text-[#757575] leading-[1]">
                       Shipping Method
                     </label>
-                    <div
-                      className={`w-[100%]  mt-2.5 ${
-                        openDropdown
-                          ? "shadow-regCardShadow rounded-3xl overflow-hidden"
-                          : ""
-                      }`}
-                    >
-                      <div
-                        onClick={dropdownEvent}
-                        className={`flex justify-between  px-[0.938rem] py-[0.438rem] ${
+                    <Menu
+                        ref={ref1}
+                        as="div"
+                        className={`w-[100%] relative block mt-2.5 ${
                           openDropdown
-                            ? "border-[#D6D6D6] border-b "
-                            : "border-[#D6D6D6] border rounded-3xl "
+                            ? "shadow-newDroShadow rounded-tl-3xl  rounded-tr-3xl"
+                            : ""
                         }`}
                       >
-                        <span className=" outline-none text-primaryGray  ">
-                          {select !== null
-                            ? select?.shippingMethodName
-                            : "Select Shipping Method"}
-                        </span>
-                        <img src={dropArrow} alt="" />
-                      </div>
-                      {openDropdown && (
-                        <ul className="bg-[#ffffff] ">
-                          {shipping?.map((item) => (
-                            <li
-                              onClick={() => selectValue(item)}
-                              className="px-[0.938rem] py-[0.438rem] text-[#757575] hover:bg-[#f0f0f0]"
-                            >
-                              {item?.shippingMethodName}
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </div>
+                        <Menu.Button
+                          onClick={dropdownEvent}
+                          className={`flex justify-between items-center w-[100%] px-[0.938rem] py-[0.438rem] ${
+                            openDropdown
+                              ? "border-[#D6D6D6] border-b "
+                              : "border-[#D6D6D6] border rounded-3xl "
+                          }`}
+                        >
+                          <span className=" outline-none text-primaryGray  ">
+                            {select !== null
+                              ? select?.shippingMethodName
+                              : "Select Shipping Method"}
+                          </span>
+                          <img src={dropArrow} alt="" />
+                        </Menu.Button>
+                        <Menu.Items
+                          className={`absolute right-0 w-[100%] origin-top-right bg-[#ffffff]  focus:outline-none overflow-hidden ${
+                            openDropdown
+                              ? "shadow-newBotDroShadow rounded-bl-3xl  rounded-br-3xl"
+                              : ""
+                          }`}
+                        >
+                          <Menu.Item>
+                            <ul>
+                              {shipping?.map((item) => (
+                                <li
+                                  onClick={() => selectValue(item)}
+                                  className="px-[0.938rem] py-[0.438rem] text-[#757575] hover:bg-[#f0f0f0]"
+                                  
+                                >
+                                  {item?.shippingMethodName}
+                                </li>
+                              ))}
+                            </ul>
+                          </Menu.Item>
+                        </Menu.Items>
+                      </Menu>
                   </div>
                   <p className="text-[11px] text-[#757575] mt-[13px] mb-[26px] leading-[1.2]">
                     All products are manufactured on-demand and ship from the
@@ -504,7 +591,7 @@ const Checkout = () => {
                     <input
                       type="text"
                       className="regInput mt-0"
-                      placeholder={userData?.residentialAddress?.countryName}
+                      value={userData?.residentialAddress?.countryName}
                     />
                   </div>
                   <div className="mt-[13px] mb-0">
@@ -514,7 +601,7 @@ const Checkout = () => {
                     <input
                       type="text"
                       className="regInput mt-0"
-                      placeholder={userData?.residentialAddress?.addressLine1}
+                      value={userData?.residentialAddress?.addressLine1}
                     />
                   </div>
                   <div className="mt-[13px] mb-0">
@@ -524,7 +611,7 @@ const Checkout = () => {
                     <input
                       type="text"
                       className="regInput mt-0"
-                      placeholder={userData?.residentialAddress?.addressLine2}
+                      value={userData?.residentialAddress?.addressLine2}
                     />
                   </div>
                   <div className="mt-[13px] mb-0">
@@ -534,7 +621,7 @@ const Checkout = () => {
                     <input
                       type="text"
                       className="regInput mt-0"
-                      placeholder={userData?.residentialAddress?.cityName}
+                      value={userData?.residentialAddress?.cityName}
                     />
                   </div>
                   <div className="flex gap-[14px]">
@@ -545,7 +632,7 @@ const Checkout = () => {
                       <input
                         type="text"
                         className="regInput mt-0"
-                        placeholder={userData?.residentialAddress?.postalCode}
+                        value={userData?.residentialAddress?.postalCode}
                       />
                     </div>
                     <div className="mt-[13px] mb-0">
@@ -555,7 +642,7 @@ const Checkout = () => {
                       <input
                         type="text"
                         className="regInput mt-0"
-                        placeholder={userData?.residentialAddress?.stateName}
+                        value={userData?.residentialAddress?.stateName}
                       />
                     </div>
                   </div>
@@ -567,10 +654,10 @@ const Checkout = () => {
                       type="text"
                       disabled={true}
                       className="regInput mt-0 bg-[#eeeeee]"
-                      placeholder={userData?.residentialAddress?.phoneNo}
+                      value={userData?.residentialAddress?.phoneNo}
                     />
                   </div>
-                  <div className="mt-[13px] mb-[36px]">
+                  {/* <div className="mt-[13px] mb-[36px]">
                     <label className="text-[12px] text-[#757575] leading-[1]">
                       Shipping Method
                     </label>
@@ -620,11 +707,9 @@ const Checkout = () => {
                           </Menu.Item>
                         </Menu.Items>
                       </Menu>
-                  </div>
+                  </div> */}
 
-                  <div className="flex justify-end pr-[90px]">
-                    <button className="blackBtn">Continue to Checkout</button>
-                  </div>
+                    <button onClick={() => setFinalCheckout(false)} className="blackBtn block mx-auto mt-[36px]">Continue to Checkout</button>
                 </div>
               </div>
             </div>
@@ -710,9 +795,9 @@ const Checkout = () => {
                 <p className="text-primaryBlack text-[15px] mb-2.5 font-semibold">
                   Shipping Method
                 </p>
-                <p className="text-[13px] text-primaryGray">Standard</p>
+                <p className="text-[13px] text-primaryGray">{select?.shippingMethodName}</p>
                 <p className="text-[11px] text-primaryGray">
-                  Order now to receive in 10-15 business days
+                  Order now to receive in {select?.dayToReceive} business days
                 </p>
               </div>
 
@@ -751,7 +836,7 @@ const Checkout = () => {
               </div>
               <div className="bg-[#EEEEEE] px-4 py-2.5 flex items-center">
                 <div className="bg-[#333333] text-[#FFFFFF] rounded-full w-[25px] h-[25px] flex items-center justify-center">
-                  {cartData?.totalQty}
+                  {cartCount}
                 </div>
                 <p className="text-[13px] leading-[20px] text-[#333333] ml-1 font-medium">
                   Items in your cart
@@ -822,9 +907,9 @@ const Checkout = () => {
                             10% Discount Applied
                           </p>
                           <p className="text-[#757575] text-[12px] flex gap-[10px]  leading-[1] mt-1 ">
-                            <span>Edit</span>
-                            <span>Delete</span>
-                            <span>Move to Wishlist</span>
+                            <span onClick={() => editArt()}>Edit</span>
+                            <span className="cursor-pointer" onClick={() => removeOrder(cart?.cartArtFrameId)}>Delete</span>
+                            {/* <span>Move to Wishlist</span> */}
                           </p>
                         </div>
                       </div>
@@ -920,8 +1005,12 @@ const Checkout = () => {
                           type="text"
                           className="regInput mt-0 placeholder:text-[13px]"
                           placeholder="Enter Promo or Coupon code"
+                          value={promoCode}
+                          disabled={giftCode.length > 0 ? true : false}
+                          onChange={(e) => setPromoCode(e.target.value)}
                         />
-                        <button className="text-primaryBlack bg-[#EEEEEE] border border-[#E9E9E9] rounded-2xl py-[0.45rem] px-2 text-[10px] leading-[10px] font-medium absolute top-2 right-2">
+                        <button onClick={addPromoCode}
+                          disabled={giftCode.length > 0 ? true : false} className="text-primaryBlack bg-[#EEEEEE] border border-[#E9E9E9] rounded-2xl py-[0.45rem] px-2 text-[10px] leading-[10px] font-medium absolute top-2 right-2">
                           Add
                         </button>
                       </div>
@@ -930,8 +1019,12 @@ const Checkout = () => {
                           type="text"
                           className="regInput mt-0 placeholder:text-[13px]"
                           placeholder="Enter Gift Card code"
+                          value={giftCode}
+                          disabled={promoCode.length > 0 ? true : false}
+                          onChange={(e) => setGiftCode(e.target.value)}
                         />
-                        <button className="text-primaryBlack bg-[#EEEEEE] border border-[#E9E9E9] rounded-2xl py-[0.45rem] px-2 text-[10px] leading-[10px] font-medium absolute top-2 right-2">
+                        <button  onClick={addGiftCode}
+                          disabled={promoCode.length > 0 ? true : false}  className="text-primaryBlack bg-[#EEEEEE] border border-[#E9E9E9] rounded-2xl py-[0.45rem] px-2 text-[10px] leading-[10px] font-medium absolute top-2 right-2">
                           Add
                         </button>
                       </div>
