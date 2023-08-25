@@ -529,7 +529,7 @@ const EarningSummary = () => {
     }
   };
 
-  const [month, setMonth] = useState('');
+  const [month, setMonth] = useState();
   const [data, setData] = useState({});
 
   const getEarningsData = async () => {
@@ -537,15 +537,30 @@ const EarningSummary = () => {
       const res = await httpClient.get(
         `/contributorearning/get/${userId}`
       );
-      setData(res.data);
-      setMonth(
-        res.data.contributorEarningMonthResponseDtoList[0]?.month
-      );
       console.log(res.data);
+      setData(res.data);
+      setMonth(res.data.contributorEarningMonthResponseDtoList[0]);
     } catch (error) {
       console.error(error);
     }
   };
+
+  const getEarningsDataMonthWise = async () => {
+    try {
+      const res = await httpClient.get(
+        `/contributorearning/get/${userId}/${month?.month}/`
+      );
+      console.log(res.data);
+      setData(res.data);
+      setMonth(res.data.contributorEarningMonthResponseDtoList[0]);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getEarningsDataMonthWise();
+  }, [month]);
 
   useEffect(() => {
     getEarningsData();
@@ -648,9 +663,9 @@ const EarningSummary = () => {
                 } cursor-pointer w-[105px] text-[12px] h-[30px] flex items-center justify-between p-[10px]`}
                 // className='cursor-pointer w-[120px] border border-[#d6d6d6] text-[12px] h-[30px] rounded-[15px] flex items-center justify-between p-[10px]'
               >
-                {month !== '' ? (
+                {month !== null ? (
                   <span className='text-[#bbbbbb]'>
-                    {month
+                    {month?.month
                       .toLowerCase()
                       .replace(/(?:^|\s)\S/g, (char) =>
                         char.toUpperCase()
@@ -667,13 +682,13 @@ const EarningSummary = () => {
                   {data?.contributorEarningMonthResponseDtoList?.map(
                     (obj) => (
                       <li
-                        onClick={() => setMonth(obj.month)}
+                        onClick={() => setMonth(obj)}
                         className='cursor-pointer hover:bg-[#F0F0F0] border-b border-[#EFEFEF] py-[5px]'
                       >
                         {obj.month
                           .toLowerCase()
                           .replace(/(?:^|\s)\S/g, (char) =>
-                            char.toUpperCase()
+                            char?.toUpperCase()
                           )}
                       </li>
                     )
@@ -714,7 +729,12 @@ const EarningSummary = () => {
                 colspan='3'
                 className='border border-[#dddddd] bg-[#e7e7e7] rounded-tl-[10px]'
               >
-                August, 2023
+                {month?.month
+                  .toLowerCase()
+                  .replace(/(?:^|\s)\S/g, (char) =>
+                    char.toUpperCase()
+                  )}
+                , 2023
               </td>
 
               <td
@@ -843,43 +863,48 @@ const EarningSummary = () => {
             {/* test */}
             <tr className='text-[13px] font-medium' height='30'>
               <td className='border-r border-l border-[#dddddd] bg-[#f9e9e9] font-medium  text-primaryBlack  pl-[10px]'>
-                August 2023
+                {month?.month
+                  .toLowerCase()
+                  .replace(/(?:^|\s)\S/g, (char) =>
+                    char.toUpperCase()
+                  )}{' '}
+                2023
               </td>
               <td className='border-r border-[#dddddd] bg-[#f9e9e9] font-medium text-primaryBlack text-center'>
-                123.2
+                {month?.itemSold}
               </td>
               <td className='border-r border-[#dddddd] bg-[#f9e9e9] font-medium text-primaryBlack text-center'>
-                123.2
+                {month?.earning}
               </td>
               <td className='border-r border-[#dddddd] bg-[#feeeee] font-medium text-primaryBlack text-center'>
-                123.2
+                {month?.artPrint}
               </td>
               <td className='border-r border-[#dddddd] bg-[#feeeee] font-medium text-primaryBlack text-center'>
-                123.2
+                {month?.productsPrice}
               </td>
               <td className='border-r border-[#dddddd] bg-[#feeeee] font-medium text-primaryBlack text-center'>
-                123.2
+                -
               </td>
               <td className='border-r border-[#dddddd] bg-[#feeeee] font-medium text-primaryBlack text-center'>
-                123.2
+                -
               </td>
               <td className='border-r border-[#dddddd] bg-[#feeeee] font-medium text-primaryBlack text-center'>
-                123.2
+                -
               </td>
               <td className='border-r border-[#dddddd] bg-[#feeeee] font-medium text-primaryBlack text-center'>
-                123.2
+                -
               </td>
               <td className='border-r border-[#dddddd] bg-[#feeeee] font-medium text-primaryBlack text-center'>
-                123.2
+                -
               </td>
               <td className='border-r border-[#dddddd] bg-[#feeeee] font-medium text-primaryBlack text-center'>
-                123.2
+                -
               </td>
               <td className='border-r border-[#dddddd] bg-[#feeeee] font-medium text-primaryBlack text-center'>
-                123.2
+                -
               </td>
               <td className='border-r border-[#dddddd] bg-[#feeeee] font-medium text-primaryBlack text-center'>
-                123.2
+                -
               </td>
               <td className='border-r border-[#dddddd] bg-[#feeeee] font-medium text-primaryBlack pl-[10px]'>
                 Paid

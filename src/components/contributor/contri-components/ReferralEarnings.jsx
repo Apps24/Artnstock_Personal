@@ -154,7 +154,7 @@ const ReferralEarnings = () => {
         `/reference_earning/getreference/${userId}`
       );
       setdata(res.data.referenceEarningSummaries);
-      console.log(res);
+      console.log(res.data);
     } catch (err) {
       console.error(err);
     }

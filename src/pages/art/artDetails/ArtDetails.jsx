@@ -1,213 +1,210 @@
-import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import { httpClient } from "../../../axios";
-import viewIcon from "../../../assets/images/Icons/viewIcon.svg";
-import conHead from "../../../assets/images/static/conHead.jpg";
-import { Tab } from "@headlessui/react";
-import frameType1 from "../../../assets/images/static/Thumbnail Frame 01.jpg";
-import questionIcon from "../../../assets/images/Icons/questionIcon.svg";
-import minusIcon from "../../../assets/images/Icons/minusIcon.svg";
-import plusIcon from "../../../assets/images/Icons/plusIcon.svg";
-import certificateImg from "../../../assets/images/static/Certificate.jpg";
-import festiveImg from "../../../assets/images/static/Festive Offer.jpg";
-import vanIcon from "../../../assets/images/Icons/vanIcon.svg";
-import packingIcon from "../../../assets/images/Icons/packingIcon.svg";
-import colorCicleImg from "../../../assets/images/Icons/Icon - Select Colour Art Print.svg";
-import blackCircleImg from "../../../assets/images/Icons/W Art Print.svg";
-import roomViewImg from "../../../assets/images/Icons/Icon - View in a room.svg";
-import threeDImg from "../../../assets/images/Icons/Icon - 3D View.svg";
-import addIcon from "../../../assets/images/Icons/addIcon.svg";
+import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import { httpClient } from '../../../axios';
+import viewIcon from '../../../assets/images/Icons/viewIcon.svg';
+import conHead from '../../../assets/images/static/conHead.jpg';
+import { Tab } from '@headlessui/react';
+import frameType1 from '../../../assets/images/static/Thumbnail Frame 01.jpg';
+import questionIcon from '../../../assets/images/Icons/questionIcon.svg';
+import minusIcon from '../../../assets/images/Icons/minusIcon.svg';
+import plusIcon from '../../../assets/images/Icons/plusIcon.svg';
+import certificateImg from '../../../assets/images/static/Certificate.jpg';
+import festiveImg from '../../../assets/images/static/Festive Offer.jpg';
+import vanIcon from '../../../assets/images/Icons/vanIcon.svg';
+import packingIcon from '../../../assets/images/Icons/packingIcon.svg';
+import colorCicleImg from '../../../assets/images/Icons/Icon - Select Colour Art Print.svg';
+import blackCircleImg from '../../../assets/images/Icons/W Art Print.svg';
+import roomViewImg from '../../../assets/images/Icons/Icon - View in a room.svg';
+import threeDImg from '../../../assets/images/Icons/Icon - 3D View.svg';
+import addIcon from '../../../assets/images/Icons/addIcon.svg';
 // import wishlistIcon from '../../../assets/images/Icons/wishlistIcon.svg';
-import { ReactComponent as WishlistIcon } from "../../../assets/images/Icons/wishlistIcon.svg";
-import shareIcon from "../../../assets/images/Icons/shareIcon.svg";
-import productHeead from "../../../assets/images/static/Header - Products (1).svg";
-import productImg from "../../../assets/images/static/products.svg";
-import wallpaperImg from "../../../assets/images/static/wallpaper.svg";
-import brandingImg from "../../../assets/images/static/Branding.svg";
-import movetoSet from "../../../assets/images/contributor/movetoSet.png";
-import Stars from "../../../assets/images/ComboPack/Stars.png";
-import like from "../../../assets/images/ComboPack/like.png";
-import Popup from "reactjs-popup";
+import { ReactComponent as WishlistIcon } from '../../../assets/images/Icons/wishlistIcon.svg';
+import shareIcon from '../../../assets/images/Icons/shareIcon.svg';
+import productHeead from '../../../assets/images/static/Header - Products (1).svg';
+import productImg from '../../../assets/images/static/products.svg';
+import wallpaperImg from '../../../assets/images/static/wallpaper.svg';
+import brandingImg from '../../../assets/images/static/Branding.svg';
+import movetoSet from '../../../assets/images/contributor/movetoSet.png';
+import Stars from '../../../assets/images/ComboPack/Stars.png';
+import Star from '../../../assets/images/art-details/star.png';
+import like from '../../../assets/images/ComboPack/like.png';
+import Popup from 'reactjs-popup';
 
 // prathamesh
-import artcolor from "../../../assets/images/lifestyle/artcolor.png";
-import mugcolor from "../../../assets/images/lifestyle/mugcolor.png";
-import glasscolor from "../../../assets/images/lifestyle/glasscolor.png";
-import mousecolor from "../../../assets/images/lifestyle/mousecolor.png";
-import coastercolor from "../../../assets/images/lifestyle/coastercolor.png";
-import flowercolor from "../../../assets/images/lifestyle/flowercolor.png";
-import giftcolor from "../../../assets/images/lifestyle/giftcolor.png";
-import bagcolor from "../../../assets/images/lifestyle/bagcolor.png";
-import shirtcolor from "../../../assets/images/lifestyle/shirtcolor.png";
-import notepadcolor from "../../../assets/images/lifestyle/notepadcolor.png";
-import dropdown from "../../../assets/images/socials/dropdown.png";
-import tshirtphoto from "../../../assets/images/lifestyle/tshirtphoto.png";
-import tickgreen from "../../../assets/images/lifestyle/tickgreen.png";
+import artcolor from '../../../assets/images/lifestyle/artcolor.png';
+import mugcolor from '../../../assets/images/lifestyle/mugcolor.png';
+import glasscolor from '../../../assets/images/lifestyle/glasscolor.png';
+import mousecolor from '../../../assets/images/lifestyle/mousecolor.png';
+import coastercolor from '../../../assets/images/lifestyle/coastercolor.png';
+import flowercolor from '../../../assets/images/lifestyle/flowercolor.png';
+import giftcolor from '../../../assets/images/lifestyle/giftcolor.png';
+import bagcolor from '../../../assets/images/lifestyle/bagcolor.png';
+import shirtcolor from '../../../assets/images/lifestyle/shirtcolor.png';
+import notepadcolor from '../../../assets/images/lifestyle/notepadcolor.png';
+import dropdown from '../../../assets/images/socials/dropdown.png';
+import tshirtphoto from '../../../assets/images/lifestyle/tshirtphoto.png';
+import tickgreen from '../../../assets/images/lifestyle/tickgreen.png';
 
-import DigArtPrint from "../../../assets/images/lifestyle/DigArtPrint.png";
-import mensTshirt from "../../../assets/images/lifestyle/mensTshirt.png";
-import darkBlueColor from "../../../assets/images/lifestyle/darkBlueColor.png";
-import mediumSize from "../../../assets/images/lifestyle/mediumSize.png";
-import cottonFabric from "../../../assets/images/lifestyle/cottonFabric.png";
-import MensShirt from "../../../assets/images/lifestyle/2MensShirt.png";
-import cards from "../../../assets/images/lifestyle/cards.png";
-import certificate from "../../../assets/images/lifestyle/Certificate.png";
+import DigArtPrint from '../../../assets/images/lifestyle/DigArtPrint.png';
+import mensTshirt from '../../../assets/images/lifestyle/mensTshirt.png';
+import darkBlueColor from '../../../assets/images/lifestyle/darkBlueColor.png';
+import mediumSize from '../../../assets/images/lifestyle/mediumSize.png';
+import cottonFabric from '../../../assets/images/lifestyle/cottonFabric.png';
+import MensShirt from '../../../assets/images/lifestyle/2MensShirt.png';
+import cards from '../../../assets/images/lifestyle/cards.png';
+import certificate from '../../../assets/images/lifestyle/Certificate.png';
 // import pro from '../../../assets/images/art-details/pro.png';
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
-import profile from "../../../assets/images/Menubar/Profile.png";
-import pro from "../../../assets/images/art-details/Pro.png";
-import locationImg from "../../../assets/images/art-details/location.png";
-import R1 from "../../../assets/images/art-details/R1.png";
-import R2 from "../../../assets/images/art-details/R2.png";
-import R3 from "../../../assets/images/art-details/R3.png";
-import IconFacebook from "../../../assets/images/art-details/IconFacebook.png";
-import IconInstagram from "../../../assets/images/art-details/IconInstagram.png";
-import IconLinkedin from "../../../assets/images/art-details/IconLinkedin.png";
-import azra1 from "../../../assets/images/art-details/azra1.png";
-import azra2 from "../../../assets/images/art-details/azra2.png";
-import azra3 from "../../../assets/images/art-details/azra3.png";
-import azra4 from "../../../assets/images/art-details/azra4.png";
-import azra5 from "../../../assets/images/art-details/azra5.png";
-import grp from "../../../assets/images/art-details/grp.png";
-import grp144 from "../../../assets/images/art-details/grp144.png";
-import stars from "../../../assets/images/art-details/stars.png";
-import Footer from "../../../components/footer/Footer";
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import Wishlist from "../../../utils/wishlist";
-import colorPaletimg from "../../../assets/images/art-details/Group 133.svg";
-import proImg from "../../../assets/images/art-details/Pro.svg";
-import locatiomIcon from "../../../assets/images/art-details/Icon - Location Pointer.svg";
-import faceBookIcon from "../../../assets/images/footer/FacebookIcon.png";
-import linkdinIcon from "../../../assets/images/footer/LinkedinIcon.png";
-import instaIcon from "../../../assets/images/footer/InstagramIcon.png";
-import custImg from "../../../assets/images/ComboPack/custImg.png";
-import { useDetectClickOutside } from "react-detect-click-outside";
+import profile from '../../../assets/images/Menubar/Profile.png';
+import pro from '../../../assets/images/art-details/Pro.png';
+import locationImg from '../../../assets/images/art-details/location.png';
+import R1 from '../../../assets/images/art-details/R1.png';
+import R2 from '../../../assets/images/art-details/R2.png';
+import R3 from '../../../assets/images/art-details/R3.png';
+import IconFacebook from '../../../assets/images/art-details/IconFacebook.png';
+import IconInstagram from '../../../assets/images/art-details/IconInstagram.png';
+import IconLinkedin from '../../../assets/images/art-details/IconLinkedin.png';
+import azra1 from '../../../assets/images/art-details/azra1.png';
+import azra2 from '../../../assets/images/art-details/azra2.png';
+import azra3 from '../../../assets/images/art-details/azra3.png';
+import azra4 from '../../../assets/images/art-details/azra4.png';
+import azra5 from '../../../assets/images/art-details/azra5.png';
+import grp from '../../../assets/images/art-details/grp.png';
+import grp144 from '../../../assets/images/art-details/grp144.png';
+import stars from '../../../assets/images/art-details/stars.png';
+import Footer from '../../../components/footer/Footer';
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import Wishlist from '../../../utils/wishlist';
+import colorPaletimg from '../../../assets/images/art-details/Group 133.svg';
+import proImg from '../../../assets/images/art-details/Pro.svg';
+import locatiomIcon from '../../../assets/images/art-details/Icon - Location Pointer.svg';
+import faceBookIcon from '../../../assets/images/footer/FacebookIcon.png';
+import linkdinIcon from '../../../assets/images/footer/LinkedinIcon.png';
+import instaIcon from '../../../assets/images/footer/InstagramIcon.png';
+import custImg from '../../../assets/images/ComboPack/custImg.png';
+import { useDetectClickOutside } from 'react-detect-click-outside';
 import {
   CartartClass,
   CartArtFrameModel,
-} from "../../../models/allModel";
+} from '../../../models/allModel';
 
-import { useCallback, useRef } from "react";
-import { toJpeg } from "html-to-image";
-import { toast } from "react-toastify";
-import { cartSliceAction } from "../../../store/cartSlice";
-
-
-
-const custReview = [
-  {
-    img: `${custImg}`,
-    name: "ksgrafiks",
-    type: "Abstract",
-    reviewCount: "5",
-    photo: "1",
-    months: "4 months",
-    desc: "Very eye pleasing sculpture. Looks best in a bright room as the variation is colored glass. Leaves do not show in dimly lit area. Very eye pleasing sculpture. Looks best in a bright room as the variation is colored glass. Leaves do not show in dimly lit area.",
-    like: "24",
-    response: "Thanks Azra - Glad we could help!",
-    responseMonth: "7 months",
-  },
-];
+import { useCallback, useRef } from 'react';
+import { toJpeg } from 'html-to-image';
+import { toast } from 'react-toastify';
+import { cartSliceAction } from '../../../store/cartSlice';
+import Rating from '@mui/material/Rating';
+import Typography from '@mui/material/Typography';
+import addsmall from '../../../assets/images/contributor/addsmall.png';
 
 const azraDesign = [
   {
     img: `${azra1}`,
-    title: "Lorem Ipsum dolor",
-    description: "lorem ijsrg gdurdfv jhgfyvdh uegfy jkugyufewsd fesrgtyb",
+    title: 'Lorem Ipsum dolor',
+    description:
+      'lorem ijsrg gdurdfv jhgfyvdh uegfy jkugyufewsd fesrgtyb',
   },
   {
     img: `${azra2}`,
-    title: "Lorem Ipsum dolor",
-    description: "lorem ijsrg gdurdfv jhgfyvdh uegfy jkugyufewsd fesrgtyb",
+    title: 'Lorem Ipsum dolor',
+    description:
+      'lorem ijsrg gdurdfv jhgfyvdh uegfy jkugyufewsd fesrgtyb',
   },
   {
     img: `${azra3}`,
-    title: "Lorem Ipsum dolor",
-    description: "lorem ijsrg gdurdfv jhgfyvdh uegfy jkugyufewsd fesrgtyb",
+    title: 'Lorem Ipsum dolor',
+    description:
+      'lorem ijsrg gdurdfv jhgfyvdh uegfy jkugyufewsd fesrgtyb',
   },
   {
     img: `${azra4}`,
-    title: "Lorem Ipsum dolor",
-    description: "lorem ijsrg gdurdfv jhgfyvdh uegfy jkugyufewsd fesrgtyb",
+    title: 'Lorem Ipsum dolor',
+    description:
+      'lorem ijsrg gdurdfv jhgfyvdh uegfy jkugyufewsd fesrgtyb',
   },
   {
     img: `${azra5}`,
-    title: "Lorem Ipsum dolor",
-    description: "lorem ijsrg gdurdfv jhgfyvdh uegfy jkugyufewsd fesrgtyb",
+    title: 'Lorem Ipsum dolor',
+    description:
+      'lorem ijsrg gdurdfv jhgfyvdh uegfy jkugyufewsd fesrgtyb',
   },
 ];
 
 const otherDesign = [
   {
     img: `${azra4}`,
-    title: "Lorem Ipsum dolor",
-    description: "lorem ijsrg gdurdfv jhgfyvdh uegfy jkugyufewsd fesrgtyb",
+    title: 'Lorem Ipsum dolor',
+    description:
+      'lorem ijsrg gdurdfv jhgfyvdh uegfy jkugyufewsd fesrgtyb',
   },
   {
     img: `${azra5}`,
-    title: "Lorem Ipsum dolor",
-    description: "lorem ijsrg gdurdfv jhgfyvdh uegfy jkugyufewsd fesrgtyb",
+    title: 'Lorem Ipsum dolor',
+    description:
+      'lorem ijsrg gdurdfv jhgfyvdh uegfy jkugyufewsd fesrgtyb',
   },
   {
     img: `${azra1}`,
-    title: "Lorem Ipsum dolor",
-    description: "lorem ijsrg gdurdfv jhgfyvdh uegfy jkugyufewsd fesrgtyb",
+    title: 'Lorem Ipsum dolor',
+    description:
+      'lorem ijsrg gdurdfv jhgfyvdh uegfy jkugyufewsd fesrgtyb',
   },
   {
     img: `${azra3}`,
-    title: "Lorem Ipsum dolor",
-    description: "lorem ijsrg gdurdfv jhgfyvdh uegfy jkugyufewsd fesrgtyb",
+    title: 'Lorem Ipsum dolor',
+    description:
+      'lorem ijsrg gdurdfv jhgfyvdh uegfy jkugyufewsd fesrgtyb',
   },
   {
     img: `${azra2}`,
-    title: "Lorem Ipsum dolor",
-    description: "lorem ijsrg gdurdfv jhgfyvdh uegfy jkugyufewsd fesrgtyb",
+    title: 'Lorem Ipsum dolor',
+    description:
+      'lorem ijsrg gdurdfv jhgfyvdh uegfy jkugyufewsd fesrgtyb',
   },
 ];
 
 const arrImg = [
   {
     img: `${azra4}`,
-    title: "Lorem Ipsum dolor",
-    description: "lorem ijsrg gdurd jhgfyvdh uegf",
+    title: 'Lorem Ipsum dolor',
+    description: 'lorem ijsrg gdurd jhgfyvdh uegf',
   },
   {
     img: `${azra5}`,
-    title: "Lorem Ipsum dolor",
-    description: "lorem ijsrg gdurd jhgfyvdh uegf",
+    title: 'Lorem Ipsum dolor',
+    description: 'lorem ijsrg gdurd jhgfyvdh uegf',
   },
   {
     img: `${azra1}`,
-    title: "Lorem Ipsum dolor",
-    description: "lorem ijsrg gdurd jhgfyvdh uegf",
+    title: 'Lorem Ipsum dolor',
+    description: 'lorem ijsrg gdurd jhgfyvdh uegf',
   },
   {
     img: `${azra3}`,
-    title: "Lorem Ipsum dolor",
-    description: "lorem ijsrg gdurd jhgfyvdh uegf",
+    title: 'Lorem Ipsum dolor',
+    description: 'lorem ijsrg gdurd jhgfyvdh uegf',
   },
   {
     img: `${azra2}`,
-    title: "Lorem Ipsum dolor",
-    description: "lorem ijsrg gdurd jhgfyvdh uegf",
+    title: 'Lorem Ipsum dolor',
+    description: 'lorem ijsrg gdurd jhgfyvdh uegf',
   },
   {
     img: `${azra1}`,
-    title: "Lorem Ipsum dolor",
-    description: "lorem ijsrg gdurd jhgfyvdh uegf",
+    title: 'Lorem Ipsum dolor',
+    description: 'lorem ijsrg gdurd jhgfyvdh uegf',
   },
   {
     img: `${azra3}`,
-    title: "Lorem Ipsum dolor",
-    description: "lorem ijsrg gdurd jhgfyvdh uegf",
+    title: 'Lorem Ipsum dolor',
+    description: 'lorem ijsrg gdurd jhgfyvdh uegf',
   },
   {
     img: `${azra2}`,
-    title: "Lorem Ipsum dolor",
-    description: "lorem ijsrg gdurd jhgfyvdh uegf",
+    title: 'Lorem Ipsum dolor',
+    description: 'lorem ijsrg gdurd jhgfyvdh uegf',
   },
 ];
 
@@ -223,6 +220,21 @@ const CustomerImg = [
   `${azra4}`,
   `${azra1}`,
 ];
+
+const StyledPopupReview = styled(Popup)`
+  // use your custom style for ".popup-overlay"
+  /* &-overlay {
+ ...;
+} */
+  // use your custom style for ".popup-content"
+  &-content {
+    background-color: #ffffff;
+    color: #333333;
+    border-radius: 30px;
+    padding: 30px;
+    width: 514px;
+  }
+`;
 
 const StyledPopup = styled(Popup)`
   // use your custom style for ".popup-overlay"
@@ -340,13 +352,10 @@ const ArtDetails = () => {
   const [includeTopMat, setIncludeTopMat] = useState(false);
   const [includeBottomMat, setIncludeBottomMat] = useState(false);
   const [isTopMatWidthOpen, setIsTopMatWidthOpen] = useState(false);
-  const [isBottomMatWidthOpen, setIsBottomMatWidthOpen] = useState(false);
+  const [isBottomMatWidthOpen, setIsBottomMatWidthOpen] =
+    useState(false);
   const includeTopMatRef = useRef();
   const includeBotMatRef = useRef();
-
-
-
-
 
   const [isOpenSortBy, setIsOpenSortBy] = useState(false);
   const [isOpenFilterBy, setIsOpenFilterBy] = useState(false);
@@ -357,11 +366,7 @@ const ArtDetails = () => {
 
   const userAuth = useSelector((state) => state.auth);
 
-
-
   const dispatch = useDispatch();
-
-
 
   const [verticalImg, setVerticalImg] = useState();
   const [horizontalImg, setHorizontalImg] = useState();
@@ -378,6 +383,10 @@ const ArtDetails = () => {
         setRecentlyViewed(res.data?.artId);
         cartModel.artId = res.data?.artId;
         setArtDetails(res.data);
+        setPostReviewData({
+          ...postReviewData,
+          artId: res.data.artId,
+        });
         mutableVariable.current = res?.data['imageMaster']?.type;
         setOrientationBtn(res?.data['imageMaster']?.type);
         setVerticalImg(
@@ -392,6 +401,10 @@ const ArtDetails = () => {
       });
   }, [location]);
 
+  useEffect(() => {
+    console.log(artDetails, 'apruv');
+  }, [location]);
+
   const setRecentlyViewed = async (artId) => {
     try {
       const recentObj = {
@@ -401,17 +414,16 @@ const ArtDetails = () => {
 
       recentObj.artId = artId;
       recentObj.userId = userId;
-      const res = await httpClient.post("/recently_view_master", recentObj);
+      const res = await httpClient.post(
+        '/recently_view_master',
+        recentObj
+      );
 
       console.log(`Recetly Viewed => ${res.data}`);
     } catch (err) {
       console.log(err);
     }
   };
-
-
- 
-
 
   const [openBig, setOpenBig] = useState(false);
   const [showPrice, setShowPrice] = useState(false);
@@ -420,13 +432,14 @@ const ArtDetails = () => {
 
   const quantityRef = useRef(1);
 
-
   useEffect(() => {
     getActivePaperMasterList();
     getHoriOriList();
     getMatList();
     getAllFrames();
     getFolders();
+    getReviewList();
+    // setPostReviewData({ ...postReviewData, artId: artDetails.artId });
   }, []);
 
   // // redux slice
@@ -434,7 +447,8 @@ const ArtDetails = () => {
   //   (state) => state.fileimages.selectedAllFilesImages
   // );
 
-  const [activePaperMasterList, setActivePaperMasterList] = useState(null);
+  const [activePaperMasterList, setActivePaperMasterList] =
+    useState(null);
   const [checking, setChecking] = useState();
   const [materialCheck, setMaterialCheck] = useState();
   const mutablePrint = useRef({});
@@ -445,7 +459,6 @@ const ArtDetails = () => {
 
   // const [activePaperMasterList, setActivePaperMasterList] =
   //   useState(null);
-
 
   const getActivePaperMasterList = async () => {
     try {
@@ -538,17 +551,21 @@ const ArtDetails = () => {
   const getAllFrames = () => {
     try {
       includeFrame &&
-        httpClient.get("/frame_master/getActiveFrameMaster").then((res) => {
-          // console.log(res.data);
-          setFrameList(res.data);
-          setFrameChecked(res.data[0].frameId);
-          setFrameColorr(res.data[0]?.frameColor);
-          setFrameColor(res.data[0]?.frameColor[0]);
-          mutableColor.current = res.data[0]?.frameColor[0];
-          setSelectedFrame(res.data[0]);
-          localStorage.setItem("selectFrameData", JSON.stringify(res.data[0]));
-        });
-
+        httpClient
+          .get('/frame_master/getActiveFrameMaster')
+          .then((res) => {
+            // console.log(res.data);
+            setFrameList(res.data);
+            setFrameChecked(res.data[0].frameId);
+            setFrameColorr(res.data[0]?.frameColor);
+            setFrameColor(res.data[0]?.frameColor[0]);
+            mutableColor.current = res.data[0]?.frameColor[0];
+            setSelectedFrame(res.data[0]);
+            localStorage.setItem(
+              'selectFrameData',
+              JSON.stringify(res.data[0])
+            );
+          });
     } catch (err) {
       console.log(err);
     }
@@ -557,7 +574,7 @@ const ArtDetails = () => {
   const getFrameCheck = (e) => {
     setSelectedFrame(e);
     setFrameColor(e.frameColor[0]);
-    localStorage.setItem("selectFrameData", JSON.stringify(e));
+    localStorage.setItem('selectFrameData', JSON.stringify(e));
     mutableColor.current = e.frameColor[0];
     setFrameChecked(e.frameId);
     setFrameColorr(e.frameColor);
@@ -609,24 +626,26 @@ const ArtDetails = () => {
         '/mat_master/getTypeWiseList/top'
       );
       // console.log(rest.data);
-    topMatColorRef.current = rest.data.frameColor[0]
-includeTopMatRef.current = false
+      topMatColorRef.current = rest.data.frameColor[0];
+      includeTopMatRef.current = false;
       setTopMatColor(rest.data.frameColor[0]);
       setTopMatWidth(rest.data);
-      localStorage.setItem("topMat", JSON.stringify(rest.data));
+      localStorage.setItem('topMat', JSON.stringify(rest.data));
     } catch (err) {
       console.log(err);
     }
     try {
       // console.log(rest.data);
-      const resb = await httpClient.get("/mat_master/getTypeWiseList/bottom");
-    botMatColorRef.current = resb.data.frameColor[0]
-    includeBotMatRef.current = false
+      const resb = await httpClient.get(
+        '/mat_master/getTypeWiseList/bottom'
+      );
+      botMatColorRef.current = resb.data.frameColor[0];
+      includeBotMatRef.current = false;
 
       setBottomMatColor(resb.data.frameColor[0]);
       // console.log(bottomMatColor);
       setBottomMatWidth(resb.data);
-      localStorage.setItem("botMat", JSON.stringify(resb.data));
+      localStorage.setItem('botMat', JSON.stringify(resb.data));
     } catch (err) {
       console.log(err);
     }
@@ -647,7 +666,7 @@ includeTopMatRef.current = false
   const selectNewTopMatColor = () => {
     // console.log(topMatColor);
     setTopMatColor(topMatColor);
-    topMatColorRef.current = topMatColor
+    topMatColorRef.current = topMatColor;
     topMatColordropdown();
   };
 
@@ -688,11 +707,11 @@ includeTopMatRef.current = false
   const selectNewBottomMatColor = () => {
     // console.log(bottomMatColor);
     setBottomMatColor(bottomMatColor);
-    botMatColorRef.current = bottomMatColor
+    botMatColorRef.current = bottomMatColor;
     bottomMatColordropdown();
   };
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState('');
   const [folderName, setFolderName] = useState(null);
   const [isNameOpen, setIsNameOpen] = useState(false);
 
@@ -702,7 +721,7 @@ includeTopMatRef.current = false
       collectionId: folderName.collectionId,
     };
     httpClient
-      .post("/collection_master/CollectionIdWiseAddArt", object)
+      .post('/collection_master/CollectionIdWiseAddArt', object)
       .then((res) => {
         console.log(res.data);
 
@@ -729,13 +748,12 @@ includeTopMatRef.current = false
       }));
 
       data.forEach((obj) => {
-        if (obj.category === "art") {
+        if (obj.category === 'art') {
           setCategories((prevCategories) => ({
             ...prevCategories,
             art: [...prevCategories.art, obj],
           }));
         }
-
       });
     } catch (error) {
       console.error(error);
@@ -747,8 +765,11 @@ includeTopMatRef.current = false
   // Image Capture
   const ref = useRef(null);
   function dataURItoBlob(dataURI) {
-    const byteString = atob(dataURI.split(",")[1]);
-    const mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
+    const byteString = atob(dataURI.split(',')[1]);
+    const mimeString = dataURI
+      .split(',')[0]
+      .split(':')[1]
+      .split(';')[0];
     const ab = new ArrayBuffer(byteString.length);
     const ia = new Uint8Array(ab);
     for (let i = 0; i < byteString.length; i++) {
@@ -765,9 +786,9 @@ includeTopMatRef.current = false
     toJpeg(ref.current, { cacheBust: true })
       .then((dataUrl) => {
         let formData = new FormData();
-        formData.append("file", dataURItoBlob(dataUrl));
+        formData.append('file', dataURItoBlob(dataUrl));
         httpClient
-          .post("/CloudinaryImageUpload?parameter=false", formData)
+          .post('/CloudinaryImageUpload?parameter=false', formData)
           .then((res) => {
             // console.log(res.data);
             CartArtFrameModel.imgUrl = res.data;
@@ -785,54 +806,61 @@ includeTopMatRef.current = false
     CartArtFrameModel.userId = userId;
     CartArtFrameModel.quantity = quantityRef.current;
     CartArtFrameModel.artId = cartModel.artId;
-    const ap = JSON.parse(localStorage.getItem("selectFrameData"));
+    const ap = JSON.parse(localStorage.getItem('selectFrameData'));
     delete ap?.frameColor;
     if (ap !== null) {
       CartArtFrameModel.frameMaster = ap;
-      CartArtFrameModel.frameMaster.frameColor = mutableColor.current.colorCode;
+      CartArtFrameModel.frameMaster.frameColor =
+        mutableColor.current.colorCode;
     }
-    if (mutableVariable.current === "Vertical") {
-      CartArtFrameModel["orientationMaster"] = vertiSelectRef.current;
-    } else if (mutableVariable.current === "Horizontal") {
-      CartArtFrameModel["orientationMaster"] = horiSelectRef.current;
+    if (mutableVariable.current === 'Vertical') {
+      CartArtFrameModel['orientationMaster'] = vertiSelectRef.current;
+    } else if (mutableVariable.current === 'Horizontal') {
+      CartArtFrameModel['orientationMaster'] = horiSelectRef.current;
     } else {
-      CartArtFrameModel["orientationMaster"] = squareSelectRef.current;
+      CartArtFrameModel['orientationMaster'] =
+        squareSelectRef.current;
     }
 
-    CartArtFrameModel["printingMaterialMaster"] = mutablePrint.current;
-    const topMat = JSON.parse(localStorage.getItem("topMat"));
+    CartArtFrameModel['printingMaterialMaster'] =
+      mutablePrint.current;
+    const topMat = JSON.parse(localStorage.getItem('topMat'));
     delete topMat?.matWidth;
     delete topMat?.color;
-    const botMat = JSON.parse(localStorage.getItem("botMat"));
+    const botMat = JSON.parse(localStorage.getItem('botMat'));
     delete botMat?.matWidth;
     delete botMat?.color;
 
     if (includeTopMatRef.current) {
-      CartArtFrameModel["matMasterTop"].matId = topMat.matId;
-      CartArtFrameModel["matMasterTop"].matType = topMat.matType;
-      CartArtFrameModel["matMasterTop"].price = topMat.price;
-      CartArtFrameModel["matMasterTop"].matWidth = topMatSelectRef.current;
-      CartArtFrameModel["matMasterTop"].color = topMatColorRef.current?.colorCode;
+      CartArtFrameModel['matMasterTop'].matId = topMat.matId;
+      CartArtFrameModel['matMasterTop'].matType = topMat.matType;
+      CartArtFrameModel['matMasterTop'].price = topMat.price;
+      CartArtFrameModel['matMasterTop'].matWidth =
+        topMatSelectRef.current;
+      CartArtFrameModel['matMasterTop'].color =
+        topMatColorRef.current?.colorCode;
     }
     if (includeBotMatRef.current) {
-      CartArtFrameModel["matMasterBottom"].matId = botMat.matId;
-      CartArtFrameModel["matMasterBottom"].matType = botMat.matType;
-      CartArtFrameModel["matMasterBottom"].price = botMat.price;
-      CartArtFrameModel["matMasterBottom"].matWidth = botMatSelectRef.current;
-      CartArtFrameModel["matMasterBottom"].color = botMatColorRef.current?.colorCode;
+      CartArtFrameModel['matMasterBottom'].matId = botMat.matId;
+      CartArtFrameModel['matMasterBottom'].matType = botMat.matType;
+      CartArtFrameModel['matMasterBottom'].price = botMat.price;
+      CartArtFrameModel['matMasterBottom'].matWidth =
+        botMatSelectRef.current;
+      CartArtFrameModel['matMasterBottom'].color =
+        botMatColorRef.current?.colorCode;
     }
 
     console.log(CartArtFrameModel);
     const res = await httpClient.post(
-      "/cart_art_frame_master/saveCartArtFrame",
+      '/cart_art_frame_master/saveCartArtFrame',
       CartArtFrameModel
     );
 
     if (res.data) {
-      toast.success("Successfully Added to Cart");
+      toast.success('Successfully Added to Cart');
       dispatch(cartSliceAction.setCartCount(cartCount + 1));
 
-      navigate("/shopping-cart");
+      navigate('/shopping-cart');
     }
   };
 
@@ -842,19 +870,129 @@ includeTopMatRef.current = false
   };
 
   const checkoutPage = () => {
-    navigate("/checkout");
+    navigate('/checkout');
   };
+
+  // review
+
+  const [postReviewData, setPostReviewData] = useState({
+    artId: location?.state?.id,
+    reviewTitle: '',
+    reviewMsg: '',
+    reviewImage: [],
+    reviewStar: 3,
+    userId: userId,
+  });
+
+  useEffect(() => {
+    console.log(postReviewData);
+  }, [postReviewData]);
+
+  useEffect(() => {
+    setPostReviewData({ ...postReviewData, artId: artDetails.artId });
+  }, [location]);
+
+  const postReviewAction = (e) => {
+    const { name, value } = e.target;
+    setPostReviewData({ ...postReviewData, [name]: value });
+    // console.log(value);
+  };
+
+  const handleRatingChange = (event, newValue) => {
+    setPostReviewData({ ...postReviewData, reviewStar: newValue }); // newValue will contain the selected rating value
+  };
+
+  const fileInputRef = useRef(null);
+
+  const handleButtonClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleFileChange = (event) => {
+    const files = event.target.files[0];
+
+    let formData = new FormData();
+    formData.append('file', files);
+    httpClient
+      .post('/CloudinaryImageUpload?parameter=false', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then((res) => {
+        console.log('file uploaded successfully');
+        // console.log(res);
+
+        if (postReviewData.reviewImage.length > 0) {
+        } else {
+        }
+
+        setPostReviewData((prev) => {
+          const newReviewImage = [...prev.reviewImage]; // Create a copy of the array
+          newReviewImage[0] = res.data; // Update the first object with the response data
+
+          return {
+            ...prev,
+            reviewImage: newReviewImage, // Set the updated array in the state
+          };
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const postReview = async () => {
+    try {
+      const res = await httpClient.post(
+        '/customer_review_master/create',
+        postReviewData
+      );
+      console.log(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const [custReview, setCustReview] = useState([]);
+
+  const getReviewList = async () => {
+    try {
+      const res = await httpClient.get(
+        '/customer_review_master/getActiveCustomerReviewMaster'
+      );
+      console.log(res.data);
+      setCustReview(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // const custReview = [
+  //   {
+  //     img: `${custImg}`,
+  //     name: 'ksgrafiks',
+  //     type: 'Abstract',
+  //     reviewCount: '5',
+  //     photo: '1',
+  //     months: '4 months',
+  //     desc: 'Very eye pleasing sculpture. Looks best in a bright room as the variation is colored glass. Leaves do not show in dimly lit area. Very eye pleasing sculpture. Looks best in a bright room as the variation is colored glass. Leaves do not show in dimly lit area.',
+  //     like: '24',
+  //     response: 'Thanks Azra - Glad we could help!',
+  //     responseMonth: '7 months',
+  //   },
+  // ];
 
   return (
     <>
-      <div className="w-w1168 mx-auto mt-10">
-        <p className="bullet mb-0.5">
+      <div className='w-w1168 mx-auto mt-10'>
+        <p className='bullet mb-0.5'>
           Artnstock / Art / Abstract Art / Shop Now
         </p>
-        <div className="flex">
-          <div className="left">
-            <div className="w-[35.625rem] h-[35.625rem] bg-[#F5F5F7] rounded-[30px] relative flex items-center justify-center px-[15px] py-[40px]">
-              <div className="bg-primaryBlack text-[#ffffff] absolute top-[15px] left-[15px] text-[10px] font-normal leading-3.5 rounded-2xl py-0.5 px-2.5">
+        <div className='flex'>
+          <div className='left'>
+            <div className='w-[35.625rem] h-[35.625rem] bg-[#F5F5F7] rounded-[30px] relative flex items-center justify-center px-[15px] py-[40px]'>
+              <div className='bg-primaryBlack text-[#ffffff] absolute top-[15px] left-[15px] text-[10px] font-normal leading-3.5 rounded-2xl py-0.5 px-2.5'>
                 Exclusive
               </div>
               {/* Frame */}
@@ -999,69 +1137,73 @@ includeTopMatRef.current = false
                 <img src={roomViewImg} alt='' />
                 <img src={threeDImg} alt='' />
               </div>
-              <div className="flex gap-x-2.5 items-center">
+              <div className='flex gap-x-2.5 items-center'>
                 {popupLogin && (
                   <div
                     className={`z-999 right-[117px] bg-[#fff] rounded-[16px] w-[266px] absolute bottom-[38px] left-[-127px]`}
                     style={{
-                      boxShadow: "0px 0px 18px rgba(0, 0, 0, 0.2)",
+                      boxShadow: '0px 0px 18px rgba(0, 0, 0, 0.2)',
                     }}
                   >
-                    <div className="flex gap-[5px] flex-col p-[14px] leading-[1.3] text-center">
-                      <p className="font-medium text-primaryBlack text-[15px]">
+                    <div className='flex gap-[5px] flex-col p-[14px] leading-[1.3] text-center'>
+                      <p className='font-medium text-primaryBlack text-[15px]'>
                         Create Account
                       </p>
-                      <p className="text-primaryGray text-[11px]">
-                        To create and add to a collection, you must be a
-                        logged-in member
+                      <p className='text-primaryGray text-[11px]'>
+                        To create and add to a collection, you must be
+                        a logged-in member
                       </p>
                       <button
                         onClick={(e) => {
-                          navigate("/join");
+                          navigate('/join');
                           e.stopPropagation();
                         }}
-                        className="bg-[#8e8e8e] rounded-[14px] h-[28px] w-[108px] text-[12px] font-medium text-[white] mx-[auto]"
+                        className='bg-[#8e8e8e] rounded-[14px] h-[28px] w-[108px] text-[12px] font-medium text-[white] mx-[auto]'
                       >
                         Create Account
                       </button>
                       <p
                         onClick={(e) => {
-                          navigate("/login");
+                          navigate('/login');
                           e.stopPropagation();
                         }}
-                        className="text-orangeColor text-[11px]"
+                        className='text-orangeColor text-[11px]'
                       >
                         Already a member? Sign in
                       </p>
-                      <p className="text-pinkColor text-[11px]">
-                        Note: Downloaded images will be saved in ‘Collections’
-                        folder
+                      <p className='text-pinkColor text-[11px]'>
+                        Note: Downloaded images will be saved in
+                        ‘Collections’ folder
                       </p>
                     </div>
-                    <div className="absolute left-[47%] bottom-[-10px] w-[20px] h-[20px] bg-[white] rounded-br-[5px] transform rotate-45 shadow-inner"></div>
+                    <div className='absolute left-[47%] bottom-[-10px] w-[20px] h-[20px] bg-[white] rounded-br-[5px] transform rotate-45 shadow-inner'></div>
                   </div>
                 )}
 
                 {userAuth.login === true ? (
                   <StyledPopupp
                     trigger={
-                      <img className="cursor-pointer" src={addIcon} alt="" />
+                      <img
+                        className='cursor-pointer'
+                        src={addIcon}
+                        alt=''
+                      />
                     }
                     modal
                   >
                     {(close) => (
-                      <div className="flex flex-col gap-[21px]">
+                      <div className='flex flex-col gap-[21px]'>
                         {/* {selectedAllFilesImages.length > 0 ? ( */}
                         <div
                           style={{
                             backgroundImage: `url(${artDetails.image})`,
                           }}
-                          className="w-[390px] h-[270px] bg-no-repeat bg-center bg-cover rounded-[16px]"
+                          className='w-[390px] h-[270px] bg-no-repeat bg-center bg-cover rounded-[16px]'
                         ></div>
 
                         <div>
-                          <div className="flex flex-col">
-                            <p className="text-[15px] font-medium mb-[3px]">
+                          <div className='flex flex-col'>
+                            <p className='text-[15px] font-medium mb-[3px]'>
                               Select Category
                             </p>
                             <div>
@@ -1071,82 +1213,94 @@ includeTopMatRef.current = false
                                 }}
                                 className={`${
                                   isCategoryOpen === true
-                                    ? "rounded-t-[20px] shadow-dropShadowButton border-b border-[#efefef]"
-                                    : "rounded-[20px] border  border-[#d6d6d6]"
+                                    ? 'rounded-t-[20px] shadow-dropShadowButton border-b border-[#efefef]'
+                                    : 'rounded-[20px] border  border-[#d6d6d6]'
                                 } cursor-pointer w-[390px] h-[40px] bg-[#FFFFFF] text-primaryGray text-sm14 font-medium flex items-center justify-between px-[15px]`}
                               >
-                                {category === "" ? (
+                                {category === '' ? (
                                   <span>Select Category</span>
                                 ) : (
                                   <span>{category}</span>
                                 )}
 
                                 <img
-                                  className="inline-block"
+                                  className='inline-block'
                                   src={dropdown}
-                                  alt=""
+                                  alt=''
                                 />
                               </button>
 
                               {isCategoryOpen && (
-                                <ul className="shadow-dropShadow rounded-b-2xl z-50 cursor-pointer hover:overflow-hidden dropdown__menu absolute bg-[#ffffff] w-[390px] text-center text-[14px] text-primaryGray">
+                                <ul className='shadow-dropShadow rounded-b-2xl z-50 cursor-pointer hover:overflow-hidden dropdown__menu absolute bg-[#ffffff] w-[390px] text-center text-[14px] text-primaryGray'>
                                   <li
                                     onClick={() => {
-                                      setCategory("Art");
-                                      setIsCategoryOpen(!isCategoryOpen);
+                                      setCategory('Art');
+                                      setIsCategoryOpen(
+                                        !isCategoryOpen
+                                      );
                                       setFolderName(null);
                                     }}
-                                    className="py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]"
+                                    className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
                                   >
                                     Art
                                   </li>
                                   <li
                                     onClick={() => {
-                                      setCategory("Photos");
-                                      setIsCategoryOpen(!isCategoryOpen);
+                                      setCategory('Photos');
+                                      setIsCategoryOpen(
+                                        !isCategoryOpen
+                                      );
                                       setFolderName(null);
                                     }}
-                                    className="py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]"
+                                    className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
                                   >
                                     Photos
                                   </li>
                                   <li
                                     onClick={() => {
-                                      setCategory("Footage");
-                                      setIsCategoryOpen(!isCategoryOpen);
+                                      setCategory('Footage');
+                                      setIsCategoryOpen(
+                                        !isCategoryOpen
+                                      );
                                       setFolderName(null);
                                     }}
-                                    className="py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]"
+                                    className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
                                   >
                                     Footage
                                   </li>
                                   <li
                                     onClick={() => {
-                                      setCategory("Music");
-                                      setIsCategoryOpen(!isCategoryOpen);
+                                      setCategory('Music');
+                                      setIsCategoryOpen(
+                                        !isCategoryOpen
+                                      );
                                       setFolderName(null);
                                     }}
-                                    className="py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]"
+                                    className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
                                   >
                                     Music
                                   </li>
                                   <li
                                     onClick={() => {
-                                      setCategory("Templates");
-                                      setIsCategoryOpen(!isCategoryOpen);
+                                      setCategory('Templates');
+                                      setIsCategoryOpen(
+                                        !isCategoryOpen
+                                      );
                                       setFolderName(null);
                                     }}
-                                    className="py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]"
+                                    className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
                                   >
                                     Templates
                                   </li>
                                   <li
                                     onClick={() => {
-                                      setCategory("Product");
-                                      setIsCategoryOpen(!isCategoryOpen);
+                                      setCategory('Product');
+                                      setIsCategoryOpen(
+                                        !isCategoryOpen
+                                      );
                                       setFolderName(null);
                                     }}
-                                    className="py-1 px-3.5 hover:bg-[#F0F0F0]"
+                                    className='py-1 px-3.5 hover:bg-[#F0F0F0]'
                                   >
                                     Product
                                   </li>
@@ -1156,8 +1310,8 @@ includeTopMatRef.current = false
                           </div>
                         </div>
                         <div>
-                          <div className="flex flex-col">
-                            <p className="text-[15px] font-medium mb-[3px]">
+                          <div className='flex flex-col'>
+                            <p className='text-[15px] font-medium mb-[3px]'>
                               Set Name
                             </p>
                             <div>
@@ -1168,8 +1322,8 @@ includeTopMatRef.current = false
                                 // className={`flex items-center justify-between px-[15px] text-primaryGray text-sm14 font-medium cursor-pointer w-[390px] h-[40px] bg-[#FFFFFF] rounded-[20px] border border-[#d6d6d6]`}
                                 className={`${
                                   isNameOpen === true
-                                    ? "rounded-t-[20px] shadow-dropShadowButton border-b border-[#efefef]"
-                                    : "rounded-[20px] border  border-[#d6d6d6]"
+                                    ? 'rounded-t-[20px] shadow-dropShadowButton border-b border-[#efefef]'
+                                    : 'rounded-[20px] border  border-[#d6d6d6]'
                                 } cursor-pointer w-[390px] h-[40px] bg-[#FFFFFF] text-primaryGray text-sm14 font-medium flex items-center justify-between px-[15px]`}
                               >
                                 {folderName === null ? (
@@ -1180,45 +1334,53 @@ includeTopMatRef.current = false
                                 {}
 
                                 <img
-                                  className="inline-block"
+                                  className='inline-block'
                                   src={dropdown}
-                                  alt=""
+                                  alt=''
                                 />
                               </button>
 
-                              {category === "Art" ? (
+                              {category === 'Art' ? (
                                 <div>
                                   {isNameOpen && (
-                                    <ul className="cursor-pointer shadow-dropShadow rounded-b-2xl hover:overflow-hidden dropdown__menu absolute bg-[#ffffff] w-[390px] text-center text-[14px] text-primaryGray">
-                                      {categories.art.map((items, index) => (
-                                        <li
-                                          onClick={() => {
-                                            setFolderName(items);
-                                            setIsNameOpen(!isNameOpen);
-                                          }}
-                                          className="py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]"
-                                        >
-                                          {items.title}
-                                        </li>
-                                      ))}
+                                    <ul className='cursor-pointer shadow-dropShadow rounded-b-2xl hover:overflow-hidden dropdown__menu absolute bg-[#ffffff] w-[390px] text-center text-[14px] text-primaryGray'>
+                                      {categories.art.map(
+                                        (items, index) => (
+                                          <li
+                                            onClick={() => {
+                                              setFolderName(items);
+                                              setIsNameOpen(
+                                                !isNameOpen
+                                              );
+                                            }}
+                                            className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
+                                          >
+                                            {items.title}
+                                          </li>
+                                        )
+                                      )}
                                     </ul>
                                   )}
                                 </div>
-                              ) : category === "Photos" ? (
+                              ) : category === 'Photos' ? (
                                 <div>
                                   {isNameOpen && (
-                                    <ul className="cursor-pointer shadow-dropShadow rounded-b-2xl hover:overflow-hidden dropdown__menu absolute bg-[#ffffff] w-[390px] text-center text-[14px] text-primaryGray">
-                                      {categories.photo.map((items, index) => (
-                                        <li
-                                          onClick={() => {
-                                            setFolderName(items);
-                                            setIsNameOpen(!isNameOpen);
-                                          }}
-                                          className="py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]"
-                                        >
-                                          {items.title}
-                                        </li>
-                                      ))}
+                                    <ul className='cursor-pointer shadow-dropShadow rounded-b-2xl hover:overflow-hidden dropdown__menu absolute bg-[#ffffff] w-[390px] text-center text-[14px] text-primaryGray'>
+                                      {categories.photo.map(
+                                        (items, index) => (
+                                          <li
+                                            onClick={() => {
+                                              setFolderName(items);
+                                              setIsNameOpen(
+                                                !isNameOpen
+                                              );
+                                            }}
+                                            className='py-1 px-3.5 hover:bg-[#F0F0F0] border-b border-[#EFEFEF]'
+                                          >
+                                            {items.title}
+                                          </li>
+                                        )
+                                      )}
                                     </ul>
                                   )}
                                 </div>
@@ -1228,19 +1390,19 @@ includeTopMatRef.current = false
                             </div>
                           </div>
                         </div>
-                        <div className="flex gap-[10px] justify-center pb-[30px]">
+                        <div className='flex gap-[10px] justify-center pb-[30px]'>
                           <button
                             onClick={() => {
                               addToFolder();
                               close();
                             }}
-                            className="blackBtn h-[40px] w-[88px]"
+                            className='blackBtn h-[40px] w-[88px]'
                           >
                             Save
                           </button>
                           <button
                             onClick={close}
-                            className="h-[40px] px-6 py-2 rounded-3xl text-sm14 text-primaryBlack border-[2px] w-[88px]"
+                            className='h-[40px] px-6 py-2 rounded-3xl text-sm14 text-primaryBlack border-[2px] w-[88px]'
                           >
                             Cancel
                           </button>
@@ -1250,12 +1412,12 @@ includeTopMatRef.current = false
                   </StyledPopupp>
                 ) : (
                   <img
-                    className="cursor-pointer"
+                    className='cursor-pointer'
                     onClick={() => {
                       setpopupLogin(!popupLogin);
                     }}
                     src={addIcon}
-                    alt=""
+                    alt=''
                   />
                 )}
                 <Wishlist
@@ -1625,21 +1787,20 @@ includeTopMatRef.current = false
           </div>
           {/* Right */}
 
-          <div className="right pl-7">
-            <p className="text-[1.563rem] font-medium leading-7 text-primaryBlack mb-0.5">
-
+          <div className='right pl-7'>
+            <p className='text-[1.563rem] font-medium leading-7 text-primaryBlack mb-0.5'>
               {artDetails?.artName}
             </p>
             {/* <img src={conHead} alt='' /> */}
-            <div className="flex gap-[4px]">
+            <div className='flex gap-[4px]'>
               {artDetails?.userMaster?.coverImage === null ? (
                 <AccountCircleIcon
                   style={{
-                    fontSize: "xx-large",
+                    fontSize: 'xx-large',
                   }}
                 />
               ) : (
-               <div
+                <div
                   className='w-[32px] h-[32px] bg-cover bg-center rounded-[50%]'
                   style={{
                     backgroundImage: `url(${artDetails?.userMaster?.coverImage})`,
@@ -1648,46 +1809,50 @@ includeTopMatRef.current = false
               )}
 
               {/* <div className=''></div> */}
-              <div className="flex flex-col mt-[3px]">
-                <img className="w-[43px] h-[15px]" src={pro} alt="pro" />
-                <p className="text-[11px] text-primaryGray leading-[1] ">
-                  by{" "}
+              <div className='flex flex-col mt-[3px]'>
+                <img
+                  className='w-[43px] h-[15px]'
+                  src={pro}
+                  alt='pro'
+                />
+                <p className='text-[11px] text-primaryGray leading-[1] '>
+                  by{' '}
                   <span
                     onClick={() => {
-                      navigate("/view-my-store", {
+                      navigate('/view-my-store', {
                         state: artDetails?.userMaster,
                       });
                     }}
-                    className="text-orangeColor"
+                    className='text-orangeColor'
                   >
                     {artDetails?.userMaster?.displayName}
                   </span>
                 </p>
               </div>
             </div>
-            <div className="mt-2 mb-8 border-t-2 border-b-2 border-[#EFEFEF]">
-              <table className="w-[100%]">
-                <tr className="border-b border-[#EFEFEF]">
-                  <td className="text-primaryGray text-sm12 font-medium leading-4 w-[100px]">
+            <div className='mt-2 mb-8 border-t-2 border-b-2 border-[#EFEFEF]'>
+              <table className='w-[100%]'>
+                <tr className='border-b border-[#EFEFEF]'>
+                  <td className='text-primaryGray text-sm12 font-medium leading-4 w-[100px]'>
                     Product ID:
                   </td>
-                  <td className="text-primaryGray text-sm12 font-normal leading-4 ">
+                  <td className='text-primaryGray text-sm12 font-normal leading-4 '>
                     {artDetails?.arProductNo}
                   </td>
                 </tr>
-                <tr className="border-b border-[#EFEFEF]">
-                  <td className="text-primaryGray text-sm12 font-medium leading-4 ">
+                <tr className='border-b border-[#EFEFEF]'>
+                  <td className='text-primaryGray text-sm12 font-medium leading-4 '>
                     Availability:
                   </td>
-                  <td className="text-primaryGray text-sm12 font-normal leading-4 ">
+                  <td className='text-primaryGray text-sm12 font-normal leading-4 '>
                     {artDetails?.stockStatus}
                   </td>
                 </tr>
-                <tr className="">
-                  <td className="text-primaryGray text-sm12 font-medium leading-4 ">
+                <tr className=''>
+                  <td className='text-primaryGray text-sm12 font-medium leading-4 '>
                     Property Release:
                   </td>
-                  <td className="text-primaryGray text-sm12 font-normal leading-4 ">
+                  <td className='text-primaryGray text-sm12 font-normal leading-4 '>
                     Yes
                   </td>
                 </tr>
@@ -1696,14 +1861,14 @@ includeTopMatRef.current = false
             {/* Tabs */}
             <Tab.Group>
               <Tab.List
-                className="border border-[#E9E9E9]  rounded-3xl overflow-hidden"
-                style={{ width: "fit-content" }}
+                className='border border-[#E9E9E9]  rounded-3xl overflow-hidden'
+                style={{ width: 'fit-content' }}
               >
                 <Tab
                   className={({ selected }) =>
                     selected
-                      ? "text-[#333333] text-[15px] font-medium leading-5 py-2.5 px-6 outline-none bg-[#bbbbbb]"
-                      : "text-[#757575] text-[15px] font-medium leading-5 py-2.5 px-6 border-r border-[#D7D7D7] bg-[#EEEEEE]"
+                      ? 'text-[#333333] text-[15px] font-medium leading-5 py-2.5 px-6 outline-none bg-[#bbbbbb]'
+                      : 'text-[#757575] text-[15px] font-medium leading-5 py-2.5 px-6 border-r border-[#D7D7D7] bg-[#EEEEEE]'
                   }
                 >
                   Size
@@ -1711,8 +1876,8 @@ includeTopMatRef.current = false
                 <Tab
                   className={({ selected }) =>
                     selected
-                      ? "text-[#333333] bg-[#bbbbbb] text-[15px] font-medium leading-5 py-2.5 px-6 outline-none"
-                      : "text-[#757575] text-[15px] font-medium leading-5 py-2.5 px-6 border-r border-[#D7D7D7] bg-[#EEEEEE]"
+                      ? 'text-[#333333] bg-[#bbbbbb] text-[15px] font-medium leading-5 py-2.5 px-6 outline-none'
+                      : 'text-[#757575] text-[15px] font-medium leading-5 py-2.5 px-6 border-r border-[#D7D7D7] bg-[#EEEEEE]'
                   }
                 >
                   Frame
@@ -1720,8 +1885,8 @@ includeTopMatRef.current = false
                 <Tab
                   className={({ selected }) =>
                     selected
-                      ? "text-[#333333] bg-[#bbbbbb] text-[15px] font-medium leading-5 py-2.5 px-6 outline-none"
-                      : "text-[#757575] text-[15px] font-medium leading-5 py-2.5 px-6 border-r border-[#D7D7D7] bg-[#EEEEEE]"
+                      ? 'text-[#333333] bg-[#bbbbbb] text-[15px] font-medium leading-5 py-2.5 px-6 outline-none'
+                      : 'text-[#757575] text-[15px] font-medium leading-5 py-2.5 px-6 border-r border-[#D7D7D7] bg-[#EEEEEE]'
                   }
                 >
                   Mat
@@ -1729,37 +1894,37 @@ includeTopMatRef.current = false
                 <Tab
                   className={({ selected }) =>
                     selected
-                      ? "text-[#333333] bg-[#bbbbbb] text-[15px] font-medium leading-5 py-2.5 px-6 outline-none"
-                      : "text-[#757575] text-[15px] font-medium leading-5 py-2.5 px-6 bg-[#EEEEEE]"
+                      ? 'text-[#333333] bg-[#bbbbbb] text-[15px] font-medium leading-5 py-2.5 px-6 outline-none'
+                      : 'text-[#757575] text-[15px] font-medium leading-5 py-2.5 px-6 bg-[#EEEEEE]'
                   }
                 >
                   Material
                 </Tab>
               </Tab.List>
-              <Tab.Panels className="pt-5 pb-7">
+              <Tab.Panels className='pt-5 pb-7'>
                 <Tab.Panel>
-                  <p className="text-primaryBlack text-[15px] font-medium leading-5 mb-1">
+                  <p className='text-primaryBlack text-[15px] font-medium leading-5 mb-1'>
                     Select Print Orientation
                   </p>
-                  <div className="flex gap-2.5 mb-5">
+                  <div className='flex gap-2.5 mb-5'>
                     {/* Horizontal */}
-                    <div className="text-center">
+                    <div className='text-center'>
                       <svg
                         onClick={() => {
                           changeOrientation('Horizontal');
                         }}
-                        width="40"
-                        height="40"
-                        viewBox="0 0 40 40"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
+                        width='40'
+                        height='40'
+                        viewBox='0 0 40 40'
+                        fill='none'
+                        xmlns='http://www.w3.org/2000/svg'
                       >
                         <rect
-                          x="0.5"
-                          y="0.5"
-                          width="39"
-                          height="39"
-                          rx="3.5"
+                          x='0.5'
+                          y='0.5'
+                          width='39'
+                          height='39'
+                          rx='3.5'
                           className={`${
                             orientationBtn === 'Horizontal'
                               ? 'stroke-[#333333] '
@@ -1767,13 +1932,13 @@ includeTopMatRef.current = false
                           }`}
                         />
                         <path
-                          d="M8 14C8 12.8954 8.89543 12 10 12H30C31.1046 12 32 12.8954 32 14V26C32 27.1046 31.1046 28 30 28H10C8.89543 28 8 27.1046 8 26V14Z"
+                          d='M8 14C8 12.8954 8.89543 12 10 12H30C31.1046 12 32 12.8954 32 14V26C32 27.1046 31.1046 28 30 28H10C8.89543 28 8 27.1046 8 26V14Z'
                           className={`${
                             orientationBtn === 'Horizontal'
                               ? 'fill-[#333333]'
                               : 'fill-[#BBBBBB]'
                           }`}
-                          fill="#BBBBBB"
+                          fill='#BBBBBB'
                         />
                       </svg>
                       <p
@@ -1800,11 +1965,11 @@ includeTopMatRef.current = false
                         xmlns='http://www.w3.org/2000/svg'
                       >
                         <rect
-                          x="0.5"
-                          y="0.5"
-                          width="39"
-                          height="39"
-                          rx="3.5"
+                          x='0.5'
+                          y='0.5'
+                          width='39'
+                          height='39'
+                          rx='3.5'
                           className={`${
                             orientationBtn === 'Vertical'
                               ? 'stroke-[#333333] '
@@ -1812,13 +1977,13 @@ includeTopMatRef.current = false
                           }`}
                         />
                         <path
-                          d="M12 10C12 8.89543 12.8954 8 14 8H26C27.1046 8 28 8.89543 28 10V30C28 31.1046 27.1046 32 26 32H14C12.8954 32 12 31.1046 12 30V10Z"
+                          d='M12 10C12 8.89543 12.8954 8 14 8H26C27.1046 8 28 8.89543 28 10V30C28 31.1046 27.1046 32 26 32H14C12.8954 32 12 31.1046 12 30V10Z'
                           className={`${
                             orientationBtn === 'Vertical'
                               ? 'fill-[#333333]'
                               : 'fill-[#BBBBBB]'
                           }`}
-                          fill="#BBBBBB"
+                          fill='#BBBBBB'
                         />
                       </svg>
                       <p
@@ -1843,11 +2008,11 @@ includeTopMatRef.current = false
                         xmlns='http://www.w3.org/2000/svg'
                       >
                         <rect
-                          x="0.5"
-                          y="0.5"
-                          width="39"
-                          height="39"
-                          rx="3.5"
+                          x='0.5'
+                          y='0.5'
+                          width='39'
+                          height='39'
+                          rx='3.5'
                           className={`${
                             orientationBtn === 'Square'
                               ? 'stroke-[#333333] '
@@ -1855,13 +2020,13 @@ includeTopMatRef.current = false
                           }`}
                         />
                         <path
-                          d="M8 10C8 8.89543 8.89543 8 10 8H30C31.1046 8 32 8.89543 32 10V30C32 31.1046 31.1046 32 30 32H10C8.89543 32 8 31.1046 8 30V10Z"
+                          d='M8 10C8 8.89543 8.89543 8 10 8H30C31.1046 8 32 8.89543 32 10V30C32 31.1046 31.1046 32 30 32H10C8.89543 32 8 31.1046 8 30V10Z'
                           className={`${
                             orientationBtn === 'Square'
                               ? 'fill-[#333333]'
                               : 'fill-[#BBBBBB]'
                           }`}
-                          fill="#BBBBBB"
+                          fill='#BBBBBB'
                         />
                       </svg>
                       <p
@@ -1878,8 +2043,9 @@ includeTopMatRef.current = false
 
                   {orientationBtn === 'Horizontal' ? (
                     <div>
-                      <p className="text-primaryBlack text-[15px] font-medium leading-5 mb-1">
-                        Select <span className="capitalize">Horizontal</span>{" "}
+                      <p className='text-primaryBlack text-[15px] font-medium leading-5 mb-1'>
+                        Select{' '}
+                        <span className='capitalize'>Horizontal</span>{' '}
                         Orientation
                       </p>
 
@@ -1896,8 +2062,8 @@ includeTopMatRef.current = false
                                   setHoriSelect(obj);
                                   horiSelectRef.current = obj;
                                 }}
-                                className=" mr-1"
-                                type="checkbox"
+                                className=' mr-1'
+                                type='checkbox'
                               />
                               <p className='text-[13px] text-primaryGray'>
                                 {obj.width}cm x {obj.height}cm
@@ -1906,10 +2072,11 @@ includeTopMatRef.current = false
                           ))}
                       </div>
                     </div>
-                  ) : orientationBtn === "Vertical" ? (
+                  ) : orientationBtn === 'Vertical' ? (
                     <div>
-                      <p className="text-primaryBlack text-[15px] font-medium leading-5 mb-1">
-                        Select <span className="capitalize">Vertical</span>{" "}
+                      <p className='text-primaryBlack text-[15px] font-medium leading-5 mb-1'>
+                        Select{' '}
+                        <span className='capitalize'>Vertical</span>{' '}
                         Orientation
                       </p>
 
@@ -1926,8 +2093,8 @@ includeTopMatRef.current = false
                                   setVertiSelect(obj);
                                   vertiSelectRef.current = obj;
                                 }}
-                                className=" mr-1"
-                                type="checkbox"
+                                className=' mr-1'
+                                type='checkbox'
                               />
                               <p className='text-[13px] text-primaryGray'>
                                 {obj.width}cm x {obj.height}cm
@@ -1938,8 +2105,9 @@ includeTopMatRef.current = false
                     </div>
                   ) : (
                     <div>
-                      <p className="text-primaryBlack text-[15px] font-medium leading-5 mb-1">
-                        Select <span className="capitalize">Square</span>{" "}
+                      <p className='text-primaryBlack text-[15px] font-medium leading-5 mb-1'>
+                        Select{' '}
+                        <span className='capitalize'>Square</span>{' '}
                         Orientation
                       </p>
 
@@ -1956,8 +2124,8 @@ includeTopMatRef.current = false
                                   setSquareSelect(obj);
                                   squareSelectRef.current = obj;
                                 }}
-                                className=" mr-1"
-                                type="checkbox"
+                                className=' mr-1'
+                                type='checkbox'
                               />
                               <p className='text-[13px] text-primaryGray '>
                                 {obj.width}cm x {obj.height}cm
@@ -1968,124 +2136,135 @@ includeTopMatRef.current = false
                     </div>
                   )}
 
-                  <p className="text-sm11 text-primaryGray font-medium">
-                    The artwork will be cropped to fit the selected size. <br />
-                    The sizes above are standard print sizes for horizontal
-                    images.
+                  <p className='text-sm11 text-primaryGray font-medium'>
+                    The artwork will be cropped to fit the selected
+                    size. <br />
+                    The sizes above are standard print sizes for
+                    horizontal images.
                   </p>
                 </Tab.Panel>
                 <Tab.Panel>
-                  <p className="text-primaryBlack text-[15px] font-medium leading-5 mb-1">
+                  <p className='text-primaryBlack text-[15px] font-medium leading-5 mb-1'>
                     Select Frame and Colour
                   </p>
-                  <div className="flex gap-2.5 mb-5">
+                  <div className='flex gap-2.5 mb-5'>
                     {/* Include Frame */}
-                    <div className="text-center">
+                    <div className='text-center'>
                       <svg
                         onClick={() => {
                           setIncludeFrame(true);
                         }}
-                        width="48"
-                        height="48"
-                        viewBox="0 0 48 48"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
+                        width='48'
+                        height='48'
+                        viewBox='0 0 48 48'
+                        fill='none'
+                        xmlns='http://www.w3.org/2000/svg'
                       >
                         <path
-                          fillRule="evenodd"
-                          clipRule="evenodd"
-                          d="M4 0C1.79086 0 0 1.79086 0 4V44C0 46.2091 1.79086 48 4 48H44C46.2091 48 48 46.2091 48 44V4C48 1.79086 46.2091 0 44 0H4ZM5 3C3.89543 3 3 3.89543 3 5V43C3 44.1046 3.89543 45 5 45H43C44.1046 45 45 44.1046 45 43V5C45 3.89543 44.1046 3 43 3H5Z"
+                          fillRule='evenodd'
+                          clipRule='evenodd'
+                          d='M4 0C1.79086 0 0 1.79086 0 4V44C0 46.2091 1.79086 48 4 48H44C46.2091 48 48 46.2091 48 44V4C48 1.79086 46.2091 0 44 0H4ZM5 3C3.89543 3 3 3.89543 3 5V43C3 44.1046 3.89543 45 5 45H43C44.1046 45 45 44.1046 45 43V5C45 3.89543 44.1046 3 43 3H5Z'
                           className={`${
-                            includeFrame ? "fill-[#333333]" : "fill-[#BBBBBB]"
+                            includeFrame
+                              ? 'fill-[#333333]'
+                              : 'fill-[#BBBBBB]'
                           }`}
                         />
                         <rect
-                          x="10"
-                          y="10"
-                          width="28"
-                          height="28"
-                          rx="2"
-                          fill="#EEEEEE"
+                          x='10'
+                          y='10'
+                          width='28'
+                          height='28'
+                          rx='2'
+                          fill='#EEEEEE'
                         />
                       </svg>
 
                       <p
                         className={`text-sm11 ${
-                          includeFrame ? "text-[#333333] " : "text-primaryGray"
+                          includeFrame
+                            ? 'text-[#333333] '
+                            : 'text-primaryGray'
                         }`}
                       >
                         Include <br /> Frame
                       </p>
                     </div>
                     {/* Exclude Frame */}
-                    <div className="text-center">
+                    <div className='text-center'>
                       <svg
-                        width="48"
-                        height="48"
-                        viewBox="0 0 48 48"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
+                        width='48'
+                        height='48'
+                        viewBox='0 0 48 48'
+                        fill='none'
+                        xmlns='http://www.w3.org/2000/svg'
                         onClick={() => {
                           setIncludeFrame(false);
-                          localStorage.removeItem("selectFrameData");
+                          localStorage.removeItem('selectFrameData');
                         }}
                       >
                         <path
-                          fillRule="evenodd"
-                          clipRule="evenodd"
-                          d="M4 0C1.79086 0 0 1.79086 0 4V44C0 46.2091 1.79086 48 4 48H44C46.2091 48 48 46.2091 48 44V4C48 1.79086 46.2091 0 44 0H4ZM5 3C3.89543 3 3 3.89543 3 5V43C3 44.1046 3.89543 45 5 45H43C44.1046 45 45 44.1046 45 43V5C45 3.89543 44.1046 3 43 3H5Z"
+                          fillRule='evenodd'
+                          clipRule='evenodd'
+                          d='M4 0C1.79086 0 0 1.79086 0 4V44C0 46.2091 1.79086 48 4 48H44C46.2091 48 48 46.2091 48 44V4C48 1.79086 46.2091 0 44 0H4ZM5 3C3.89543 3 3 3.89543 3 5V43C3 44.1046 3.89543 45 5 45H43C44.1046 45 45 44.1046 45 43V5C45 3.89543 44.1046 3 43 3H5Z'
                           className={`${
-                            !includeFrame ? "fill-[#333333]" : "fill-[#BBBBBB]"
+                            !includeFrame
+                              ? 'fill-[#333333]'
+                              : 'fill-[#BBBBBB]'
                           }`}
                         />
                         <rect
-                          x="10"
-                          y="10"
-                          width="28"
-                          height="28"
-                          rx="2"
-                          fill="#EEEEEE"
+                          x='10'
+                          y='10'
+                          width='28'
+                          height='28'
+                          rx='2'
+                          fill='#EEEEEE'
                         />
                         <rect
-                          width="58.2986"
-                          height="1.0096"
-                          rx="0.5"
-                          transform="matrix(0.706047 0.708165 -0.706047 0.708165 3.83838 3)"
-                          fill="#BBBBBB"
+                          width='58.2986'
+                          height='1.0096'
+                          rx='0.5'
+                          transform='matrix(0.706047 0.708165 -0.706047 0.708165 3.83838 3)'
+                          fill='#BBBBBB'
                         />
                         <rect
-                          width="58.2986"
-                          height="1.0096"
-                          rx="0.5"
-                          transform="matrix(-0.706047 0.708165 0.706047 0.708165 44.1616 3)"
-                          fill="#BBBBBB"
+                          width='58.2986'
+                          height='1.0096'
+                          rx='0.5'
+                          transform='matrix(-0.706047 0.708165 0.706047 0.708165 44.1616 3)'
+                          fill='#BBBBBB'
                         />
                       </svg>
 
                       <p
                         className={`text-sm11 ${
-                          !includeFrame ? "text-[#333333] " : "text-primaryGray"
+                          !includeFrame
+                            ? 'text-[#333333] '
+                            : 'text-primaryGray'
                         }`}
                       >
                         Exclude <br /> Frame
                       </p>
                     </div>
                     {/*  Frame color */}
-                    <div className="relative" ref={ref1}>
+                    <div className='relative' ref={ref1}>
                       {/* test */}
                       {colorFrame && (
                         <div
                           className={`z-999 bg-[#fff] rounded-[16px] w-[350px] h-[180px] absolute bottom-[90px] left-[-130px]`}
                           style={{
-                            boxShadow: "0px 0px 18px rgba(0, 0, 0, 0.2)",
+                            boxShadow:
+                              '0px 0px 18px rgba(0, 0, 0, 0.2)',
                           }}
                         >
-                          <div className="flex gap-[5px] flex-col p-[14px] leading-[1.3] text-center">
-                            <p className="font-medium text-primaryBlack text-[15px]">
+                          <div className='flex gap-[5px] flex-col p-[14px] leading-[1.3] text-center'>
+                            <p className='font-medium text-primaryBlack text-[15px]'>
                               Select Frame Colour
                             </p>
-                            <p className="text-primaryGray text-[11px]">
-                              Click the colour icon to select the colour <br />
+                            <p className='text-primaryGray text-[11px]'>
+                              Click the colour icon to select the
+                              colour <br />
                               of the frame
                             </p>
 
@@ -2098,12 +2277,12 @@ includeTopMatRef.current = false
                                   }}
                                   className={`h-[67px] cursor-pointer  rounded-[8px] ${
                                     colorFrameFocus === color
-                                      ? "bg-[#f5f5f7]"
-                                      : ""
+                                      ? 'bg-[#f5f5f7]'
+                                      : ''
                                   } flex flex-col p-[4px]`}
                                 >
                                   <div
-                                    className="h-[32px] w-[32px] rounded-[50%]"
+                                    className='h-[32px] w-[32px] rounded-[50%]'
                                     style={{
                                       backgroundColor: `${color?.colorCode}`,
                                     }}
@@ -2125,7 +2304,7 @@ includeTopMatRef.current = false
                               Select Colour
                             </button>
                           </div>
-                          <div className="absolute left-[47%] bottom-[-10px] w-[20px] h-[20px] bg-[white] rounded-br-[5px] transform rotate-45 shadow-inner"></div>
+                          <div className='absolute left-[47%] bottom-[-10px] w-[20px] h-[20px] bg-[white] rounded-br-[5px] transform rotate-45 shadow-inner'></div>
                         </div>
                       )}
 
@@ -2134,14 +2313,14 @@ includeTopMatRef.current = false
                         onClick={() => {
                           setcolorFrame(!colorFrame);
                         }}
-                        className="text-center ml-5 cursor-pointer "
+                        className='text-center ml-5 cursor-pointer '
                       >
                         <svg
-                          width="48"
-                          height="48"
-                          viewBox="0 0 48 48"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
+                          width='48'
+                          height='48'
+                          viewBox='0 0 48 48'
+                          fill='none'
+                          xmlns='http://www.w3.org/2000/svg'
                         >
                           <path
                             fillRule='evenodd'
@@ -2150,11 +2329,11 @@ includeTopMatRef.current = false
                             fill='#A6CF4F'
                           />
                           <rect
-                            x="16"
-                            y="45"
-                            width="16"
-                            height="3"
-                            fill="#283897"
+                            x='16'
+                            y='45'
+                            width='16'
+                            height='3'
+                            fill='#283897'
                           />
                           <path
                             fillRule='evenodd'
@@ -2175,20 +2354,25 @@ includeTopMatRef.current = false
                             fill='#02A2B8'
                           />
                           <rect
-                            x="45"
-                            y="16"
-                            width="3"
-                            height="16"
-                            fill="#F25721"
+                            x='45'
+                            y='16'
+                            width='3'
+                            height='16'
+                            fill='#F25721'
                           />
-                          <rect y="16" width="3" height="16" fill="#01A566" />
                           <rect
-                            x="10"
-                            y="10"
-                            width="28"
-                            height="28"
-                            rx="2"
-                            fill="#EEEEEE"
+                            y='16'
+                            width='3'
+                            height='16'
+                            fill='#01A566'
+                          />
+                          <rect
+                            x='10'
+                            y='10'
+                            width='28'
+                            height='28'
+                            rx='2'
+                            fill='#EEEEEE'
                           />
                         </svg>
 
@@ -2198,7 +2382,7 @@ includeTopMatRef.current = false
                       </div>
                     </div>
                   </div>
-                  <p className="text-primaryBlack text-[15px] font-medium leading-5 mb-1">
+                  <p className='text-primaryBlack text-[15px] font-medium leading-5 mb-1'>
                     Select Frame Type
                   </p>
                   <div className='flex gap-2.5 flex-wrap mb-0.5'>
@@ -2357,10 +2541,10 @@ includeTopMatRef.current = false
                   </SeeAllFramesPopup>
                 </Tab.Panel>
                 <Tab.Panel>
-                  <div className="flex gap-7">
+                  <div className='flex gap-7'>
                     <div>
-                      <div className="flex items-center mb-1">
-                        <p className="text-primaryBlack text-[15px] font-medium leading-5 mr-1">
+                      <div className='flex items-center mb-1'>
+                        <p className='text-primaryBlack text-[15px] font-medium leading-5 mr-1'>
                           Select Top Mat
                         </p>
                         <img
@@ -2409,11 +2593,11 @@ includeTopMatRef.current = false
                               setIncludeTopMat(true);
                               includeTopMatRef.current = true;
                             }}
-                            width="48"
-                            height="48"
-                            viewBox="0 0 48 48"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
+                            width='48'
+                            height='48'
+                            viewBox='0 0 48 48'
+                            fill='none'
+                            xmlns='http://www.w3.org/2000/svg'
                           >
                             <path
                               d='M4 0.5H44C45.933 0.5 47.5 2.067 47.5 4V44C47.5 45.933 45.933 47.5 44 47.5H4C2.067 47.5 0.5 45.933 0.5 44V4C0.5 2.067 2.067 0.5 4 0.5Z'
@@ -2443,11 +2627,11 @@ includeTopMatRef.current = false
                         {/* Exclude Mat */}
                         <div className='text-center'>
                           <svg
-                            width="48"
-                            height="48"
-                            viewBox="0 0 48 48"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
+                            width='48'
+                            height='48'
+                            viewBox='0 0 48 48'
+                            fill='none'
+                            xmlns='http://www.w3.org/2000/svg'
                             onClick={() => {
                               setIncludeTopMat(false);
                               includeTopMatRef.current = false;
@@ -2664,11 +2848,11 @@ includeTopMatRef.current = false
                               setIncludeBottomMat(true);
                               includeBotMatRef.current = true;
                             }}
-                            width="48"
-                            height="48"
-                            viewBox="0 0 48 48"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
+                            width='48'
+                            height='48'
+                            viewBox='0 0 48 48'
+                            fill='none'
+                            xmlns='http://www.w3.org/2000/svg'
                           >
                             <path
                               d='M4 0.5H44C45.933 0.5 47.5 2.067 47.5 4V44C47.5 45.933 45.933 47.5 44 47.5H4C2.067 47.5 0.5 45.933 0.5 44V4C0.5 2.067 2.067 0.5 4 0.5Z'
@@ -2701,11 +2885,11 @@ includeTopMatRef.current = false
                         {/* Exclude Mat */}
                         <div className='text-center'>
                           <svg
-                            width="48"
-                            height="48"
-                            viewBox="0 0 48 48"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
+                            width='48'
+                            height='48'
+                            viewBox='0 0 48 48'
+                            fill='none'
+                            xmlns='http://www.w3.org/2000/svg'
                             onClick={() => {
                               setIncludeBottomMat(false);
                               includeBotMatRef.current = false;
@@ -2737,11 +2921,11 @@ includeTopMatRef.current = false
                               fill='#BBBBBB'
                             />
                             <rect
-                              width="58.2986"
-                              height="1.0096"
-                              rx="0.5"
-                              transform="matrix(-0.706047 0.708165 0.706047 0.708165 44.1616 3)"
-                              fill="#BBBBBB"
+                              width='58.2986'
+                              height='1.0096'
+                              rx='0.5'
+                              transform='matrix(-0.706047 0.708165 0.706047 0.708165 44.1616 3)'
+                              fill='#BBBBBB'
                             />
                           </svg>
 
@@ -3019,7 +3203,7 @@ includeTopMatRef.current = false
                   </div>
                 </Tab.Panel>
                 <Tab.Panel>
-                  <p className="text-primaryBlack text-[15px] font-medium leading-5 mb-1">
+                  <p className='text-primaryBlack text-[15px] font-medium leading-5 mb-1'>
                     Select Material
                   </p>
                   <div className='flex gap-x-7 flex-wrap w-[308px]'>
@@ -3056,11 +3240,11 @@ includeTopMatRef.current = false
             </Tab.Group>
 
             <div
-              className="flex border-2 border-[#EEEEEE] rounded-3xl overflow-hidden"
-              style={{ width: "fit-content" }}
+              className='flex border-2 border-[#EEEEEE] rounded-3xl overflow-hidden'
+              style={{ width: 'fit-content' }}
             >
               <button
-                className="bg-[#EEEEEE] py-3 px-3"
+                className='bg-[#EEEEEE] py-3 px-3'
                 onClick={() => {
                   quantity > 1 && setQuantity(quantity - 1);
                   quantityRef.current = quantityRef.current - 1;
@@ -3074,7 +3258,7 @@ includeTopMatRef.current = false
                 value={quantity}
               />
               <button
-                className="bg-[#EEEEEE] py-3 px-3"
+                className='bg-[#EEEEEE] py-3 px-3'
                 onClick={() => {
                   setQuantity(quantity + 1);
                   quantityRef.current = quantityRef.current + 1;
@@ -3088,11 +3272,11 @@ includeTopMatRef.current = false
               </button>
             </div>
 
-            <div className="flex items-baseline">
-              <p className="text-orangeColor text-[22px] font-normal leading-[32px]">
+            <div className='flex items-baseline'>
+              <p className='text-orangeColor text-[22px] font-normal leading-[32px]'>
                 $
               </p>
-              <p className="text-orangeColor text-[38px] font-normal leading-[55px]">
+              <p className='text-orangeColor text-[38px] font-normal leading-[55px]'>
                 {artDetails?.price * quantity}
               </p>
             </div>
@@ -3238,16 +3422,16 @@ includeTopMatRef.current = false
               </div>
             </PriceDetailsPopup>
 
-            <div className="mt-5 flex gap-x-2.5 mb-1.5">
+            <div className='mt-5 flex gap-x-2.5 mb-1.5'>
               <button
                 onClick={() => {
                   onButtonClick();
                 }}
-                className="outlineBtn"
+                className='outlineBtn'
               >
                 Add to Cart
               </button>
-              <button onClick={checkoutPage} className="blackBtn">
+              <button onClick={checkoutPage} className='blackBtn'>
                 Shop Now
               </button>
             </div>
@@ -3289,160 +3473,176 @@ includeTopMatRef.current = false
               <img src={certificateImg} alt='' />
               <img src={festiveImg} alt='' />
             </div>
-            <p className="text-primaryBlack text-[15px] font-medium leading-5 mb-1">
+            <p className='text-primaryBlack text-[15px] font-medium leading-5 mb-1'>
               Delivery options
             </p>
-            <div className="relative mb-1" style={{ width: "fit-content" }}>
+            <div
+              className='relative mb-1'
+              style={{ width: 'fit-content' }}
+            >
               <input
-                className="text-[#BBBBBB] border border-[#BBBBBB] rounded-3xl font-medium text-sm14 px-4 py-2.5"
-                type="text"
-                placeholder="Enter Pincode"
+                className='text-[#BBBBBB] border border-[#BBBBBB] rounded-3xl font-medium text-sm14 px-4 py-2.5'
+                type='text'
+                placeholder='Enter Pincode'
               />
-              <button className="absolute right-2 bg-[#EEEEEE] border border-[#E9E9E9] rounded-2xl top-2 py-1 px-2 text-[10px] text-primaryBlack font-medium">
-                <img src={vanIcon} alt="" className="inline mr-1" />
+              <button className='absolute right-2 bg-[#EEEEEE] border border-[#E9E9E9] rounded-2xl top-2 py-1 px-2 text-[10px] text-primaryBlack font-medium'>
+                <img src={vanIcon} alt='' className='inline mr-1' />
                 Check
               </button>
             </div>
-            <p className="text-sm11 font-normal text-primaryGray mb-2.5">
-              Please enter PIN code to check delivery time and Pay on Delivery
-              Availability.
+            <p className='text-sm11 font-normal text-primaryGray mb-2.5'>
+              Please enter PIN code to check delivery time and Pay on
+              Delivery Availability.
             </p>
-            <img src={packingIcon} alt="" />
+            <img src={packingIcon} alt='' />
           </div>
         </div>
         {/* <div className="hrLine"></div> */}
-     
       </div>
 
-      <div className="hrLine"></div>
+      <div className='hrLine'></div>
       {/* User Details */}
-      <div className="w-w1168 flex mx-auto">
-        <div className="left flex-1">
-          <p className="text-[25px] text-primaryBlack font-medium leading-3 mb-5">
+      <div className='w-w1168 flex mx-auto'>
+        <div className='left flex-1'>
+          <p className='text-[25px] text-primaryBlack font-medium leading-3 mb-5'>
             Art Description
           </p>
-          <p className="text-sm14 text-primaryGray font-normal mb-2">
+          <p className='text-sm14 text-primaryGray font-normal mb-2'>
             {artDetails?.description}
           </p>
           <img
-            className="w-[300px] h-[160px] rounded-2xl mb-5"
+            className='w-[300px] h-[160px] rounded-2xl mb-5'
             src={artDetails?.image}
-            alt=""
+            alt=''
           />
-          <div className="mb-5 border-t-2 border-b-2 border-[#EFEFEF]">
-            <table className="w-[100%]">
-              <tr className="border-b border-[#EFEFEF]">
-                <td className="text-primaryGray text-sm12 font-medium leading-4 w-[100px]">
+          <div className='mb-5 border-t-2 border-b-2 border-[#EFEFEF]'>
+            <table className='w-[100%]'>
+              <tr className='border-b border-[#EFEFEF]'>
+                <td className='text-primaryGray text-sm12 font-medium leading-4 w-[100px]'>
                   Category:
                 </td>
-                <td className="text-primaryGray text-sm12 font-normal leading-4 ">
+                <td className='text-primaryGray text-sm12 font-normal leading-4 '>
                   Abstract Art
                 </td>
               </tr>
-              <tr className="border-b border-[#EFEFEF]">
-                <td className="text-primaryGray text-sm12 font-medium leading-4 ">
+              <tr className='border-b border-[#EFEFEF]'>
+                <td className='text-primaryGray text-sm12 font-medium leading-4 '>
                   Subject:
                 </td>
-                <td className="text-primaryGray text-sm12 font-normal leading-4 ">
+                <td className='text-primaryGray text-sm12 font-normal leading-4 '>
                   Abstract
                 </td>
               </tr>
-              <tr className="">
-                <td className="text-primaryGray text-sm12 font-medium leading-4 ">
+              <tr className=''>
+                <td className='text-primaryGray text-sm12 font-medium leading-4 '>
                   Medium:
                 </td>
-                <td className="text-primaryGray text-sm12 font-normal leading-4 ">
+                <td className='text-primaryGray text-sm12 font-normal leading-4 '>
                   Digital
                 </td>
               </tr>
             </table>
           </div>
-          <p className="text-[15px] text-primaryBlack font-medium leading-4 mb-1.5">
+          <p className='text-[15px] text-primaryBlack font-medium leading-4 mb-1.5'>
             Colour Palette
           </p>
-          <img src={colorPaletimg} alt="" />
+          <img src={colorPaletimg} alt='' />
         </div>
-        <div className="right flex-1  pl-7">
-          <p className="text-sm11 text-primaryGray ">Artist Info</p>
-          <div className="flex mb-5">
+        <div className='right flex-1  pl-7'>
+          <p className='text-sm11 text-primaryGray '>Artist Info</p>
+          <div className='flex mb-5'>
             <div>
               <img
-                className="w-[7rem] h-[7rem] rounded-full"
+                className='w-[7rem] h-[7rem] rounded-full'
                 src={artDetails?.userMaster?.profileImage}
-                alt=""
+                alt=''
               />
             </div>
-            <div className="ml-2">
-              <img src={proImg} alt="" />
-              <p className="text-sm11 text-primaryGray font-normal leading-[16px]">
+            <div className='ml-2'>
+              <img src={proImg} alt='' />
+              <p className='text-sm11 text-primaryGray font-normal leading-[16px]'>
                 {artDetails?.userMaster?.displayName}
               </p>
-              <p className="text-sm11 text-primaryGray font-normal leading-[16px]">
+              <p className='text-sm11 text-primaryGray font-normal leading-[16px]'>
                 Freelance Illustrator/Photographer
               </p>
-              <div className="flex items-center mb-3">
-                <img className="mr-0.5" src={locatiomIcon} alt="" />
-                <p className="text-sm11 text-primaryGray font-normal leading-[16px]">
-                  {artDetails?.userMaster?.residentialAddress?.cityName},{" "}
-                  {artDetails?.userMaster?.residentialAddress?.countryName}
+              <div className='flex items-center mb-3'>
+                <img className='mr-0.5' src={locatiomIcon} alt='' />
+                <p className='text-sm11 text-primaryGray font-normal leading-[16px]'>
+                  {
+                    artDetails?.userMaster?.residentialAddress
+                      ?.cityName
+                  }
+                  ,{' '}
+                  {
+                    artDetails?.userMaster?.residentialAddress
+                      ?.countryName
+                  }
                 </p>
               </div>
               <button
                 onClick={() => {
-                  navigate("/view-my-store", {
+                  navigate('/view-my-store', {
                     state: artDetails?.userMaster,
                   });
                 }}
-                className="bg-[#00F9C6] text-sm12 text-primaryBlack font-medium px-4 py-1.5 rounded-3xl "
+                className='bg-[#00F9C6] text-sm12 text-primaryBlack font-medium px-4 py-1.5 rounded-3xl '
               >
                 View Store
               </button>
             </div>
           </div>
-          <p className="text-sm14 leading-5 text-primaryGray font-normal mb-4">
-            International Artist Azra's art work dictates the expression of man
-            and beast exploring our role and place in this universe. Taking
-            inspiration from Primitive Art work and a various assortment of
-            Modern Art.
+          <p className='text-sm14 leading-5 text-primaryGray font-normal mb-4'>
+            International Artist Azra's art work dictates the
+            expression of man and beast exploring our role and place
+            in this universe. Taking inspiration from Primitive Art
+            work and a various assortment of Modern Art.
           </p>
-          <p className="text-sm14 leading-5 text-primaryGray font-normal mb-0.5">
+          <p className='text-sm14 leading-5 text-primaryGray font-normal mb-0.5'>
             Recognition
           </p>
-          <ul className="mb-5">
-            <li className="mb-1.5 flex">
-              <img className="mr-2.5" src={proImg} alt="" />
-              <p className="text-sm11 leading-3 font-normal text-primaryGray">
-                Lorem ipsum dolor sit amet consectetur adipiscing <br />
+          <ul className='mb-5'>
+            <li className='mb-1.5 flex'>
+              <img className='mr-2.5' src={proImg} alt='' />
+              <p className='text-sm11 leading-3 font-normal text-primaryGray'>
+                Lorem ipsum dolor sit amet consectetur adipiscing{' '}
+                <br />
                 elit sed do eiusmod tempor
               </p>
             </li>
           </ul>
-          <div className="flex gap-4">
-            <a href="http://" target="_blank" rel="noopener noreferrer">
-              {" "}
-              <img src={faceBookIcon} alt="" />
+          <div className='flex gap-4'>
+            <a
+              href='http://'
+              target='_blank'
+              rel='noopener noreferrer'
+            >
+              {' '}
+              <img src={faceBookIcon} alt='' />
             </a>
-            <img src={linkdinIcon} alt="" />
-            <img src={instaIcon} alt="" />
+            <img src={linkdinIcon} alt='' />
+            <img src={instaIcon} alt='' />
           </div>
         </div>
       </div>
-      <div className="hrLine"></div>
+      <div className='hrLine'></div>
 
       {/* userDetails */}
-      <div className="w-w1409 flex justify-center mx-auto">
+      <div className='w-w1409 flex justify-center mx-auto'>
         <div>
-          <p className="text-[38px] font-medium text-center text-[#333333]">
+          <p className='text-[38px] font-medium text-center text-[#333333]'>
             Designs by Azra
           </p>
-          <div className="flex gap-3 text-center mt-4 mb-7">
+          <div className='flex gap-3 text-center mt-4 mb-7'>
             {azraDesign.map((item) => {
               return (
                 <>
                   <div>
-                    <img src={item.img} alt="" />
-                    <p className="text-[15px] text-[#333333]">{item.title}</p>
-                    <p className="text-[12px] text-[#757575]">
+                    <img src={item.img} alt='' />
+                    <p className='text-[15px] text-[#333333]'>
+                      {item.title}
+                    </p>
+                    <p className='text-[12px] text-[#757575]'>
                       {item.description}
                     </p>
                   </div>
@@ -3450,27 +3650,29 @@ includeTopMatRef.current = false
               );
             })}
           </div>
-          <p className=" flex justify-center">
-            <button className="blackBtn">Discover more</button>
+          <p className=' flex justify-center'>
+            <button className='blackBtn'>Discover more</button>
           </p>
         </div>
       </div>
 
-      <div className="hrLine"></div>
+      <div className='hrLine'></div>
 
-      <div className="w-w1409 flex justify-center mx-auto">
+      <div className='w-w1409 flex justify-center mx-auto'>
         <div>
-          <p className="text-[38px] font-medium text-center text-[#333333]">
+          <p className='text-[38px] font-medium text-center text-[#333333]'>
             Other designs you might like
           </p>
-          <div className="flex gap-3 text-center mt-4 mb-7">
+          <div className='flex gap-3 text-center mt-4 mb-7'>
             {otherDesign.map((item) => {
               return (
                 <>
                   <div>
-                    <img src={item.img} alt="" />
-                    <p className="text-[15px] text-[#333333]">{item.title}</p>
-                    <p className="text-[12px] text-[#757575]">
+                    <img src={item.img} alt='' />
+                    <p className='text-[15px] text-[#333333]'>
+                      {item.title}
+                    </p>
+                    <p className='text-[12px] text-[#757575]'>
                       {item.description}
                     </p>
                   </div>
@@ -3478,27 +3680,29 @@ includeTopMatRef.current = false
               );
             })}
           </div>
-          <p className=" flex justify-center">
-            <button className="blackBtn">Discover more</button>
+          <p className=' flex justify-center'>
+            <button className='blackBtn'>Discover more</button>
           </p>
         </div>
       </div>
 
       {/* <div className="hrLine"></div> */}
 
-      <div className="bg-[#F7F7F7] mt-[25px]">
-        <div className="flex justify-center py-[80px] gap-2 w-w1409 flex-wrap mx-auto text-center mt-4 mb-7">
+      <div className='bg-[#F7F7F7] mt-[25px]'>
+        <div className='flex justify-center py-[80px] gap-2 w-w1409 flex-wrap mx-auto text-center mt-4 mb-7'>
           {arrImg.map((item) => {
             return (
               <>
-                <div className="text-center">
+                <div className='text-center'>
                   <img
                     src={item.img}
-                    className="w-[162px] h-[162px] flex justify-center"
-                    alt=""
+                    className='w-[162px] h-[162px] flex justify-center'
+                    alt=''
                   />
-                  <p className="text-[15px] text-[#333333]">{item.title}</p>
-                  <p className="text-[12px] text-[#757575]">
+                  <p className='text-[15px] text-[#333333]'>
+                    {item.title}
+                  </p>
+                  <p className='text-[12px] text-[#757575]'>
                     {item.description}
                   </p>
                 </div>
@@ -3508,31 +3712,35 @@ includeTopMatRef.current = false
         </div>
       </div>
 
-      <div className="flex justify-center my-[100px]">
-        <img src={grp} alt="" />
+      <div className='flex justify-center my-[100px]'>
+        <img src={grp} alt='' />
       </div>
 
-      <div className="w-w1168 mx-auto ">
-        <p className="text-[38px] font-medium text-[#333333] text-center  mb-[19px]">
+      <div className='w-w1168 mx-auto '>
+        <p className='text-[38px] font-medium text-[#333333] text-center  mb-[19px]'>
           Customer Reviews
         </p>
-        <div className="flex justify-center gap-[30px]">
+        <div className='flex justify-center gap-[30px]'>
           <div>
-            <img src={grp144} alt="" />
+            <img src={grp144} alt='' />
           </div>
           <div>
-            <p className="text-[15px] font-medium">Customer Images</p>
+            <p className='text-[15px] font-medium'>Customer Images</p>
 
-            <div className="flex flex-wrap">
+            <div className='flex flex-wrap'>
               {CustomerImg.map((item) => {
                 return (
                   <>
-                    <img src={item} className="w-[65px] h-[65px] m-2" alt="" />
+                    <img
+                      src={item}
+                      className='w-[65px] h-[65px] m-2'
+                      alt=''
+                    />
                   </>
                 );
               })}
             </div>
-            <button className="text-[#F88331] text-[12px]">
+            <button className='text-[#F88331] text-[12px]'>
               See all customer images
             </button>
           </div>
@@ -3541,14 +3749,168 @@ includeTopMatRef.current = false
 
       {/* test */}
       {/* buttons */}
-      <div className="w-w1168 mx-auto mb-3 mt-[50px] flex justify-between">
-        <div className="flex gap-[10px]">
-          <button className="blackBtn">Write a Review</button>
-          <button className="blackBtn bg-[#FFFFFF] border border-[#333333] rounded-full text-[#333333]">
+      <div className='w-w1168 mx-auto mb-3 mt-[50px] flex justify-between'>
+        <div className='flex gap-[10px]'>
+          {/* test */}
+
+          <StyledPopupReview
+            trigger={
+              <button className='blackBtn'>Write a Review</button>
+            }
+            modal
+          >
+            {(close) => (
+              <div>
+                <div className='text-center'>
+                  <p className='text-primaryBlack leading-[1] font-medium text-[38px]'>
+                    Your Opinion Matters!
+                  </p>
+                  <p className='text-pinkColor font-normal text-[18px] mt-[13px]'>
+                    Hey Azra Shaikh!
+                  </p>
+                  <p className='text-primaryBlack font-normal text-[12px]'>
+                    Take a minute to rate and review this product.
+                    Your feedback will help others <br /> make smart
+                    decisions.
+                  </p>
+                </div>
+                <div className='flex gap-[15px] pb-[20px] border-b border-[#e7e7e7]'>
+                  <div className='w-[210px] h-[210px] rounded-[16px] bg-[#f7f7f7] flex justify-center items-center'>
+                    <div
+                      style={{
+                        backgroundImage: `url(${artDetails?.image})`,
+                      }}
+                      className='w-[180px] h-[180px] bg-cover bg-center'
+                    ></div>
+                    {/* <img
+                      src={artDetails?.image}
+                      alt=''
+                    /> */}
+                  </div>
+                  <div>
+                    <p className='font-medium text-[18px] leading-[1.2]'>
+                      {artDetails?.artName}
+                    </p>
+                    <p className='text-[11px]'>
+                      by{' '}
+                      <span className='text-orangeColor font-medium'>
+                        {' '}
+                        {artDetails?.userMaster?.displayName}
+                      </span>
+                    </p>
+                    <p className='mt-[3px] text-[11px] font-medium text-primaryGray border-t border-t-[#efefef] border-t-[2px] border-b border-b-[#efefef] border-b-[2px]'>
+                      Combo ID: {artDetails?.arProductNo}
+                    </p>
+                    <p className='text-[15px] text-primaryBlack font-medium mt-[7px]'>
+                      Description
+                    </p>
+                    <p className='text-[12px] text-primaryGray leading-[1]'>
+                      {artDetails?.description}
+                    </p>
+                  </div>
+                </div>
+                <div className='text-center mt-[17px]'>
+                  <p className='text-[18px] font-medium mb-[8px]'>
+                    Rate this Product
+                  </p>
+                  <Rating
+                    name='size-large'
+                    defaultValue={3}
+                    size='large'
+                    onChange={handleRatingChange}
+                    sx={{
+                      '& .MuiSvgIcon-fontSizeInherit': {
+                        color: '#e6b900', // Change the border color of empty stars to red
+                      },
+                    }}
+                  />
+                </div>
+                <div>
+                  <p className='text-[12px] text-primaryGray pt-[10px]'>
+                    Review Title
+                  </p>
+                  <input
+                    type='text'
+                    placeholder='What’s most important to know?'
+                    className='w-[100%] h-[40px] rounded-[20px] border-[1px] border-[#d6d6d6] pl-[15px] outline-none'
+                    name='reviewTitle'
+                    onChange={postReviewAction}
+                  />
+                </div>
+                <div>
+                  <p className='text-[12px] text-primaryGray pt-[10px]'>
+                    Add a Photo or Video
+                  </p>
+
+                  <div className='flex flex-wrap gap-[9px]'>
+                    <div
+                      onClick={handleButtonClick}
+                      className='w-[83px] h-[83px] bg-[#f7f7f7] rounded-[10px] flex justify-center items-center border border-[#d6d6d6] border-dashed'
+                    >
+                      <input
+                        type='file'
+                        multiple
+                        onChange={handleFileChange}
+                        accept='image/*'
+                        style={{ display: 'none' }}
+                        ref={fileInputRef}
+                      />
+                      <img
+                        className='h-[25px] w-[25px]'
+                        src={addsmall}
+                      />
+                    </div>
+
+                    <div
+                      style={{
+                        backgroundImage: `url(${postReviewData?.reviewImage[0]})`,
+                      }}
+                      className='w-[83px] h-[83px] rounded-[10px] bg-cover bg-center'
+                    ></div>
+                  </div>
+                </div>
+                <div className='pt-[7px]'>
+                  <p className='text-[12px] text-primaryGray'>
+                    Write a Review
+                  </p>
+                  <div className=''>
+                    <textarea
+                      name='reviewMsg'
+                      onChange={postReviewAction}
+                      type='text'
+                      className='border border-[#d6d6d6] h-[112px] w-[455px] rounded-[16px] pb-[70px] pl-[10px] outline-none'
+                    />
+                    <p className='text-[11px] text-primaryGray text-right'>
+                      123/250 words
+                    </p>
+                  </div>
+
+                  <div className='flex gap-[0.938rem] mt-[15px] justify-center'>
+                    <button
+                      onClick={postReview}
+                      // onClick={postRelease}
+                      className='blackBtn h-[40px]'
+                    >
+                      Submit Review
+                    </button>
+                    <button
+                      onClick={close}
+                      className='h-[40px] px-6 py-2 rounded-3xl text-sm14 text-primaryBlack border-[0.125rem]'
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </StyledPopupReview>
+          {/* test */}
+
+          <button className='blackBtn bg-[#FFFFFF] border border-[#333333] rounded-full text-[#333333]'>
             See All Review
           </button>
         </div>
-        <div className="flex gap-[10px] items-center">
+        <div className='flex gap-[10px] items-center'>
           <div>
             <button
               onClick={() => {
@@ -3556,23 +3918,23 @@ includeTopMatRef.current = false
               }}
               className={`${
                 isOpenSortBy === true
-                  ? "rounded-t-[15px] shadow-dropShadowButton border-b border-[#EFEFEF]"
-                  : "rounded-[15px] border  border-[#D6D6D6]"
+                  ? 'rounded-t-[15px] shadow-dropShadowButton border-b border-[#EFEFEF]'
+                  : 'rounded-[15px] border  border-[#D6D6D6]'
               } cursor-pointer w-[120px] text-[12px] h-[30px] flex items-center justify-between p-[10px]`}
               // className='cursor-pointer w-[120px] border border-[#D6D6D6] text-[12px] h-[30px] rounded-[15px] flex items-center justify-between p-[10px]'
             >
-              <span className="text-[#BBBBBB]">Sort by</span>
-              <img className="inline-block" src={dropdown} alt="" />
+              <span className='text-[#BBBBBB]'>Sort by</span>
+              <img className='inline-block' src={dropdown} alt='' />
             </button>
             {isOpenSortBy && (
-              <ul className="shadow-dropShadow rounded-b-2xl hover:overflow-hidden dropdown__menu absolute z-50 bg-[#FFFFFF] w-[120px] text-center text-[14px] text-primaryGray">
-                <li className="cursor-pointer hover:bg-[#F0F0F0] border-b border-[#EFEFEF] py-[5px]">
+              <ul className='shadow-dropShadow rounded-b-2xl hover:overflow-hidden dropdown__menu absolute z-50 bg-[#FFFFFF] w-[120px] text-center text-[14px] text-primaryGray'>
+                <li className='cursor-pointer hover:bg-[#F0F0F0] border-b border-[#EFEFEF] py-[5px]'>
                   month
                 </li>
-                <li className="cursor-pointer hover:bg-[#F0F0F0] border-b border-[#EFEFEF] py-[5px]">
+                <li className='cursor-pointer hover:bg-[#F0F0F0] border-b border-[#EFEFEF] py-[5px]'>
                   date
                 </li>
-                <li className="cursor-pointer hover:bg-[#F0F0F0] py-[5px]">
+                <li className='cursor-pointer hover:bg-[#F0F0F0] py-[5px]'>
                   year
                 </li>
               </ul>
@@ -3585,23 +3947,23 @@ includeTopMatRef.current = false
               }}
               className={`${
                 isOpenFilterBy === true
-                  ? "rounded-t-[15px] shadow-dropShadowButton border-b border-[#EFEFEF]"
-                  : "rounded-[15px] border  border-[#D6D6D6]"
+                  ? 'rounded-t-[15px] shadow-dropShadowButton border-b border-[#EFEFEF]'
+                  : 'rounded-[15px] border  border-[#D6D6D6]'
               } cursor-pointer w-[120px] text-[12px] h-[30px] flex items-center justify-between p-[10px]`}
               // className='cursor-pointer w-[120px] border border-[#D6D6D6] text-[12px] h-[30px] rounded-[15px] flex items-center justify-between p-[10px]'
             >
-              <span className="text-[#BBBBBB]">Filter by</span>
-              <img className="inline-block" src={dropdown} alt="" />
+              <span className='text-[#BBBBBB]'>Filter by</span>
+              <img className='inline-block' src={dropdown} alt='' />
             </button>
             {isOpenFilterBy && (
-              <ul className="shadow-dropShadow rounded-b-2xl hover:overflow-hidden dropdown__menu absolute z-50 bg-[#FFFFFF] w-[120px] text-center text-[14px] text-primaryGray">
-                <li className="cursor-pointer hover:bg-[#F0F0F0] border-b border-[#EFEFEF] py-[5px]">
+              <ul className='shadow-dropShadow rounded-b-2xl hover:overflow-hidden dropdown__menu absolute z-50 bg-[#FFFFFF] w-[120px] text-center text-[14px] text-primaryGray'>
+                <li className='cursor-pointer hover:bg-[#F0F0F0] border-b border-[#EFEFEF] py-[5px]'>
                   month
                 </li>
-                <li className="cursor-pointer hover:bg-[#F0F0F0] border-b border-[#EFEFEF] py-[5px]">
+                <li className='cursor-pointer hover:bg-[#F0F0F0] border-b border-[#EFEFEF] py-[5px]'>
                   date
                 </li>
-                <li className="cursor-pointer hover:bg-[#F0F0F0] py-[5px]">
+                <li className='cursor-pointer hover:bg-[#F0F0F0] py-[5px]'>
                   year
                 </li>
               </ul>
@@ -3612,45 +3974,69 @@ includeTopMatRef.current = false
       {/* buttons */}
 
       <div
-        className="w-w1168 rounded-2xl pt-[15px] mx-auto pl-4"
+        className='w-w1168 rounded-2xl pt-[15px] mx-auto pl-4'
         style={{
-          boxShadow: "#f0f0f0 0px 0px 4.3px 4px",
+          boxShadow: '#f0f0f0 0px 0px 4.3px 4px',
         }}
       >
         {custReview.map((item) => {
           return (
             <div>
-              <div className="flex py-[15px] gap-3">
-                <p>
-                  <img src={item.img} alt="" />
-                </p>
+              <div className='flex py-[15px] gap-3'>
                 <div>
-                  <p className="text-[15px] text-[#333333] leading-[1.2]">
-                    {item.name}
+                  <div
+                    className='w-[30px] h-[30px] bg-center bg-cover rounded-[50%]'
+                    style={{
+                      backgroundImage: `url(${item?.userMaster?.profileImage})`,
+                    }}
+                  ></div>
+                </div>
+                <div>
+                  <p className='text-[15px] text-[#333333] leading-[1.2]'>
+                    {item?.userMaster?.displayName}
                   </p>
-                  <p className="text-[12px] mt-1 mb-3 leading-[1.1] text-[#757575]">
-                    <span className="text-[#f88331]">{item.type}</span>{" "}
+                  <p className='text-[12px] mt-1 mb-3 leading-[1.1] text-[#757575]'>
+                    <span className='text-[#f88331]'>
+                      {item.type}
+                    </span>{' '}
                     {item.reviewCount} reviews . {item.photo} Photo
                   </p>
-                  <p className="text-[12px] leading-[1.2] flex gap-3 text-[#757575]">
-                    <img src={Stars} className="inline" alt="" /> {item.months}{" "}
-                    ago
+                  <p className='text-[12px] leading-[1.2] flex gap-3 text-[#757575]'>
+                    <div className='flex gap-[2px]'>
+                      {Array.from({ length: item.reviewStar }).map(
+                        (_, index) => (
+                          <div key={index}>
+                            <img
+                              src={Star}
+                              className='inline'
+                              alt=''
+                            />
+                          </div>
+                        )
+                      )}
+                      {/* <img  />
+                      <img src={Star} className='inline' alt='' />
+                      <img src={Star} className='inline' alt='' /> */}
+                    </div>
+                    {item.months} ago
                   </p>
-                  <p className="text-[13px] mt-3 mb-[19px] leading-[1.2] text-[#757575]">
-                    {item.desc}
+                  <p className='text-[13px] mt-3 mb-[19px] leading-[1.2] text-[#757575]'>
+                    {item.reviewMsg}
                   </p>
-                  <p className="text-[13px] mb-3 leading-[1.2] text-[#757575] flex items-center">
-                    <img src={like} className="inline" alt="" />
-                    <span className="pl-1"> {item.like}</span>
-                  </p>
-                  <div className="border-l-2 text-[12px] leading-[1.2] pl-3 text-[#757575] border-[#dcdcdc]">
+                  <div className='text-[13px] mb-3 leading-[1.2] text-[#757575] flex items-center'>
+                    <img src={like} className='inline' alt='' />
+                    <span className='pl-1'> {item.like}</span>
+                  </div>
+                  <div className='border-l-2 text-[12px] leading-[1.2] pl-3 text-[#757575] border-[#dcdcdc]'>
                     <p>
-                      <span className="text-[#333333] text-[13px] font-medium">
+                      <span className='text-[#333333] text-[13px] font-medium'>
                         Response from the owner
-                      </span>{" "}
+                      </span>{' '}
                       {item.responseMonth} ago
                     </p>
-                    <p className="text-[13px] leading-[1.2]">{item.response}</p>
+                    <p className='text-[13px] leading-[1.2]'>
+                      {item.response}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -3658,7 +4044,7 @@ includeTopMatRef.current = false
           );
         })}
       </div>
-      <p className="w-w1168 mx-auto flex justify-between text-[#F88331] text-[12px] mt-2 mb-10">
+      <p className='w-w1168 mx-auto flex justify-between text-[#F88331] text-[12px] mt-2 mb-10'>
         <span>Disclosures & Guidlines</span>
         <span>See all 126 reviews</span>
       </p>

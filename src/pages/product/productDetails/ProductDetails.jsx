@@ -95,6 +95,7 @@ import styled from 'styled-components';
 import Popup from 'reactjs-popup';
 import { useDetectClickOutside } from 'react-detect-click-outside';
 import { object } from 'yup';
+import { toast } from 'react-toastify';
 // import { zIndex } from 'html2canvas/dist/types/css/property-descriptors/z-index';
 // import html2canvas from 'html2canvas';
 
@@ -203,9 +204,18 @@ const ProductDetails = () => {
     setChecked(item);
     setProductCart((prevItem) => ({
       ...prevItem,
-      image: item.image,
-      colorCode: item.colorCode,
-      color: item.color,
+      artProductMaster: {
+        ...prevItem.artProductMaster,
+        images: {
+          image: item.image,
+          colorCode: item.colorCode,
+          color: item.color,
+        },
+      },
+
+      // image: item.image,
+      // colorCode: item.colorCode,
+      // color: item.color,
     }));
     // setShirt(item.backgroundColor);
   };
@@ -421,20 +431,6 @@ const ProductDetails = () => {
   const [wishlist, setwishlist] = useState();
 
   useEffect(() => {
-    setProductCart((prevItem) => ({
-      ...prevItem,
-      image: data?.images[0]?.image,
-      size: data?.productMaster.sizeAndPrices[0].size,
-      sizeName: data?.productMaster.sizeAndPrices[0].sizeName,
-      color: data?.images[0]?.color,
-    }));
-
-    setChecked(data?.images[0]);
-
-    getAllWishlistByUserId();
-  }, []);
-
-  useEffect(() => {
     console.log(data);
     getFolders();
   }, []);
@@ -453,26 +449,117 @@ const ProductDetails = () => {
   // above code is for valdating if artProductId already exists in wishlist
 
   const [productCart, setProductCart] = useState({
-    image: '',
-    colorCode: '',
-    style: '',
-    size: '',
-    sizeName: '',
+    artProductMaster: {
+      artId: data?.artMaster?.artId,
+      artProductId: data?.artProductId,
+      artProductName: data?.artProductName,
+      artProductUniqueNo: data?.artProductUniqueNo,
+      canvasSize: data?.canvasSize,
+      canvasX: data?.canvasX,
+      canvasY: data?.canvasY,
+      images: {
+        color: '',
+        colorCode: '',
+        image: '',
+      },
+      productId: '',
+      // qty: 0,
+      sizeAndPrices: {
+        basePrice: 0,
+        sellPrice: 0,
+        size: '',
+        sizeName: '',
+      },
+      // status: '',
+    },
+
+    description: '',
+    productName: '',
     quantity: 1,
-    totalPrice: 0,
-    color: '',
+    size: '',
+    style: '',
+    userId: '',
   });
 
   useEffect(() => {
-    let abc = data?.productMaster?.sizeAndPrices[0]?.sellPrice;
-    // let abc = data?.productMaster.sizeAndPrices?.filter(
-    //   (obj) => obj.size === 'M'
-    // )[0]?.sellPrice;
-
-    setProductCart((prev) => ({ ...prev, totalPrice: abc }));
+    console.log(data);
   }, []);
 
-  useEffect(() => {}, [productCart.quantity]);
+  useEffect(() => {
+    let abc = data?.productMaster?.sizeAndPrices[0]?.sellPrice;
+
+    setProductCart((prevItem) => ({
+      ...prevItem,
+      artProductMaster: {
+        ...prevItem.artProductMaster,
+        images: {
+          image: data?.images[0]?.image,
+          color: data?.images[0]?.color,
+        },
+        productId: data?.productMaster.productId,
+        sizeAndPrices: {
+          size: data?.productMaster.sizeAndPrices[0].size,
+          sizeName: data?.productMaster.sizeAndPrices[0].sizeName,
+          sellPrice: abc,
+        },
+      },
+      description: data?.artMaster?.description,
+      productName: data?.productMaster?.productName,
+      size: data?.productMaster.sizeAndPrices[0].size,
+      userId: userId,
+    }));
+    console.log(productCart);
+
+    setChecked(data?.images[0]);
+
+    getAllWishlistByUserId();
+  }, []);
+
+  const setSizeAndAccordingPrice = (obj) => {
+    // console.log(obj);
+    setProductCart((prev) => ({
+      ...prev,
+      artProductMaster: {
+        ...prev.artProductMaster,
+        sizeAndPrices: {
+          size: obj.size,
+          sizeName: obj.sizeName,
+          sellPrice: obj.sellPrice,
+        },
+      },
+    }));
+  };
+
+  const increaseQuantity = () => {
+    // console.log('Before update:', productCart.quantity);
+
+    setProductCart((prev) => ({
+      ...prev,
+      quantity: prev.quantity + 1,
+    }));
+
+    // console.log('After update:', productCart.quantity);
+  };
+
+  const decreaseQuantity = () => {
+    if (productCart.quantity > 1) {
+      setProductCart((prev) => ({
+        ...prev,
+        quantity: prev.quantity - 1,
+      }));
+    }
+  };
+
+  // useEffect(() => {
+  //   setProductCart((prev) => ({
+  //     ...prev,
+  //     artProductMaster: {
+  //       sizeAndPrices: {
+  //         sellPrice: abc,
+  //       },
+  //     },
+  //   }));
+  // }, []);
 
   useEffect(() => {
     console.log(productCart);
@@ -597,39 +684,20 @@ const ProductDetails = () => {
     onTriggered: handleClickOutside,
   });
 
-  const setSizeAndAccordingPrice = (obj) => {
-    console.log(obj);
-    setProductCart((prev) => ({
-      ...prev,
-      size: obj.size,
-      totalPrice: obj.sellPrice,
-      sizeName: obj.sizeName,
-    }));
-  };
-
-  const increaseQuantity = () => {
-    // console.log('Before update:', productCart.quantity);
-
-    setProductCart((prev) => ({
-      ...prev,
-      quantity: prev.quantity + 1,
-    }));
-
-    // console.log('After update:', productCart.quantity);
-  };
-
-  const decreaseQuantity = () => {
-    if (productCart.quantity > 1) {
-      setProductCart((prev) => ({
-        ...prev,
-        quantity: prev.quantity - 1,
-      }));
+  const addToCart = async () => {
+    try {
+      const res = await httpClient.post('/cart_master', productCart);
+      toast.success('Successfully Addes to Cart');
+      console.log(res.data);
+    } catch (error) {
+      toast.error('Error');
+      console.error(error);
     }
   };
 
   // useEffect(() => {
-  //   console.log('Updated quantity:', productCart.quantity);
-  // }, [productCart.quantity]);
+  //   console.log(productCart);
+  // }, [productCart]);
 
   return (
     <>
@@ -644,7 +712,7 @@ const ProductDetails = () => {
           <div className='w-[50%]'>
             <div
               style={{
-                backgroundImage: `url(${productCart.image})`,
+                backgroundImage: `url(${productCart?.artProductMaster?.images?.image})`,
               }}
               //earlier4
               // style={{
@@ -1007,8 +1075,9 @@ const ProductDetails = () => {
                         ></div>
                       </div>
                       <p className='text-center'>
-                        {productCart.color.replace(/\b\w/g, (char) =>
-                          char.toUpperCase()
+                        {productCart?.artProductMaster?.images?.color?.replace(
+                          /\b\w/g,
+                          (char) => char.toUpperCase()
                         )}{' '}
                         Color
                       </p>
@@ -1018,11 +1087,17 @@ const ProductDetails = () => {
                     <div className='w-[48px]'>
                       <div className='w-[48px] h-[48px] rounded-[10px] border-[1px] border-[#d6d6d6] flex justify-center items-center'>
                         <p className='text-[15px] font-medium text-primaryGray'>
-                          {productCart.size}
+                          {
+                            productCart?.artProductMaster
+                              ?.sizeAndPrices?.size
+                          }
                         </p>
                       </div>
                       <p className='text-center'>
-                        {productCart.sizeName}
+                        {
+                          productCart?.artProductMaster?.sizeAndPrices
+                            ?.sizeName
+                        }
                       </p>
                     </div>
                   </div>
@@ -1053,7 +1128,9 @@ const ProductDetails = () => {
                   </div>
                   <div className='flex border-b border-[#efefef]'>
                     <p className='w-[80px] font-medium'>Colours:</p>
-                    <p>{productCart.color}</p>
+                    <p>
+                      {productCart.artProductMaster?.images?.color}
+                    </p>
                   </div>
                   <div className='flex '>
                     <p className='w-[80px] font-medium'>PrintSize:</p>
@@ -1214,7 +1291,8 @@ const ProductDetails = () => {
                     //   }`,
                     // }}
                     className={`cursor-pointer w-[48px] h-[48px] border border-[#D6D6D6] rounded-[10px] flex justify-center items-center ${
-                      productCart.size === obj.size
+                      productCart?.artProductMaster?.sizeAndPrices
+                        ?.size === obj.size
                         ? 'bg-[#bbbbbb] border-[#bbbbbb]'
                         : 'border-[#D6D6D6] text-primaryGray'
                     }`}
@@ -1355,7 +1433,8 @@ const ProductDetails = () => {
                   </p>
                   <p className='text-orangeColor text-[38px] font-normal leading-[55px]'>
                     {(
-                      productCart.totalPrice * productCart.quantity
+                      productCart?.artProductMaster?.sizeAndPrices
+                        ?.sellPrice * productCart.quantity
                     ).toFixed(2)}
                   </p>
                 </div>
@@ -1364,7 +1443,9 @@ const ProductDetails = () => {
                 </p>
 
                 <div className='mt-5 flex gap-x-2.5 mb-1.5'>
-                  <button className='outlineBtn'>Add to Cart</button>
+                  <button onClick={addToCart} className='outlineBtn'>
+                    Add to Cart
+                  </button>
                   <button className='blackBtn'>Shop Now</button>
                 </div>
 

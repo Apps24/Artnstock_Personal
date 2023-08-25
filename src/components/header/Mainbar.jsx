@@ -443,9 +443,9 @@ const Mainbar = () => {
     }
   };
 
-  useEffect(() => {
-    console.log(subjects);
-  }, [subjects]);
+  // useEffect(() => {
+  //   console.log(subjects);
+  // }, [subjects]);
 
   return (
     <>
@@ -1078,7 +1078,12 @@ const Mainbar = () => {
                                   <button>Promote My Work</button>
                                 </Menu.Item>
                               </div>
-                              <div className='px-[14px] text-[12px] text-[#757575]'>
+                              <div
+                                onClick={() =>
+                                  navigate('/view-my-store')
+                                }
+                                className='px-[14px] text-[12px] text-[#757575]'
+                              >
                                 <Menu.Item>
                                   <button>View My Shop</button>
                                 </Menu.Item>
@@ -1209,14 +1214,25 @@ const Mainbar = () => {
                 />
               </li>
               <li className='menu-link m-0 '>
-
-                <div onClick={() => {
+                <div
+                  onClick={() => {
                     navigate('/shopping-cart');
-                  }} className='relative'>
-                <CartIcon   />
-             {(cartQuantity !== 0 || cartQuantity !== null || cartQuantity !== undefined) &&   <div className='absolute top-[0.2px] right-[-12px] bg-[#FF369F] text-[#ffffff] text-[11px] border border-[#ffffff] font-medium w-[20px] h-[14px] rounded-lg flex justify-center items-center  '>
-                  {cartQuantity}
-                </div>}
+                  }}
+                  className='relative'
+                >
+                  <CartIcon
+                    style={{
+                      position: 'relative',
+                      top: '1px',
+                    }}
+                  />
+                  {(cartQuantity !== 0 ||
+                    cartQuantity !== null ||
+                    cartQuantity !== undefined) && (
+                    <div className='absolute top-[0.2px] right-[-12px] bg-[#FF369F] text-[#ffffff] text-[11px] border border-[#ffffff] font-medium w-[20px] h-[14px] rounded-lg flex justify-center items-center  '>
+                      {cartQuantity}
+                    </div>
+                  )}
                 </div>
               </li>
             </ul>

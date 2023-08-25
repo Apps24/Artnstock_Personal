@@ -474,8 +474,8 @@ const ContributorViewMyStore = () => {
               <div
                 style={{
                   backgroundImage: `url(${
-                    user.profileImage !== null
-                      ? user.profileImage
+                    user?.profileImage !== null
+                      ? user?.profileImage
                       : profile
                   })`,
 
@@ -494,7 +494,7 @@ const ContributorViewMyStore = () => {
             <div className='mr-[28px]'>
               <img src={Pro} alt='' />
               <p className='text-[25px] text-[#333333] mt-2  leading-[0.4]'>
-                {user.displayName}
+                {user?.displayName}
               </p>
               <div className='leading-[1.2] mt-2'>
                 <p className='text-[11px] text-[#757575] '>
@@ -502,9 +502,9 @@ const ContributorViewMyStore = () => {
                 </p>
                 <img src={location} alt='' className='inline' />
                 <span className='text-[11px] text-[#757575]'>
-                  {user.shippingAddress.cityName},{' '}
-                  {user.shippingAddress.stateName},{' '}
-                  {user.shippingAddress.countryName}
+                  {user?.shippingAddress.cityName},{' '}
+                  {user?.shippingAddress.stateName},{' '}
+                  {user?.shippingAddress.countryName}
                   {/* Pune, Maharashtra, India */}
                 </span>
               </div>

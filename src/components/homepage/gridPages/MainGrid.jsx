@@ -44,7 +44,7 @@ const MainGrid = () => {
         artwork at fair costs, our choice of works of art will expand
         the possibilities for your visual initiatives.
       </p>
-      <div className='grid grid-cols-4 gap-4 my-7 h-[682px]'>
+      <div className='grid grid-cols-4 gap-4 my-7'>
         {/* Grid 1 */}
         <div
           onClick={() => {
@@ -56,7 +56,7 @@ const MainGrid = () => {
             backgroundImage: `url(${gridList[0]?.image})`,
             backgroundSize: '100% 100%',
             backgroundRepeat: 'no-repeat',
-            height: `100%`,
+            height: `386px`,
           }}
         >
           <div
@@ -92,7 +92,7 @@ const MainGrid = () => {
             backgroundImage: `url(${gridList[1]?.image})`,
             backgroundSize: '100% 100%',
             backgroundRepeat: 'no-repeat',
-            height: `100%`,
+            height: `185px`,
           }}
         >
           <div
@@ -128,8 +128,7 @@ const MainGrid = () => {
             backgroundImage: `url(${gridList[2]?.image})`,
             backgroundSize: '100% 100%',
             backgroundRepeat: 'no-repeat',
-            height: `100%`,
-
+            height: `280px`,
           }}
         >
           <div
@@ -165,7 +164,7 @@ const MainGrid = () => {
             backgroundImage: `url(${gridList[3]?.image})`,
             backgroundSize: '100% 100%',
             backgroundRepeat: 'no-repeat',
-            height: `100%`,
+            height: `185px`,
           }}
         >
           <div
@@ -196,13 +195,12 @@ const MainGrid = () => {
             dispatch(setSubjectId(gridList[4]));
             navigate('/art-list');
           }}
-          className='row-span-3 rounded-2xl group overflow-hidden'
+          className='row-span-3 rounded-2xl group overflow-hidden relative bottom-[2px]'
           style={{
             backgroundImage: `url(${gridList[4]?.image})`,
             backgroundSize: '100% 100%',
             backgroundRepeat: 'no-repeat',
-            height: `100%`,
-
+            height: `280px`,
           }}
         >
           <div
@@ -233,13 +231,12 @@ const MainGrid = () => {
             dispatch(setSubjectId(gridList[5]));
             navigate('/art-list');
           }}
-          className='row-span-3 rounded-2xl group overflow-hidden'
+          className='row-span-3 rounded-2xl group overflow-hidden relative bottom-[2px]'
           style={{
             backgroundImage: `url(${gridList[5]?.image})`,
             backgroundSize: '100% 100%',
             backgroundRepeat: 'no-repeat',
-            height: `100%`,
-
+            height: `280px`,
           }}
         >
           <div
@@ -264,19 +261,18 @@ const MainGrid = () => {
             />
           </div>
         </div>
-        {/* Grid 6 */}
+        {/* Grid 7 */}
         <div
           onClick={() => {
             dispatch(setSubjectId(gridList[6]));
             navigate('/art-list');
           }}
-          className='row-span-4 rounded-2xl group overflow-hidden'
+          className='row-span-4 rounded-2xl group overflow-hidden relative bottom-[6px]'
           style={{
             backgroundImage: `url(${gridList[6]?.image})`,
             backgroundSize: '100% 100%',
             backgroundRepeat: 'no-repeat',
-            height: `100%`,
-
+            height: `386px`,
           }}
         >
           <div
@@ -312,8 +308,7 @@ const MainGrid = () => {
             backgroundImage: `url(${gridList[7]?.image})`,
             backgroundSize: '100% 100%',
             backgroundRepeat: 'no-repeat',
-            height: `100%`,
-
+            height: `280px`,
           }}
         >
           <div
@@ -344,13 +339,12 @@ const MainGrid = () => {
             dispatch(setSubjectId(gridList[8]));
             navigate('/art-list');
           }}
-          className='row-span-2 rounded-2xl group overflow-hidden'
+          className='row-span-2 rounded-2xl group overflow-hidden relative bottom-[5px]'
           style={{
             backgroundImage: `url(${gridList[8]?.image})`,
             backgroundSize: '100% 100%',
             backgroundRepeat: 'no-repeat',
-            height: `100%`,
-
+            height: `185px`,
           }}
         >
           <div
@@ -381,13 +375,12 @@ const MainGrid = () => {
             dispatch(setSubjectId(gridList[9]));
             navigate('/art-list');
           }}
-          className='row-span-2 rounded-2xl group overflow-hidden'
+          className='row-span-2 rounded-2xl group overflow-hidden relative bottom-[5px]'
           style={{
             backgroundImage: `url(${gridList[9]?.image})`,
             backgroundSize: '100% 100%',
             backgroundRepeat: 'no-repeat',
-            height: `100%`,
-
+            height: `185px`,
           }}
         >
           <div
